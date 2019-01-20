@@ -1,3 +1,3 @@
 # shapes
-A lightweight header only planar geometry library for Modern C++
+A lightweight planar geometry library for Modern C++
 
