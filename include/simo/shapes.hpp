@@ -88,13 +88,9 @@ class Geometry
 
     virtual ~Geometry() = default;
 
-    virtual GeometryType geom_type() const
+    virtual GeometryType geom_type() const NOEXCEPT = 0;
 
-        NOEXCEPT = 0;
-
-    virtual std::string geom_type_str() const
-
-        NOEXCEPT = 0;
+    virtual std::string geom_type_str() const NOEXCEPT = 0;
 
     virtual int8_t dimension() const = 0;
 
@@ -196,11 +192,37 @@ class Point : virtual public Geometry
   public:
     double x, y, z;
 
-    Point() : x(0), y(0), z(0), m_dimension(2) {}
+    Point()
+        : x(0), y(0), z(0), m_dimension(2) {}
 
-    Point(double x, double y) : x(x), y(y), z(0), m_dimension(2) {}
+    Point(double x, double y)
+        : x(x), y(y), z(0), m_dimension(2) {}
 
-    Point(double x, double y, double z) : x(x), y(y), z(z), m_dimension(3) {}
+    Point(double x, double y, double z)
+        : x(x), y(y), z(z), m_dimension(3) {}
+
+    Point(std::initializer_list<double> coordinates)
+    {
+        if (coordinates.size() > 3 || coordinates.size() < 2)
+        {
+            throw std::invalid_argument("invalid coordinates");
+        }
+
+        if (coordinates.size() == 2)
+        {
+            x           = *coordinates.begin();
+            y           = *(coordinates.begin() + 1);
+            z           = 0;
+            m_dimension = 2;
+        }
+        else if (coordinates.size() == 3)
+        {
+            x           = *coordinates.begin();
+            y           = *(coordinates.begin() + 1);
+            z           = *(coordinates.begin() + 2);
+            m_dimension = 3;
+        }
+    }
 
     GeometryType geom_type() const override { return GeometryType::POINT; }
 
@@ -259,89 +281,82 @@ class Point : virtual public Geometry
     int8_t m_dimension;
 };
 
-class Envelope
+class MultiPoint : virtual public Geometry
 {
   public:
-    Envelope(const Point& min, const Point& max) : m_min(min), m_max(max)
+    MultiPoint(std::initializer_list<Point> points)
+        : m_points(points) {}
+
+    MultiPoint(std::initializer_list<std::initializer_list<double>> list)
     {
-        if (min.dimension() != 2 || max.dimension() != 2)
+        for (const auto& coordinates : list)
         {
-            throw std::invalid_argument("invalid dimensions, the points must be 2-dimensional");
-        }
-        if (min.dimension() != max.dimension())
-        {
-            throw std::invalid_argument("invalid dimensions, the points dimensions must match");
+            m_points.emplace_back(Point(coordinates));
         }
     }
 
-    Envelope& extend(const Point& other)
-    {
-        if (other.dimension() != m_min.dimension())
-        {
-            throw std::invalid_argument("invalid dimensions, the points dimensions must match");
-        }
-        m_min.x = std::min(other.x, m_min.x);
-        m_max.x = std::max(other.x, m_max.x);
-        m_min.y = std::min(other.y, m_min.y);
-        m_max.y = std::max(other.y, m_max.y);
-        return *this;
-    }
+    explicit MultiPoint(std::vector<Point> points)
+        : m_points(std::move(points)) {}
 
-    Point center() const { return {(m_min.x + m_max.x) / 2, (m_min.y + m_max.y) / 2}; }
+    typedef std::vector<Point>::iterator iterator;
+    typedef std::vector<Point>::const_iterator const_iterator;
 
-    Point bottom_left() const { return {m_min.x, m_max.y}; }
+    iterator begin() { return m_points.begin(); }
 
-    Point top_right() const { return {m_max.x, m_min.y}; }
+    const_iterator begin() const { return m_points.begin(); }
 
-    Point top_left() const { return m_min; }
+    iterator end() { return m_points.end(); }
 
-    Point bottom_right() const { return m_max; }
+    const_iterator end() const { return m_points.end(); }
 
-    Point min() const { return m_min; }
+    GeometryType geom_type() const NOEXCEPT override { return GeometryType::MULTIPOINT; }
 
-    Point max() const { return m_max; }
+    std::string geom_type_str() const NOEXCEPT override { return "MultiPoint"; }
 
-    bool contains(const Point& other) const
-    {
-        return (other.x >= m_min.x) && (other.x <= m_max.x) && (other.y >= m_min.y) && (other.y <= m_max.y);
-    }
+    int8_t dimension() const override { return 0; }
 
-    bool contains(const Envelope& other) { return contains(other.min()) && contains(other.max()); }
+    bool is_empty() const override { return false; }
 
-    bool intersects(const Envelope& other)
-    {
-        auto min  = m_min;
-        auto max  = m_max;
-        auto min2 = other.min();
-        auto max2 = other.max();
-        return (max2.x >= min.x) && (min2.x <= max.x) && (max2.y >= min.y) && (min2.y <= max.y);
-    }
+    bool is_simple() const override { return false; }
 
-    bool overlaps(const Envelope& other)
-    {
-        auto min  = m_min;
-        auto max  = m_max;
-        auto min2 = other.min();
-        auto max2 = other.max();
-        return (max2.x > min.x) && (min2.x < max.x) && (max2.y > min.y) && (min2.y < max.y);
-    }
+    bool is_closed() const override { return false; }
+
+    bool equals(const Geometry& geom) const override { return false; }
+
+    bool touches(const Geometry& geom) const override { return false; }
+
+    bool contains(const Geometry& geom) const override { return false; }
+
+    bool within(const Geometry& geom) const override { return false; }
+
+    bool disjoint(const Geometry& geom) const override { return false; }
+
+    bool crosses(const Geometry& geom) const override { return false; }
+
+    bool overlaps(const Geometry& geom) const override { return false; }
+
+    bool intersects(const Geometry& geom) const override { return false; }
+
+    bool relate(const Geometry& geom, const std::string& overlap_matrix) const override { return false; }
+
+    double distance(const Geometry& geom) const override { return 0; }
+
+    std::unique_ptr<Geometry> buffer(double distance) const override { return std::unique_ptr<Geometry>(); }
+
+    std::unique_ptr<Geometry> convex_hull() const override { return std::unique_ptr<Geometry>(); }
+
+    std::unique_ptr<Geometry> set_intersection(const Geometry& other) const override { return std::unique_ptr<Geometry>(); }
+
+    std::unique_ptr<Geometry> set_union(const Geometry& other) const override { return std::unique_ptr<Geometry>(); }
+
+    std::unique_ptr<Geometry> set_difference(const Geometry& other) const override { return std::unique_ptr<Geometry>(); }
+
+    std::unique_ptr<Geometry> set_symmetric_difference(const Geometry& other) const override { return std::unique_ptr<Geometry>(); }
 
   private:
-    Point m_min;
-    Point m_max;
+    std::vector<Point> m_points;
 };
 
-//
-//    class MultiPoint : virtual public Geometry {
-//    public:
-//        GeometryType geom_type() const NOEXCEPT override {
-//            return GeometryType::MULTIPOINT;
-//        }
-//
-//        std::string geom_type_str() const NOEXCEPT override {
-//            return "MultiPoint";
-//        }
-//    };
 //
 //    class LineString : virtual public Geometry {
 //    public:
