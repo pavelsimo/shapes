@@ -39,12 +39,6 @@ SOFTWARE.
 #include <tuple>
 #include <vector>
 
-#ifndef _MSC_VER
-#    define NOEXCEPT NOEXCEPT
-#else
-#    define NOEXCEPT
-#endif
-
 namespace simo
 {
 namespace shapes
@@ -57,6 +51,7 @@ class MultiLineString;
 class Polygon;
 class MultiPolygon;
 class GeometryCollection;
+class Envelope;
 
 enum class GeometryType
 {
@@ -88,11 +83,13 @@ class Geometry
 
     virtual ~Geometry() = default;
 
-    virtual GeometryType geom_type() const NOEXCEPT = 0;
+    virtual GeometryType geom_type() const  = 0;
 
-    virtual std::string geom_type_str() const NOEXCEPT = 0;
+    virtual std::string geom_type_str() const  = 0;
 
     virtual int8_t dimension() const = 0;
+
+    virtual std::unique_ptr<Envelope> envelope() = 0;
 
     //===========================
     // Geometry Creation
@@ -230,6 +227,8 @@ class Point : virtual public Geometry
 
     int8_t dimension() const override { return m_dimension; }
 
+    std::unique_ptr<Envelope> envelope() override { return nullptr; }
+
     bool is_empty() const override { return false; }
 
     bool is_simple() const override { return false; }
@@ -281,6 +280,68 @@ class Point : virtual public Geometry
     int8_t m_dimension;
 };
 
+class Envelope
+{
+  public:
+    Envelope(double minx, double maxx, double miny, double maxy)
+        : m_min(Point(minx, miny)), m_max(Point(maxx, maxy))
+    {
+    }
+
+    Envelope& extend(double x, double y)
+    {
+        Point other(x, y);
+        m_min.x = std::min(other.x, m_min.x);
+        m_max.x = std::max(other.x, m_max.x);
+        m_min.y = std::min(other.y, m_min.y);
+        m_max.y = std::max(other.y, m_max.y);
+        return *this;
+    }
+
+    Point center() const { return {(m_min.x + m_max.x) / 2, (m_min.y + m_max.y) / 2}; }
+
+    Point bottom_left() const { return {m_min.x, m_max.y}; }
+
+    Point top_right() const { return {m_max.x, m_min.y}; }
+
+    Point top_left() const { return m_min; }
+
+    Point bottom_right() const { return m_max; }
+
+    Point min() const { return m_min; }
+
+    Point max() const { return m_max; }
+
+    bool contains(const Point& other) const
+    {
+        return (other.x >= m_min.x) && (other.x <= m_max.x) && (other.y >= m_min.y) && (other.y <= m_max.y);
+    }
+
+    bool contains(const Envelope& other) { return contains(other.min()) && contains(other.max()); }
+
+    bool intersects(const Envelope& other)
+    {
+        auto min  = m_min;
+        auto max  = m_max;
+        auto min2 = other.min();
+        auto max2 = other.max();
+        return (max2.x >= min.x) && (min2.x <= max.x) && (max2.y >= min.y) && (min2.y <= max.y);
+    }
+
+    bool overlaps(const Envelope& other)
+    {
+        auto min  = m_min;
+        auto max  = m_max;
+        auto min2 = other.min();
+        auto max2 = other.max();
+        return (max2.x > min.x) && (min2.x < max.x) && (max2.y > min.y) && (min2.y < max.y);
+    }
+
+  private:
+    Point m_min;
+    Point m_max;
+};
+
 class MultiPoint : virtual public Geometry
 {
   public:
@@ -309,11 +370,13 @@ class MultiPoint : virtual public Geometry
 
     const_iterator end() const { return m_points.end(); }
 
-    GeometryType geom_type() const NOEXCEPT override { return GeometryType::MULTIPOINT; }
+    GeometryType geom_type() const  override { return GeometryType::MULTIPOINT; }
 
-    std::string geom_type_str() const NOEXCEPT override { return "MultiPoint"; }
+    std::string geom_type_str() const  override { return "MultiPoint"; }
 
     int8_t dimension() const override { return 0; }
+
+    std::unique_ptr<Envelope> envelope() override { return nullptr; }
 
     bool is_empty() const override { return false; }
 
@@ -360,44 +423,44 @@ class MultiPoint : virtual public Geometry
 //
 //    class LineString : virtual public Geometry {
 //    public:
-//        GeometryType geom_type() const NOEXCEPT override {
+//        GeometryType geom_type() const  override {
 //            return GeometryType::LINESTRING;
 //        }
 //
-//        std::string geom_type_str() const NOEXCEPT override {
+//        std::string geom_type_str() const  override {
 //            return "LineString";
 //        }
 //    };
 //
 //    class MultiLineString : virtual public Geometry {
 //    public:
-//        GeometryType geom_type() const NOEXCEPT override {
+//        GeometryType geom_type() const  override {
 //            return GeometryType::MULTILINESTRING;
 //        }
 //
-//        std::string geom_type_str() const NOEXCEPT override {
+//        std::string geom_type_str() const  override {
 //            return "MultiLineString";
 //        }
 //    };
 //
 //    class Polygon : virtual public Geometry {
 //    public:
-//        GeometryType geom_type() const NOEXCEPT override {
+//        GeometryType geom_type() const  override {
 //            return GeometryType::POLYGON;
 //        }
 //
-//        std::string geom_type_str() const NOEXCEPT override {
+//        std::string geom_type_str() const  override {
 //            return "Polygon";
 //        }
 //    };
 //
 //    class MultiPolygon : virtual public Geometry {
 //    public:
-//        GeometryType geom_type() const NOEXCEPT override {
+//        GeometryType geom_type() const  override {
 //            return GeometryType::MULTIPOLYGON;
 //        }
 //
-//        std::string geom_type_str() const NOEXCEPT override {
+//        std::string geom_type_str() const  override {
 //            return "MultiPolygon";
 //        }
 //    };
