@@ -16,11 +16,6 @@ if(NOT ${CLANG_FORMAT} STREQUAL "CLANG_FORMAT-NOTFOUND")
             COMMAND ${CLANG_FORMAT} -i ${HPP_FILES})
 endif()
 
-include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${PROJECT_SOURCE_DIR}/thirdparty)
+add_subdirectory(tests)
 
-add_executable(main main.cpp)
-add_executable(test_point tests/test_point.cpp)
-add_executable(test_multipoint tests/test_multipoint.cpp)
-add_executable(tests_envelope tests/test_envelope.cpp)
 
