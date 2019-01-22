@@ -1,0 +1,8 @@
+{
+	"project": "shapes",
+	"target": "single_include/simo/shapes.hpp",
+	"sources": [
+		"include/simo/shapes.hpp"
+	],
+	"include_paths": ["include"]
+}
