@@ -3,13 +3,22 @@
 #include <initializer_list>
 #include <stdexcept>
 #include <memory>
+#include <string>
 #include <type_traits>
+#include <json/json.hpp>
 #include <simo/geom/geometry.hpp>
+
+namespace simo
+{
+namespace shapes
+{
 
 class point_t
 {
   public:
-    double x, y, z;
+    double x;
+    double y;
+    double z;
 
     point_t()
     {
@@ -20,7 +29,7 @@ class point_t
     }
 
     template <
-        typename T,  //real type
+        typename T,  // integer,
         typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     point_t(std::initializer_list<T> list)
     {
@@ -38,6 +47,10 @@ class point_t
             this->z           = *(list.begin() + 2);
             this->m_dimension = 3;
         }
+        else
+        {
+            /// @todo (pavel) report error
+        }
     }
 
     GeometryType geom_type() const
@@ -54,62 +67,46 @@ class point_t
     {
         return m_dimension;
     }
-    //
-    //    std::unique_ptr<Envelope> envelope_()
-    //    {
-    //        return nullptr;
-    //    }
 
-    //    bool is_empty() const override { return false; }
-    //
-    //    bool is_simple() const override { return false; }
-    //
-    //    bool is_closed() const override { return false; }
-    //
-    //    bool equals(const Geometry& geom) const override { return false; }
-    //
-    //    bool touches(const Geometry& geom) const override { return false; }
-    //
-    //    bool contains(const Geometry& geom) const override { return false; }
-    //
-    //    bool within(const Geometry& geom) const override { return false; }
-    //
-    //    bool disjoint(const Geometry& geom) const override { return false; }
-    //
-    //    bool crosses(const Geometry& geom) const override { return false; }
-    //
-    //    bool overlaps(const Geometry& geom) const override { return false; }
-    //
-    //    bool intersects(const Geometry& geom) const override { return false; }
-    //
-    //    bool relate(const Geometry& geom, const std::string& overlap_matrix) const override { return false; }
-    //
-    //    double distance(const Geometry& geom) const override { return 0; }
-    //
-    //    std::unique_ptr<Geometry> buffer(double distance) const override { return std::unique_ptr<Geometry>(); }
-    //
-    //    std::unique_ptr<Geometry> convex_hull() const override { return std::unique_ptr<Geometry>(); }
-    //
-    //    std::unique_ptr<Geometry> set_intersection(const Geometry& other) const override
-    //    {
-    //        return std::unique_ptr<Geometry>();
-    //    }
-    //
-    //    std::unique_ptr<Geometry>
-    //    set_union(const Geometry& other) const override { return std::unique_ptr<Geometry>(); }
-    //
-    //    std::unique_ptr<Geometry> set_difference(const Geometry& other) const override
-    //    {
-    //        return std::unique_ptr<Geometry>();
-    //    }
-    //
-    //    std::unique_ptr<Geometry> set_symmetric_difference(const Geometry& other) const override
-    //    {
-    //        return std::unique_ptr<Geometry>();
-    //    }
+    static point_t from_json(const std::string& json)
+    {
+        nlohmann::json j = nlohmann::json::parse(json);
+        std::string type = j.at("type").get<std::string>();
+        if (type != "Point")
+        {
+            // parse error
+        }
+
+        std::vector<double> coords = j.at("coordinates");
+        if (coords.size() == 2)
+        {
+            return {coords[0], coords[1]};
+        }
+        else if (coords.size() == 3)
+        {
+            return {coords[0], coords[1], coords[2]};
+        }
+
+        /// @todo thrown an exception
+        return {};
+    }
+
+    std::string to_json()
+    {
+        std::vector<double> coords = {x, y};
+        if (m_dimension == 3)
+        {
+            coords.push_back(z);
+        }
+        nlohmann::json j = {{"type", "Point"}, {"coordinates", coords}};
+        return j.dump();
+    }
 
   private:
     int8_t m_dimension;
 };
 
 typedef Geometry<point_t> Point;
+
+}  // namespace shapes
+}  // namespace simo

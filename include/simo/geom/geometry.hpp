@@ -4,6 +4,11 @@
 #include <memory>
 #include <simo/shapes_fwd.hpp>
 
+namespace simo
+{
+namespace shapes
+{
+
 enum class GeometryType
 {
     GEOMETRY        = 0,
@@ -25,8 +30,7 @@ class Geometry : public Base
 {
   public:
     Geometry()
-        : Base()
-    {}
+        : Base() {}
 
     template <typename T>
     Geometry(std::initializer_list<T> params)
@@ -62,11 +66,6 @@ class Geometry : public Base
     {
         return Base::dimension();
     }
-
-    //    std::unique_ptr<Envelope> envelope()
-    //    {
-    //        return this->envelope_();
-    //    }
 
     //===========================
     // Geometry Creation
@@ -160,3 +159,6 @@ class Geometry : public Base
     //    /// with anotherGeometry.
     //    virtual std::unique_ptr<Geometry> set_symmetric_difference(const Geometry& other) const = 0;
 };
+
+}  // namespace shapes
+}  // namespace simo

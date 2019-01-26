@@ -37,18 +37,10 @@ SOFTWARE.
 #include <tuple>
 #include <vector>
 
-namespace simo
-{
-namespace shapes
-{
-
 #include <simo/shapes_fwd.hpp>
 #include <simo/geom/geometry.hpp>
 #include <simo/geom/point.hpp>
 #include <simo/geom/envelope.hpp>
 #include <simo/geom/multipoint.hpp>
-
-}  // namespace shapes
-}  // namespace simo
 
 #endif  // SIMO_SHAPES_HPP
