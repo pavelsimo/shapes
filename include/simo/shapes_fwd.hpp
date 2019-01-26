@@ -1,17 +1,19 @@
 #pragma once
 
-class Point;
+#include <type_traits>
 
-class MultiPoint;
+class point_t;
 
-class LineString;
+class multipoint_t;
 
-class MultiLineString;
+class linestring_t;
 
-class Polygon;
+class multilinestring_t;
 
-class MultiPolygon;
+class polygon_t;
 
-class GeometryCollection;
+class multipolygon_t;
 
-class Envelope;
+class geometrycollection_t;
+
+//class Envelope;

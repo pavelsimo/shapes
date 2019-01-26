@@ -34,12 +34,10 @@ target_include_directories(
         $<INSTALL_INTERFACE:include>
 )
 
-#find_package (PythonInterp)
-#if (${PythonInterp} STREQUAL "PYTHONINTERP_FOUND")
+# @todo first find python
 add_custom_target(amalgamate COMMENT "merging the headers"
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         COMMAND python ${PROJECT_SOURCE_DIR}/thirdparty/amalgamate/amalgamate.py -c ${PROJECT_SOURCE_DIR}/thirdparty/amalgamate/config.json -s . --verbose=yes)
-#endif ()
 
 
 add_subdirectory(tests)

@@ -45,23 +45,30 @@ namespace shapes
 // #include <simo/shapes_fwd.hpp>
 
 
-class Point;
+#include <type_traits>
 
-class MultiPoint;
+class point_t;
 
-class LineString;
+class multipoint_t;
 
-class MultiLineString;
+class linestring_t;
 
-class Polygon;
+class multilinestring_t;
 
-class MultiPolygon;
+class polygon_t;
 
-class GeometryCollection;
+class multipolygon_t;
 
-class Envelope;
+class geometrycollection_t;
+
+//class Envelope;
 
 // #include <simo/geom/geometry.hpp>
+
+
+#include <vector>
+#include <memory>
+// #include <simo/shapes_fwd.hpp>
 
 
 enum class GeometryType
@@ -80,379 +87,455 @@ enum class GeometryType
     MULTIPOLYGON    = 11
 };
 
-enum class DimensionType
-{
-    XY   = 2,
-    XYZ  = 3,
-    XYZM = 4
-};
-
-class Geometry
+template <typename Base>
+class Geometry : public Base
 {
   public:
-    Geometry() = default;
+    Geometry()
+        : Base()
+    {}
 
-    virtual ~Geometry() = default;
+    template <typename T>
+    Geometry(std::initializer_list<T> params)
+        : Base(params)
+    {}
 
-    virtual GeometryType geom_type() const = 0;
+    template <typename T>
+    Geometry(std::initializer_list<std::initializer_list<T>> params)
+        : Base(params)
+    {}
 
-    virtual std::string geom_type_str() const = 0;
+    template <typename T>
+    Geometry(std::vector<T> rhs)
+        : Base(std::move(rhs))
+    {}
 
-    virtual int8_t dimension() const = 0;
+    template <typename T>
+    Geometry(std::vector<std::vector<T>> rhs)
+        : Base(std::move(rhs))
+    {}
 
-    virtual std::unique_ptr<Envelope> envelope() = 0;
+    GeometryType geom_type()
+    {
+        return Base::geom_type();
+    }
+
+    std::string geom_type_str()
+    {
+        return Base::geom_type_str();
+    }
+
+    virtual int8_t dimension()
+    {
+        return Base::dimension();
+    }
+
+    //    std::unique_ptr<Envelope> envelope()
+    //    {
+    //        return this->envelope_();
+    //    }
 
     //===========================
     // Geometry Creation
     //===========================
 
-    virtual std::string to_geojson() const { return ""; }
-
-    static std::unique_ptr<Geometry> from_geojson(const std::string& json) { return nullptr; }
-
-    virtual std::string to_wkt() const { return ""; }
-
-    static std::unique_ptr<Geometry> from_wkt(const std::string& json) { return nullptr; }
-
-    virtual std::string to_wkb() const { return ""; }
-
-    static std::unique_ptr<Geometry> from_wkb(const std::string& json) { return nullptr; }
+    //    virtual std::string to_geojson() const { return ""; }
+    //
+    //    static std::unique_ptr<Geometry> from_geojson(const std::string& json) { return nullptr; }
+    //
+    //    virtual std::string to_wkt() const { return ""; }
+    //
+    //    static std::unique_ptr<Geometry> from_wkt(const std::string& json) { return nullptr; }
+    //
+    //    virtual std::string to_wkb() const { return ""; }
+    //
+    //    static std::unique_ptr<Geometry> from_wkb(const std::string& json) { return nullptr; }
 
     //===========================
     // Geometry Characteristics
     //===========================
 
-    virtual bool is_empty() const = 0;
-
-    virtual bool is_simple() const = 0;
-
-    virtual bool is_closed() const = 0;
+    //    virtual bool is_empty() const = 0;
+    //
+    //    virtual bool is_simple() const = 0;
+    //
+    //    virtual bool is_closed() const = 0;
 
     //===========================
     // Relational Operators
     //===========================
-
-    /// Tests if this geometry is ?spatially equal? to another geometry.
-    virtual bool equals(const Geometry& geom) const = 0;
-
-    /// Tests if this geometry ?spatially touches? another geometry.
-    virtual bool touches(const Geometry& geom) const = 0;
-
-    /// Tests if this geometry ?spatially contains? another geometry.
-    virtual bool contains(const Geometry& geom) const = 0;
-
-    /// Tests if this geometry is ?spatially within? another geometry.
-    virtual bool within(const Geometry& geom) const = 0;
-
-    /// Tests if this geometry is ?spatially disjoint? from another geometry.
-    virtual bool disjoint(const Geometry& geom) const = 0;
-
-    /// Tests if this geometry ?spatially crosses? another geometry.
-    virtual bool crosses(const Geometry& geom) const = 0;
-
-    /// Tests if this geometry ?spatially overlaps? another geometry.
-    virtual bool overlaps(const Geometry& geom) const = 0;
-
-    /// Tests if this geometry ?spatially intersects? another geometry.
-    virtual bool intersects(const Geometry& geom) const = 0;
-
-    /// Tests if this geometry is spatially related to anotherGeometry,
-    virtual bool relate(const Geometry& geom, const std::string& overlap_matrix) const = 0;
+    //
+    //    /// Tests if this geometry is ?spatially equal? to another geometry.
+    //    virtual bool equals(const Geometry& geom) const = 0;
+    //
+    //    /// Tests if this geometry ?spatially touches? another geometry.
+    //    virtual bool touches(const Geometry& geom) const = 0;
+    //
+    //    /// Tests if this geometry ?spatially contains? another geometry.
+    //    virtual bool contains(const Geometry& geom) const = 0;
+    //
+    //    /// Tests if this geometry is ?spatially within? another geometry.
+    //    virtual bool within(const Geometry& geom) const = 0;
+    //
+    //    /// Tests if this geometry is ?spatially disjoint? from another geometry.
+    //    virtual bool disjoint(const Geometry& geom) const = 0;
+    //
+    //    /// Tests if this geometry ?spatially crosses? another geometry.
+    //    virtual bool crosses(const Geometry& geom) const = 0;
+    //
+    //    /// Tests if this geometry ?spatially overlaps? another geometry.
+    //    virtual bool overlaps(const Geometry& geom) const = 0;
+    //
+    //    /// Tests if this geometry ?spatially intersects? another geometry.
+    //    virtual bool intersects(const Geometry& geom) const = 0;
+    //
+    //    /// Tests if this geometry is spatially related to anotherGeometry,
+    //    virtual bool relate(const Geometry& geom, const std::string& overlap_matrix) const = 0;
 
     //===========================
     // Spatial Analysis
     //===========================
-
-    /// Returns the shortest distance between any two points in the two
-    /// geometries.
-    /// Calculations are in the Spatial Reference System of this geometry.
-    virtual double distance(const Geometry& geom) const = 0;
-
-    /// Returns a geometry that represents all points whose distance from this
-    /// geometry is less than or equal to distance.
-    /// Calculations are in the Spatial Reference System of this geometry.
-    virtual std::unique_ptr<Geometry> buffer(double distance) const = 0;
-
-    /// Returns a geometry that represents the convex hull of this geometry.
-    virtual std::unique_ptr<Geometry> convex_hull() const = 0;
-
-    /// Returns a geometry that represents the point set intersection of the
-    /// source geometry with anotherGeometry.
-    virtual std::unique_ptr<Geometry> set_intersection(const Geometry& other) const = 0;
-
-    /// Returns a geometry that represents the point set union of the source
-    /// geometry with anotherGeometry.
-    virtual std::unique_ptr<Geometry> set_union(const Geometry& other) const = 0;
-
-    /// Geometry Difference(Geometry anotherGeometry)?Returns a geometry that
-    /// represents the point set difference of the source geometry with
-    /// anotherGeometry.
-    virtual std::unique_ptr<Geometry> set_difference(const Geometry& other) const = 0;
-
-    /// Geometry SymmetricDifference(Geometry anotherGeometry)?Returns a geometry
-    /// that represents the point set symmetric difference of the source geometry
-    /// with anotherGeometry.
-    virtual std::unique_ptr<Geometry> set_symmetric_difference(const Geometry& other) const = 0;
+    //
+    //    /// Returns the shortest distance between any two points in the two
+    //    /// geometries.
+    //    /// Calculations are in the Spatial Reference System of this geometry.
+    //    virtual double distance(const Geometry& geom) const = 0;
+    //
+    //    /// Returns a geometry that represents all points whose distance from this
+    //    /// geometry is less than or equal to distance.
+    //    /// Calculations are in the Spatial Reference System of this geometry.
+    //    virtual std::unique_ptr<Geometry> buffer(double distance) const = 0;
+    //
+    //    /// Returns a geometry that represents the convex hull of this geometry.
+    //    virtual std::unique_ptr<Geometry> convex_hull() const = 0;
+    //
+    //    /// Returns a geometry that represents the point set intersection of the
+    //    /// source geometry with anotherGeometry.
+    //    virtual std::unique_ptr<Geometry> set_intersection(const Geometry& other) const = 0;
+    //
+    //    /// Returns a geometry that represents the point set union of the source
+    //    /// geometry with anotherGeometry.
+    //    virtual std::unique_ptr<Geometry> set_union(const Geometry& other) const = 0;
+    //
+    //    /// Geometry Difference(Geometry anotherGeometry)?Returns a geometry that
+    //    /// represents the point set difference of the source geometry with
+    //    /// anotherGeometry.
+    //    virtual std::unique_ptr<Geometry> set_difference(const Geometry& other) const = 0;
+    //
+    //    /// Geometry SymmetricDifference(Geometry anotherGeometry)?Returns a geometry
+    //    /// that represents the point set symmetric difference of the source geometry
+    //    /// with anotherGeometry.
+    //    virtual std::unique_ptr<Geometry> set_symmetric_difference(const Geometry& other) const = 0;
 };
 
 // #include <simo/geom/point.hpp>
 
 
+#include <initializer_list>
+#include <stdexcept>
+#include <memory>
+#include <type_traits>
 // #include <simo/geom/geometry.hpp>
 
 
-class Point : virtual public Geometry
+class point_t
 {
   public:
     double x, y, z;
 
-    Point()
-        : x(0), y(0), z(0), m_dimension(2) {}
-
-    Point(double x, double y)
-        : x(x), y(y), z(0), m_dimension(2) {}
-
-    Point(double x, double y, double z)
-        : x(x), y(y), z(z), m_dimension(3) {}
-
-    Point(std::initializer_list<double> coordinates)
+    point_t()
     {
-        if (coordinates.size() > 3 || coordinates.size() < 2)
-        {
-            throw std::invalid_argument("invalid coordinates");
-        }
+        this->x           = 0;
+        this->y           = 0;
+        this->z           = 0;
+        this->m_dimension = 2;
+    }
 
-        if (coordinates.size() == 2)
+    template <
+        typename T,  //real type
+        typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    point_t(std::initializer_list<T> list)
+    {
+        if (list.size() == 2)
         {
-            x           = *coordinates.begin();
-            y           = *(coordinates.begin() + 1);
-            z           = 0;
-            m_dimension = 2;
+            this->x           = *list.begin();
+            this->y           = *(list.begin() + 1);
+            this->z           = 0;
+            this->m_dimension = 2;
         }
-        else if (coordinates.size() == 3)
+        else if (list.size() == 3)
         {
-            x           = *coordinates.begin();
-            y           = *(coordinates.begin() + 1);
-            z           = *(coordinates.begin() + 2);
-            m_dimension = 3;
+            this->x           = *list.begin();
+            this->y           = *(list.begin() + 1);
+            this->z           = *(list.begin() + 2);
+            this->m_dimension = 3;
         }
     }
 
-    GeometryType geom_type() const override { return GeometryType::POINT; }
-
-    std::string geom_type_str() const override { return "POINT"; }
-
-    int8_t dimension() const override { return m_dimension; }
-
-    std::unique_ptr<Envelope> envelope() override { return nullptr; }
-
-    bool is_empty() const override { return false; }
-
-    bool is_simple() const override { return false; }
-
-    bool is_closed() const override { return false; }
-
-    bool equals(const Geometry& geom) const override { return false; }
-
-    bool touches(const Geometry& geom) const override { return false; }
-
-    bool contains(const Geometry& geom) const override { return false; }
-
-    bool within(const Geometry& geom) const override { return false; }
-
-    bool disjoint(const Geometry& geom) const override { return false; }
-
-    bool crosses(const Geometry& geom) const override { return false; }
-
-    bool overlaps(const Geometry& geom) const override { return false; }
-
-    bool intersects(const Geometry& geom) const override { return false; }
-
-    bool relate(const Geometry& geom, const std::string& overlap_matrix) const override { return false; }
-
-    double distance(const Geometry& geom) const override { return 0; }
-
-    std::unique_ptr<Geometry> buffer(double distance) const override { return std::unique_ptr<Geometry>(); }
-
-    std::unique_ptr<Geometry> convex_hull() const override { return std::unique_ptr<Geometry>(); }
-
-    std::unique_ptr<Geometry> set_intersection(const Geometry& other) const override
+    GeometryType geom_type() const
     {
-        return std::unique_ptr<Geometry>();
+        return GeometryType::POINT;
     }
 
-    std::unique_ptr<Geometry>
-    set_union(const Geometry& other) const override { return std::unique_ptr<Geometry>(); }
-
-    std::unique_ptr<Geometry> set_difference(const Geometry& other) const override
+    std::string geom_type_str() const
     {
-        return std::unique_ptr<Geometry>();
+        return "POINT";
     }
 
-    std::unique_ptr<Geometry> set_symmetric_difference(const Geometry& other) const override
+    int8_t dimension() const
     {
-        return std::unique_ptr<Geometry>();
+        return m_dimension;
     }
+    //
+    //    std::unique_ptr<Envelope> envelope_()
+    //    {
+    //        return nullptr;
+    //    }
+
+    //    bool is_empty() const override { return false; }
+    //
+    //    bool is_simple() const override { return false; }
+    //
+    //    bool is_closed() const override { return false; }
+    //
+    //    bool equals(const Geometry& geom) const override { return false; }
+    //
+    //    bool touches(const Geometry& geom) const override { return false; }
+    //
+    //    bool contains(const Geometry& geom) const override { return false; }
+    //
+    //    bool within(const Geometry& geom) const override { return false; }
+    //
+    //    bool disjoint(const Geometry& geom) const override { return false; }
+    //
+    //    bool crosses(const Geometry& geom) const override { return false; }
+    //
+    //    bool overlaps(const Geometry& geom) const override { return false; }
+    //
+    //    bool intersects(const Geometry& geom) const override { return false; }
+    //
+    //    bool relate(const Geometry& geom, const std::string& overlap_matrix) const override { return false; }
+    //
+    //    double distance(const Geometry& geom) const override { return 0; }
+    //
+    //    std::unique_ptr<Geometry> buffer(double distance) const override { return std::unique_ptr<Geometry>(); }
+    //
+    //    std::unique_ptr<Geometry> convex_hull() const override { return std::unique_ptr<Geometry>(); }
+    //
+    //    std::unique_ptr<Geometry> set_intersection(const Geometry& other) const override
+    //    {
+    //        return std::unique_ptr<Geometry>();
+    //    }
+    //
+    //    std::unique_ptr<Geometry>
+    //    set_union(const Geometry& other) const override { return std::unique_ptr<Geometry>(); }
+    //
+    //    std::unique_ptr<Geometry> set_difference(const Geometry& other) const override
+    //    {
+    //        return std::unique_ptr<Geometry>();
+    //    }
+    //
+    //    std::unique_ptr<Geometry> set_symmetric_difference(const Geometry& other) const override
+    //    {
+    //        return std::unique_ptr<Geometry>();
+    //    }
 
   private:
     int8_t m_dimension;
 };
 
+typedef Geometry<point_t> Point;
+
 // #include <simo/geom/envelope.hpp>
 
 
+#include <algorithm>
 // #include <simo/geom/point.hpp>
 
-
-class Envelope
-{
-  public:
-    Envelope(double minx, double maxx, double miny, double maxy)
-        : m_min(Point(minx, miny)), m_max(Point(maxx, maxy))
-    {
-    }
-
-    Envelope& extend(double x, double y)
-    {
-        m_min.x = std::min(x, m_min.x);
-        m_max.x = std::max(x, m_max.x);
-        m_min.y = std::min(y, m_min.y);
-        m_max.y = std::max(y, m_max.y);
-        return *this;
-    }
-
-    Point center() const { return {(m_min.x + m_max.x) / 2, (m_min.y + m_max.y) / 2}; }
-
-    Point bottom_left() const { return {m_min.x, m_max.y}; }
-
-    Point top_right() const { return {m_max.x, m_min.y}; }
-
-    Point top_left() const { return m_min; }
-
-    Point bottom_right() const { return m_max; }
-
-    Point min() const { return m_min; }
-
-    Point max() const { return m_max; }
-
-    bool contains(const Point& other) const
-    {
-        return (other.x >= m_min.x) && (other.x <= m_max.x) && (other.y >= m_min.y) && (other.y <= m_max.y);
-    }
-
-    bool contains(const Envelope& other) { return contains(other.min()) && contains(other.max()); }
-
-    bool intersects(const Envelope& other)
-    {
-        auto min  = m_min;
-        auto max  = m_max;
-        auto min2 = other.min();
-        auto max2 = other.max();
-        return (max2.x >= min.x) && (min2.x <= max.x) && (max2.y >= min.y) && (min2.y <= max.y);
-    }
-
-    bool overlaps(const Envelope& other)
-    {
-        auto min  = m_min;
-        auto max  = m_max;
-        auto min2 = other.min();
-        auto max2 = other.max();
-        return (max2.x > min.x) && (min2.x < max.x) && (max2.y > min.y) && (min2.y < max.y);
-    }
-
-  private:
-    Point m_min;
-    Point m_max;
-};
+//
+//class Envelope
+//{
+//  public:
+//    Envelope(double minx, double maxx, double miny, double maxy)
+//        : m_min(Point(minx, miny)), m_max(Point(maxx, maxy))
+//    {
+//    }
+//
+//    Envelope& extend(double x, double y)
+//    {
+//        m_min.x = std::min(x, m_min.x);
+//        m_max.x = std::max(x, m_max.x);
+//        m_min.y = std::min(y, m_min.y);
+//        m_max.y = std::max(y, m_max.y);
+//        return *this;
+//    }
+//
+//    Point center() const { return {(m_min.x + m_max.x) / 2, (m_min.y + m_max.y) / 2}; }
+//
+//    Point bottom_left() const { return {m_min.x, m_max.y}; }
+//
+//    Point top_right() const { return {m_max.x, m_min.y}; }
+//
+//    Point top_left() const { return m_min; }
+//
+//    Point bottom_right() const { return m_max; }
+//
+//    Point min() const { return m_min; }
+//
+//    Point max() const { return m_max; }
+//
+//    bool contains(const Point& other) const
+//    {
+//        return (other.x >= m_min.x) && (other.x <= m_max.x) && (other.y >= m_min.y) && (other.y <= m_max.y);
+//    }
+//
+//    bool contains(const Envelope& other) { return contains(other.min()) && contains(other.max()); }
+//
+//    bool intersects(const Envelope& other)
+//    {
+//        auto min  = m_min;
+//        auto max  = m_max;
+//        auto min2 = other.min();
+//        auto max2 = other.max();
+//        return (max2.x >= min.x) && (min2.x <= max.x) && (max2.y >= min.y) && (min2.y <= max.y);
+//    }
+//
+//    bool overlaps(const Envelope& other)
+//    {
+//        auto min  = m_min;
+//        auto max  = m_max;
+//        auto min2 = other.min();
+//        auto max2 = other.max();
+//        return (max2.x > min.x) && (min2.x < max.x) && (max2.y > min.y) && (min2.y < max.y);
+//    }
+//
+//  private:
+//    Point m_min;
+//    Point m_max;
+//};
 
 // #include <simo/geom/multipoint.hpp>
 
 
+#include <vector>
 // #include <simo/geom/geometry.hpp>
 
+// #include <simo/geom/point.hpp>
 
-class MultiPoint : virtual public Geometry
+
+class multipoint_t
 {
   public:
-    MultiPoint(std::initializer_list<Point> points)
-        : m_points(points) {}
+    multipoint_t() = default;
 
-    MultiPoint(std::initializer_list<std::initializer_list<double>> list)
+    template <
+        typename T,  //real type
+        typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    multipoint_t(std::initializer_list<std::initializer_list<T>> list)
     {
-        for (const auto& coordinates : list)
+        for (const auto& coords : list)
         {
-            m_points.emplace_back(Point(coordinates));
+            m_points.emplace_back(coords);
         }
     }
-
-    explicit MultiPoint(std::vector<Point> points)
-        : m_points(std::move(points)) {}
 
     typedef std::vector<Point>::iterator iterator;
     typedef std::vector<Point>::const_iterator const_iterator;
 
-    iterator begin() { return m_points.begin(); }
+    iterator begin()
+    {
+        return m_points.begin();
+    }
 
-    const_iterator begin() const { return m_points.begin(); }
+    const_iterator begin() const
+    {
+        return m_points.begin();
+    }
 
-    iterator end() { return m_points.end(); }
+    iterator end()
+    {
+        return m_points.end();
+    }
 
-    const_iterator end() const { return m_points.end(); }
+    const_iterator end() const
+    {
+        return m_points.end();
+    }
 
-    GeometryType geom_type() const override { return GeometryType::MULTIPOINT; }
+    GeometryType geom_type() const
+    {
+        return GeometryType::MULTIPOINT;
+    }
 
-    std::string geom_type_str() const override { return "MultiPoint"; }
+    std::string geom_type_str() const
+    {
+        return "MULTIPOINT";
+    }
 
-    int8_t dimension() const override { return 0; }
+    int8_t dimension() const
+    {
+        return 0;
+    }
 
-    std::unique_ptr<Envelope> envelope() override { return nullptr; }
+    Point at(size_t pos)
+    {
+        return m_points.at(pos);
+    }
 
-    bool is_empty() const override { return false; }
-
-    bool is_simple() const override { return false; }
-
-    bool is_closed() const override { return false; }
-
-    bool equals(const Geometry& geom) const override { return false; }
-
-    bool touches(const Geometry& geom) const override { return false; }
-
-    bool contains(const Geometry& geom) const override { return false; }
-
-    bool within(const Geometry& geom) const override { return false; }
-
-    bool disjoint(const Geometry& geom) const override { return false; }
-
-    bool crosses(const Geometry& geom) const override { return false; }
-
-    bool overlaps(const Geometry& geom) const override { return false; }
-
-    bool intersects(const Geometry& geom) const override { return false; }
-
-    bool relate(const Geometry& geom, const std::string& overlap_matrix) const override { return false; }
-
-    double distance(const Geometry& geom) const override { return 0; }
-
-    std::unique_ptr<Geometry> buffer(double distance) const override { return std::unique_ptr<Geometry>(); }
-
-    std::unique_ptr<Geometry> convex_hull() const override { return std::unique_ptr<Geometry>(); }
-
-    std::unique_ptr<Geometry>
-    set_intersection(const Geometry& other) const override { return std::unique_ptr<Geometry>(); }
-
-    std::unique_ptr<Geometry>
-    set_union(const Geometry& other) const override { return std::unique_ptr<Geometry>(); }
-
-    std::unique_ptr<Geometry>
-    set_difference(const Geometry& other) const override { return std::unique_ptr<Geometry>(); }
-
-    std::unique_ptr<Geometry>
-    set_symmetric_difference(const Geometry& other) const override { return std::unique_ptr<Geometry>(); }
+    Point operator[] (size_t pos)
+    {
+        return m_points[pos];
+    }
+    //
+    //    std::unique_ptr<Envelope> envelope() override { return nullptr; }
+    //
+    //    bool is_empty() const override { return false; }
+    //
+    //    bool is_simple() const override { return false; }
+    //
+    //    bool is_closed() const override { return false; }
+    //
+    //    bool equals(const Geometry& geom) const override { return false; }
+    //
+    //    bool touches(const Geometry& geom) const override { return false; }
+    //
+    //    bool contains(const Geometry& geom) const override { return false; }
+    //
+    //    bool within(const Geometry& geom) const override { return false; }
+    //
+    //    bool disjoint(const Geometry& geom) const override { return false; }
+    //
+    //    bool crosses(const Geometry& geom) const override { return false; }
+    //
+    //    bool overlaps(const Geometry& geom) const override { return false; }
+    //
+    //    bool intersects(const Geometry& geom) const override { return false; }
+    //
+    //    bool relate(const Geometry& geom, const std::string& overlap_matrix) const override { return false; }
+    //
+    //    double distance(const Geometry& geom) const override { return 0; }
+    //
+    //    std::unique_ptr<Geometry> buffer(double distance) const override { return std::unique_ptr<Geometry>(); }
+    //
+    //    std::unique_ptr<Geometry> convex_hull() const override { return std::unique_ptr<Geometry>(); }
+    //
+    //    std::unique_ptr<Geometry>
+    //    set_intersection(const Geometry& other) const override { return std::unique_ptr<Geometry>(); }
+    //
+    //    std::unique_ptr<Geometry>
+    //    set_union(const Geometry& other) const override { return std::unique_ptr<Geometry>(); }
+    //
+    //    std::unique_ptr<Geometry>
+    //    set_difference(const Geometry& other) const override { return std::unique_ptr<Geometry>(); }
+    //
+    //    std::unique_ptr<Geometry>
+    //    set_symmetric_difference(const Geometry& other) const override { return std::unique_ptr<Geometry>(); }
 
   private:
     std::vector<Point> m_points;
 };
 
+typedef Geometry<multipoint_t> MultiPoint;
 
 }  // namespace shapes
 }  // namespace simo
