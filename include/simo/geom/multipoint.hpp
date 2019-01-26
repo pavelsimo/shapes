@@ -11,6 +11,8 @@ namespace simo
 namespace shapes
 {
 
+typedef Geometry<multipoint_t> MultiPoint;
+
 class multipoint_t
 {
   public:
@@ -34,6 +36,11 @@ class multipoint_t
         {
             /// @todo throw an exception
         }
+    }
+
+    explicit multipoint_t(std::vector<Point> points)
+        : m_points(std::move(points))
+    {
     }
 
     typedef std::vector<Point>::iterator iterator;
@@ -94,12 +101,58 @@ class multipoint_t
         return m_points.size();
     }
 
+    static MultiPoint from_json(const std::string& json)
+    {
+        nlohmann::json j = nlohmann::json::parse(json);
+        std::string type = j.at("type").get<std::string>();
+        if (type != "MultiPoint")
+        {
+            /// @todo parse error...
+        }
+
+        auto points = j.at("coordinates").get<std::vector<std::vector<double>>>();
+        std::vector<Point> res;
+        for (const auto& coordinates : points)
+        {
+            if (coordinates.size() == 2)
+            {
+                res.emplace_back(Point{coordinates[0], coordinates[1]});
+            }
+            else if (coordinates.size() == 3)
+            {
+                res.emplace_back(Point{coordinates[0], coordinates[1], coordinates[2]});
+            }
+            else
+            {
+                /// @todo parse error...
+            }
+        }
+        return MultiPoint(res);
+    }
+
+    std::string to_json()
+    {
+        auto coordinates = std::vector<std::vector<double>>();
+        coordinates.reserve(m_points.size());
+        for (const auto& p : *this)
+        {
+            if (p.dimension() == 2)
+            {
+                coordinates.emplace_back(std::vector<double>{p.x, p.y});
+            }
+            else if (p.dimension() == 3)
+            {
+                coordinates.emplace_back(std::vector<double>{p.x, p.y, p.z});
+            }
+        }
+        nlohmann::json j = {{"type", "MultiPoint"}, {"coordinates", coordinates}};
+        return j.dump();
+    }
+
   private:
     std::vector<Point> m_points;
     Envelope m_envelope;
 };
-
-typedef Geometry<multipoint_t> MultiPoint;
 
 }  // namespace shapes
 }  // namespace simo

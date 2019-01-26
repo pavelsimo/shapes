@@ -34,7 +34,7 @@ TEST_CASE("Point tests") {
         CHECK(p.dimension() == 3);
     }
 
-    SECTION("2d point from geojson") {
+    SECTION("2d point - from json") {
         auto p = Point::from_json("{\"type\": \"Point\", \"coordinates\": [1.0, 2.0]}");
         CHECK(p.x == 1.0);
         CHECK(p.y == 2.0);
@@ -42,7 +42,7 @@ TEST_CASE("Point tests") {
         CHECK(p.geom_type_str() == "POINT");
     }
 
-    SECTION("3d point from geojson") {
+    SECTION("3d point - from json") {
         auto p = Point::from_json("{\"type\": \"Point\", \"coordinates\": [1.0, 2.0, 3.0]}");
         CHECK(p.x == 1.0);
         CHECK(p.y == 2.0);
@@ -51,12 +51,12 @@ TEST_CASE("Point tests") {
         CHECK(p.geom_type_str() == "POINT");
     }
 
-    SECTION("2d point to geojson") {
+    SECTION("2d point - to json") {
         auto p = Point{1, 2};
         CHECK(p.to_json() == "{\"coordinates\":[1.0,2.0],\"type\":\"Point\"}");
     }
 
-    SECTION("3d point to geojson") {
+    SECTION("3d point - to json") {
         auto p = Point{1, 2, 3};
         CHECK(p.to_json() == "{\"coordinates\":[1.0,2.0,3.0],\"type\":\"Point\"}");
     }

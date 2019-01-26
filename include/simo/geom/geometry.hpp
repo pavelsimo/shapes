@@ -52,17 +52,17 @@ class Geometry : public Base
         : Base(std::move(rhs))
     {}
 
-    GeometryType geom_type()
+    GeometryType geom_type() const
     {
         return Base::geom_type();
     }
 
-    std::string geom_type_str()
+    std::string geom_type_str() const
     {
         return Base::geom_type_str();
     }
 
-    virtual int8_t dimension()
+    int8_t dimension() const
     {
         return Base::dimension();
     }

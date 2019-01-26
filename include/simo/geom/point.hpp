@@ -13,6 +13,8 @@ namespace simo
 namespace shapes
 {
 
+typedef Geometry<point_t> Point;
+
 class point_t
 {
   public:
@@ -68,7 +70,7 @@ class point_t
         return m_dimension;
     }
 
-    static point_t from_json(const std::string& json)
+    static Point from_json(const std::string& json)
     {
         nlohmann::json j = nlohmann::json::parse(json);
         std::string type = j.at("type").get<std::string>();
@@ -93,20 +95,18 @@ class point_t
 
     std::string to_json()
     {
-        std::vector<double> coords = {x, y};
+        auto coordinates = std::vector<double>{x, y};
         if (m_dimension == 3)
         {
-            coords.push_back(z);
+            coordinates.push_back(z);
         }
-        nlohmann::json j = {{"type", "Point"}, {"coordinates", coords}};
+        nlohmann::json j = {{"type", "Point"}, {"coordinates", coordinates}};
         return j.dump();
     }
 
   private:
     int8_t m_dimension;
 };
-
-typedef Geometry<point_t> Point;
 
 }  // namespace shapes
 }  // namespace simo

@@ -1,4 +1,6 @@
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_VERBOSE_MAKEFILE on)
 
 add_executable(test_point test_point.cpp)
 target_link_libraries(test_point shapes)

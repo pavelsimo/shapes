@@ -33,7 +33,7 @@ TEST_CASE("MultiPoint tests")
         CHECK(mp[1].z == 6.0);
     }
 
-    SECTION("2d multipoint envelope")
+    SECTION("2d multipoint - envelope")
     {
         MultiPoint mp = {{1.0, 2.0}, {3.0, 4.0}};
         CHECK(mp.envelope().max().x == 3.0);
@@ -42,7 +42,7 @@ TEST_CASE("MultiPoint tests")
         CHECK(mp.envelope().min().y == 2.0);
     }
 
-    SECTION("2d multipoint for each")
+    SECTION("2d multipoint - for each")
     {
         auto points = MultiPoint{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
         int count = 0;
@@ -55,7 +55,7 @@ TEST_CASE("MultiPoint tests")
         CHECK(count == 3);
     }
 
-    SECTION("3d multipoint for each")
+    SECTION("3d multipoint - for each")
     {
         auto points = MultiPoint{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}};
         int count = 0;
@@ -69,7 +69,7 @@ TEST_CASE("MultiPoint tests")
         CHECK(count == 3);
     }
 
-    SECTION("2d multipoint index operator")
+    SECTION("2d multipoint - index operator")
     {
         auto points = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
         auto p1 = points[0];
@@ -80,7 +80,7 @@ TEST_CASE("MultiPoint tests")
         CHECK(p2.y == 4.0);
     }
 
-    SECTION("3d multipoint index operator")
+    SECTION("3d multipoint - index operator")
     {
         auto points = MultiPoint{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
         auto p1 = points[0];
@@ -92,5 +92,31 @@ TEST_CASE("MultiPoint tests")
         CHECK(p2.y == 4.0);
         CHECK(p3.x == 5.0);
         CHECK(p3.y == 6.0);
+    }
+
+    SECTION("2d multipoint - from json")
+    {
+        std::string json = "{\"type\":\"MultiPoint\",\"coordinates\":[[1.0,2.0],[3.0,4.0]]}";
+        auto mp = MultiPoint::from_json(json);
+        auto p1 = mp[0];
+        auto p2 = mp[1];
+        CHECK(p1.x == 1.0);
+        CHECK(p1.y == 2.0);
+        CHECK(p2.x == 3.0);
+        CHECK(p2.y == 4.0);
+    }
+
+    SECTION("3d multipoint - from json")
+    {
+        std::string json = "{\"type\":\"MultiPoint\",\"coordinates\":[[1.0,2.0,3.0],[4.0,5.0,6.0]]}";
+        auto mp = MultiPoint::from_json(json);
+        auto p1 = mp[0];
+        auto p2 = mp[1];
+        CHECK(p1.x == 1.0);
+        CHECK(p1.y == 2.0);
+        CHECK(p1.z == 3.0);
+        CHECK(p2.x == 4.0);
+        CHECK(p2.y == 5.0);
+        CHECK(p2.z == 6.0);
     }
 }
