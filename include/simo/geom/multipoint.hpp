@@ -34,13 +34,14 @@ class multipoint_t
 
         if (dimensions.size() >= 2)
         {
-            /// @todo throw an exception
+            throw exception();
         }
     }
 
     explicit multipoint_t(std::vector<Point> points)
         : m_points(std::move(points))
     {
+            /// @todo (pavel) check dimensions
     }
 
     typedef std::vector<Point>::iterator iterator;
@@ -107,7 +108,7 @@ class multipoint_t
         std::string type = j.at("type").get<std::string>();
         if (type != "MultiPoint")
         {
-            /// @todo parse error...
+            throw parse_error();
         }
 
         auto points = j.at("coordinates").get<std::vector<std::vector<double>>>();
@@ -124,7 +125,7 @@ class multipoint_t
             }
             else
             {
-                /// @todo parse error...
+                throw parse_error();
             }
         }
         return MultiPoint(res);

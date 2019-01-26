@@ -7,6 +7,7 @@
 #include <type_traits>
 #include <json/json.hpp>
 #include <simo/geom/geometry.hpp>
+#include <simo/exceptions.hpp>
 
 namespace simo
 {
@@ -31,7 +32,7 @@ class point_t
     }
 
     template <
-        typename T,  // integer,
+        typename T,
         typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     point_t(std::initializer_list<T> list)
     {
@@ -76,7 +77,7 @@ class point_t
         std::string type = j.at("type").get<std::string>();
         if (type != "Point")
         {
-            // parse error
+            throw parse_error();
         }
 
         std::vector<double> coords = j.at("coordinates");
@@ -89,8 +90,7 @@ class point_t
             return {coords[0], coords[1], coords[2]};
         }
 
-        /// @todo thrown an exception
-        return {};
+        throw parse_error();
     }
 
     std::string to_json()

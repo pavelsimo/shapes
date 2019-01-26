@@ -44,12 +44,12 @@ TEST_CASE("MultiPoint tests")
 
     SECTION("2d multipoint - for each")
     {
-        auto points = MultiPoint{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
+        auto mp = MultiPoint{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
         int count = 0;
-        for (const auto& point: points)
+        for (const auto& p: mp)
         {
-            CHECK(point.x != 0);
-            CHECK(point.y != 0);
+            CHECK(p.x != 0);
+            CHECK(p.y != 0);
             ++count;
         }
         CHECK(count == 3);
@@ -57,13 +57,13 @@ TEST_CASE("MultiPoint tests")
 
     SECTION("3d multipoint - for each")
     {
-        auto points = MultiPoint{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}};
+        auto mp = MultiPoint{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}};
         int count = 0;
-        for (const auto& point: points)
+        for (const auto& p: mp)
         {
-            CHECK(point.x != 0);
-            CHECK(point.y != 0);
-            CHECK(point.z != 0);
+            CHECK(p.x != 0);
+            CHECK(p.y != 0);
+            CHECK(p.z != 0);
             ++count;
         }
         CHECK(count == 3);
@@ -118,5 +118,17 @@ TEST_CASE("MultiPoint tests")
         CHECK(p2.x == 4.0);
         CHECK(p2.y == 5.0);
         CHECK(p2.z == 6.0);
+    }
+
+    SECTION("2d multipoint - to json")
+    {
+        MultiPoint mp = {{1.0, 2.0}, {3.0, 4.0}};
+        CHECK(mp.to_json() == "{\"coordinates\":[[1.0,2.0],[3.0,4.0]],\"type\":\"MultiPoint\"}");
+    }
+
+    SECTION("3d multipoint - to json")
+    {
+        MultiPoint mp = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+        CHECK(mp.to_json() == "{\"coordinates\":[[1.0,2.0,3.0],[4.0,5.0,6.0]],\"type\":\"MultiPoint\"}");
     }
 }
