@@ -2,22 +2,27 @@ dist: trusty
 sudo: false
 language: cpp
 
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - g++-6
+matrix:
+include:
 
-before_script:
-  - pip install --user cpp-coveralls
-script:
-  - CXX=/usr/bin/g++-6 CC=/usr/bin/gcc-6 cmake -DCOVERAGE=1 .
-  - cmake .
-  - cmake --build . -- -j2
-  - ./tests/test_point
-  - ./tests/test_multipoint
+- os: linux
+  compiler: gcc
+    addons:
+      apt:
+        sources: ['ubuntu-toolchain-r-test']
+        packages: ['g++-4.9', 'ninja-build']
 
+  before_script:
+    - pip install --user cpp-coveralls
 
+  script:
+    - cmake .
+    - cmake --build . -- -j2
 
+  after_success:
+    - coveralls --build-root tests --include include/simo --gcov 'gcov-4.9' --gcov-options '\-lp'
 
+  env:
+  - COMPILER=g++-4.9
+  - CMAKE_OPTIONS=-DSHAPES_COVERAGE=ON
+  - SHAPES_SINGLE_HEADER=OFF
