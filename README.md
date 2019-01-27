@@ -1,12 +1,13 @@
 # shapes
-GIS made easy, a lightweight header-only planar geometry library for Modern C++
+A lightweight header-only planar geometry library for Modern C++
 
+- Inspired on the 
 - Beautiful API, straightforward integration.
 - Complaint with OGC [Simple Features](https://en.wikipedia.org/wiki/Simple_Features).
 
 ## Installation
 
-For integration simplicity `shapes` ships as a header-only library:
+`shapes` ships as a header-only library:
 
 ```cpp
 #include <simo/shapes.hpp>
@@ -24,13 +25,6 @@ std::cout << p.x << " " << p.y << " " << p.z << std::endl;
 std::cout << p.to_json() std::endl; 
 ```
 
-Building geometry from WKT:
-
-```cpp
-auto point = Geometry::from_wkt("POINT (30 10)");
-auto linestring = Geometry::from_wkt("LINESTRING (30 10, 10 30, 40 40)");
-```
-
 Iterating a `MultiPoint` is as simple as:
 
 ```cpp
@@ -40,6 +34,14 @@ for(const auto& point: points)
     std::cout << point.x << " " << point.y << " " << point.z << std::endl;
 } 
 ```
+
+## Third-party tools
+
+This project would not have been possible without the help of the following tools, many thanks to its developers!
+
+- [JSON for Modern C++](https://github.com/nlohmann/json)
+- [amalgamate.py](https://github.com/edlund/amalgamate)
+- [Catch2](https://github.com/catchorg/Catch2)
 
 ## License
 
