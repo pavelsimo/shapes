@@ -52,7 +52,7 @@ class point_t
         }
         else
         {
-            /// @todo (pavel) report error
+            throw exception();
         }
     }
 
@@ -63,12 +63,39 @@ class point_t
 
     std::string geom_type_str() const
     {
-        return "POINT";
+        return "Point";
     }
 
     int8_t dimension() const
     {
         return m_dimension;
+    }
+
+    bool empty() const
+    {
+        return false;
+    }
+
+    double at(size_t pos)
+    {
+        if (pos >= size()) {
+            throw exception();
+        }
+        if (pos == 0)
+            return x;
+        if (pos == 1)
+            return y;
+        return z;
+    }
+
+    double operator[](size_t pos)
+    {
+        return at(pos);
+    }
+
+    size_t size() const
+    {
+        return static_cast<size_t>(m_dimension);
     }
 
     static Point from_json(const std::string& json)

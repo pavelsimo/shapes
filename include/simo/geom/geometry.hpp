@@ -67,6 +67,16 @@ class Geometry : public Base
         return Base::dimension();
     }
 
+    bool empty() const
+    {
+        return Base::empty();
+    }
+
+    size_t size() const
+    {
+        return Base::size();
+    }
+
     //===========================
     // Geometry Creation
     //===========================
@@ -87,7 +97,6 @@ class Geometry : public Base
     // Geometry Characteristics
     //===========================
 
-    //    virtual bool is_empty() const = 0;
     //
     //    virtual bool is_simple() const = 0;
     //

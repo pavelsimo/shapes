@@ -8,6 +8,8 @@ namespace simo
 namespace shapes
 {
 
+typedef envelope_t Envelope;
+
 class envelope_t
 {
   public:
@@ -18,7 +20,7 @@ class envelope_t
     envelope_t(double minx, double maxx, double miny, double maxy)
         : m_min({minx, miny}), m_max({maxx, maxy}) {}
 
-    envelope_t& extend(double x, double y)
+    Envelope& extend(double x, double y)
     {
         m_min.x = std::min(x, m_min.x);
         m_max.x = std::max(x, m_max.x);
@@ -94,8 +96,6 @@ class envelope_t
     Point m_min;
     Point m_max;
 };
-
-typedef envelope_t Envelope;
 
 }  // namespace shapes
 }  // namespace simo

@@ -10,7 +10,6 @@ namespace simo
 {
 namespace shapes
 {
-
 typedef Geometry<multipoint_t> MultiPoint;
 
 class multipoint_t
@@ -23,25 +22,19 @@ class multipoint_t
         typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     multipoint_t(std::initializer_list<std::initializer_list<T>> list)
     {
-        std::set<int> dimensions;
-        for (const auto& coords : list)
+        for (const auto& coordinates : list)
         {
-            Point p(coords);
-            dimensions.insert(p.dimension());
+            Point p(coordinates);
             m_envelope.extend(p.x, p.y);
             m_points.push_back(std::move(p));
         }
-
-        if (dimensions.size() >= 2)
-        {
-            throw exception();
-        }
+        /// @todo (pavel) check dimensions?
     }
 
     explicit multipoint_t(std::vector<Point> points)
         : m_points(std::move(points))
     {
-            /// @todo (pavel) check dimensions
+        /// @todo (pavel) check dimensions?
     }
 
     typedef std::vector<Point>::iterator iterator;
@@ -74,7 +67,7 @@ class multipoint_t
 
     std::string geom_type_str() const
     {
-        return "MULTIPOINT";
+        return "MultiPoint";
     }
 
     int8_t dimension() const
@@ -89,7 +82,12 @@ class multipoint_t
 
     Point operator[](size_t pos)
     {
-        return m_points[pos];
+        return m_points.at(pos);
+    }
+
+    bool empty() const
+    {
+        return m_points.empty();
     }
 
     Envelope envelope() const
@@ -97,7 +95,7 @@ class multipoint_t
         return m_envelope;
     }
 
-    size_t size() noexcept
+    size_t size() const
     {
         return m_points.size();
     }
