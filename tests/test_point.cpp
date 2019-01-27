@@ -77,8 +77,8 @@ TEST_CASE("Point tests")
         CHECK(p[1] == 2.0);
         CHECK(p.size() == 2);
         CHECK_THROWS(p[2]);
-        int n = 0;
-        for (int i = 0; i < p.size(); ++i)
+        size_t n = 0;
+        for (size_t i = 0; i < p.size(); ++i)
         {
             n++;
         }
@@ -93,8 +93,8 @@ TEST_CASE("Point tests")
         CHECK(p[2] == 3.0);
         CHECK(p.size() == 3);
         CHECK_THROWS(p[3]);
-        int n = 0;
-        for (int i = 0; i < p.size(); ++i)
+        size_t n = 0;
+        for (size_t i = 0; i < p.size(); ++i)
         {
             n++;
         }
