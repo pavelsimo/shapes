@@ -3,6 +3,7 @@
 #include <initializer_list>
 #include <stdexcept>
 #include <memory>
+#include <tuple>
 #include <string>
 #include <type_traits>
 #include <json/json.hpp>
@@ -101,12 +102,12 @@ class point_t
 
     std::tuple<double, double> xy() const
     {
-        return {x, y};
+        return std::make_tuple(x, y);
     }
 
     std::tuple<double, double, double> xyz() const
     {
-        return {x, y, z};
+        return std::make_tuple(x, y, z);
     }
 
     static Point from_json(const std::string& json)
