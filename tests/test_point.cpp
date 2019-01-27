@@ -112,11 +112,11 @@ TEST_CASE("Point tests")
 
     SECTION("3d point - to tuples")
     {
-        Point p = {1.0, 2.0};
+        Point p = {1.0, 2.0, 3.0};
         double x, y, z;
         std::tie(x, y, z) = p.xyz();
         CHECK(x == 1.0);
         CHECK(y == 2.0);
-        CHECK(y == 3.0);
+        CHECK(z == 3.0);
     }
 }

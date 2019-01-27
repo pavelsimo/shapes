@@ -36,6 +36,7 @@ SOFTWARE.
 #include <string>
 #include <tuple>
 #include <vector>
+#include <tuple>
 
 // #include <simo/shapes_fwd.hpp>
 
@@ -61,7 +62,7 @@ class multipolygon_t;
 
 class geometrycollection_t;
 
-class envelope_t;
+class bounds_t;
 
 }  // namespace shapes
 }  // namespace simo
@@ -124,19 +125,29 @@ class Geometry : public Base
         : Base(std::move(rhs))
     {}
 
-    GeometryType geom_type()
+    GeometryType geom_type() const
     {
         return Base::geom_type();
     }
 
-    std::string geom_type_str()
+    std::string geom_type_str() const
     {
         return Base::geom_type_str();
     }
 
-    virtual int8_t dimension()
+    int8_t dimension() const
     {
         return Base::dimension();
+    }
+
+    bool empty() const
+    {
+        return Base::empty();
+    }
+
+    size_t size() const
+    {
+        return Base::size();
     }
 
     //===========================
@@ -159,7 +170,6 @@ class Geometry : public Base
     // Geometry Characteristics
     //===========================
 
-    //    virtual bool is_empty() const = 0;
     //
     //    virtual bool is_simple() const = 0;
     //
@@ -245,11 +255,47 @@ class Geometry : public Base
 #include <json/json.hpp>
 // #include <simo/geom/geometry.hpp>
 
+// #include <simo/exceptions.hpp>
+
+
+#include <string>
+#include <exception>
 
 namespace simo
 {
 namespace shapes
 {
+
+/// @todo (pavel) improve these types
+
+class exception : public std::exception
+{
+  public:
+    const char* what() const noexcept override
+    {
+        return "shapes error";
+    }
+};
+
+class parse_error : public exception
+{
+  public:
+    const char* what() const noexcept override
+    {
+        return "parse error";
+    }
+};
+
+}  // namespace shapes
+}  // namespace simo
+
+
+namespace simo
+{
+namespace shapes
+{
+
+typedef Geometry<point_t> Point;
 
 class point_t
 {
@@ -260,34 +306,34 @@ class point_t
 
     point_t()
     {
-        this->x           = 0;
-        this->y           = 0;
-        this->z           = 0;
-        this->m_dimension = 2;
+        this->x      = 0;
+        this->y      = 0;
+        this->z      = 0;
+        this->m_ndim = 2;
     }
 
     template <
-        typename T,  // integer,
+        typename T,
         typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     point_t(std::initializer_list<T> list)
     {
         if (list.size() == 2)
         {
-            this->x           = *list.begin();
-            this->y           = *(list.begin() + 1);
-            this->z           = 0;
-            this->m_dimension = 2;
+            this->x      = *list.begin();
+            this->y      = *(list.begin() + 1);
+            this->z      = 0;
+            this->m_ndim = 2;
         }
         else if (list.size() == 3)
         {
-            this->x           = *list.begin();
-            this->y           = *(list.begin() + 1);
-            this->z           = *(list.begin() + 2);
-            this->m_dimension = 3;
+            this->x      = *list.begin();
+            this->y      = *(list.begin() + 1);
+            this->z      = *(list.begin() + 2);
+            this->m_ndim = 3;
         }
         else
         {
-            /// @todo (pavel) report error
+            throw exception();
         }
     }
 
@@ -298,21 +344,59 @@ class point_t
 
     std::string geom_type_str() const
     {
-        return "POINT";
+        return "Point";
     }
 
     int8_t dimension() const
     {
-        return m_dimension;
+        return m_ndim;
     }
 
-    static point_t from_json(const std::string& json)
+    bool empty() const
+    {
+        return false;
+    }
+
+    double at(size_t pos)
+    {
+        if (pos >= size())
+        {
+            throw exception();
+        }
+        if (pos == 0)
+            return x;
+        if (pos == 1)
+            return y;
+        return z;
+    }
+
+    double operator[](size_t pos)
+    {
+        return at(pos);
+    }
+
+    size_t size() const
+    {
+        return static_cast<size_t>(m_ndim);
+    }
+
+    std::tuple<double, double> xy() const
+    {
+        return {x, y};
+    }
+
+    std::tuple<double, double, double> xyz() const
+    {
+        return {x, y, z};
+    }
+
+    static Point from_json(const std::string& json)
     {
         nlohmann::json j = nlohmann::json::parse(json);
         std::string type = j.at("type").get<std::string>();
         if (type != "Point")
         {
-            // parse error
+            throw parse_error();
         }
 
         std::vector<double> coords = j.at("coordinates");
@@ -325,26 +409,23 @@ class point_t
             return {coords[0], coords[1], coords[2]};
         }
 
-        /// @todo thrown an exception
-        return {};
+        throw parse_error();
     }
 
     std::string to_json()
     {
-        std::vector<double> coords = {x, y};
-        if (m_dimension == 3)
+        auto coordinates = std::vector<double>{x, y};
+        if (m_ndim == 3)
         {
-            coords.push_back(z);
+            coordinates.push_back(z);
         }
-        nlohmann::json j = {{"type", "Point"}, {"coordinates", coords}};
+        nlohmann::json j = {{"type", "Point"}, {"coordinates", coordinates}};
         return j.dump();
     }
 
   private:
-    int8_t m_dimension;
+    int8_t m_ndim;
 };
-
-typedef Geometry<point_t> Point;
 
 }  // namespace shapes
 }  // namespace simo
@@ -360,17 +441,19 @@ namespace simo
 namespace shapes
 {
 
-class envelope_t
+typedef bounds_t Bounds;
+
+class bounds_t
 {
   public:
-    envelope_t()
+    bounds_t()
         : m_min({std::numeric_limits<double>::max(), std::numeric_limits<double>::max()}),
           m_max({std::numeric_limits<double>::min(), std::numeric_limits<double>::min()}) {}
 
-    envelope_t(double minx, double maxx, double miny, double maxy)
+    bounds_t(double minx, double maxx, double miny, double maxy)
         : m_min({minx, miny}), m_max({maxx, maxy}) {}
 
-    envelope_t& extend(double x, double y)
+    Bounds& extend(double x, double y)
     {
         m_min.x = std::min(x, m_min.x);
         m_max.x = std::max(x, m_max.x);
@@ -419,12 +502,12 @@ class envelope_t
         return (other.x >= m_min.x) && (other.x <= m_max.x) && (other.y >= m_min.y) && (other.y <= m_max.y);
     }
 
-    bool contains(const envelope_t& other)
+    bool contains(const bounds_t& other)
     {
         return contains(other.min()) && contains(other.max());
     }
 
-    bool intersects(const envelope_t& other)
+    bool intersects(const bounds_t& other)
     {
         auto min  = m_min;
         auto max  = m_max;
@@ -433,7 +516,7 @@ class envelope_t
         return (max2.x >= min.x) && (min2.x <= max.x) && (max2.y >= min.y) && (min2.y <= max.y);
     }
 
-    bool overlaps(const envelope_t& other)
+    bool overlaps(const bounds_t& other)
     {
         auto min  = m_min;
         auto max  = m_max;
@@ -446,8 +529,6 @@ class envelope_t
     Point m_min;
     Point m_max;
 };
-
-typedef envelope_t Envelope;
 
 }  // namespace shapes
 }  // namespace simo
@@ -467,6 +548,7 @@ namespace simo
 {
 namespace shapes
 {
+typedef Geometry<multipoint_t> MultiPoint;
 
 class multipoint_t
 {
@@ -478,19 +560,19 @@ class multipoint_t
         typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     multipoint_t(std::initializer_list<std::initializer_list<T>> list)
     {
-        std::set<int> dimensions;
-        for (const auto& coords : list)
+        for (const auto& coordinates : list)
         {
-            Point p(coords);
-            dimensions.insert(p.dimension());
-            m_envelope.extend(p.x, p.y);
+            Point p(coordinates);
+            m_bounds.extend(p.x, p.y);
             m_points.push_back(std::move(p));
         }
+        /// @todo (pavel) check dimensions?
+    }
 
-        if (dimensions.size() >= 2)
-        {
-            /// @todo throw an exception
-        }
+    explicit multipoint_t(std::vector<Point> points)
+        : m_points(std::move(points))
+    {
+        /// @todo (pavel) check dimensions?
     }
 
     typedef std::vector<Point>::iterator iterator;
@@ -523,7 +605,7 @@ class multipoint_t
 
     std::string geom_type_str() const
     {
-        return "MULTIPOINT";
+        return "MultiPoint";
     }
 
     int8_t dimension() const
@@ -538,25 +620,96 @@ class multipoint_t
 
     Point operator[](size_t pos)
     {
-        return m_points[pos];
+        return m_points.at(pos);
     }
 
-    Envelope envelope() const
+    bool empty() const
     {
-        return m_envelope;
+        return m_points.empty();
     }
 
-    size_t size() noexcept
+    Bounds bounds() const
+    {
+        return m_bounds;
+    }
+
+    size_t size() const
     {
         return m_points.size();
     }
 
+    std::vector<std::tuple<double, double>> xy() const
+    {
+        std::vector<std::tuple<double, double>> res;
+        for (const auto& point : m_points)
+        {
+            res.push_back(point.xy());
+        }
+        return res;
+    }
+
+    std::vector<std::tuple<double, double, double>> xyz() const
+    {
+        std::vector<std::tuple<double, double, double>> res;
+        for (const auto& point : m_points)
+        {
+            res.push_back(point.xyz());
+        }
+        return res;
+    }
+
+    static MultiPoint from_json(const std::string& json)
+    {
+        nlohmann::json j = nlohmann::json::parse(json);
+        std::string type = j.at("type").get<std::string>();
+        if (type != "MultiPoint")
+        {
+            throw parse_error();
+        }
+
+        auto coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
+        std::vector<Point> res;
+        for (const auto& tuple : coords)
+        {
+            if (tuple.size() == 2)
+            {
+                res.emplace_back(Point{tuple[0], tuple[1]});
+            }
+            else if (tuple.size() == 3)
+            {
+                res.emplace_back(Point{tuple[0], tuple[1], tuple[2]});
+            }
+            else
+            {
+                throw parse_error();
+            }
+        }
+        return MultiPoint(res);
+    }
+
+    std::string to_json()
+    {
+        auto coords = std::vector<std::vector<double>>();
+        coords.reserve(m_points.size());
+        for (const auto& p : *this)
+        {
+            if (p.dimension() == 2)
+            {
+                coords.emplace_back(std::vector<double>{p.x, p.y});
+            }
+            else if (p.dimension() == 3)
+            {
+                coords.emplace_back(std::vector<double>{p.x, p.y, p.z});
+            }
+        }
+        nlohmann::json j = {{"type", "MultiPoint"}, {"coordinates", coords}};
+        return j.dump();
+    }
+
   private:
     std::vector<Point> m_points;
-    Envelope m_envelope;
+    Bounds m_bounds;
 };
-
-typedef Geometry<multipoint_t> MultiPoint;
 
 }  // namespace shapes
 }  // namespace simo

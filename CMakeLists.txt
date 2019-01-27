@@ -10,9 +10,17 @@ set(SHAPES_VERSION_MAJOR 0)
 set(SHAPES_VERSION_MINOR 1)
 set(SHAPES_VERSION_PATCH 0)
 
-#==============#
-# clang-format #
-#==============#
+set(SHAPES_LIBRARY ${PROJECT_NAME})
+
+# include settings
+option(SHAPES_SINGLE_HEADER "whether to use a single header or multiple headers" ON)
+if (SHAPES_SINGLE_HEADER)
+    set(SHAPES_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/single_include)
+else()
+    set(SHAPES_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
+endif()
+
+# clang-format
 find_program(CLANG_FORMAT clang-format)
 if (NOT ${CLANG_FORMAT} STREQUAL "CLANG_FORMAT-NOTFOUND")
     message(STATUS "clang-format found: ${CLANG_FORMAT}")
@@ -26,42 +34,21 @@ if (NOT ${CLANG_FORMAT} STREQUAL "CLANG_FORMAT-NOTFOUND")
             COMMAND ${CLANG_FORMAT} -i ${HPP_FILES})
 endif ()
 
-add_library(${PROJECT_NAME} INTERFACE)
-add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
-target_compile_features(${PROJECT_NAME} INTERFACE)
+add_library(${SHAPES_LIBRARY} INTERFACE)
+add_library(${SHAPES_LIBRARY}::${SHAPES_LIBRARY} ALIAS ${SHAPES_LIBRARY})
+target_compile_features(${SHAPES_LIBRARY} INTERFACE)
+add_dependencies(${SHAPES_LIBRARY} amalgamate)
 
 target_include_directories(
-        ${PROJECT_NAME}
+        ${SHAPES_LIBRARY}
         INTERFACE
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/single_include/>
         $<INSTALL_INTERFACE:include>
 )
 
+# amalgamate
 add_custom_target(amalgamate COMMENT "merging the headers"
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         COMMAND python ${PROJECT_SOURCE_DIR}/thirdparty/amalgamate/amalgamate.py -c ${PROJECT_SOURCE_DIR}/thirdparty/amalgamate/config.json -s . --verbose=yes)
 
 add_subdirectory(tests)
-
-install(
-    DIRECTORY "${PROJECT_SOURCE_DIR}/single_include/"
-    DESTINATION "include"
-)
-
-export(
-    TARGETS ${PROJECT_NAME}
-    NAMESPACE ${PROJECT_NAME}::
-    FILE "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Targets.cmake"
-)
-
-install(
-    TARGETS ${PROJECT_NAME}
-    EXPORT "${PROJECT_NAME}Targets"
-    INCLUDES DESTINATION "include"
-)
-
-install(
-    EXPORT "${PROJECT_NAME}Targets"
-    NAMESPACE ${PROJECT_NAME}::
-    DESTINATION "lib/cmake/${PROJECT_NAME}"
-)

@@ -1,11 +1,9 @@
 
-add_executable(test_point test_point.cpp)
-target_link_libraries(test_point shapes)
-target_include_directories(test_point PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/thirdparty)
-
-add_executable(test_multipoint test_multipoint.cpp)
-target_link_libraries(test_multipoint shapes)
-target_include_directories(test_multipoint PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/thirdparty)
-
-
-
+file(GLOB files "test_*.cpp")
+foreach(file ${files})
+    get_filename_component(target_name ${file} NAME_WE)
+    message(STATUS "Building target ${target_name}")
+    add_executable(${target_name} ${file})
+    target_link_libraries(${target_name} ${SHAPES_LIBRARY})
+    target_include_directories(${target_name} PUBLIC ${SHAPES_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/thirdparty)
+endforeach()
