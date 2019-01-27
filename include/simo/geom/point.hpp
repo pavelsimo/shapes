@@ -78,7 +78,8 @@ class point_t
 
     double at(size_t pos)
     {
-        if (pos >= size()) {
+        if (pos >= size())
+        {
             throw exception();
         }
         if (pos == 0)

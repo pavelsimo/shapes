@@ -57,8 +57,8 @@ TEST_CASE("MultiPoint tests")
     SECTION("2d multipoint - for each")
     {
         auto mp = MultiPoint{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
-        int n = 0;
-        for (const auto& p: mp)
+        int n   = 0;
+        for (const auto& p : mp)
         {
             CHECK(p.x != 0);
             CHECK(p.y != 0);
@@ -70,8 +70,8 @@ TEST_CASE("MultiPoint tests")
     SECTION("3d multipoint - for each")
     {
         auto mp = MultiPoint{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}};
-        int n = 0;
-        for (const auto& p: mp)
+        int n   = 0;
+        for (const auto& p : mp)
         {
             CHECK(p.x != 0);
             CHECK(p.y != 0);
@@ -84,8 +84,8 @@ TEST_CASE("MultiPoint tests")
     SECTION("2d multipoint - index operator")
     {
         auto points = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
-        auto p1 = points[0];
-        auto p2 = points[1];
+        auto p1     = points[0];
+        auto p2     = points[1];
         CHECK(p1.x == 1.0);
         CHECK(p1.y == 2.0);
         CHECK(p2.x == 3.0);
@@ -109,9 +109,9 @@ TEST_CASE("MultiPoint tests")
     SECTION("2d multipoint - from json")
     {
         std::string json = "{\"type\":\"MultiPoint\",\"coordinates\":[[1.0,2.0],[3.0,4.0]]}";
-        auto mp = MultiPoint::from_json(json);
-        auto p1 = mp[0];
-        auto p2 = mp[1];
+        auto mp          = MultiPoint::from_json(json);
+        auto p1          = mp[0];
+        auto p2          = mp[1];
         CHECK(p1.x == 1.0);
         CHECK(p1.y == 2.0);
         CHECK(p2.x == 3.0);
@@ -121,9 +121,9 @@ TEST_CASE("MultiPoint tests")
     SECTION("3d multipoint - from json")
     {
         std::string json = "{\"type\":\"MultiPoint\",\"coordinates\":[[1.0,2.0,3.0],[4.0,5.0,6.0]]}";
-        auto mp = MultiPoint::from_json(json);
-        auto p1 = mp[0];
-        auto p2 = mp[1];
+        auto mp          = MultiPoint::from_json(json);
+        auto p1          = mp[0];
+        auto p2          = mp[1];
         CHECK(p1.x == 1.0);
         CHECK(p1.y == 2.0);
         CHECK(p1.z == 3.0);

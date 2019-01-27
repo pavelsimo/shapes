@@ -4,21 +4,25 @@
 
 using namespace simo::shapes;
 
-TEST_CASE("Point tests") {
-    SECTION("geometry type") {
+TEST_CASE("Point tests")
+{
+    SECTION("geometry type")
+    {
         Point p;
         CHECK(p.geom_type() == GeometryType::POINT);
         CHECK(p.geom_type_str() == "Point");
     }
 
-    SECTION("empty constructor") {
+    SECTION("empty constructor")
+    {
         Point p;
         CHECK(p.x == 0);
         CHECK(p.y == 0);
         CHECK(p.dimension() == 2);
     }
 
-    SECTION("2d point constructor - initializer list") {
+    SECTION("2d point constructor - initializer list")
+    {
         Point p = {1, 2};
         CHECK(p.x == 1);
         CHECK(p.y == 2);
@@ -26,7 +30,8 @@ TEST_CASE("Point tests") {
         CHECK(p.dimension() == 2);
     }
 
-    SECTION("3d point constructor - initializer list") {
+    SECTION("3d point constructor - initializer list")
+    {
         Point p = {1, 2, 3};
         CHECK(p.x == 1);
         CHECK(p.y == 2);
@@ -34,7 +39,8 @@ TEST_CASE("Point tests") {
         CHECK(p.dimension() == 3);
     }
 
-    SECTION("2d point - from json") {
+    SECTION("2d point - from json")
+    {
         auto p = Point::from_json("{\"type\": \"Point\", \"coordinates\": [1.0, 2.0]}");
         CHECK(p.x == 1.0);
         CHECK(p.y == 2.0);
@@ -42,7 +48,8 @@ TEST_CASE("Point tests") {
         CHECK(p.geom_type_str() == "Point");
     }
 
-    SECTION("3d point - from json") {
+    SECTION("3d point - from json")
+    {
         auto p = Point::from_json("{\"type\": \"Point\", \"coordinates\": [1.0, 2.0, 3.0]}");
         CHECK(p.x == 1.0);
         CHECK(p.y == 2.0);
@@ -51,17 +58,20 @@ TEST_CASE("Point tests") {
         CHECK(p.geom_type_str() == "Point");
     }
 
-    SECTION("2d point - to json") {
+    SECTION("2d point - to json")
+    {
         auto p = Point{1, 2};
         CHECK(p.to_json() == "{\"coordinates\":[1.0,2.0],\"type\":\"Point\"}");
     }
 
-    SECTION("3d point - to json") {
+    SECTION("3d point - to json")
+    {
         auto p = Point{1, 2, 3};
         CHECK(p.to_json() == "{\"coordinates\":[1.0,2.0,3.0],\"type\":\"Point\"}");
     }
 
-    SECTION("2d point index operator") {
+    SECTION("2d point index operator")
+    {
         Point p = {1, 2};
         CHECK(p[0] == 1.0);
         CHECK(p[1] == 2.0);
@@ -75,7 +85,8 @@ TEST_CASE("Point tests") {
         CHECK(n == p.size());
     }
 
-    SECTION("3d point index operator") {
+    SECTION("3d point index operator")
+    {
         Point p = {1, 2, 3};
         CHECK(p[0] == 1.0);
         CHECK(p[1] == 2.0);
