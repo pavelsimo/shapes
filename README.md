@@ -1,7 +1,7 @@
 # shapes
 A lightweight header-only planar geometry library for Modern C++
  
-# Examples
+## Examples
 
 Building a point from GeoJSON:
 
@@ -28,7 +28,7 @@ for(const auto& point: points)
 } 
 ```
 
-# License
+## License
 
 MIT License
 
