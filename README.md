@@ -1,6 +1,19 @@
 # shapes
-A lightweight header-only planar geometry library for Modern C++
- 
+GIS made easy, a lightweight header-only planar geometry library for Modern C++
+
+- Beautiful API, straightforward integration.
+- Complaint with OGC [Simple Features](https://en.wikipedia.org/wiki/Simple_Features).
+
+## Installation
+
+For integration simplicity `shapes` ships as a header-only library:
+
+```cpp
+#include <simo/shapes.hpp>
+
+using namespace simo::shapes;
+```
+
 ## Examples
 
 Building a point from GeoJSON:
