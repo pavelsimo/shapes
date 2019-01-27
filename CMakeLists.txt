@@ -12,6 +12,13 @@ set(SHAPES_VERSION_PATCH 0)
 
 set(SHAPES_LIBRARY ${PROJECT_NAME})
 
+# warning settings
+if (MSVC)
+    add_compile_options(/W3)
+else()
+    add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
 # include settings
 option(SHAPES_SINGLE_HEADER "whether to use a single header or multiple headers" ON)
 if (SHAPES_SINGLE_HEADER)
@@ -37,7 +44,9 @@ endif ()
 add_library(${SHAPES_LIBRARY} INTERFACE)
 add_library(${SHAPES_LIBRARY}::${SHAPES_LIBRARY} ALIAS ${SHAPES_LIBRARY})
 target_compile_features(${SHAPES_LIBRARY} INTERFACE)
-add_dependencies(${SHAPES_LIBRARY} amalgamate)
+if (SHAPES_SINGLE_HEADER)
+    add_dependencies(${SHAPES_LIBRARY} amalgamate)
+endif()
 
 target_include_directories(
         ${SHAPES_LIBRARY}
