@@ -1,3 +1,4 @@
+SET(COVERAGE OFF CACHE BOOL "Coverage")
 
 file(GLOB files "test_*.cpp")
 foreach(file ${files})
@@ -6,4 +7,8 @@ foreach(file ${files})
     add_executable(${target_name} ${file})
     target_link_libraries(${target_name} ${SHAPES_LIBRARY})
     target_include_directories(${target_name} PUBLIC ${SHAPES_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/thirdparty)
+    if (COVERAGE)
+        target_compile_options(${target_name} PRIVATE --coverage)
+        target_link_libraries(${target_name} PRIVATE --coverage)
+    endif()
 endforeach()

@@ -2,6 +2,22 @@ dist: trusty
 sudo: false
 language: cpp
 
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-6
+
+before_script:
+  - pip install --user cpp-coveralls
 script:
+  - CXX=/usr/bin/g++-6 CC=/usr/bin/gcc-6 cmake -DCOVERAGE=1 .
   - cmake .
   - cmake --build . -- -j2
+  - ./tests/test_point
+  - ./tests/test_multipoint
+
+
+
+
