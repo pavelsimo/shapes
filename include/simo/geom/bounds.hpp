@@ -8,19 +8,19 @@ namespace simo
 namespace shapes
 {
 
-typedef envelope_t Envelope;
+typedef bounds_t Bounds;
 
-class envelope_t
+class bounds_t
 {
   public:
-    envelope_t()
+    bounds_t()
         : m_min({std::numeric_limits<double>::max(), std::numeric_limits<double>::max()}),
           m_max({std::numeric_limits<double>::min(), std::numeric_limits<double>::min()}) {}
 
-    envelope_t(double minx, double maxx, double miny, double maxy)
+    bounds_t(double minx, double maxx, double miny, double maxy)
         : m_min({minx, miny}), m_max({maxx, maxy}) {}
 
-    Envelope& extend(double x, double y)
+    Bounds& extend(double x, double y)
     {
         m_min.x = std::min(x, m_min.x);
         m_max.x = std::max(x, m_max.x);
@@ -69,12 +69,12 @@ class envelope_t
         return (other.x >= m_min.x) && (other.x <= m_max.x) && (other.y >= m_min.y) && (other.y <= m_max.y);
     }
 
-    bool contains(const envelope_t& other)
+    bool contains(const bounds_t& other)
     {
         return contains(other.min()) && contains(other.max());
     }
 
-    bool intersects(const envelope_t& other)
+    bool intersects(const bounds_t& other)
     {
         auto min  = m_min;
         auto max  = m_max;
@@ -83,7 +83,7 @@ class envelope_t
         return (max2.x >= min.x) && (min2.x <= max.x) && (max2.y >= min.y) && (min2.y <= max.y);
     }
 
-    bool overlaps(const envelope_t& other)
+    bool overlaps(const bounds_t& other)
     {
         auto min  = m_min;
         auto max  = m_max;

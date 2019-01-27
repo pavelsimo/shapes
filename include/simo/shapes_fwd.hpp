@@ -21,9 +21,9 @@ class multipolygon_t;
 
 class geometrycollection_t;
 
-class envelope_t;
+class bounds_t;
 
 }  // namespace shapes
 }  // namespace simo
 
-//class envelope_t;
+//class bounds_t;

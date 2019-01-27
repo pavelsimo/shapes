@@ -45,13 +45,13 @@ TEST_CASE("MultiPoint tests")
         CHECK(mp[1].z == 6.0);
     }
 
-    SECTION("2d multipoint - envelope")
+    SECTION("2d multipoint - bounds")
     {
         MultiPoint mp = {{1.0, 2.0}, {3.0, 4.0}};
-        CHECK(mp.envelope().max().x == 3.0);
-        CHECK(mp.envelope().max().y == 4.0);
-        CHECK(mp.envelope().min().x == 1.0);
-        CHECK(mp.envelope().min().y == 2.0);
+        CHECK(mp.bounds().max().x == 3.0);
+        CHECK(mp.bounds().max().y == 4.0);
+        CHECK(mp.bounds().min().x == 1.0);
+        CHECK(mp.bounds().min().y == 2.0);
     }
 
     SECTION("2d multipoint - for each")

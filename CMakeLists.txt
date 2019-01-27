@@ -10,18 +10,21 @@ set(SHAPES_VERSION_MAJOR 0)
 set(SHAPES_VERSION_MINOR 1)
 set(SHAPES_VERSION_PATCH 0)
 
-# format
+#==============#
+# clang-format #
+#==============#
 find_program(CLANG_FORMAT clang-format)
 if (NOT ${CLANG_FORMAT} STREQUAL "CLANG_FORMAT-NOTFOUND")
     message(STATUS "clang-format found: ${CLANG_FORMAT}")
     file(GLOB_RECURSE HPP_FILES
             ${PROJECT_SOURCE_DIR}/include/simo/*.hpp
             ${PROJECT_SOURCE_DIR}/include/simo/io/*.hpp
-            ${PROJECT_SOURCE_DIR}/include/simo/geom/*.hpp)
+            ${PROJECT_SOURCE_DIR}/include/simo/geom/*.hpp
+            ${PROJECT_SOURCE_DIR}/tests/*.cpp
+            )
     add_custom_target(shapes_format COMMENT "applying clang-format"
             COMMAND ${CLANG_FORMAT} -i ${HPP_FILES})
 endif ()
-
 
 add_library(${PROJECT_NAME} INTERFACE)
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
@@ -34,11 +37,9 @@ target_include_directories(
         $<INSTALL_INTERFACE:include>
 )
 
-# @todo first find python
 add_custom_target(amalgamate COMMENT "merging the headers"
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         COMMAND python ${PROJECT_SOURCE_DIR}/thirdparty/amalgamate/amalgamate.py -c ${PROJECT_SOURCE_DIR}/thirdparty/amalgamate/config.json -s . --verbose=yes)
-
 
 add_subdirectory(tests)
 

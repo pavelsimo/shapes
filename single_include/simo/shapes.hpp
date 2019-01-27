@@ -66,7 +66,7 @@ class envelope_t;
 }  // namespace shapes
 }  // namespace simo
 
-//class envelope_t;
+//class bounds_t;
 
 // #include <simo/geom/geometry.hpp>
 
@@ -348,7 +348,7 @@ typedef Geometry<point_t> Point;
 
 }  // namespace shapes
 }  // namespace simo
-// #include <simo/geom/envelope.hpp>
+// #include <simo/geom/bounds.hpp>
 
 
 #include <algorithm>
@@ -460,7 +460,7 @@ typedef envelope_t Envelope;
 
 // #include <simo/geom/point.hpp>
 
-// #include <simo/geom/envelope.hpp>
+// #include <simo/geom/bounds.hpp>
 
 
 namespace simo
