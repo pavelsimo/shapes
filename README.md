@@ -1,4 +1,7 @@
 # shapes
+
+[![Build Status](https://travis-ci.org/pavelsimo/shapes.svg?branch=master)](https://travis-ci.org/pavelsimo/shapes)
+
 A lightweight header-only planar geometry library for Modern C++
 
 - Inspired by python [shapely](https://pypi.org/project/Shapely/) 
