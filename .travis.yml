@@ -2,29 +2,16 @@ dist: trusty
 sudo: false
 language: cpp
 
-matrix:
-include:
+before_script:
+  - pip install --user cpp-coveralls
 
-- os: linux
-  env:
-    - TEST="Coveralls"
-  addons:
-    apt:
-      sources:
-        - ubuntu-toolchain-r-test
-      packages:
-        - gcc-6
-        - g++-6
-  before_script:
-    - pip install --user cpp-coveralls
-
-  script:
-    - cmake .
-    - cmake -DENABLE_COVERAGE=ON -DCMAKE_CXX_COMPILER="g++-6" --build . -- -j2
-    - |
-      coveralls --build-root . --gcov-options '\-lp' \
-        -e build/external \
-        -e build/include \
-        -e build/CMakeFiles/3.8.0 \
-        -e build/CMakeFiles/feature_tests.c \
-        -e build/CMakeFiles/feature_tests.cxx
+script:
+  - cmake .
+  - cmake -DENABLE_COVERAGE=ON -DCMAKE_CXX_COMPILER="g++-6" --build . -- -j2
+  - |
+    coveralls --build-root . --gcov-options '\-lp' \
+      -e build/external \
+      -e build/include \
+      -e build/CMakeFiles/3.8.0 \
+      -e build/CMakeFiles/feature_tests.c \
+      -e build/CMakeFiles/feature_tests.cxx
