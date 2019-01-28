@@ -2,16 +2,18 @@ dist: trusty
 sudo: false
 language: cpp
 
+compiler: gcc
+addons:
+  apt:
+    sources: ['ubuntu-toolchain-r-test']
+    packages: ['g++-4.9', 'ninja-build']
+
 before_script:
   - pip install --user cpp-coveralls
-
 script:
   - cmake .
-  - cmake -DENABLE_COVERAGE=ON -DCMAKE_CXX_COMPILER="g++-6" --build . -- -j2
-  - |
-    coveralls --build-root . --gcov-options '\-lp' \
-      -e build/external \
-      -e build/include \
-      -e build/CMakeFiles/3.8.0 \
-      -e build/CMakeFiles/feature_tests.c \
-      -e build/CMakeFiles/feature_tests.cxx
+  - cmake --build . -- -j2
+  - coveralls --build-root tests --include include/shapes --gcov 'gcov-4.9' --gcov-options '\-lp'
+env:
+  - CMAKE_CXX_COMPILER=g++-4.9
+  - ENABLE_COVERAGE=ON
