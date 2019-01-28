@@ -60,4 +60,9 @@ add_custom_target(amalgamate COMMENT "merging the headers"
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         COMMAND python ${PROJECT_SOURCE_DIR}/thirdparty/amalgamate/amalgamate.py -c ${PROJECT_SOURCE_DIR}/thirdparty/amalgamate/config.json -s . --verbose=yes)
 
-add_subdirectory(tests)
+include(CTest)
+option(SHAPES_TESTING "build tests" ON)
+if(SHAPES_TESTING)
+    enable_testing()
+    add_subdirectory(tests)
+endif()

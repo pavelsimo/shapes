@@ -1,12 +1,8 @@
-if(ENABLE_COVERAGE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g ")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ftest-coverage")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
+if(SHAPES_ENABLE_COVERAGE)
+    set(CMAKE_CXX_FLAGS "--coverage -g -O0 -fprofile-arcs -ftest-coverage -Wno-unused-command-line-argument")
 endif()
 
-include(CTest)
+
 file(GLOB files "test_*.cpp")
 foreach(file ${files})
     get_filename_component(test_name ${file} NAME_WE)
@@ -15,5 +11,6 @@ foreach(file ${files})
     target_link_libraries(${test_name} ${SHAPES_LIBRARY})
     target_compile_definitions(${test_name} PRIVATE CATCH_CONFIG_MAIN)
     target_include_directories(${test_name} PUBLIC ${SHAPES_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/thirdparty)
-    add_test(NAME ${test_name} COMMAND ${test_name} --break WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
+
+    add_test(NAME ${test_name} COMMAND ${test_name})
 endforeach()

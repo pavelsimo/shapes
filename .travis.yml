@@ -13,7 +13,8 @@ before_script:
 
 script:
   - cmake .
-  - cmake --build . -- -j2
+  - cmake --build . --config Release
+  - ctest -C Release -V -j
 
 after_success:
   - coveralls --build-root tests --include include/shapes --gcov 'gcov-4.9' --gcov-options '\-lp'
@@ -21,4 +22,4 @@ after_success:
 env:
   - COMPILER=g++-4.9
   - CCOMPILER=gcc-4.9
-  - CMAKE_OPTIONS=-DENABLE_COVERAGEE=ON
+  - CMAKE_OPTIONS=-DSHAPES_ENABLE_COVERAGE=ON
