@@ -250,6 +250,7 @@ class Geometry : public Base
 #include <initializer_list>
 #include <stdexcept>
 #include <memory>
+#include <tuple>
 #include <string>
 #include <type_traits>
 #include <json/json.hpp>

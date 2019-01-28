@@ -6,23 +6,29 @@ matrix:
 include:
 
 - os: linux
-  compiler: gcc
-    addons:
-      apt:
-        sources: ['ubuntu-toolchain-r-test']
-        packages: ['g++-4.9', 'ninja-build']
-
+  env:
+    - TEST="Coveralls"
+  addons:
+    apt:
+      sources:
+        - ubuntu-toolchain-r-test
+      packages:
+        - gcc-6
+        - g++-6
   before_script:
+    - mkdir build
+    - cd build
     - pip install --user cpp-coveralls
 
   script:
-    - cmake .
-    - cmake --build . -- -j2
-
-  after_success:
-    - coveralls --build-root tests --include include/simo --gcov 'gcov-4.9' --gcov-options '\-lp'
-
-  env:
-  - COMPILER=g++-4.9
-  - CMAKE_OPTIONS=-DSHAPES_COVERAGE=ON
-  - SHAPES_SINGLE_HEADER=OFF
+    - cmake -DENABLE_COVERAGE=ON -DCMAKE_CXX_COMPILER="g++-6" ..
+    - make
+    - make test
+    - cd ..
+    - |
+      coveralls --build-root build --gcov-options '\-lp' \
+        -e build/external \
+        -e build/include \
+        -e build/CMakeFiles/3.8.0 \
+        -e build/CMakeFiles/feature_tests.c \
+        -e build/CMakeFiles/feature_tests.cxx
