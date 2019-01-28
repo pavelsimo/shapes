@@ -10,10 +10,13 @@ addons:
 
 before_script:
   - pip install --user cpp-coveralls
+
 script:
   - cmake .
   - cmake --build . -- -j2
   - coveralls --build-root tests --include include/shapes --gcov 'gcov-4.9' --gcov-options '\-lp'
+  - make test
+
 env:
   - CMAKE_CXX_COMPILER=g++-4.9
   - ENABLE_COVERAGE=ON
