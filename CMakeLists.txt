@@ -20,7 +20,7 @@ else()
 endif()
 
 # include settings
-option(SHAPES_SINGLE_HEADER "whether to use a single header or multiple headers" ON)
+option(SHAPES_SINGLE_HEADER "whether to use a single header or multiple headers" OFF)
 if (SHAPES_SINGLE_HEADER)
     set(SHAPES_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/single_include)
 else()

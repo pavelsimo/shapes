@@ -14,9 +14,11 @@ before_script:
 script:
   - cmake .
   - cmake --build . -- -j2
+
+after_success:
   - coveralls --build-root tests --include include/shapes --gcov 'gcov-4.9' --gcov-options '\-lp'
-  - make test
 
 env:
-  - CMAKE_CXX_COMPILER=g++-4.9
-  - ENABLE_COVERAGE=ON
+  - COMPILER=g++-4.9
+  - CCOMPILER=gcc-4.9
+  - CMAKE_OPTIONS=-DENABLE_COVERAGEE=ON

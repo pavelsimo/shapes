@@ -1,7 +1,7 @@
 # shapes
-
 [![Build Status](https://travis-ci.org/pavelsimo/shapes.svg?branch=master)](https://travis-ci.org/pavelsimo/shapes)
 [![Coverage Status](https://coveralls.io/repos/github/pavelsimo/shapes/badge.svg?branch=master)](https://coveralls.io/github/pavelsimo/shapes?branch=master)
+[![](https://img.shields.io/github/license/pavelsimo/shapes.svg)](https://github.com/pavelsimo/shapes/blob/master/LICENSE)
 
 A lightweight header-only planar geometry library for Modern C++
 
@@ -40,7 +40,7 @@ for(const auto& point: points)
 
 ## Third-party tools
 
-This project would not have been possible without the help of the following tools, many thanks to its developers!
+This project would not have been possible without the following amazing tools, many thanks to its developers!
 
 - [JSON for Modern C++](https://github.com/nlohmann/json)
 - [amalgamate.py](https://github.com/edlund/amalgamate)
