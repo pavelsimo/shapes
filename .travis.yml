@@ -19,12 +19,10 @@ include:
     - pip install --user cpp-coveralls
 
   script:
-    - cmake -DENABLE_COVERAGE=ON -DCMAKE_CXX_COMPILER="g++-6" ..
-    - make
-    - make test
-    - cd ..
+    - cmake .
+    - cmake -DENABLE_COVERAGE=ON -DCMAKE_CXX_COMPILER="g++-6" --build . -- -j2
     - |
-      coveralls --build-root tests --gcov-options '\-lp' \
+      coveralls --build-root . --gcov-options '\-lp' \
         -e build/external \
         -e build/include \
         -e build/CMakeFiles/3.8.0 \
