@@ -1,6 +1,6 @@
 # shapes
 [![Build Status](https://travis-ci.org/pavelsimo/shapes.svg?branch=master)](https://travis-ci.org/pavelsimo/shapes)
-[![Coverage Status](https://coveralls.io/repos/github/pavelsimo/shapes/badge.svg?branch=master)](https://coveralls.io/github/pavelsimo/shapes?branch=master)
+[![codecov](https://codecov.io/gh/pavelsimo/shapes/branch/master/graph/badge.svg)](https://codecov.io/gh/pavelsimo/shapes)
 [![](https://img.shields.io/github/license/pavelsimo/shapes.svg)](https://github.com/pavelsimo/shapes/blob/master/LICENSE)
 
 A lightweight header-only planar geometry library for Modern C++
