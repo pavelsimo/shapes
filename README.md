@@ -48,7 +48,9 @@ This project would not have been possible without the following amazing tools, m
 
 ## License
 
-MIT License
+<img align="right" src="http://opensource.org/trademarks/opensource/OSI-Approved-License-100x137.png">
+
+[MIT License](http://opensource.org/licenses/MIT)
 
 Copyright (c) 2019 Pavel Simó
 
