@@ -10,7 +10,7 @@ addons:
 
 script:
   - cmake . -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE
-  - cmake --build . --j2
+  - cmake --build . -- -j2
   - ctest -j2
 
 after_success:
