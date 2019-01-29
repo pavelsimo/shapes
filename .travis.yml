@@ -20,6 +20,6 @@ after_success:
   - coveralls --build-root tests --include include/shapes --gcov 'gcov-4.9' --gcov-options '\-lp'
 
 env:
-  - COMPILER=g++-4.9
-  - CCOMPILER=gcc-4.9
+  #- COMPILER=g++-4.9
+  #- CCOMPILER=gcc-4.9
   - CMAKE_OPTIONS=-DSHAPES_ENABLE_COVERAGE=ON

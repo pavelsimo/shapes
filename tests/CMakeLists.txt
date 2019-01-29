@@ -1,5 +1,15 @@
 if(SHAPES_ENABLE_COVERAGE)
     set(CMAKE_CXX_FLAGS "--coverage -g -O0 -fprofile-arcs -ftest-coverage -Wno-unused-command-line-argument")
+
+    # collect all source files that we are interested in
+    file(GLOB_RECURSE SOURCE_FILES ${CMAKE_SOURCE_DIR}/include/simo/*)
+
+    # define target to run lcov to collect coverage information, filter unwanted files, and create HTML report
+    add_custom_target(shapes_coverage_report
+            COMMAND lcov --directory . --capture --output-file coverage.info --rc lcov_branch_coverage=1
+            COMMAND lcov -e coverage.info ${SOURCE_FILES} --output-file coverage.info.filtered --rc lcov_branch_coverage=1
+            COMMAND genhtml --title "Shapes ${PROJECT_VERSION}" --legend --demangle-cpp --output-directory coverage_report --show-details --branch-coverage coverage.info.filtered
+            COMMENT "Generating HTML report coverage_report/index.html")
 endif()
 
 
