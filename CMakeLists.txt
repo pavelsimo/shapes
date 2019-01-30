@@ -60,6 +60,24 @@ add_custom_target(amalgamate COMMENT "merging the headers"
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         COMMAND python ${PROJECT_SOURCE_DIR}/thirdparty/amalgamate/amalgamate.py -c ${PROJECT_SOURCE_DIR}/thirdparty/amalgamate/config.json -s . --verbose=yes)
 
+# doxygen
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+    message(STATUS "Doxygen found")
+    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in)
+    set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/docs/Doxyfile)
+
+    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+
+    add_custom_target(shapes_documentation
+            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/docs
+            COMMENT "Generating API documentation with Doxygen"
+            VERBATIM)
+else()
+    message(STATUS "Doxygen not found")
+endif()
+
 include(CTest)
 option(SHAPES_TESTING "build tests" ON)
 if(SHAPES_TESTING)
