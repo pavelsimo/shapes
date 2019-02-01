@@ -8,16 +8,14 @@ namespace simo
 namespace shapes
 {
 
-typedef bounds_t Bounds;
-
-class bounds_t
+class Bounds
 {
   public:
-    bounds_t()
+    Bounds()
         : m_min({std::numeric_limits<double>::max(), std::numeric_limits<double>::max()}),
           m_max({std::numeric_limits<double>::min(), std::numeric_limits<double>::min()}) {}
 
-    bounds_t(double minx, double maxx, double miny, double maxy)
+    Bounds(double minx, double maxx, double miny, double maxy)
         : m_min({minx, miny}), m_max({maxx, maxy}) {}
 
     Bounds& extend(double x, double y)
@@ -69,12 +67,12 @@ class bounds_t
         return (other.x >= m_min.x) && (other.x <= m_max.x) && (other.y >= m_min.y) && (other.y <= m_max.y);
     }
 
-    bool contains(const bounds_t& other)
+    bool contains(const Bounds& other)
     {
         return contains(other.min()) && contains(other.max());
     }
 
-    bool intersects(const bounds_t& other)
+    bool intersects(const Bounds& other)
     {
         auto min  = m_min;
         auto max  = m_max;
@@ -83,7 +81,7 @@ class bounds_t
         return (max2.x >= min.x) && (min2.x <= max.x) && (max2.y >= min.y) && (min2.y <= max.y);
     }
 
-    bool overlaps(const bounds_t& other)
+    bool overlaps(const Bounds& other)
     {
         auto min  = m_min;
         auto max  = m_max;

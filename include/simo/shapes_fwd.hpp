@@ -7,21 +7,23 @@ namespace simo
 namespace shapes
 {
 
-class point_t;
+class Point;
 
-class multipoint_t;
+class MultiPoint;
 
-class linestring_t;
+class Bounds;
 
-class multilinestring_t;
+//
+//class linestring_t;
+//
+//class multilinestring_t;
+//
+//class polygon_t;
+//
+//class multipolygon_t;
+//
+//class geometrycollection_t;
 
-class polygon_t;
-
-class multipolygon_t;
-
-class geometrycollection_t;
-
-class bounds_t;
 
 }  // namespace shapes
 }  // namespace simo

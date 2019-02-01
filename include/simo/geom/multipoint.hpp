@@ -10,17 +10,16 @@ namespace simo
 {
 namespace shapes
 {
-typedef Geometry<multipoint_t> MultiPoint;
 
-class multipoint_t
+class MultiPoint : public Geometry<MultiPoint>
 {
   public:
-    multipoint_t() = default;
+    MultiPoint() = default;
 
     template <
         typename T,  //real type
         typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-    multipoint_t(std::initializer_list<std::initializer_list<T>> list)
+    MultiPoint(std::initializer_list<std::initializer_list<T>> list)
     {
         for (const auto& coordinates : list)
         {
@@ -31,7 +30,7 @@ class multipoint_t
         /// @todo (pavel) check dimensions?
     }
 
-    explicit multipoint_t(std::vector<Point> points)
+    explicit MultiPoint(std::vector<Point> points)
         : m_points(std::move(points))
     {
         /// @todo (pavel) check dimensions?
@@ -60,17 +59,17 @@ class multipoint_t
         return m_points.end();
     }
 
-    GeometryType geom_type() const
+    GeometryType geom_type_impl() const
     {
         return GeometryType::MULTIPOINT;
     }
 
-    std::string geom_type_str() const
+    std::string geom_type_str_impl() const
     {
         return "MultiPoint";
     }
 
-    int8_t dimension() const
+    int8_t dimension_impl() const
     {
         return 0;
     }
@@ -85,7 +84,7 @@ class multipoint_t
         return m_points.at(pos);
     }
 
-    bool empty() const
+    bool empty_impl() const
     {
         return m_points.empty();
     }
@@ -95,7 +94,7 @@ class multipoint_t
         return m_bounds;
     }
 
-    size_t size() const
+    size_t size_impl() const
     {
         return m_points.size();
     }
@@ -155,11 +154,11 @@ class multipoint_t
         coords.reserve(m_points.size());
         for (const auto& p : *this)
         {
-            if (p.dimension() == 2)
+            if (p.dimension_impl() == 2)
             {
                 coords.emplace_back(std::vector<double>{p.x, p.y});
             }
-            else if (p.dimension() == 3)
+            else if (p.dimension_impl() == 3)
             {
                 coords.emplace_back(std::vector<double>{p.x, p.y, p.z});
             }
@@ -169,6 +168,7 @@ class multipoint_t
     }
 
   private:
+
     std::vector<Point> m_points;
     Bounds m_bounds;
 };

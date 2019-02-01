@@ -15,16 +15,14 @@ namespace simo
 namespace shapes
 {
 
-typedef Geometry<point_t> Point;
-
-class point_t
+class Point : public Geometry<Point>
 {
   public:
     double x;
     double y;
     double z;
 
-    point_t()
+    Point()
     {
         this->x      = 0;
         this->y      = 0;
@@ -32,23 +30,37 @@ class point_t
         this->m_ndim = 2;
     }
 
-    template <
-        typename T,
-        typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-    point_t(std::initializer_list<T> list)
+    Point(double x, double y)
     {
-        if (list.size() == 2)
+        this->x      = x;
+        this->y      = y;
+        this->z      = 0;
+        this->m_ndim = 2;
+    }
+
+    Point(double x, double y, double z)
+    {
+        this->x      = x;
+        this->y      = y;
+        this->z      = z;
+        this->m_ndim = 3;
+    }
+
+    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    Point(std::initializer_list<T> init)
+    {
+        if (init.size() == 2)
         {
-            this->x      = *list.begin();
-            this->y      = *(list.begin() + 1);
+            this->x      = *init.begin();
+            this->y      = *(init.begin() + 1);
             this->z      = 0;
             this->m_ndim = 2;
         }
-        else if (list.size() == 3)
+        else if (init.size() == 3)
         {
-            this->x      = *list.begin();
-            this->y      = *(list.begin() + 1);
-            this->z      = *(list.begin() + 2);
+            this->x      = *init.begin();
+            this->y      = *(init.begin() + 1);
+            this->z      = *(init.begin() + 2);
             this->m_ndim = 3;
         }
         else
@@ -57,29 +69,29 @@ class point_t
         }
     }
 
-    GeometryType geom_type() const
+    GeometryType geom_type_impl() const
     {
         return GeometryType::POINT;
     }
 
-    std::string geom_type_str() const
+    std::string geom_type_str_impl() const
     {
         return "Point";
     }
 
-    int8_t dimension() const
+    int8_t dimension_impl() const
     {
         return m_ndim;
     }
 
-    bool empty() const
+    bool empty_impl() const
     {
         return false;
     }
 
     double at(size_t pos)
     {
-        if (pos >= size())
+        if (pos >= size_impl())
         {
             throw exception();
         }
@@ -95,7 +107,7 @@ class point_t
         return at(pos);
     }
 
-    size_t size() const
+    size_t size_impl() const
     {
         return static_cast<size_t>(m_ndim);
     }

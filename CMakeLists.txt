@@ -51,7 +51,7 @@ endif()
 target_include_directories(
         ${SHAPES_LIBRARY}
         INTERFACE
-        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/single_include/>
+        $<BUILD_INTERFACE:${SHAPES_INCLUDE_DIR}>
         $<INSTALL_INTERFACE:include>
 )
 
