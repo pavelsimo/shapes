@@ -13,7 +13,6 @@ matrix:
       env:
         - COMPILER=g++-8
         - CCOMPILER=gcc-8
-        - CXXFLAGS=-std=c++17
 
       script:
         - cmake . -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE
