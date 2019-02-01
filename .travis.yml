@@ -3,6 +3,11 @@ sudo: false
 language: cpp
 
 compiler: gcc
+env:
+  - COMPILER=g++-8
+  - CCOMPILER=gcc-8
+  - CXXFLAGS=-std=c++17
+
 addons:
   apt:
     sources: ['ubuntu-toolchain-r-test']
