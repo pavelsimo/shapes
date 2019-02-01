@@ -16,9 +16,7 @@ class MultiPoint : public Geometry<MultiPoint>
   public:
     MultiPoint() = default;
 
-    template <
-        typename T,  //real type
-        typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     MultiPoint(std::initializer_list<std::initializer_list<T>> list)
     {
         for (const auto& coordinates : list)

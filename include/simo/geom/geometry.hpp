@@ -96,7 +96,7 @@ class Geometry : public BasicGeometry
 
     std::unique_ptr<BasicGeometry> clone() override
     {
-        return std::make_unique<T>(*static_cast<T*>(this));
+        return std::unique_ptr<T>(new T(*static_cast<T*>(this)));
     };
 };
 

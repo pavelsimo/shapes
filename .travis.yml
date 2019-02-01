@@ -1,23 +1,25 @@
+language: cpp
 dist: trusty
 sudo: false
-language: cpp
 
-compiler: gcc
-env:
-  - COMPILER=g++-8
-  - CCOMPILER=gcc-8
-  - CXXFLAGS=-std=c++17
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: ['ubuntu-toolchain-r-test']
+          packages: ['g++-8', 'ninja-build']
+      env:
+        - COMPILER=g++-8
+        - CCOMPILER=gcc-8
+        - CXXFLAGS=-std=c++17
 
-addons:
-  apt:
-    sources: ['ubuntu-toolchain-r-test']
-    packages: ['g++-8', 'ninja-build']
+      script:
+        - cmake . -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE
+        - cmake --build . -- -j2
+        - ctest -j2
 
-script:
-  - cmake . -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE
-  - cmake --build . -- -j2
-  - ctest -j2
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
 
