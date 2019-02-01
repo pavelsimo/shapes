@@ -6,7 +6,7 @@ compiler: gcc
 addons:
   apt:
     sources: ['ubuntu-toolchain-r-test']
-    packages: ['g++-4.9', 'ninja-build']
+    packages: ['g++-8', 'ninja-build']
 
 script:
   - cmake . -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE
