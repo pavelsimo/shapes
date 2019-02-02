@@ -117,27 +117,27 @@ class Bounds
 
     std::tuple<double, double> center() const
     {
-        return {minx + maxx / 2.0, miny + maxy / 2.0};
+        return std::make_tuple((minx + maxx) / 2.0, (miny + maxy) / 2.0);
     }
 
     std::tuple<double, double> bottom_left() const
     {
-        return {minx, maxy};
+        return std::make_tuple(minx, maxy);
     }
 
     std::tuple<double, double> top_right() const
     {
-        return {maxx, miny};
+        return std::make_tuple(maxx, miny);
     }
 
     std::tuple<double, double> top_left() const
     {
-        return {minx, miny};
+        return std::make_tuple(minx, miny);
     }
 
     std::tuple<double, double> bottom_right() const
     {
-        return {maxx, maxy};
+        return std::make_tuple(maxx, maxy);
     }
 
     bool contains(double x, double y) const
