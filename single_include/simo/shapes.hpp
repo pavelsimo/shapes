@@ -48,21 +48,22 @@ namespace simo
 namespace shapes
 {
 
-class point_t;
+class Point;
 
-class multipoint_t;
+class MultiPoint;
 
-class linestring_t;
+class Bounds;
 
-class multilinestring_t;
-
-class polygon_t;
-
-class multipolygon_t;
-
-class geometrycollection_t;
-
-class bounds_t;
+//
+//class linestring_t;
+//
+//class multilinestring_t;
+//
+//class polygon_t;
+//
+//class multipolygon_t;
+//
+//class geometrycollection_t;
 
 }  // namespace shapes
 }  // namespace simo
@@ -76,6 +77,92 @@ class bounds_t;
 #include <memory>
 // #include <simo/shapes_fwd.hpp>
 
+// #include <simo/geom/bounds.hpp>
+
+
+#include <algorithm>
+#include <tuple>
+
+namespace simo
+{
+namespace shapes
+{
+
+class Bounds
+{
+  public:
+    double minx;
+    double miny;
+    double maxx;
+    double maxy;
+
+    Bounds()
+        : minx(std::numeric_limits<double>::max()), miny(std::numeric_limits<double>::max()), maxx(std::numeric_limits<double>::max()), maxy(std::numeric_limits<double>::max())
+    {
+    }
+
+    Bounds(double minx, double miny, double maxx, double maxy)
+        : minx(minx), miny(miny), maxx(maxx), maxy(maxy)
+    {
+    }
+
+    Bounds& extend(double x, double y)
+    {
+        minx = std::min(x, minx);
+        maxx = std::max(x, maxx);
+        miny = std::min(y, miny);
+        maxy = std::max(y, maxy);
+        return *this;
+    }
+
+    std::tuple<double, double> center() const
+    {
+        return {minx + maxx / 2.0, miny + maxy / 2.0};
+    }
+
+    std::tuple<double, double> bottom_left() const
+    {
+        return {minx, maxy};
+    }
+
+    std::tuple<double, double> top_right() const
+    {
+        return {maxx, miny};
+    }
+
+    std::tuple<double, double> top_left() const
+    {
+        return {minx, miny};
+    }
+
+    std::tuple<double, double> bottom_right() const
+    {
+        return {maxx, maxy};
+    }
+
+    bool contains(double x, double y) const
+    {
+        return (x >= minx) && (x <= maxx) && (y >= miny) && (y <= maxy);
+    }
+
+    bool contains(const Bounds& other)
+    {
+        return contains(other.minx, other.miny) && contains(other.maxx, other.maxy);
+    }
+
+    bool intersects(const Bounds& other)
+    {
+        return (other.maxx >= minx) && (other.minx <= maxx) && (other.maxy >= miny) && (other.miny <= maxy);
+    }
+
+    bool overlaps(const Bounds& other)
+    {
+        return (other.maxx > minx) && (other.minx < maxx) && (other.maxy > miny) && (other.miny < maxy);
+    }
+};
+
+}  // namespace shapes
+}  // namespace simo
 
 namespace simo
 {
@@ -98,148 +185,74 @@ enum class GeometryType
     MULTIPOLYGON    = 11
 };
 
-template <typename Base>
-class Geometry : public Base
+class BasicGeometry
 {
   public:
-    Geometry()
-        : Base() {}
+    /*!
+     * @brief Returns the geometry type
+     * @return the geometry type
+     */
+    virtual GeometryType geom_type() const = 0;
 
-    template <typename T>
-    Geometry(std::initializer_list<T> params)
-        : Base(params)
-    {}
+    /*!
+     * @brief Returns the geometry type as a string (e.g. LineString)
+     * @return the geometry type as a string
+     */
+    virtual std::string geom_type_str() const = 0;
 
-    template <typename T>
-    Geometry(std::initializer_list<std::initializer_list<T>> params)
-        : Base(params)
-    {}
+    /*!
+     * @brief Returns true if the geometry is empty, otherwise false
+     * @return
+     */
+    virtual bool empty() const = 0;
 
-    template <typename T>
-    Geometry(std::vector<T> rhs)
-        : Base(std::move(rhs))
-    {}
+    /*!
+     * @brief Returns the size of the geometry
+     * @return the size of the geometry
+     */
+    virtual size_t size() const = 0;
 
-    template <typename T>
-    Geometry(std::vector<std::vector<T>> rhs)
-        : Base(std::move(rhs))
-    {}
+    /*!
+     * @brief Returns a clone of the given geometry
+     * @return a geometry clone
+     */
+    virtual std::unique_ptr<BasicGeometry> clone() = 0;
+};
 
-    GeometryType geom_type() const
+template <typename T>
+class Geometry : public BasicGeometry
+{
+  public:
+    /// geometry bounds
+    Bounds bounds;
+
+    /// number of dimensions
+    int8_t ndim;
+
+    GeometryType geom_type() const override
     {
-        return Base::geom_type();
+        return static_cast<const T*>(this)->geom_type_();
     }
 
-    std::string geom_type_str() const
+    std::string geom_type_str() const override
     {
-        return Base::geom_type_str();
+        return static_cast<const T*>(this)->geom_type_str_();
     }
 
-    int8_t dimension() const
+    bool empty() const override
     {
-        return Base::dimension();
+        return static_cast<const T*>(this)->empty_();
     }
 
-    bool empty() const
+    size_t size() const override
     {
-        return Base::empty();
+        return static_cast<const T*>(this)->size_();
     }
 
-    size_t size() const
+    std::unique_ptr<BasicGeometry> clone() override
     {
-        return Base::size();
-    }
-
-    //===========================
-    // Geometry Creation
-    //===========================
-
-    //    virtual std::string to_geojson() const { return ""; }
-    //
-    //    static std::unique_ptr<Geometry> from_geojson(const std::string& json) { return nullptr; }
-    //
-    //    virtual std::string to_wkt() const { return ""; }
-    //
-    //    static std::unique_ptr<Geometry> from_wkt(const std::string& json) { return nullptr; }
-    //
-    //    virtual std::string to_wkb() const { return ""; }
-    //
-    //    static std::unique_ptr<Geometry> from_wkb(const std::string& json) { return nullptr; }
-
-    //===========================
-    // Geometry Characteristics
-    //===========================
-
-    //
-    //    virtual bool is_simple() const = 0;
-    //
-    //    virtual bool is_closed() const = 0;
-
-    //===========================
-    // Relational Operators
-    //===========================
-    //
-    //    /// Tests if this geometry is ?spatially equal? to another geometry.
-    //    virtual bool equals(const Geometry& geom) const = 0;
-    //
-    //    /// Tests if this geometry ?spatially touches? another geometry.
-    //    virtual bool touches(const Geometry& geom) const = 0;
-    //
-    //    /// Tests if this geometry ?spatially contains? another geometry.
-    //    virtual bool contains(const Geometry& geom) const = 0;
-    //
-    //    /// Tests if this geometry is ?spatially within? another geometry.
-    //    virtual bool within(const Geometry& geom) const = 0;
-    //
-    //    /// Tests if this geometry is ?spatially disjoint? from another geometry.
-    //    virtual bool disjoint(const Geometry& geom) const = 0;
-    //
-    //    /// Tests if this geometry ?spatially crosses? another geometry.
-    //    virtual bool crosses(const Geometry& geom) const = 0;
-    //
-    //    /// Tests if this geometry ?spatially overlaps? another geometry.
-    //    virtual bool overlaps(const Geometry& geom) const = 0;
-    //
-    //    /// Tests if this geometry ?spatially intersects? another geometry.
-    //    virtual bool intersects(const Geometry& geom) const = 0;
-    //
-    //    /// Tests if this geometry is spatially related to anotherGeometry,
-    //    virtual bool relate(const Geometry& geom, const std::string& overlap_matrix) const = 0;
-
-    //===========================
-    // Spatial Analysis
-    //===========================
-    //
-    //    /// Returns the shortest distance between any two points in the two
-    //    /// geometries.
-    //    /// Calculations are in the Spatial Reference System of this geometry.
-    //    virtual double distance(const Geometry& geom) const = 0;
-    //
-    //    /// Returns a geometry that represents all points whose distance from this
-    //    /// geometry is less than or equal to distance.
-    //    /// Calculations are in the Spatial Reference System of this geometry.
-    //    virtual std::unique_ptr<Geometry> buffer(double distance) const = 0;
-    //
-    //    /// Returns a geometry that represents the convex hull of this geometry.
-    //    virtual std::unique_ptr<Geometry> convex_hull() const = 0;
-    //
-    //    /// Returns a geometry that represents the point set intersection of the
-    //    /// source geometry with anotherGeometry.
-    //    virtual std::unique_ptr<Geometry> set_intersection(const Geometry& other) const = 0;
-    //
-    //    /// Returns a geometry that represents the point set union of the source
-    //    /// geometry with anotherGeometry.
-    //    virtual std::unique_ptr<Geometry> set_union(const Geometry& other) const = 0;
-    //
-    //    /// Geometry Difference(Geometry anotherGeometry)?Returns a geometry that
-    //    /// represents the point set difference of the source geometry with
-    //    /// anotherGeometry.
-    //    virtual std::unique_ptr<Geometry> set_difference(const Geometry& other) const = 0;
-    //
-    //    /// Geometry SymmetricDifference(Geometry anotherGeometry)?Returns a geometry
-    //    /// that represents the point set symmetric difference of the source geometry
-    //    /// with anotherGeometry.
-    //    virtual std::unique_ptr<Geometry> set_symmetric_difference(const Geometry& other) const = 0;
+        return std::unique_ptr<T>(new T(*static_cast<T*>(this)));
+    };
 };
 
 }  // namespace shapes
@@ -296,41 +309,47 @@ namespace simo
 namespace shapes
 {
 
-typedef Geometry<point_t> Point;
-
-class point_t
+class Point : public Geometry<Point>
 {
   public:
     double x;
     double y;
     double z;
 
-    point_t()
+    Point()
+        : x(0), y(0), z(0)
     {
-        this->x      = 0;
-        this->y      = 0;
-        this->z      = 0;
-        this->m_ndim = 2;
+        ndim = 2;
     }
 
-    template <
-        typename T,
-        typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-    point_t(std::initializer_list<T> list)
+    Point(double x, double y)
+        : x(x), y(y), z(0)
     {
-        if (list.size() == 2)
+        ndim = 2;
+    }
+
+    Point(double x, double y, double z)
+        : x(x), y(y), z(z)
+    {
+        ndim = 3;
+    }
+
+    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    Point(std::initializer_list<T> init)
+    {
+        if (init.size() == 2)
         {
-            this->x      = *list.begin();
-            this->y      = *(list.begin() + 1);
-            this->z      = 0;
-            this->m_ndim = 2;
+            x    = *init.begin();
+            y    = *(init.begin() + 1);
+            z    = 0;
+            ndim = 2;
         }
-        else if (list.size() == 3)
+        else if (init.size() == 3)
         {
-            this->x      = *list.begin();
-            this->y      = *(list.begin() + 1);
-            this->z      = *(list.begin() + 2);
-            this->m_ndim = 3;
+            x    = *init.begin();
+            y    = *(init.begin() + 1);
+            z    = *(init.begin() + 2);
+            ndim = 3;
         }
         else
         {
@@ -338,29 +357,29 @@ class point_t
         }
     }
 
-    GeometryType geom_type() const
+    GeometryType geom_type_() const
     {
         return GeometryType::POINT;
     }
 
-    std::string geom_type_str() const
+    std::string geom_type_str_() const
     {
         return "Point";
     }
 
-    int8_t dimension() const
-    {
-        return m_ndim;
-    }
-
-    bool empty() const
+    bool empty_() const
     {
         return false;
     }
 
+    size_t size_() const
+    {
+        return static_cast<size_t>(ndim);
+    }
+
     double at(size_t pos)
     {
-        if (pos >= size())
+        if (pos >= size_())
         {
             throw exception();
         }
@@ -374,11 +393,6 @@ class point_t
     double operator[](size_t pos)
     {
         return at(pos);
-    }
-
-    size_t size() const
-    {
-        return static_cast<size_t>(m_ndim);
     }
 
     std::tuple<double, double> xy() const
@@ -416,123 +430,19 @@ class point_t
     std::string to_json()
     {
         auto coordinates = std::vector<double>{x, y};
-        if (m_ndim == 3)
+        if (ndim == 3)
         {
             coordinates.push_back(z);
         }
         nlohmann::json j = {{"type", "Point"}, {"coordinates", coordinates}};
         return j.dump();
     }
-
-  private:
-    int8_t m_ndim;
 };
 
 }  // namespace shapes
 }  // namespace simo
 // #include <simo/geom/bounds.hpp>
 
-
-#include <algorithm>
-// #include <simo/geom/point.hpp>
-
-
-namespace simo
-{
-namespace shapes
-{
-
-typedef bounds_t Bounds;
-
-class bounds_t
-{
-  public:
-    bounds_t()
-        : m_min({std::numeric_limits<double>::max(), std::numeric_limits<double>::max()}),
-          m_max({std::numeric_limits<double>::min(), std::numeric_limits<double>::min()}) {}
-
-    bounds_t(double minx, double maxx, double miny, double maxy)
-        : m_min({minx, miny}), m_max({maxx, maxy}) {}
-
-    Bounds& extend(double x, double y)
-    {
-        m_min.x = std::min(x, m_min.x);
-        m_max.x = std::max(x, m_max.x);
-        m_min.y = std::min(y, m_min.y);
-        m_max.y = std::max(y, m_max.y);
-        return *this;
-    }
-
-    Point center() const
-    {
-        return {(m_min.x + m_max.x) / 2, (m_min.y + m_max.y) / 2};
-    }
-
-    Point bottom_left() const
-    {
-        return {m_min.x, m_max.y};
-    }
-
-    Point top_right() const
-    {
-        return {m_max.x, m_min.y};
-    }
-
-    Point top_left() const
-    {
-        return m_min;
-    }
-
-    Point bottom_right() const
-    {
-        return m_max;
-    }
-
-    Point min() const
-    {
-        return m_min;
-    }
-
-    Point max() const
-    {
-        return m_max;
-    }
-
-    bool contains(const Point& other) const
-    {
-        return (other.x >= m_min.x) && (other.x <= m_max.x) && (other.y >= m_min.y) && (other.y <= m_max.y);
-    }
-
-    bool contains(const bounds_t& other)
-    {
-        return contains(other.min()) && contains(other.max());
-    }
-
-    bool intersects(const bounds_t& other)
-    {
-        auto min  = m_min;
-        auto max  = m_max;
-        auto min2 = other.min();
-        auto max2 = other.max();
-        return (max2.x >= min.x) && (min2.x <= max.x) && (max2.y >= min.y) && (min2.y <= max.y);
-    }
-
-    bool overlaps(const bounds_t& other)
-    {
-        auto min  = m_min;
-        auto max  = m_max;
-        auto min2 = other.min();
-        auto max2 = other.max();
-        return (max2.x > min.x) && (min2.x < max.x) && (max2.y > min.y) && (min2.y < max.y);
-    }
-
-  private:
-    Point m_min;
-    Point m_max;
-};
-
-}  // namespace shapes
-}  // namespace simo
 // #include <simo/geom/multipoint.hpp>
 
 
@@ -549,35 +459,52 @@ namespace simo
 {
 namespace shapes
 {
-typedef Geometry<multipoint_t> MultiPoint;
 
-class multipoint_t
+class MultiPoint : public Geometry<MultiPoint>
 {
   public:
-    multipoint_t() = default;
+    MultiPoint() = default;
 
-    template <
-        typename T,  //real type
-        typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-    multipoint_t(std::initializer_list<std::initializer_list<T>> list)
+    typedef std::vector<Point>::iterator iterator;
+    typedef std::vector<Point>::const_iterator const_iterator;
+
+    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    MultiPoint(std::initializer_list<std::initializer_list<T>> list)
     {
         for (const auto& coordinates : list)
         {
             Point p(coordinates);
-            m_bounds.extend(p.x, p.y);
+            bounds.extend(p.x, p.y);
             m_points.push_back(std::move(p));
         }
         /// @todo (pavel) check dimensions?
     }
 
-    explicit multipoint_t(std::vector<Point> points)
+    explicit MultiPoint(std::vector<Point> points)
         : m_points(std::move(points))
     {
         /// @todo (pavel) check dimensions?
     }
 
-    typedef std::vector<Point>::iterator iterator;
-    typedef std::vector<Point>::const_iterator const_iterator;
+    GeometryType geom_type_() const
+    {
+        return GeometryType::MULTIPOINT;
+    }
+
+    std::string geom_type_str_() const
+    {
+        return "MultiPoint";
+    }
+
+    bool empty_() const
+    {
+        return m_points.empty();
+    }
+
+    size_t size_() const
+    {
+        return m_points.size();
+    }
 
     iterator begin()
     {
@@ -599,21 +526,6 @@ class multipoint_t
         return m_points.end();
     }
 
-    GeometryType geom_type() const
-    {
-        return GeometryType::MULTIPOINT;
-    }
-
-    std::string geom_type_str() const
-    {
-        return "MultiPoint";
-    }
-
-    int8_t dimension() const
-    {
-        return 0;
-    }
-
     Point at(size_t pos)
     {
         return m_points.at(pos);
@@ -622,21 +534,6 @@ class multipoint_t
     Point operator[](size_t pos)
     {
         return m_points.at(pos);
-    }
-
-    bool empty() const
-    {
-        return m_points.empty();
-    }
-
-    Bounds bounds() const
-    {
-        return m_bounds;
-    }
-
-    size_t size() const
-    {
-        return m_points.size();
     }
 
     std::vector<std::tuple<double, double>> xy() const
@@ -694,11 +591,11 @@ class multipoint_t
         coords.reserve(m_points.size());
         for (const auto& p : *this)
         {
-            if (p.dimension() == 2)
+            if (p.ndim == 2)
             {
                 coords.emplace_back(std::vector<double>{p.x, p.y});
             }
-            else if (p.dimension() == 3)
+            else if (p.ndim == 3)
             {
                 coords.emplace_back(std::vector<double>{p.x, p.y, p.z});
             }
@@ -709,7 +606,6 @@ class multipoint_t
 
   private:
     std::vector<Point> m_points;
-    Bounds m_bounds;
 };
 
 }  // namespace shapes

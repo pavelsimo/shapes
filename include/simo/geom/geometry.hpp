@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include <simo/shapes_fwd.hpp>
+#include <simo/geom/bounds.hpp>
 
 namespace simo
 {
@@ -41,12 +42,6 @@ class BasicGeometry
     virtual std::string geom_type_str() const = 0;
 
     /*!
-     * @brief Returns the number of dimensions
-     * @return the number of dimensions
-     */
-    virtual int8_t dimension() const = 0;
-
-    /*!
      * @brief Returns true if the geometry is empty, otherwise false
      * @return
      */
@@ -69,29 +64,30 @@ template <typename T>
 class Geometry : public BasicGeometry
 {
   public:
+    /// geometry bounds
+    Bounds bounds;
+
+    /// number of dimensions
+    int8_t ndim;
+
     GeometryType geom_type() const override
     {
-        return static_cast<const T*>(this)->geom_type_impl();
+        return static_cast<const T*>(this)->geom_type_();
     }
 
     std::string geom_type_str() const override
     {
-        return static_cast<const T*>(this)->geom_type_str_impl();
-    }
-
-    int8_t dimension() const override
-    {
-        return static_cast<const T*>(this)->dimension_impl();
+        return static_cast<const T*>(this)->geom_type_str_();
     }
 
     bool empty() const override
     {
-        return static_cast<const T*>(this)->empty_impl();
+        return static_cast<const T*>(this)->empty_();
     }
 
     size_t size() const override
     {
-        return static_cast<const T*>(this)->size_impl();
+        return static_cast<const T*>(this)->size_();
     }
 
     std::unique_ptr<BasicGeometry> clone() override

@@ -23,27 +23,21 @@ class Point : public Geometry<Point>
     double z;
 
     Point()
+        : x(0), y(0), z(0)
     {
-        this->x      = 0;
-        this->y      = 0;
-        this->z      = 0;
-        this->m_ndim = 2;
+        ndim = 2;
     }
 
     Point(double x, double y)
+        : x(x), y(y), z(0)
     {
-        this->x      = x;
-        this->y      = y;
-        this->z      = 0;
-        this->m_ndim = 2;
+        ndim = 2;
     }
 
     Point(double x, double y, double z)
+        : x(x), y(y), z(z)
     {
-        this->x      = x;
-        this->y      = y;
-        this->z      = z;
-        this->m_ndim = 3;
+        ndim = 3;
     }
 
     template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
@@ -51,17 +45,17 @@ class Point : public Geometry<Point>
     {
         if (init.size() == 2)
         {
-            this->x      = *init.begin();
-            this->y      = *(init.begin() + 1);
-            this->z      = 0;
-            this->m_ndim = 2;
+            x    = *init.begin();
+            y    = *(init.begin() + 1);
+            z    = 0;
+            ndim = 2;
         }
         else if (init.size() == 3)
         {
-            this->x      = *init.begin();
-            this->y      = *(init.begin() + 1);
-            this->z      = *(init.begin() + 2);
-            this->m_ndim = 3;
+            x    = *init.begin();
+            y    = *(init.begin() + 1);
+            z    = *(init.begin() + 2);
+            ndim = 3;
         }
         else
         {
@@ -69,29 +63,29 @@ class Point : public Geometry<Point>
         }
     }
 
-    GeometryType geom_type_impl() const
+    GeometryType geom_type_() const
     {
         return GeometryType::POINT;
     }
 
-    std::string geom_type_str_impl() const
+    std::string geom_type_str_() const
     {
         return "Point";
     }
 
-    int8_t dimension_impl() const
-    {
-        return m_ndim;
-    }
-
-    bool empty_impl() const
+    bool empty_() const
     {
         return false;
     }
 
+    size_t size_() const
+    {
+        return static_cast<size_t>(ndim);
+    }
+
     double at(size_t pos)
     {
-        if (pos >= size_impl())
+        if (pos >= size_())
         {
             throw exception();
         }
@@ -105,11 +99,6 @@ class Point : public Geometry<Point>
     double operator[](size_t pos)
     {
         return at(pos);
-    }
-
-    size_t size_impl() const
-    {
-        return static_cast<size_t>(m_ndim);
     }
 
     std::tuple<double, double> xy() const
@@ -147,16 +136,13 @@ class Point : public Geometry<Point>
     std::string to_json()
     {
         auto coordinates = std::vector<double>{x, y};
-        if (m_ndim == 3)
+        if (ndim == 3)
         {
             coordinates.push_back(z);
         }
         nlohmann::json j = {{"type", "Point"}, {"coordinates", coordinates}};
         return j.dump();
     }
-
-  private:
-    int8_t m_ndim;
 };
 
 }  // namespace shapes

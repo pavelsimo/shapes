@@ -17,7 +17,7 @@ TEST_CASE("Point tests")
         Point p;
         CHECK(p.x == 0);
         CHECK(p.y == 0);
-        CHECK(p.dimension() == 2);
+        CHECK(p.ndim == 2);
     }
 
     SECTION("2d point constructor - initializer list")
@@ -26,7 +26,7 @@ TEST_CASE("Point tests")
         CHECK(p.x == 1);
         CHECK(p.y == 2);
         CHECK(p.z == 0);
-        CHECK(p.dimension() == 2);
+        CHECK(p.ndim == 2);
     }
 
     SECTION("3d point constructor - initializer list")
@@ -35,7 +35,7 @@ TEST_CASE("Point tests")
         CHECK(p.x == 1);
         CHECK(p.y == 2);
         CHECK(p.z == 3);
-        CHECK(p.dimension() == 3);
+        CHECK(p.ndim == 3);
     }
 
     SECTION("2d point - from json")
@@ -43,7 +43,7 @@ TEST_CASE("Point tests")
         auto p = Point::from_json("{\"type\": \"Point\", \"coordinates\": [1.0, 2.0]}");
         CHECK(p.x == 1.0);
         CHECK(p.y == 2.0);
-        CHECK(p.dimension() == 2);
+        CHECK(p.ndim == 2);
         CHECK(p.geom_type_str() == "Point");
     }
 
@@ -53,7 +53,7 @@ TEST_CASE("Point tests")
         CHECK(p.x == 1.0);
         CHECK(p.y == 2.0);
         CHECK(p.z == 3.0);
-        CHECK(p.dimension() == 3);
+        CHECK(p.ndim == 3);
         CHECK(p.geom_type_str() == "Point");
     }
 

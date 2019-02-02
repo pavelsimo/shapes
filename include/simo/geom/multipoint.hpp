@@ -16,13 +16,16 @@ class MultiPoint : public Geometry<MultiPoint>
   public:
     MultiPoint() = default;
 
+    typedef std::vector<Point>::iterator iterator;
+    typedef std::vector<Point>::const_iterator const_iterator;
+
     template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     MultiPoint(std::initializer_list<std::initializer_list<T>> list)
     {
         for (const auto& coordinates : list)
         {
             Point p(coordinates);
-            m_bounds.extend(p.x, p.y);
+            bounds.extend(p.x, p.y);
             m_points.push_back(std::move(p));
         }
         /// @todo (pavel) check dimensions?
@@ -34,8 +37,25 @@ class MultiPoint : public Geometry<MultiPoint>
         /// @todo (pavel) check dimensions?
     }
 
-    typedef std::vector<Point>::iterator iterator;
-    typedef std::vector<Point>::const_iterator const_iterator;
+    GeometryType geom_type_() const
+    {
+        return GeometryType::MULTIPOINT;
+    }
+
+    std::string geom_type_str_() const
+    {
+        return "MultiPoint";
+    }
+
+    bool empty_() const
+    {
+        return m_points.empty();
+    }
+
+    size_t size_() const
+    {
+        return m_points.size();
+    }
 
     iterator begin()
     {
@@ -57,21 +77,6 @@ class MultiPoint : public Geometry<MultiPoint>
         return m_points.end();
     }
 
-    GeometryType geom_type_impl() const
-    {
-        return GeometryType::MULTIPOINT;
-    }
-
-    std::string geom_type_str_impl() const
-    {
-        return "MultiPoint";
-    }
-
-    int8_t dimension_impl() const
-    {
-        return 0;
-    }
-
     Point at(size_t pos)
     {
         return m_points.at(pos);
@@ -80,21 +85,6 @@ class MultiPoint : public Geometry<MultiPoint>
     Point operator[](size_t pos)
     {
         return m_points.at(pos);
-    }
-
-    bool empty_impl() const
-    {
-        return m_points.empty();
-    }
-
-    Bounds bounds() const
-    {
-        return m_bounds;
-    }
-
-    size_t size_impl() const
-    {
-        return m_points.size();
     }
 
     std::vector<std::tuple<double, double>> xy() const
@@ -152,11 +142,11 @@ class MultiPoint : public Geometry<MultiPoint>
         coords.reserve(m_points.size());
         for (const auto& p : *this)
         {
-            if (p.dimension_impl() == 2)
+            if (p.ndim == 2)
             {
                 coords.emplace_back(std::vector<double>{p.x, p.y});
             }
-            else if (p.dimension_impl() == 3)
+            else if (p.ndim == 3)
             {
                 coords.emplace_back(std::vector<double>{p.x, p.y, p.z});
             }
@@ -166,9 +156,7 @@ class MultiPoint : public Geometry<MultiPoint>
     }
 
   private:
-
     std::vector<Point> m_points;
-    Bounds m_bounds;
 };
 
 }  // namespace shapes

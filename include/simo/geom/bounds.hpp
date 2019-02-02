@@ -1,7 +1,7 @@
 #pragma once
 
 #include <algorithm>
-#include <simo/geom/point.hpp>
+#include <tuple>
 
 namespace simo
 {
@@ -11,88 +11,74 @@ namespace shapes
 class Bounds
 {
   public:
-    Bounds()
-        : m_min({std::numeric_limits<double>::max(), std::numeric_limits<double>::max()}),
-          m_max({std::numeric_limits<double>::min(), std::numeric_limits<double>::min()}) {}
+    double minx;
+    double miny;
+    double maxx;
+    double maxy;
 
-    Bounds(double minx, double maxx, double miny, double maxy)
-        : m_min({minx, miny}), m_max({maxx, maxy}) {}
+    Bounds()
+        : minx(std::numeric_limits<double>::max()), miny(std::numeric_limits<double>::max()), maxx(std::numeric_limits<double>::max()), maxy(std::numeric_limits<double>::max())
+    {
+    }
+
+    Bounds(double minx, double miny, double maxx, double maxy)
+        : minx(minx), miny(miny), maxx(maxx), maxy(maxy)
+    {
+    }
 
     Bounds& extend(double x, double y)
     {
-        m_min.x = std::min(x, m_min.x);
-        m_max.x = std::max(x, m_max.x);
-        m_min.y = std::min(y, m_min.y);
-        m_max.y = std::max(y, m_max.y);
+        minx = std::min(x, minx);
+        maxx = std::max(x, maxx);
+        miny = std::min(y, miny);
+        maxy = std::max(y, maxy);
         return *this;
     }
 
-    Point center() const
+    std::tuple<double, double> center() const
     {
-        return {(m_min.x + m_max.x) / 2, (m_min.y + m_max.y) / 2};
+        return {minx + maxx / 2.0, miny + maxy / 2.0};
     }
 
-    Point bottom_left() const
+    std::tuple<double, double> bottom_left() const
     {
-        return {m_min.x, m_max.y};
+        return {minx, maxy};
     }
 
-    Point top_right() const
+    std::tuple<double, double> top_right() const
     {
-        return {m_max.x, m_min.y};
+        return {maxx, miny};
     }
 
-    Point top_left() const
+    std::tuple<double, double> top_left() const
     {
-        return m_min;
+        return {minx, miny};
     }
 
-    Point bottom_right() const
+    std::tuple<double, double> bottom_right() const
     {
-        return m_max;
+        return {maxx, maxy};
     }
 
-    Point min() const
+    bool contains(double x, double y) const
     {
-        return m_min;
-    }
-
-    Point max() const
-    {
-        return m_max;
-    }
-
-    bool contains(const Point& other) const
-    {
-        return (other.x >= m_min.x) && (other.x <= m_max.x) && (other.y >= m_min.y) && (other.y <= m_max.y);
+        return (x >= minx) && (x <= maxx) && (y >= miny) && (y <= maxy);
     }
 
     bool contains(const Bounds& other)
     {
-        return contains(other.min()) && contains(other.max());
+        return contains(other.minx, other.miny) && contains(other.maxx, other.maxy);
     }
 
     bool intersects(const Bounds& other)
     {
-        auto min  = m_min;
-        auto max  = m_max;
-        auto min2 = other.min();
-        auto max2 = other.max();
-        return (max2.x >= min.x) && (min2.x <= max.x) && (max2.y >= min.y) && (min2.y <= max.y);
+        return (other.maxx >= minx) && (other.minx <= maxx) && (other.maxy >= miny) && (other.miny <= maxy);
     }
 
     bool overlaps(const Bounds& other)
     {
-        auto min  = m_min;
-        auto max  = m_max;
-        auto min2 = other.min();
-        auto max2 = other.max();
-        return (max2.x > min.x) && (min2.x < max.x) && (max2.y > min.y) && (min2.y < max.y);
+        return (other.maxx > minx) && (other.minx < maxx) && (other.maxy > miny) && (other.miny < maxy);
     }
-
-  private:
-    Point m_min;
-    Point m_max;
 };
 
 }  // namespace shapes

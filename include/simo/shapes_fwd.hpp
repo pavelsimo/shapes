@@ -24,7 +24,6 @@ class Bounds;
 //
 //class geometrycollection_t;
 
-
 }  // namespace shapes
 }  // namespace simo
 
