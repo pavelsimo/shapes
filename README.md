@@ -20,13 +20,24 @@ using namespace simo::shapes;
 
 ## Examples
 
-Building a point from GeoJSON:
+Building a `Point` from GeoJSON:
 
 ```cpp
 auto p = Point::from_json("{\"type\": \"Point\", \"coordinates\": [1.0, 2.0, 3.0]}");
 std::cout << p.x << " " << p.y << " " << p.z << std::endl;
-std::cout << p.to_json() std::endl; 
 ```
+
+GeoJSON representation of the `Point`:
+
+```cpp
+auto p = Point{1, 2, 3};
+p.precision = 1;
+std::cout << p.json() << std::endl;
+```
+
+```json
+{"coordinates":[1.0,2.0,3.0],"type":"Point"}
+``` 
 
 Iterating a `MultiPoint` is as simple as:
 
