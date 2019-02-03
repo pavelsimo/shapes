@@ -92,24 +92,52 @@ class Point : public BasicGeometry<Point>
         }
     }
 
+    /*!
+     * @copydoc Geometry::geom_type()
+     */
     GeometryType geom_type_() const
     {
         return GeometryType::POINT;
     }
 
+    /*!
+     * @copydoc Geometry::geom_type_str()
+     */
     std::string geom_type_str_() const
     {
         return "Point";
     }
 
+    /*!
+     * @copydoc Geometry::empty()
+     */
     bool empty_() const
     {
         return false;
     }
 
+    /*!
+     * @copydoc Geometry::size()
+     */
     size_t size_() const
     {
         return static_cast<size_t>(m_ndim);
+    }
+
+    /*!
+     * @copydoc Geometry::xy()
+     */
+    std::vector<std::tuple<double, double>> xy_() const
+    {
+        return {std::make_tuple(x, y)};
+    }
+
+    /*!
+    * @copydoc Geometry::xyz()
+    */
+    std::vector<std::tuple<double, double, double>> xyz_() const
+    {
+        return {std::make_tuple(x, y, z)};
     }
 
     double at(size_t pos)
@@ -128,16 +156,6 @@ class Point : public BasicGeometry<Point>
     double operator[](size_t pos)
     {
         return at(pos);
-    }
-
-    std::vector<std::tuple<double, double>> xy_() const
-    {
-        return {std::make_tuple(x, y)};
-    }
-
-    std::vector<std::tuple<double, double, double>> xyz_() const
-    {
-        return {std::make_tuple(x, y, z)};
     }
 
     static Point from_json(const std::string& json)

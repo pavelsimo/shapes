@@ -140,7 +140,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>
 
     std::string json()
     {
-        // TODO(pavel): remove json library here...
+        /// @todo (pavel) remove json library here...
         auto coords = std::vector<std::vector<double>>();
         coords.reserve(m_points.size());
         for (const auto& p : *this)

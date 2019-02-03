@@ -10,6 +10,7 @@ namespace simo
 namespace shapes
 {
 
+/// geometry types as defined by the Open Geospatial Consortium (OGC) in their Simple Feature
 enum class GeometryType
 {
     GEOMETRY        = 0,
@@ -26,64 +27,84 @@ enum class GeometryType
     MULTIPOLYGON    = 11
 };
 
+/// geometry interface
 class Geometry
 {
   public:
     /*!
-     * @brief Returns the geometry type
+     * @brief returns the geometry type
      * @return the geometry type
+     *
+     * @since 0.0.1
      */
     virtual GeometryType geom_type() const = 0;
 
     /*!
-     * @brief Returns the geometry type as a string (e.g. LineString)
+     * @brief returns the geometry type as a string (e.g. Point, LineString)
      * @return the geometry type as a string
+     *
+     * @since 0.0.1
      */
     virtual std::string geom_type_str() const = 0;
 
     /*!
-     * @brief Returns true if the geometry is empty, otherwise false
-     * @return
+     * @brief returns true if the geometry is empty
+     * @return true if the the geometry is empty, otherwise false
+     *
+     * @since 0.0.1
      */
     virtual bool empty() const = 0;
 
     /*!
-     * @brief Returns the size of the geometry
+     * @brief returns the geometry size
      * @return the size of the geometry
+     *
+     * @since 0.0.1
      */
     virtual size_t size() const = 0;
 
     /*!
-     * @brief Returns the number of dimensions of the geometry
+     * @brief returns the number of dimensions of the geometry
      * @return the number of dimensions of the geometry
+     *
+     * @since 0.0.1
      */
     virtual int8_t ndim() const = 0;
 
     /*!
-     * @brief Returns the geometry bounding box
-     * @return the geometry bounding box
+     * @brief returns the geometry bounds
+     * @return the geometry bounds
+     *
+     * @since 0.0.1
      */
     virtual Bounds bounds() const = 0;
 
     /*!
-     * @brief Returns a clone of the given geometry
+     * @brief returns a clone of the given geometry
      * @return a geometry clone
+     *
+     * @since 0.0.1
      */
     virtual std::unique_ptr<Geometry> clone() = 0;
 
     /*!
+     * @brief returns the geometry (x, y) coordinates as a tuple
+     * @return a vector of (x, y) tuples
      *
-     * @return
+     * @since 0.0.1
      */
     virtual std::vector<std::tuple<double, double>> xy() const = 0;
 
     /*!
+     * @brief returns the geometry (x, y, z) coordinates as a tuple
+     * @return a vector of (x, y, z) tuples
      *
-     * @return
+     * @since 0.0.1
      */
     virtual std::vector<std::tuple<double, double, double>> xyz() const = 0;
 };
 
+/// basic geometry type
 template <typename T>
 class BasicGeometry : public Geometry
 {

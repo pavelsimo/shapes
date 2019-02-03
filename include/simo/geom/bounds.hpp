@@ -9,7 +9,9 @@ namespace shapes
 {
 
 /*!
- * @brief represents axis-aligned bounding box
+ * @brief represents a bounding box
+ *
+ * @since 0.0.1
  */
 class Bounds
 {
@@ -130,7 +132,7 @@ class Bounds
      *
      * @param x the x-coordinate of the point
      * @param y the y-coordinate of the point
-     * @return true if the bounds contains the given point, otherwise false
+     * @return true if the Bounds contains the given point, otherwise false
      *
      * @since 0.0.1
      */
@@ -143,7 +145,7 @@ class Bounds
      * @brief returns true if the bounds contains the given one
      *
      * @param other the bounds
-     * @return true if the bounds contain the given one, otherwise false
+     * @return true if the Bounds contain the given one, otherwise false
      *
      * @since 0.0.1
      */
@@ -156,7 +158,7 @@ class Bounds
      * @brief returns true if the bounds intersect the given one
      *
      * @param other the bounds
-     * @return true if the bounds intersect the given one, otherwise false
+     * @return true if the Bounds intersect the given one, otherwise false
      *
      * @since 0.0.1
      */
@@ -169,7 +171,7 @@ class Bounds
      * @brief returns true if the bounds overlaps the given one
      *
      * @param other the bounds
-     * @return true if the bounds overlaps the given one, otherwise false
+     * @return true if the Bounds overlaps the given one, otherwise false
      *
      * @since 0.0.1
      */
