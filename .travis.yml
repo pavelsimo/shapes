@@ -14,8 +14,7 @@ matrix:
         - SHAPES_CXX=g++-8
         - SHAPES_CC=gcc-8
 
-      script
-        - if [[ "${SHAPES_CXX}" != "" ]]; then export CXX=${SHAPES_CXX}; export CC=${SHAPES_CC}; fi
+      script:
         - $CC --version
         - $CXX --version
         - cmake . -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE
@@ -24,3 +23,7 @@ matrix:
 
       after_success:
         - bash <(curl -s https://codecov.io/bash)
+
+
+install:
+- if [[ "${SHAPES_CXX}" != "" ]]; then export CXX=${SHAPES_CXX}; export CC=${SHAPES_CC}; fi
