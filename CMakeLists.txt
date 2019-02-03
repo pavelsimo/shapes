@@ -43,6 +43,8 @@ if (NOT ${CLANG_FORMAT} STREQUAL "CLANG_FORMAT-NOTFOUND")
             )
     add_custom_target(shapes_format COMMENT "applying clang-format"
             COMMAND ${CLANG_FORMAT} -i ${HPP_FILES})
+else()
+    message(STATUS "clang-format not found")
 endif ()
 
 add_library(${SHAPES_LIBRARY} INTERFACE)
