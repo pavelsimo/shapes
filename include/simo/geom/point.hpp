@@ -39,13 +39,13 @@ class Point : public BasicGeometry<Point>
     }
 
     Point(double x, double y)
-        : x(x), y(y), z(0), has_z(false), has_m(false)
+        : x(x), y(y), z(0)
     {
         m_ndim = 2;
     }
 
     Point(double x, double y, double z)
-        : x(x), y(y), z(z), has_z(true), has_m(false)
+        : x(x), y(y), z(z), has_z(true)
     {
         m_ndim = 3;
     }
@@ -72,6 +72,17 @@ class Point : public BasicGeometry<Point>
             y      = *(init.begin() + 1);
             z      = *(init.begin() + 2);
             m_ndim = 3;
+            has_z = true;
+        }
+        else if (init.size() == 4)
+        {
+            x      = *init.begin();
+            y      = *(init.begin() + 1);
+            z      = *(init.begin() + 2);
+            m      = *(init.begin() + 3);
+            m_ndim = 4;
+            has_m = true;
+            has_z = true;
         }
         else
         {
@@ -174,10 +185,9 @@ class Point : public BasicGeometry<Point>
         return ss.str();
     }
 
-
   private:
-    bool has_z;
-    bool has_m;
+    bool has_z = false;
+    bool has_m = false;
 };
 
 }  // namespace shapes
