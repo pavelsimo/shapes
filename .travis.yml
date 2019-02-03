@@ -11,13 +11,21 @@ matrix:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['g++-8', 'ninja-build']
       env:
-        - CXX=g++-8
-        - CC=gcc-8
+        - SHAPES_CXX=g++-8
+        - SHAPES_CC=gcc-8
 
-      script:
+      script
+        # show compiler versions
+        - $CC --version
+        - $CXX --version
+        # building
         - cmake . -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE
         - cmake --build . -- -j2
+        # running the tests
         - ctest -j2
 
       after_success:
         - bash <(curl -s https://codecov.io/bash)
+
+install:
+  - if [[ "${SHAPES_CXX}" != "" ]]; then export CXX=${SHAPES_CXX}; export CC=${SHAPES_CC}; fi
