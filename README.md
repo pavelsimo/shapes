@@ -49,6 +49,18 @@ for(const auto& point: points)
 } 
 ```
 
+WKT representation of a `MultiPoint`:
+
+```cpp
+MultiPoint points = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+points.precision  = 1;
+std::cout << points.wkt() << std::endl;
+```
+
+```
+MULTIPOINTZ((1.0 2.0 3.0),(4.0 5.0 6.0))
+```
+
 ## Third-party tools
 
 This project would not have been possible without the following amazing tools, many thanks to its developers!
