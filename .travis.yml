@@ -11,8 +11,8 @@ matrix:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['g++-8', 'ninja-build']
       env:
-        - COMPILER=g++-8
-        - CCOMPILER=gcc-8
+        - CXX=g++-8
+        - CC=gcc-8
 
       script:
         - cmake . -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE
@@ -21,4 +21,3 @@ matrix:
 
       after_success:
         - bash <(curl -s https://codecov.io/bash)
-
