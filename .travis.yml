@@ -13,17 +13,17 @@ matrix:
       env:
         - SHAPES_CXX=g++-8
         - SHAPES_CC=gcc-8
+        - CTEST_OUTPUT_ON_FAILURE=1
 
       script:
         - $CC --version
         - $CXX --version
         - cmake . -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE
         - cmake --build . -- -j2
-        - ctest -j2
+        - ctest -V -j2
 
       after_success:
         - bash <(curl -s https://codecov.io/bash)
-
 
 install:
 - if [[ "${SHAPES_CXX}" != "" ]]; then export CXX=${SHAPES_CXX}; export CC=${SHAPES_CC}; fi
