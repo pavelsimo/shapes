@@ -71,23 +71,47 @@ TEST_CASE("Point tests")
 
     SECTION("2d point - to wkt")
     {
-        Point p = {1.0, 2.0};
+        Point p     = {1.0, 2.0};
         p.precision = 1;
         CHECK(p.wkt() == "POINT(1.0 2.0)");
     }
 
     SECTION("3d point - to wkt")
     {
-        Point p = {1.0, 2.0, 3.0};
+        Point p     = {1.0, 2.0, 3.0};
         p.precision = 1;
         CHECK(p.wkt() == "POINTZ(1.0 2.0 3.0)");
     }
 
     SECTION("4d point - to wkt")
     {
-        Point p = {1.0, 2.0, 3.0, 4.0};
+        Point p     = {1.0, 2.0, 3.0, 4.0};
         p.precision = 1;
         CHECK(p.wkt() == "POINTZM(1.0 2.0 3.0 4.0)");
+    }
+
+    SECTION("2d point - from wkt")
+    {
+        auto p = Point::from_wkt("POINT(1 2)");
+        CHECK(p.x == 1.0);
+        CHECK(p.y == 2.0);
+    }
+
+    SECTION("3d point - from wkt")
+    {
+        auto p = Point::from_wkt("POINTZ(1 2 3)");
+        CHECK(p.x == 1.0);
+        CHECK(p.y == 2.0);
+        CHECK(p.z == 3.0);
+    }
+
+    SECTION("4d point - from wkt")
+    {
+        auto p = Point::from_wkt("POINTZM(1 2 3 4)");
+        CHECK(p.x == 1.0);
+        CHECK(p.y == 2.0);
+        CHECK(p.z == 3.0);
+        CHECK(p.m == 4.0);
     }
 
     SECTION("2d point index operator")

@@ -37,7 +37,6 @@ class MultiPoint : public BasicGeometry<MultiPoint>
     explicit MultiPoint(std::vector<Point> points)
         : m_points(std::move(points))
     {
-
     }
 
     GeometryType geom_type_() const
@@ -164,15 +163,19 @@ class MultiPoint : public BasicGeometry<MultiPoint>
         std::stringstream ss;
         ss << std::fixed << std::setprecision(precision);
         ss << "MULTIPOINT";
-        if (m_ndim >= 3) ss << "Z";
-        if (m_ndim == 4) ss << "M";
+        if (m_ndim >= 3)
+            ss << "Z";
+        if (m_ndim == 4)
+            ss << "M";
         ss << "(";
         for (size_t i = 0; i < m_points.size(); ++i)
         {
-            const Point& p =  m_points[i];
-            if (i > 0) ss << ",";
+            const Point& p = m_points[i];
+            if (i > 0)
+                ss << ",";
             ss << "(" << p.x << " " << p.y;
-            if (m_ndim == 3) ss << " " << p.z;
+            if (m_ndim == 3)
+                ss << " " << p.z;
             ss << ")";
         }
         ss << ")";

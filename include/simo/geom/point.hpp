@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <initializer_list>
 #include <stdexcept>
 #include <memory>
@@ -8,6 +9,7 @@
 #include <type_traits>
 #include <sstream>
 #include <iomanip>
+#include <regex>
 #include <json/json.hpp>
 #include <simo/geom/geometry.hpp>
 #include <simo/exceptions.hpp>
@@ -72,7 +74,7 @@ class Point : public BasicGeometry<Point>
             y      = *(init.begin() + 1);
             z      = *(init.begin() + 2);
             m_ndim = 3;
-            has_z = true;
+            has_z  = true;
         }
         else if (init.size() == 4)
         {
@@ -81,8 +83,8 @@ class Point : public BasicGeometry<Point>
             z      = *(init.begin() + 2);
             m      = *(init.begin() + 3);
             m_ndim = 4;
-            has_m = true;
-            has_z = true;
+            has_m  = true;
+            has_z  = true;
         }
         else
         {
@@ -175,14 +177,54 @@ class Point : public BasicGeometry<Point>
         std::stringstream ss;
         ss << std::fixed << std::setprecision(precision);
         ss << "POINT";
-        if (has_z) ss << "Z";
-        if (has_m) ss << "M";
+        if (has_z)
+            ss << "Z";
+        if (has_m)
+            ss << "M";
         ss << "(";
         ss << x << " " << y;
-        if (has_z) ss << " " << z;
-        if (has_m) ss << " " << m;
+        if (has_z)
+            ss << " " << z;
+        if (has_m)
+            ss << " " << m;
         ss << ")";
         return ss.str();
+    }
+
+    static Point from_wkt(const std::string& wkt)
+    {
+        /// @todo (pavel) ensure the number of coordinates for POINT, POINTZ, POINTM, POINTZM
+        /// @todo (pavel) consider the case, Point(...) should also be a valid WKT
+        std::regex point_regex("POINT[Z]?[M]?\\((.*)\\)");
+        std::smatch match;
+        std::string coords_str;
+        if (std::regex_search(wkt, match, point_regex) && match.size() > 1)
+        {
+            coords_str = match.str(1);
+            std::regex coords_regex("\\s+");
+            std::sregex_token_iterator iter(coords_str.begin(), coords_str.end(), coords_regex, -1);
+            std::sregex_token_iterator end;
+
+            /// @todo (pavel) add another point constructor Point(const std::vector<double> coords) ...
+            std::vector<double> coords;
+            for (; iter != end; ++iter)
+            {
+                coords.push_back(std::stod(*iter));
+            }
+            if (coords.size() == 2)
+            {
+                return Point(coords[0], coords[1]);
+            }
+            else if (coords.size() == 3)
+            {
+                return Point(coords[0], coords[1], coords[2]);
+            }
+            else if (coords.size() == 4)
+            {
+                return Point(coords[0], coords[1], coords[2]);
+            }
+        }
+        throw parse_error();
     }
 
   private:
