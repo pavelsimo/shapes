@@ -24,5 +24,6 @@ matrix:
       after_success:
         - bash <(curl -s https://codecov.io/bash)
 
+
 install:
-  - if [[ "${SHAPES_CXX}" != "" ]]; then export CXX=${SHAPES_CXX}; export CC=${SHAPES_CC}; fi
+- if [[ "${SHAPES_CXX}" != "" ]]; then export CXX=${SHAPES_CXX}; export CC=${SHAPES_CC}; fi
