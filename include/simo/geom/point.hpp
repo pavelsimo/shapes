@@ -221,7 +221,7 @@ class Point : public BasicGeometry<Point>
             }
             else if (coords.size() == 4)
             {
-                return Point(coords[0], coords[1], coords[2]);
+                return Point(coords[0], coords[1], coords[2], coords[3]);
             }
         }
         throw parse_error();
