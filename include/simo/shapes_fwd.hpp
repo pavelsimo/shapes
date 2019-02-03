@@ -7,6 +7,8 @@ namespace simo
 namespace shapes
 {
 
+class Geometry;
+
 class Point;
 
 class MultiPoint;

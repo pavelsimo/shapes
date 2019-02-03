@@ -36,7 +36,6 @@ if (NOT ${CLANG_FORMAT} STREQUAL "CLANG_FORMAT-NOTFOUND")
     message(STATUS "clang-format found: ${CLANG_FORMAT}")
     file(GLOB_RECURSE HPP_FILES
             ${PROJECT_SOURCE_DIR}/include/simo/*.hpp
-            ${PROJECT_SOURCE_DIR}/include/simo/io/*.hpp
             ${PROJECT_SOURCE_DIR}/include/simo/geom/*.hpp
             ${PROJECT_SOURCE_DIR}/tests/*.cpp
             )

@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <set>
+#include <sstream>
+#include <iomanip>
 #include <simo/geom/geometry.hpp>
 #include <simo/geom/point.hpp>
 #include <simo/geom/bounds.hpp>
@@ -11,7 +13,9 @@ namespace simo
 namespace shapes
 {
 
-class MultiPoint : public Geometry<MultiPoint>
+/// TODO(pavel) : deal with precision
+
+class MultiPoint : public BasicGeometry<MultiPoint>
 {
   public:
     MultiPoint() = default;
@@ -20,21 +24,20 @@ class MultiPoint : public Geometry<MultiPoint>
     typedef std::vector<Point>::const_iterator const_iterator;
 
     template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-    MultiPoint(std::initializer_list<std::initializer_list<T>> list)
+    MultiPoint(std::initializer_list<std::initializer_list<T>> init)
     {
-        for (const auto& coordinates : list)
+        for (const auto& coords : init)
         {
-            Point p(coordinates);
-            bounds.extend(p.x, p.y);
+            Point p(coords);
+            m_bounds.extend(p.x, p.y);
             m_points.push_back(std::move(p));
         }
-        /// @todo (pavel) check dimensions?
     }
 
     explicit MultiPoint(std::vector<Point> points)
         : m_points(std::move(points))
     {
-        /// @todo (pavel) check dimensions?
+
     }
 
     GeometryType geom_type_() const
@@ -87,22 +90,22 @@ class MultiPoint : public Geometry<MultiPoint>
         return m_points.at(pos);
     }
 
-    std::vector<std::tuple<double, double>> xy() const
+    std::vector<std::tuple<double, double>> xy_() const
     {
         std::vector<std::tuple<double, double>> res;
         for (const auto& point : m_points)
         {
-            res.push_back(point.xy());
+            res.emplace_back(point.x, point.y);
         }
         return res;
     }
 
-    std::vector<std::tuple<double, double, double>> xyz() const
+    std::vector<std::tuple<double, double, double>> xyz_() const
     {
         std::vector<std::tuple<double, double, double>> res;
         for (const auto& point : m_points)
         {
-            res.push_back(point.xyz());
+            res.emplace_back(point.x, point.y, point.z);
         }
         return res;
     }
@@ -136,23 +139,44 @@ class MultiPoint : public Geometry<MultiPoint>
         return MultiPoint(res);
     }
 
-    std::string to_json()
+    std::string json()
     {
+        // TODO(pavel): remove json library here...
         auto coords = std::vector<std::vector<double>>();
         coords.reserve(m_points.size());
         for (const auto& p : *this)
         {
-            if (p.ndim == 2)
+            if (p.ndim() == 2)
             {
                 coords.emplace_back(std::vector<double>{p.x, p.y});
             }
-            else if (p.ndim == 3)
+            else if (p.ndim() == 3)
             {
                 coords.emplace_back(std::vector<double>{p.x, p.y, p.z});
             }
         }
         nlohmann::json j = {{"type", "MultiPoint"}, {"coordinates", coords}};
         return j.dump();
+    }
+
+    std::string wkt()
+    {
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(precision);
+        ss << "MULTIPOINT";
+        if (m_ndim >= 3) ss << "Z";
+        if (m_ndim == 4) ss << "M";
+        ss << "(";
+        for (size_t i = 0; i < m_points.size(); ++i)
+        {
+            const Point& p =  m_points[i];
+            if (i > 0) ss << ",";
+            ss << "(" << p.x << " " << p.y;
+            if (m_ndim == 3) ss << " " << p.z;
+            ss << ")";
+        }
+        ss << ")";
+        return ss.str();
     }
 
   private:

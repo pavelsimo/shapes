@@ -47,10 +47,10 @@ TEST_CASE("MultiPoint tests")
     SECTION("2d multipoint - bounds")
     {
         MultiPoint mp = {{1.0, 2.0}, {3.0, 4.0}};
-        CHECK(mp.bounds.maxx == 3.0);
-        CHECK(mp.bounds.maxy == 4.0);
-        CHECK(mp.bounds.minx == 1.0);
-        CHECK(mp.bounds.miny == 2.0);
+        CHECK(mp.bounds().maxx == 3.0);
+        CHECK(mp.bounds().maxy == 4.0);
+        CHECK(mp.bounds().minx == 1.0);
+        CHECK(mp.bounds().miny == 2.0);
     }
 
     SECTION("2d multipoint - for each")
@@ -131,15 +131,22 @@ TEST_CASE("MultiPoint tests")
         CHECK(p2.z == 6.0);
     }
 
-    SECTION("2d multipoint - to json")
+    SECTION("2d multipoint - json")
     {
         MultiPoint mp = {{1.0, 2.0}, {3.0, 4.0}};
-        CHECK(mp.to_json() == "{\"coordinates\":[[1.0,2.0],[3.0,4.0]],\"type\":\"MultiPoint\"}");
+        CHECK(mp.json() == "{\"coordinates\":[[1.0,2.0],[3.0,4.0]],\"type\":\"MultiPoint\"}");
     }
 
-    SECTION("3d multipoint - to json")
+    SECTION("3d multipoint - json")
     {
         MultiPoint mp = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
-        CHECK(mp.to_json() == "{\"coordinates\":[[1.0,2.0,3.0],[4.0,5.0,6.0]],\"type\":\"MultiPoint\"}");
+        CHECK(mp.json() == "{\"coordinates\":[[1.0,2.0,3.0],[4.0,5.0,6.0]],\"type\":\"MultiPoint\"}");
+    }
+
+    SECTION("2d multipoint - wkt")
+    {
+        MultiPoint mp = {{1.0, 2.0}, {4.0, 5.0}};
+        mp.precision  = 1;
+        CHECK(mp.wkt() == "MULTIPOINT((1.0 2.0),(4.0 5.0))");
     }
 }

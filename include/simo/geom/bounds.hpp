@@ -17,7 +17,10 @@ class Bounds
     double maxy;
 
     Bounds()
-        : minx(std::numeric_limits<double>::max()), miny(std::numeric_limits<double>::max()), maxx(std::numeric_limits<double>::max()), maxy(std::numeric_limits<double>::max())
+        : minx(std::numeric_limits<double>::max()),
+          miny(std::numeric_limits<double>::max()),
+          maxx(std::numeric_limits<double>::min()),
+          maxy(std::numeric_limits<double>::min())
     {
     }
 
