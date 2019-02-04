@@ -34,30 +34,73 @@ class Point : public BasicGeometry<Point>
     /// the m-coordinate value for this Point, if it has one.
     double m;
 
+    /*!
+     * @brief creates a Point
+     *
+     * @note the default behaviour is to create a 2-dimensional point with coordinates (0, 0)
+     *
+     * @since 0.0.1
+     */
     Point()
         : x(0), y(0), z(0), has_z(false), has_m(false)
     {
         m_ndim = 2;
     }
 
+    /*!
+     * @brief creates a Point from coordinates (x, y)
+     *
+     * @param x the x-coordinate value
+     * @param y the y-coordinate value
+     *
+     * @since 0.0.1
+     */
     Point(double x, double y)
         : x(x), y(y), z(0)
     {
         m_ndim = 2;
     }
 
+    /*!
+     * @brief creates a Point from coordinates (x, y, z)
+     *
+     * @param x the x-coordinate value
+     * @param y the y-coordinate value
+     * @param z the z-coordinate value
+     *
+     * @since 0.0.1
+     */
     Point(double x, double y, double z)
         : x(x), y(y), z(z), has_z(true)
     {
         m_ndim = 3;
     }
 
+    /*!
+     * @brief creates a Point from coordinates (x, y, z, m)
+     *
+     * @param x the x-coordinate value
+     * @param y the y-coordinate value
+     * @param z the z-coordinate value
+     * @param m the m-coordinate (measure) value
+     *
+     * @since 0.0.1
+     */
     Point(double x, double y, double z, double m)
         : x(x), y(y), z(z), m(m), has_z(true), has_m(true)
     {
         m_ndim = 4;
     }
 
+    /*!
+     * @brief creates a Point
+     *
+     * @param init the coordinates list
+     *
+     * @throw exception if the given number of coordinates is either less than two or greater than four
+     *
+     * @since 0.0.1
+     */
     template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     Point(std::initializer_list<T> init)
     {
@@ -140,6 +183,16 @@ class Point : public BasicGeometry<Point>
         return {std::make_tuple(x, y, z)};
     }
 
+    /*!
+     * @brief returns the coordinate at the given index
+     *
+     * @param pos the coordinate position
+     * @return a double with the coordinate value
+     *
+     * @throw exception if the position is not found
+     *
+     * @since 0.0.1
+     */
     double at(size_t pos)
     {
         if (pos >= size_())
@@ -150,14 +203,29 @@ class Point : public BasicGeometry<Point>
             return x;
         if (pos == 1)
             return y;
-        return z;
+        if (pos == 2)
+            return z;
+        return m;
     }
 
+    /*!
+     * @copydoc Point::at()
+     */
     double operator[](size_t pos)
     {
         return at(pos);
     }
 
+    /*!
+     * @brief creates a Point from a geojson string
+     *
+     * @param json the geojson string
+     * @return a Point object
+     *
+     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
+     *
+     * @since 0.0.1
+     */
     static Point from_json(const std::string& json)
     {
         nlohmann::json j = nlohmann::json::parse(json);
@@ -179,6 +247,15 @@ class Point : public BasicGeometry<Point>
         throw parse_error();
     }
 
+    /*!
+     * @brief dumps the geojson representation of the point
+     *
+     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
+     *
+     * @return a geojson string
+     *
+     * @since 0.0.1
+     */
     std::string json()
     {
         auto coordinates = std::vector<double>{x, y};
@@ -190,25 +267,16 @@ class Point : public BasicGeometry<Point>
         return j.dump();
     }
 
-    std::string wkt()
-    {
-        std::stringstream ss;
-        ss << std::fixed << std::setprecision(precision);
-        ss << "POINT";
-        if (has_z)
-            ss << "Z";
-        if (has_m)
-            ss << "M";
-        ss << "(";
-        ss << x << " " << y;
-        if (has_z)
-            ss << " " << z;
-        if (has_m)
-            ss << " " << m;
-        ss << ")";
-        return ss.str();
-    }
-
+    /*!
+     * @brief creates a Point from a WKT string
+     *
+     * @param wkt the WKT string
+     * @return a Point object
+     *
+     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
+     *
+     * @since 0.0.1
+     */
     static Point from_wkt(const std::string& wkt)
     {
         /// @todo (pavel) ensure the number of coordinates for POINT, POINTZ, POINTM, POINTZM
@@ -243,6 +311,34 @@ class Point : public BasicGeometry<Point>
             }
         }
         throw parse_error();
+    }
+
+    /*!
+     * @brief dumps the WKT representation of the point
+     *
+     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
+     *
+     * @return a WKT string
+     *
+     * @since 0.0.1
+     */
+    std::string wkt()
+    {
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(precision);
+        ss << "POINT";
+        if (has_z)
+            ss << "Z";
+        if (has_m)
+            ss << "M";
+        ss << "(";
+        ss << x << " " << y;
+        if (has_z)
+            ss << " " << z;
+        if (has_m)
+            ss << " " << m;
+        ss << ")";
+        return ss.str();
     }
 
   private:

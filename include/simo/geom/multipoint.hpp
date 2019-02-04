@@ -39,24 +39,62 @@ class MultiPoint : public BasicGeometry<MultiPoint>
     {
     }
 
+    /*!
+    * @copydoc Geometry::geom_type()
+    */
     GeometryType geom_type_() const
     {
         return GeometryType::MULTIPOINT;
     }
 
+    /*!
+    * @copydoc Geometry::geom_type_str()
+    */
     std::string geom_type_str_() const
     {
         return "MultiPoint";
     }
 
+    /*!
+    * @copydoc Geometry::empty()
+    */
     bool empty_() const
     {
         return m_points.empty();
     }
 
+    /*!
+    * @copydoc Geometry::size()
+    */
     size_t size_() const
     {
         return m_points.size();
+    }
+
+    /*!
+    * @copydoc Geometry::xy()
+    */
+    std::vector<std::tuple<double, double>> xy_() const
+    {
+        std::vector<std::tuple<double, double>> res;
+        for (const auto& point : m_points)
+        {
+            res.emplace_back(point.x, point.y);
+        }
+        return res;
+    }
+
+    /*!
+    * @copydoc Geometry::xyz()
+    */
+    std::vector<std::tuple<double, double, double>> xyz_() const
+    {
+        std::vector<std::tuple<double, double, double>> res;
+        for (const auto& point : m_points)
+        {
+            res.emplace_back(point.x, point.y, point.z);
+        }
+        return res;
     }
 
     iterator begin()
@@ -87,26 +125,6 @@ class MultiPoint : public BasicGeometry<MultiPoint>
     Point operator[](size_t pos)
     {
         return m_points.at(pos);
-    }
-
-    std::vector<std::tuple<double, double>> xy_() const
-    {
-        std::vector<std::tuple<double, double>> res;
-        for (const auto& point : m_points)
-        {
-            res.emplace_back(point.x, point.y);
-        }
-        return res;
-    }
-
-    std::vector<std::tuple<double, double, double>> xyz_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        for (const auto& point : m_points)
-        {
-            res.emplace_back(point.x, point.y, point.z);
-        }
-        return res;
     }
 
     static MultiPoint from_json(const std::string& json)

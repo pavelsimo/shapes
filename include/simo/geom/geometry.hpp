@@ -10,7 +10,7 @@ namespace simo
 namespace shapes
 {
 
-/// geometry types as defined by the Open Geospatial Consortium (OGC) in their Simple Feature
+/// geometry types as defined by the OpenGIS "Consortium Simple Features for SQL" specification
 enum class GeometryType
 {
     GEOMETRY        = 0,
