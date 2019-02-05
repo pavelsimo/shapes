@@ -281,14 +281,15 @@ class Point : public BasicGeometry<Point>
     {
         /// @todo (pavel) ensure the number of coordinates for POINT, POINTZ, POINTM, POINTZM
         /// @todo (pavel) consider the case, Point(...) should also be a valid WKT
-        std::regex point_regex("POINT[Z]?[M]?\\((.*)\\)");
-        std::smatch match;
-        std::string coords_str;
-        if (std::regex_search(wkt, match, point_regex) && match.size() > 1)
+        /// @todo (pavel) empty spaces
+        std::regex tagged_text_regex("POINT[Z]?[M]?\\((.*)\\)");
+        std::smatch tagged_text_match;
+        std::string tagged_text;
+        if (std::regex_search(wkt, tagged_text_match, tagged_text_regex) && tagged_text_match.size() > 1)
         {
-            coords_str = match.str(1);
+            tagged_text = tagged_text_match.str(1);
             std::regex coords_regex("\\s+");
-            std::sregex_token_iterator iter(coords_str.begin(), coords_str.end(), coords_regex, -1);
+            std::sregex_token_iterator iter(tagged_text.begin(), tagged_text.end(), coords_regex, -1);
             std::sregex_token_iterator end;
 
             /// @todo (pavel) add another point constructor Point(const std::vector<double> coords) ...
