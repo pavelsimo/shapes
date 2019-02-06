@@ -13,15 +13,10 @@ namespace simo
 namespace shapes
 {
 
-/// TODO(pavel) : deal with precision
-
-class MultiPoint : public BasicGeometry<MultiPoint>
+class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<MultiPoint>
 {
   public:
     MultiPoint() = default;
-
-    typedef std::vector<Point>::iterator iterator;
-    typedef std::vector<Point>::const_iterator const_iterator;
 
     template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     MultiPoint(std::initializer_list<std::initializer_list<T>> init)
@@ -34,9 +29,9 @@ class MultiPoint : public BasicGeometry<MultiPoint>
         }
     }
 
-    explicit MultiPoint(std::vector<Point> points)
-        : m_points(std::move(points))
+    explicit MultiPoint(const std::vector<Point>& points)
     {
+        m_points = points;
     }
 
     /*!
@@ -97,36 +92,16 @@ class MultiPoint : public BasicGeometry<MultiPoint>
         return res;
     }
 
-    iterator begin()
-    {
-        return m_points.begin();
-    }
-
-    const_iterator begin() const
-    {
-        return m_points.begin();
-    }
-
-    iterator end()
-    {
-        return m_points.end();
-    }
-
-    const_iterator end() const
-    {
-        return m_points.end();
-    }
-
-    Point at(size_t pos)
-    {
-        return m_points.at(pos);
-    }
-
-    Point operator[](size_t pos)
-    {
-        return m_points.at(pos);
-    }
-
+    /*!
+      * @brief creates a MultiPoint from a geojson string
+      *
+      * @param json the geojson string
+      * @return a MultiPoint object
+      *
+      * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
+      *
+      * @since 0.0.1
+      */
     static MultiPoint from_json(const std::string& json)
     {
         nlohmann::json j = nlohmann::json::parse(json);
@@ -156,6 +131,15 @@ class MultiPoint : public BasicGeometry<MultiPoint>
         return MultiPoint(res);
     }
 
+    /*!
+     * @brief dumps the geojson representation of the MultiPoint
+     *
+     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
+     *
+     * @return a geojson string
+     *
+     * @since 0.0.1
+     */
     std::string json()
     {
         /// @todo (pavel) remove json library here...
@@ -176,6 +160,16 @@ class MultiPoint : public BasicGeometry<MultiPoint>
         return j.dump();
     }
 
+    /*!
+     * @brief creates a MultiPoint from a WKT string
+     *
+     * @param wkt the WKT string
+     * @return a MultiPoint object
+     *
+     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
+     *
+     * @since 0.0.1
+     */
     std::string wkt()
     {
         std::stringstream ss;
@@ -199,9 +193,6 @@ class MultiPoint : public BasicGeometry<MultiPoint>
         ss << ")";
         return ss.str();
     }
-
-  private:
-    std::vector<Point> m_points;
 };
 
 }  // namespace shapes

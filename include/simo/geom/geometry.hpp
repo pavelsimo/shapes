@@ -105,7 +105,7 @@ class Geometry
 };
 
 /// basic geometry type
-template <typename T>
+template <typename Derived>
 class BasicGeometry : public Geometry
 {
   public:
@@ -114,37 +114,37 @@ class BasicGeometry : public Geometry
 
     GeometryType geom_type() const override
     {
-        return static_cast<const T*>(this)->geom_type_();
+        return static_cast<const Derived*>(this)->geom_type_();
     }
 
     std::string geom_type_str() const override
     {
-        return static_cast<const T*>(this)->geom_type_str_();
+        return static_cast<const Derived*>(this)->geom_type_str_();
     }
 
     bool empty() const override
     {
-        return static_cast<const T*>(this)->empty_();
+        return static_cast<const Derived*>(this)->empty_();
     }
 
     size_t size() const override
     {
-        return static_cast<const T*>(this)->size_();
+        return static_cast<const Derived*>(this)->size_();
     }
 
     std::unique_ptr<Geometry> clone() override
     {
-        return std::unique_ptr<T>(new T(*static_cast<T*>(this)));
+        return std::unique_ptr<Derived>(new Derived(*static_cast<Derived*>(this)));
     };
 
     std::vector<std::tuple<double, double>> xy() const override
     {
-        return static_cast<const T*>(this)->xy_();
+        return static_cast<const Derived*>(this)->xy_();
     }
 
     std::vector<std::tuple<double, double, double>> xyz() const override
     {
-        return static_cast<const T*>(this)->xyz_();
+        return static_cast<const Derived*>(this)->xyz_();
     }
 
     int8_t ndim() const override

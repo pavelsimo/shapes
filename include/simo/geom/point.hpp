@@ -248,7 +248,7 @@ class Point : public BasicGeometry<Point>
     }
 
     /*!
-     * @brief dumps the geojson representation of the point
+     * @brief dumps the geojson representation of the Point
      *
      * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
      *
@@ -345,6 +345,47 @@ class Point : public BasicGeometry<Point>
   private:
     bool has_z = false;
     bool has_m = false;
+};
+
+template <typename Derived>
+class PointCollection
+{
+  public:
+    typedef std::vector<Point>::iterator iterator;
+    typedef std::vector<Point>::const_iterator const_iterator;
+
+    iterator begin()
+    {
+        return m_points.begin();
+    }
+
+    const_iterator begin() const
+    {
+        return m_points.begin();
+    }
+
+    iterator end()
+    {
+        return m_points.end();
+    }
+
+    const_iterator end() const
+    {
+        return m_points.end();
+    }
+
+    Point at(size_t pos)
+    {
+        return m_points.at(pos);
+    }
+
+    Point operator[](size_t pos)
+    {
+        return m_points.at(pos);
+    }
+
+  protected:
+    std::vector<Point> m_points;
 };
 
 }  // namespace shapes
