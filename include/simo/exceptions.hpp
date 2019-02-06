@@ -7,26 +7,45 @@ namespace simo
 {
 namespace shapes
 {
+namespace exceptions
+{
 
-/// @todo (pavel) improve these types
-
-class exception : public std::exception
+/*!
+ * @brief base shapes exception
+ */
+class shapes_exception : public std::exception
 {
   public:
+    explicit shapes_exception(const char* what)
+            : m_what(what) {}
+
     const char* what() const noexcept override
     {
-        return "shapes error";
+        return m_what.c_str();
+    }
+
+  protected:
+
+    void set_reason(const std::string& reason)
+    {
+        m_what.append(": ");
+        m_what.append(reason);
+    }
+
+  private:
+    std::string m_what{};
+};
+
+class parse_error : public shapes_exception
+{
+  public:
+    explicit parse_error(const std::string& reason)
+        : shapes_exception("parse error")
+    {
+        set_reason(reason);
     }
 };
 
-class parse_error : public exception
-{
-  public:
-    const char* what() const noexcept override
-    {
-        return "parse error";
-    }
-};
-
+}  // namespace exceptions
 }  // namespace shapes
 }  // namespace simo

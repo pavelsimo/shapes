@@ -131,7 +131,7 @@ class Point : public BasicGeometry<Point>
         }
         else
         {
-            throw exception();
+            throw exceptions::shapes_exception("invalid dimensions");
         }
     }
 
@@ -197,7 +197,7 @@ class Point : public BasicGeometry<Point>
     {
         if (pos >= size_())
         {
-            throw exception();
+            throw exceptions::shapes_exception("index out of bounds");
         }
         if (pos == 0)
             return x;
@@ -232,7 +232,7 @@ class Point : public BasicGeometry<Point>
         std::string type = j.at("type").get<std::string>();
         if (type != "Point")
         {
-            throw parse_error();
+            throw exceptions::parse_error("invalid geometry type");
         }
 
         std::vector<double> coords = j.at("coordinates");
@@ -244,7 +244,7 @@ class Point : public BasicGeometry<Point>
         {
             return {coords[0], coords[1], coords[2]};
         }
-        throw parse_error();
+        throw exceptions::parse_error("invalid dimensions");
     }
 
     /*!
@@ -310,8 +310,12 @@ class Point : public BasicGeometry<Point>
             {
                 return Point(coords[0], coords[1], coords[2], coords[3]);
             }
+            else
+            {
+                throw exceptions::parse_error("invalid dimensions");
+            }
         }
-        throw parse_error();
+        throw exceptions::parse_error("invalid tagged text");
     }
 
     /*!

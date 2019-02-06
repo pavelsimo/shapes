@@ -108,7 +108,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         std::string type = j.at("type").get<std::string>();
         if (type != "MultiPoint")
         {
-            throw parse_error();
+            throw exceptions::parse_error("invalid geometry type");
         }
 
         auto coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
@@ -125,7 +125,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
             }
             else
             {
-                throw parse_error();
+                throw exceptions::parse_error("invalid dimensions");
             }
         }
         return MultiPoint(res);
