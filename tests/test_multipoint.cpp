@@ -134,13 +134,15 @@ TEST_CASE("MultiPoint tests")
     SECTION("2d multipoint - json")
     {
         MultiPoint mp = {{1.0, 2.0}, {3.0, 4.0}};
-        CHECK(mp.json() == "{\"coordinates\":[[1.0,2.0],[3.0,4.0]],\"type\":\"MultiPoint\"}");
+        mp.precision = 1;
+        CHECK(mp.json() == "{\"type\":\"MultiPoint\",\"coordinates\":[[1.0,2.0],[3.0,4.0]]}");
     }
 
     SECTION("3d multipoint - json")
     {
         MultiPoint mp = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
-        CHECK(mp.json() == "{\"coordinates\":[[1.0,2.0,3.0],[4.0,5.0,6.0]],\"type\":\"MultiPoint\"}");
+        mp.precision = 1;
+        CHECK(mp.json() == "{\"type\":\"MultiPoint\",\"coordinates\":[[1.0,2.0,3.0],[4.0,5.0,6.0]]}");
     }
 
     SECTION("2d multipoint - wkt")

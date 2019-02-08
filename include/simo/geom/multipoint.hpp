@@ -16,11 +16,24 @@ namespace shapes
 class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<MultiPoint>
 {
   public:
+    /*!
+     * @brief creates an empty MultiPoint
+     *
+     * @since 0.0.1
+     */
     MultiPoint() = default;
 
+     /*!
+      * @brief creates a MultiPoint from a given initializer list
+      *
+      * @param init the initializer list
+      *
+      * @since 0.0.1
+      */
     template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     MultiPoint(std::initializer_list<std::initializer_list<T>> init)
     {
+        m_points.reserve(init.size());
         for (const auto& coords : init)
         {
             Point p(coords);
@@ -29,6 +42,13 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         }
     }
 
+    /*!
+     * @brief creates a MultiPoint from a given point vector
+     *
+     * @param points the point list
+     *
+     * @since 0.0.1
+     */
     explicit MultiPoint(const std::vector<Point>& points)
     {
         m_points = points;
@@ -142,22 +162,31 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
      */
     std::string json()
     {
-        /// @todo (pavel) remove json library here...
-        auto coords = std::vector<std::vector<double>>();
-        coords.reserve(m_points.size());
-        for (const auto& p : *this)
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(precision);
+        ss << "{\"type\":\"MultiPoint\",\"coordinates\":[";
+        for(size_t i = 0; i < m_points.size(); ++i)
         {
+            if (i > 0)
+            {
+                ss << ",";
+            }
+            const auto& p = m_points[i];
             if (p.ndim() == 2)
             {
-                coords.emplace_back(std::vector<double>{p.x, p.y});
+                ss << "[" << p.x << "," << p.y << "]";
             }
             else if (p.ndim() == 3)
             {
-                coords.emplace_back(std::vector<double>{p.x, p.y, p.z});
+                ss << "[" << p.x << "," << p.y << "," << p.z << "]";
+            }
+            else if (p.ndim() == 4)
+            {
+                ss << "[" << p.x << "," << p.y << "," << p.z << "," << p.m << "]";
             }
         }
-        nlohmann::json j = {{"type", "MultiPoint"}, {"coordinates", coords}};
-        return j.dump();
+        ss << "]}";
+        return ss.str();
     }
 
     /*!
@@ -174,20 +203,30 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
     {
         std::stringstream ss;
         ss << std::fixed << std::setprecision(precision);
+
         ss << "MULTIPOINT";
         if (m_ndim >= 3)
+        {
             ss << "Z";
+        }
         if (m_ndim == 4)
+        {
             ss << "M";
+        }
+
         ss << "(";
         for (size_t i = 0; i < m_points.size(); ++i)
         {
             const Point& p = m_points[i];
             if (i > 0)
+            {
                 ss << ",";
+            }
             ss << "(" << p.x << " " << p.y;
             if (m_ndim == 3)
+            {
                 ss << " " << p.z;
+            }
             ss << ")";
         }
         ss << ")";
