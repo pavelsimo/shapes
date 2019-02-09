@@ -8,8 +8,8 @@ TEST_CASE("Point tests")
     SECTION("geometry type")
     {
         Point p;
-        CHECK(p.geom_type() == GeometryType::POINT);
-        CHECK(p.geom_type_str() == "Point");
+        CHECK(p.type() == GeometryType::POINT);
+        CHECK(p.type_str() == "Point");
     }
 
     SECTION("empty constructor")
@@ -17,7 +17,7 @@ TEST_CASE("Point tests")
         Point p;
         CHECK(p.x == 0);
         CHECK(p.y == 0);
-        CHECK(p.ndim() == 2);
+        CHECK(p.dimension == DimensionType::XY);
     }
 
     SECTION("2d point constructor - initializer list")
@@ -26,7 +26,7 @@ TEST_CASE("Point tests")
         CHECK(p.x == 1);
         CHECK(p.y == 2);
         CHECK(p.z == 0);
-        CHECK(p.ndim() == 2);
+        CHECK(p.dimension == DimensionType::XY);
     }
 
     SECTION("3d point constructor - initializer list")
@@ -35,7 +35,8 @@ TEST_CASE("Point tests")
         CHECK(p.x == 1);
         CHECK(p.y == 2);
         CHECK(p.z == 3);
-        CHECK(p.ndim() == 3);
+        CHECK(p.dimension == DimensionType::XYZ);
+        CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
     }
 
     SECTION("2d point - from json")
@@ -43,8 +44,8 @@ TEST_CASE("Point tests")
         auto p = Point::from_json(R"({"type": "Point", "coordinates": [1.0, 2.0]})");
         CHECK(p.x == 1.0);
         CHECK(p.y == 2.0);
-        CHECK(p.ndim() == 2);
-        CHECK(p.geom_type_str() == "Point");
+        CHECK(p.dimension == DimensionType::XY);
+        CHECK(p.type_str() == "Point");
     }
 
     SECTION("3d point - from json")
@@ -53,8 +54,9 @@ TEST_CASE("Point tests")
         CHECK(p.x == 1.0);
         CHECK(p.y == 2.0);
         CHECK(p.z == 3.0);
-        CHECK(p.ndim() == 3);
-        CHECK(p.geom_type_str() == "Point");
+        CHECK(p.dimension == DimensionType::XYZ);
+        CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
+        CHECK(p.type_str() == "Point");
     }
 
     SECTION("2d point - to json")
@@ -114,6 +116,7 @@ TEST_CASE("Point tests")
         CHECK(p.y == 2.0);
         CHECK(p.z == 3.0);
         CHECK(p.m == 4.0);
+        CHECK(p.detailed_type() == GeometryDetailedType::POINTZM);
     }
 
     SECTION("2d point index operator")

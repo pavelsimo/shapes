@@ -8,8 +8,8 @@ TEST_CASE("MultiPoint tests")
     SECTION("geometry type")
     {
         MultiPoint mp;
-        CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
-        CHECK(mp.geom_type_str() == "MultiPoint");
+        CHECK(mp.type() == GeometryType::MULTIPOINT);
+        CHECK(mp.type_str() == "MultiPoint");
     }
 
     SECTION("multipoint empty")
@@ -47,10 +47,10 @@ TEST_CASE("MultiPoint tests")
     SECTION("2d multipoint - bounds")
     {
         MultiPoint mp = {{1.0, 2.0}, {3.0, 4.0}};
-        CHECK(mp.bounds().maxx == 3.0);
-        CHECK(mp.bounds().maxy == 4.0);
-        CHECK(mp.bounds().minx == 1.0);
-        CHECK(mp.bounds().miny == 2.0);
+        CHECK(mp.bounds.maxx == 3.0);
+        CHECK(mp.bounds.maxy == 4.0);
+        CHECK(mp.bounds.minx == 1.0);
+        CHECK(mp.bounds.miny == 2.0);
     }
 
     SECTION("2d multipoint - for each")

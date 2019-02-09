@@ -37,7 +37,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         for (const auto& coords : init)
         {
             Point p(coords);
-            m_bounds.extend(p.x, p.y);
+            bounds.extend(p.x, p.y);
             m_points.push_back(std::move(p));
         }
     }
@@ -55,17 +55,17 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
     }
 
     /*!
-    * @copydoc Geometry::geom_type()
+    * @copydoc Geometry::type()
     */
-    GeometryType geom_type_() const
+    GeometryType type_() const
     {
         return GeometryType::MULTIPOINT;
     }
 
     /*!
-    * @copydoc Geometry::geom_type_str()
+    * @copydoc Geometry::type_str()
     */
-    std::string geom_type_str_() const
+    std::string type_str_() const
     {
         return "MultiPoint";
     }
@@ -108,6 +108,19 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         for (const auto& point : m_points)
         {
             res.emplace_back(point.x, point.y, point.z);
+        }
+        return res;
+    }
+
+    /*!
+    * @copydoc Geometry::xyz()
+    */
+    std::vector<std::tuple<double, double, double, double>> xyzm_() const
+    {
+        std::vector<std::tuple<double, double, double, double>> res;
+        for (const auto& point : m_points)
+        {
+            res.emplace_back(point.x, point.y, point.z, point.m);
         }
         return res;
     }
@@ -172,17 +185,28 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
                 ss << ",";
             }
             const auto& p = m_points[i];
-            if (p.ndim() == 2)
+            switch (p.dimension)
             {
-                ss << "[" << p.x << "," << p.y << "]";
-            }
-            else if (p.ndim() == 3)
-            {
-                ss << "[" << p.x << "," << p.y << "," << p.z << "]";
-            }
-            else if (p.ndim() == 4)
-            {
-                ss << "[" << p.x << "," << p.y << "," << p.z << "," << p.m << "]";
+                case DimensionType::XY:
+                {
+                    ss << "[" << p.x << "," << p.y << "]";
+                    break;
+                }
+                case DimensionType::XYZ:
+                {
+                    ss << "[" << p.x << "," << p.y << "," << p.z << "]";
+                    break;
+                }
+                case DimensionType::XYM:
+                {
+                    ss << "[" << p.x << "," << p.y << "," << p.m << "]";
+                    break;
+                }
+                case DimensionType::XYZM:
+                {
+                    ss << "[" << p.x << "," << p.y << "," << p.z << "," << p.m << "]";
+                    break;
+                }
             }
         }
         ss << "]}";
@@ -205,11 +229,11 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         ss << std::fixed << std::setprecision(precision);
 
         ss << "MULTIPOINT";
-        if (m_ndim >= 3)
+        if (has_z())
         {
             ss << "Z";
         }
-        if (m_ndim == 4)
+        if (has_m())
         {
             ss << "M";
         }
@@ -223,9 +247,13 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
                 ss << ",";
             }
             ss << "(" << p.x << " " << p.y;
-            if (m_ndim == 3)
+            if (has_z())
             {
                 ss << " " << p.z;
+            }
+            if (has_m())
+            {
+                ss << " " << p.m;
             }
             ss << ")";
         }

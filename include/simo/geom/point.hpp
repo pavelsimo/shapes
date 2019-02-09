@@ -42,9 +42,9 @@ class Point : public BasicGeometry<Point>
      * @since 0.0.1
      */
     Point()
-        : x(0), y(0), z(0), has_z(false), has_m(false)
+        : x(0), y(0), z(0)
     {
-        m_ndim = 2;
+        dimension = DimensionType::XY;
     }
 
     /*!
@@ -58,7 +58,7 @@ class Point : public BasicGeometry<Point>
     Point(double x, double y)
         : x(x), y(y), z(0)
     {
-        m_ndim = 2;
+        dimension = DimensionType::XY;
     }
 
     /*!
@@ -71,9 +71,9 @@ class Point : public BasicGeometry<Point>
      * @since 0.0.1
      */
     Point(double x, double y, double z)
-        : x(x), y(y), z(z), has_z(true)
+        : x(x), y(y), z(z)
     {
-        m_ndim = 3;
+        dimension = DimensionType::XYZ;
     }
 
     /*!
@@ -87,9 +87,9 @@ class Point : public BasicGeometry<Point>
      * @since 0.0.1
      */
     Point(double x, double y, double z, double m)
-        : x(x), y(y), z(z), m(m), has_z(true), has_m(true)
+        : x(x), y(y), z(z), m(m)
     {
-        m_ndim = 4;
+        dimension = DimensionType::XYZM;
     }
 
     /*!
@@ -109,15 +109,14 @@ class Point : public BasicGeometry<Point>
             x      = *init.begin();
             y      = *(init.begin() + 1);
             z      = 0;
-            m_ndim = 2;
+            dimension = DimensionType::XY;
         }
         else if (init.size() == 3)
         {
             x      = *init.begin();
             y      = *(init.begin() + 1);
             z      = *(init.begin() + 2);
-            m_ndim = 3;
-            has_z  = true;
+            dimension = DimensionType::XYZ;
         }
         else if (init.size() == 4)
         {
@@ -125,9 +124,7 @@ class Point : public BasicGeometry<Point>
             y      = *(init.begin() + 1);
             z      = *(init.begin() + 2);
             m      = *(init.begin() + 3);
-            m_ndim = 4;
-            has_m  = true;
-            has_z  = true;
+            dimension = DimensionType::XYZM;
         }
         else
         {
@@ -136,17 +133,17 @@ class Point : public BasicGeometry<Point>
     }
 
     /*!
-     * @copydoc Geometry::geom_type()
+     * @copydoc Geometry::type()
      */
-    GeometryType geom_type_() const
+    GeometryType type_() const
     {
         return GeometryType::POINT;
     }
 
     /*!
-     * @copydoc Geometry::geom_type_str()
+     * @copydoc Geometry::type_str()
      */
-    std::string geom_type_str_() const
+    std::string type_str_() const
     {
         return "Point";
     }
@@ -164,7 +161,7 @@ class Point : public BasicGeometry<Point>
      */
     size_t size_() const
     {
-        return static_cast<size_t>(m_ndim);
+        return static_cast<size_t>(get_num_dimension());
     }
 
     /*!
@@ -181,6 +178,14 @@ class Point : public BasicGeometry<Point>
     std::vector<std::tuple<double, double, double>> xyz_() const
     {
         return {std::make_tuple(x, y, z)};
+    }
+
+    /*!
+    * @copydoc Geometry::xyzm()
+    */
+    std::vector<std::tuple<double, double, double, double>> xyzm_() const
+    {
+        return {std::make_tuple(x, y, z, m)};
     }
 
     /*!
@@ -244,6 +249,10 @@ class Point : public BasicGeometry<Point>
         {
             return {coords[0], coords[1], coords[2]};
         }
+        else if (coords.size() == 4)
+        {
+            return {coords[0], coords[1], coords[2], coords[3]};
+        }
         throw exceptions::parse_error("invalid dimensions");
     }
 
@@ -262,11 +271,11 @@ class Point : public BasicGeometry<Point>
         ss << std::fixed << std::setprecision(precision);
         ss << "{\"type\":\"Point\",\"coordinates\":";
         ss << "[" << x << "," << y;
-        if (has_z)
+        if (has_z())
         {
             ss << "," << z;
         }
-        if (has_m)
+        if (has_m())
         {
             ss << "," << m;
         }
@@ -287,7 +296,6 @@ class Point : public BasicGeometry<Point>
     static Point from_wkt(const std::string& wkt)
     {
         /// @todo (pavel) ensure the number of coordinates for POINT, POINTZ, POINTM, POINTZM
-        /// @todo (pavel) consider the case, Point(...) should also be a valid WKT
         /// @todo (pavel) empty spaces
         std::regex tagged_text_regex("(?:POINT|Point){1}[Z]?[M]?\\((.*)\\)");
         std::smatch tagged_text_match;
@@ -307,15 +315,15 @@ class Point : public BasicGeometry<Point>
             }
             if (coords.size() == 2)
             {
-                return Point(coords[0], coords[1]);
+                return {coords[0], coords[1]};
             }
             else if (coords.size() == 3)
             {
-                return Point(coords[0], coords[1], coords[2]);
+                return {coords[0], coords[1], coords[2]};
             }
             else if (coords.size() == 4)
             {
-                return Point(coords[0], coords[1], coords[2], coords[3]);
+                return {coords[0], coords[1], coords[2], coords[3]};
             }
             else
             {
@@ -339,23 +347,27 @@ class Point : public BasicGeometry<Point>
         std::stringstream ss;
         ss << std::fixed << std::setprecision(precision);
         ss << "POINT";
-        if (has_z)
+        if (has_z())
+        {
             ss << "Z";
-        if (has_m)
+        }
+        if (has_m())
+        {
             ss << "M";
+        }
         ss << "(";
         ss << x << " " << y;
-        if (has_z)
+        if (has_z())
+        {
             ss << " " << z;
-        if (has_m)
+        }
+        if (has_m())
+        {
             ss << " " << m;
+        }
         ss << ")";
         return ss.str();
     }
-
-  private:
-    bool has_z = false;
-    bool has_m = false;
 };
 
 template <typename Derived>
