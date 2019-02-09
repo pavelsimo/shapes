@@ -23,7 +23,8 @@ using namespace simo::shapes;
 Building a `Point` from GeoJSON:
 
 ```cpp
-auto p = Point::from_json("{\"type\": \"Point\", \"coordinates\": [1.0, 2.0, 3.0]}");
+
+auto p = Point::from_json(R"({"type": "Point", "coordinates": [1.0, 2.0, 3.0]})");
 std::cout << p.x << " " << p.y << " " << p.z << std::endl;
 ```
 

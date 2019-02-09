@@ -40,7 +40,7 @@ TEST_CASE("Point tests")
 
     SECTION("2d point - from json")
     {
-        auto p = Point::from_json("{\"type\": \"Point\", \"coordinates\": [1.0, 2.0]}");
+        auto p = Point::from_json(R"({"type": "Point", "coordinates": [1.0, 2.0]})");
         CHECK(p.x == 1.0);
         CHECK(p.y == 2.0);
         CHECK(p.ndim() == 2);
@@ -49,7 +49,7 @@ TEST_CASE("Point tests")
 
     SECTION("3d point - from json")
     {
-        auto p = Point::from_json("{\"type\": \"Point\", \"coordinates\": [1.0, 2.0, 3.0]}");
+        auto p = Point::from_json(R"({"type": "Point", "coordinates": [1.0, 2.0, 3.0]})");
         CHECK(p.x == 1.0);
         CHECK(p.y == 2.0);
         CHECK(p.z == 3.0);
@@ -60,13 +60,15 @@ TEST_CASE("Point tests")
     SECTION("2d point - to json")
     {
         auto p = Point{1, 2};
-        CHECK(p.json() == "{\"coordinates\":[1.0,2.0],\"type\":\"Point\"}");
+        p.precision = 1;
+        CHECK(p.json() == R"({"type":"Point","coordinates":[1.0,2.0]})");
     }
 
     SECTION("3d point - to json")
     {
         auto p = Point{1, 2, 3};
-        CHECK(p.json() == "{\"coordinates\":[1.0,2.0,3.0],\"type\":\"Point\"}");
+        p.precision = 1;
+        CHECK(p.json() == R"({"type":"Point","coordinates":[1.0,2.0,3.0]})");
     }
 
     SECTION("2d point - to wkt")
