@@ -258,13 +258,20 @@ class Point : public BasicGeometry<Point>
      */
     std::string json()
     {
-        auto coordinates = std::vector<double>{x, y};
-        if (m_ndim == 3)
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(precision);
+        ss << "{\"type\":\"Point\",\"coordinates\":";
+        ss << "[" << x << "," << y;
+        if (has_z)
         {
-            coordinates.push_back(z);
+            ss << "," << z;
         }
-        nlohmann::json j = {{"type", "Point"}, {"coordinates", coordinates}};
-        return j.dump();
+        if (has_m)
+        {
+            ss << "," << m;
+        }
+        ss << "]}";
+        return ss.str();
     }
 
     /*!
@@ -282,7 +289,7 @@ class Point : public BasicGeometry<Point>
         /// @todo (pavel) ensure the number of coordinates for POINT, POINTZ, POINTM, POINTZM
         /// @todo (pavel) consider the case, Point(...) should also be a valid WKT
         /// @todo (pavel) empty spaces
-        std::regex tagged_text_regex("POINT[Z]?[M]?\\((.*)\\)");
+        std::regex tagged_text_regex("(?:POINT|Point){1}[Z]?[M]?\\((.*)\\)");
         std::smatch tagged_text_match;
         std::string tagged_text;
         if (std::regex_search(wkt, tagged_text_match, tagged_text_regex) && tagged_text_match.size() > 1)
