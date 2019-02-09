@@ -181,6 +181,14 @@ class Point : public BasicGeometry<Point>
     }
 
     /*!
+    * @copydoc Geometry::xym()
+    */
+    std::vector<std::tuple<double, double, double>> xym_() const
+    {
+        return {std::make_tuple(x, y, m)};
+    }
+
+    /*!
     * @copydoc Geometry::xyzm()
     */
     std::vector<std::tuple<double, double, double, double>> xyzm_() const

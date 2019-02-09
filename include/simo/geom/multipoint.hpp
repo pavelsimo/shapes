@@ -113,7 +113,20 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
     }
 
     /*!
-    * @copydoc Geometry::xyz()
+    * @copydoc Geometry::xym()
+    */
+    std::vector<std::tuple<double, double, double>> xym_() const
+    {
+        std::vector<std::tuple<double, double, double>> res;
+        for (const auto& point : m_points)
+        {
+            res.emplace_back(point.x, point.y, point.m);
+        }
+        return res;
+    }
+
+    /*!
+    * @copydoc Geometry::xyzm()
     */
     std::vector<std::tuple<double, double, double, double>> xyzm_() const
     {

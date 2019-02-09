@@ -211,6 +211,14 @@ class Geometry
     virtual std::vector<std::tuple<double, double, double>> xyz() const = 0;
 
     /*!
+     * @brief returns the geometry (x, y, m) coordinates as a tuple
+     * @return a vector of (x, y, m) tuples
+     *
+     * @since 0.0.1
+     */
+    virtual std::vector<std::tuple<double, double, double>> xym() const = 0;
+
+    /*!
      * @brief returns the geometry (x, y, z, m) coordinates as a tuple
      * @return a vector of (x, y, z, m) tuples
      *
@@ -454,6 +462,11 @@ class BasicGeometry : public Geometry
     std::vector<std::tuple<double, double, double>> xyz() const override
     {
         return static_cast<const Derived*>(this)->xyz_();
+    }
+
+    std::vector<std::tuple<double, double, double>> xym() const override
+    {
+        return static_cast<const Derived*>(this)->xym_();
     }
 
     std::vector<std::tuple<double, double, double, double>> xyzm() const override
