@@ -23,16 +23,16 @@ class Point : public BasicGeometry<Point>
 {
   public:
     /// the x-coordinate value for this Point
-    double x;
+    double x = 0;
 
     /// the y-coordinate value for this Point
-    double y;
+    double y = 0;
 
     /// the z-coordinate value for this Point, if it has one.
-    double z;
+    double z = 0;
 
     /// the m-coordinate value for this Point, if it has one.
-    double m;
+    double m = 0;
 
     /*!
      * @brief creates a Point
@@ -42,7 +42,6 @@ class Point : public BasicGeometry<Point>
      * @since 0.0.1
      */
     Point()
-        : x(0), y(0), z(0)
     {
         dimension = DimensionType::XY;
     }
@@ -56,7 +55,7 @@ class Point : public BasicGeometry<Point>
      * @since 0.0.1
      */
     Point(double x, double y)
-        : x(x), y(y), z(0)
+        : x(x), y(y)
     {
         dimension = DimensionType::XY;
     }
@@ -93,6 +92,67 @@ class Point : public BasicGeometry<Point>
     }
 
     /*!
+     * @brief creates a Point from coordinates (x, y)
+     *
+     * @param x the x-coordinate value
+     * @param y the y-coordinate value
+     *
+     * @since 0.0.1
+     */
+    static Point from_xy(double x, double y)
+    {
+        return {x, y};
+    }
+
+    /*!
+     * @brief creates a Point from coordinates (x, y, z)
+     *
+     * @param x the x-coordinate value
+     * @param y the y-coordinate value
+     * @param z the z-coordinate value
+     *
+     * @since 0.0.1
+     */
+    static Point from_xyz(double x, double y, double z)
+    {
+        return {x, y, z};
+    }
+
+    /*!
+     * @brief creates a Point from coordinates (x, y, m)
+     *
+     * @param x the x-coordinate value
+     * @param y the y-coordinate value
+     * @param m the m-coordinate value
+     *
+     * @since 0.0.1
+     */
+    static Point from_xym(double x, double y, double m)
+    {
+        Point p;
+        p.x = x;
+        p.y = y;
+        p.m = m;
+        p.dimension = DimensionType::XYM;
+        return p;
+    }
+
+    /*!
+       * @brief creates a Point from coordinates (x, y, z, m)
+       *
+       * @param x the x-coordinate value
+       * @param y the y-coordinate value
+       * @param z the z-coordinate value
+       * @param m the m-coordinate value
+       *
+       * @since 0.0.1
+       */
+    static Point from_xyzm(double x, double y, double z, double m)
+    {
+        return {x, y, z, m};
+    }
+
+    /*!
      * @brief creates a Point
      *
      * @param init the coordinates list
@@ -108,7 +168,6 @@ class Point : public BasicGeometry<Point>
         {
             x      = *init.begin();
             y      = *(init.begin() + 1);
-            z      = 0;
             dimension = DimensionType::XY;
         }
         else if (init.size() == 3)

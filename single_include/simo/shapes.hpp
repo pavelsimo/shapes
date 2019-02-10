@@ -48,6 +48,8 @@ namespace simo
 namespace shapes
 {
 
+class Geometry;
+
 class Point;
 
 class MultiPoint;
@@ -88,6 +90,11 @@ namespace simo
 namespace shapes
 {
 
+/*!
+ * @brief represents a bounding box
+ *
+ * @since 0.0.1
+ */
 class Bounds
 {
   public:
@@ -96,16 +103,43 @@ class Bounds
     double maxx;
     double maxy;
 
+    /*!
+     * @brief creates a Bounds object
+     *
+     * @since 0.0.1
+     */
     Bounds()
-        : minx(std::numeric_limits<double>::max()), miny(std::numeric_limits<double>::max()), maxx(std::numeric_limits<double>::max()), maxy(std::numeric_limits<double>::max())
+        : minx(std::numeric_limits<double>::max()),
+          miny(std::numeric_limits<double>::max()),
+          maxx(std::numeric_limits<double>::min()),
+          maxy(std::numeric_limits<double>::min())
     {
     }
 
+    /*!
+     * @brief creates a Bounds object from the given coordinates
+     *
+     * @param minx the x-coordinate of the first corner
+     * @param miny the y-coordinate of the first corner
+     * @param maxx the x-coordinate of the second corner
+     * @param maxy the y-coordinate of the second corner
+     *
+     * @since 0.0.1
+     */
     Bounds(double minx, double miny, double maxx, double maxy)
         : minx(minx), miny(miny), maxx(maxx), maxy(maxy)
     {
     }
 
+    /*!
+     * @brief extends the bounds to contain the given point
+     *
+     * @param x the x-coordinate of the point
+     * @param y the y-coordinate of the point
+     * @return the Bounds object
+     *
+     * @since 0.0.1
+     */
     Bounds& extend(double x, double y)
     {
         minx = std::min(x, minx);
@@ -115,46 +149,114 @@ class Bounds
         return *this;
     }
 
+    /*!
+     * @brief returns a (x, y) tuple with the center of the bounds
+     *
+     * @return a tuple
+     *
+     * @since 0.0.1
+     */
     std::tuple<double, double> center() const
     {
         return std::make_tuple((minx + maxx) / 2.0, (miny + maxy) / 2.0);
     }
 
+    /*!
+     * @brief returns a (x, y) tuple with the bottom left bounds
+     *
+     * @return a tuple
+     *
+     * @since 0.0.1
+     */
     std::tuple<double, double> bottom_left() const
     {
         return std::make_tuple(minx, maxy);
     }
 
+    /*!
+     * @brief returns a (x, y) tuple with the top right bounds
+     *
+     * @return a tuple
+     *
+     * @since 0.0.1
+     */
     std::tuple<double, double> top_right() const
     {
         return std::make_tuple(maxx, miny);
     }
 
+    /*!
+     * @brief returns a (x, y) tuple with the top left bounds
+     *
+     * @return a tuple
+     *
+     * @since 0.0.1
+     */
     std::tuple<double, double> top_left() const
     {
         return std::make_tuple(minx, miny);
     }
 
+    /*!
+     * @brief returns a (x, y) tuple with the bottom right bounds
+     *
+     * @return a tuple
+     *
+     * @since 0.0.1
+     */
     std::tuple<double, double> bottom_right() const
     {
         return std::make_tuple(maxx, maxy);
     }
 
+    /*!
+     * @brief returns true if the bounds contains the given point
+     *
+     * @param x the x-coordinate of the point
+     * @param y the y-coordinate of the point
+     * @return true if the Bounds contains the given point, otherwise false
+     *
+     * @since 0.0.1
+     */
     bool contains(double x, double y) const
     {
         return (x >= minx) && (x <= maxx) && (y >= miny) && (y <= maxy);
     }
 
+    /*!
+     * @brief returns true if the bounds contains the given one
+     *
+     * @param other the bounds
+     * @return true if the Bounds contain the given one, otherwise false
+     *
+     * @since 0.0.1
+     */
     bool contains(const Bounds& other)
     {
         return contains(other.minx, other.miny) && contains(other.maxx, other.maxy);
     }
 
+    /*!
+     * @brief returns true if the bounds intersect the given one
+     *
+     * @param other the bounds
+     * @return true if the Bounds intersect the given one, otherwise false
+     *
+     * @since 0.0.1
+     */
     bool intersects(const Bounds& other)
     {
         return (other.maxx >= minx) && (other.minx <= maxx) && (other.maxy >= miny) && (other.miny <= maxy);
     }
 
+    /*!
+     * @brief returns true if the bounds overlaps the given one
+     *
+     * @param other the bounds
+     * @return true if the Bounds overlaps the given one, otherwise false
+     *
+     * @since 0.0.1
+     */
     bool overlaps(const Bounds& other)
     {
         return (other.maxx > minx) && (other.minx < maxx) && (other.maxy > miny) && (other.miny < maxy);
@@ -169,90 +271,503 @@ namespace simo
 namespace shapes
 {
 
-enum class GeometryType
+/// geometry dimension type is (x, y), (x, y, z), (x, y, m) or (x, y, z, m)
+enum class DimensionType
 {
-    GEOMETRY        = 0,
-    POINT           = 1,
-    CURVE           = 2,
-    LINESTRING      = 3,
-    SURFACE         = 4,
-    POLYGON         = 5,
-    COLLECTION      = 6,
-    MULTIPOINT      = 7,
-    MULTICURVE      = 8,
-    MULTILINESTRING = 9,
-    MULTISURFACE    = 10,
-    MULTIPOLYGON    = 11
+    XY = 1,
+    XYZ = 2,
+    XYM = 3,
+    XYZM = 4
 };
 
-class BasicGeometry
+/// geometry types as defined by the OpenGIS "Consortium Simple Features for SQL" specification
+enum class GeometryType
+{
+    GEOMETRY = 0,
+    POINT = 1,
+    LINESTRING = 2,
+    POLYGON = 3,
+    MULTIPOINT = 4,
+    MULTILINESTRING = 5,
+    MULTIPOLYGON = 6,
+    GEOMETRYCOLLECTION = 7,
+    CIRCULARSTRING = 8,
+    COMPOUNDCURVE = 9,
+    CURVEPOLYGON = 10,
+    MULTICURVE = 11,
+    MULTISURFACE = 12,
+    CURVE = 13,
+    SURFACE = 14,
+    POLYHEDRALSURFACE = 15,
+    TIN = 16
+};
+
+/// geometry detailed types as defined by the OpenGIS "Consortium Simple Features for SQL" specification
+enum class GeometryDetailedType
+{
+    GEOMETRY = 0,
+    POINT = 1,
+    LINESTRING = 2,
+    POLYGON = 3,
+    MULTIPOINT = 4,
+    MULTILINESTRING = 5,
+    MULTIPOLYGON = 6,
+    GEOMETRYCOLLECTION = 7,
+    CIRCULARSTRING = 8,
+    COMPOUNDCURVE = 9,
+    CURVEPOLYGON = 10,
+    MULTICURVE = 11,
+    MULTISURFACE = 12,
+    CURVE = 13,
+    SURFACE = 14,
+    POLYHEDRALSURFACE = 15,
+    TIN = 16,
+    GEOMETRYZ = 1000,
+    POINTZ = 1001,
+    LINESTRINGZ = 1002,
+    POLYGONZ = 1003,
+    MULTIPOINTZ = 1004,
+    MULTILINESTRINGZ = 1005,
+    MULTIPOLYGONZ = 1006,
+    GEOMETRYCOLLECTIONZ = 1007,
+    CIRCULARSTRINGZ = 1008,
+    COMPOUNDCURVEZ = 1009,
+    CURVEPOLYGONZ = 1010,
+    MULTICURVEZ = 1011,
+    MULTISURFACEZ = 1012,
+    CURVEZ = 1013,
+    SURFACEZ = 1014,
+    POLYHEDRALSURFACEZ = 1015,
+    TINZ = 1016,
+    GEOMETRYM = 2000,
+    POINTM = 2001,
+    LINESTRINGM = 2002,
+    POLYGONM = 2003,
+    MULTIPOINTM = 2004,
+    MULTILINESTRINGM = 2005,
+    MULTIPOLYGONM = 2006,
+    GEOMETRYCOLLECTIONM = 2007,
+    CIRCULARSTRINGM = 2008,
+    COMPOUNDCURVEM = 2009,
+    CURVEPOLYGONM = 2010,
+    MULTICURVEM = 2011,
+    MULTISURFACEM = 2012,
+    CURVEM = 2013,
+    SURFACEM = 2014,
+    POLYHEDRALSURFACEM = 2015,
+    TINM = 2016,
+    GEOMETRYZM = 3000,
+    POINTZM = 3001,
+    LINESTRINGZM = 3002,
+    POLYGONZM = 3003,
+    MULTIPOINTZM = 3004,
+    MULTILINESTRINGZM = 3005,
+    MULTIPOLYGONZM = 3006,
+    GEOMETRYCOLLECTIONZM = 3007,
+    CIRCULARSTRINGZM = 3008,
+    COMPOUNDCURVEZM = 3009,
+    CURVEPOLYGONZM = 3010,
+    MULTICURVEZM  = 3011,
+    MULTISURFACEZM = 3012,
+    CURVEZM = 3013,
+    SURFACEZM = 3014,
+    POLYHEDRALSURFACEZM = 3015,
+    TINZM = 3016
+};
+
+/// geometry interface
+class Geometry
 {
   public:
     /*!
-     * @brief Returns the geometry type
+     * @brief returns the geometry type (e.g. GeometryType::Point, GeometryType::MultiPoint)
      * @return the geometry type
+     *
+     * @since 0.0.1
      */
-    virtual GeometryType geom_type() const = 0;
+    virtual GeometryType type() const = 0;
 
     /*!
-     * @brief Returns the geometry type as a string (e.g. LineString)
+     * @brief returns the geometry detailed type (e.g. GeometryType::PointZ, GeometryType::MultiPointZM)
+     * @return the geometry detailed type
+     *
+     * @since 0.0.1
+     */
+    virtual GeometryDetailedType detailed_type() const = 0;
+
+    /*!
+     * @brief returns the geometry type as a string (e.g. Point, LineString)
      * @return the geometry type as a string
+     *
+     * @since 0.0.1
      */
-    virtual std::string geom_type_str() const = 0;
+    virtual std::string type_str() const = 0;
 
     /*!
-     * @brief Returns true if the geometry is empty, otherwise false
-     * @return
+     * @brief returns true if the geometry is empty
+     * @return true if the the geometry is empty, otherwise false
+     *
+     * @since 0.0.1
      */
     virtual bool empty() const = 0;
 
     /*!
-     * @brief Returns the size of the geometry
+     * @brief returns the geometry size
      * @return the size of the geometry
+     *
+     * @since 0.0.1
      */
     virtual size_t size() const = 0;
 
     /*!
-     * @brief Returns a clone of the given geometry
-     * @return a geometry clone
+     * @brief returns the dimension type of the geometry
+     * @return the dimension type
+     *
+     * @note the dimension type is (x, y), (x, y, z), (x, y, m) and (x, y, z, m)
+     *
+     * @since 0.0.1
      */
-    virtual std::unique_ptr<BasicGeometry> clone() = 0;
+    virtual DimensionType get_dimension() const = 0;
+
+    /*!
+     * @brief returns the number of dimensions of the geometry
+     * @return the number of dimensions
+     *
+     * @note the number of dimensions is (x, y) = 2, (x, y, z) = 3, (x, y, m) = 3 and (x, y, z, m) = 4
+     *
+     * @since 0.0.1
+     */
+    virtual int8_t get_num_dimension() const = 0;
+
+    /*!
+     * @brief returns the geometry bounds
+     * @return the geometry bounds
+     *
+     * @since 0.0.1
+     */
+    virtual Bounds get_bounds() const = 0;
+
+    /*!
+     * @brief returns a clone of the given geometry
+     * @return a geometry clone
+     *
+     * @since 0.0.1
+     */
+    virtual std::unique_ptr<Geometry> clone() = 0;
+
+    /*!
+     * @brief returns the geometry (x, y) coordinates as a tuple
+     * @return a vector of (x, y) tuples
+     *
+     * @since 0.0.1
+     */
+    virtual std::vector<std::tuple<double, double>> xy() const = 0;
+
+    /*!
+     * @brief returns the geometry (x, y, z) coordinates as a tuple
+     * @return a vector of (x, y, z) tuples
+     *
+     * @since 0.0.1
+     */
+    virtual std::vector<std::tuple<double, double, double>> xyz() const = 0;
+
+    /*!
+     * @brief returns the geometry (x, y, m) coordinates as a tuple
+     * @return a vector of (x, y, m) tuples
+     *
+     * @since 0.0.1
+     */
+    virtual std::vector<std::tuple<double, double, double>> xym() const = 0;
+
+    /*!
+     * @brief returns the geometry (x, y, z, m) coordinates as a tuple
+     * @return a vector of (x, y, z, m) tuples
+     *
+     * @since 0.0.1
+     */
+    virtual std::vector<std::tuple<double, double, double, double>> xyzm() const = 0;
+
+    /*!
+     * @brief whether the geometry has z-coordinate
+     * @return true if the geometry has z-coordinate, otherwise false
+     *
+     * @since 0.0.1
+     */
+    virtual bool has_z() const = 0;
+
+    /*!
+     * @brief whether the geometry has m-coordinate
+     * @return true if the geometry has m-coordinate, otherwise false
+     *
+     * @since 0.0.1
+     */
+    virtual bool has_m() const = 0;
 };
 
-template <typename T>
-class Geometry : public BasicGeometry
+/// basic geometry type
+template <typename Derived>
+class BasicGeometry : public Geometry
 {
   public:
+    /// serialization precision
+    int8_t precision = 1;
+
+    /// a spatial reference identifier (SRID) is a unique identifier associated with a specific coordinate system
+    int32_t srid = -1;
+
     /// geometry bounds
     Bounds bounds;
 
-    /// number of dimensions
-    int8_t ndim;
+    /// the dimension type (x, y), (x, y, z), (x, y, m) or (x, y, z, m)
+    DimensionType dimension;
 
-    GeometryType geom_type() const override
+    GeometryType type() const override
     {
-        return static_cast<const T*>(this)->geom_type_();
+        return static_cast<const Derived*>(this)->type_();
     }
 
-    std::string geom_type_str() const override
+    GeometryDetailedType detailed_type() const override
     {
-        return static_cast<const T*>(this)->geom_type_str_();
+        auto type = static_cast<const Derived*>(this)->type_();
+        switch (dimension)
+        {
+            case DimensionType::XY:
+            {
+                switch (type)
+                {
+                    case GeometryType::GEOMETRY:
+                        return GeometryDetailedType::GEOMETRY;
+                    case GeometryType::POINT:
+                        return GeometryDetailedType::POINT;
+                    case GeometryType::LINESTRING:
+                        return GeometryDetailedType::LINESTRING;
+                    case GeometryType::POLYGON:
+                        return GeometryDetailedType::POLYGON;
+                    case GeometryType::MULTIPOINT:
+                        return GeometryDetailedType::MULTIPOINT;
+                    case GeometryType::MULTILINESTRING:
+                        return GeometryDetailedType::MULTILINESTRING;
+                    case GeometryType::MULTIPOLYGON:
+                        return GeometryDetailedType::MULTIPOLYGON;
+                    case GeometryType::GEOMETRYCOLLECTION:
+                        return GeometryDetailedType::GEOMETRYCOLLECTION;
+                    case GeometryType::CIRCULARSTRING:
+                        return GeometryDetailedType::CIRCULARSTRING;
+                    case GeometryType::COMPOUNDCURVE:
+                        return GeometryDetailedType::COMPOUNDCURVE;
+                    case GeometryType::CURVEPOLYGON:
+                        return GeometryDetailedType::CURVEPOLYGON;
+                    case GeometryType::MULTICURVE:
+                        return GeometryDetailedType::MULTICURVE;
+                    case GeometryType::MULTISURFACE:
+                        return GeometryDetailedType::MULTISURFACE;
+                    case GeometryType::CURVE:
+                        return GeometryDetailedType::CURVE;
+                    case GeometryType::SURFACE:
+                        return GeometryDetailedType::SURFACE;
+                    case GeometryType::POLYHEDRALSURFACE:
+                        return GeometryDetailedType::POLYHEDRALSURFACE;
+                    case GeometryType::TIN:
+                        return GeometryDetailedType::TIN;
+                }
+            }
+            case DimensionType::XYZ:
+            {
+                switch (type)
+                {
+                    case GeometryType::GEOMETRY:
+                        return GeometryDetailedType::GEOMETRYZ;
+                    case GeometryType::POINT:
+                        return GeometryDetailedType::POINTZ;
+                    case GeometryType::LINESTRING:
+                        return GeometryDetailedType::LINESTRINGZ;
+                    case GeometryType::POLYGON:
+                        return GeometryDetailedType::POLYGONZ;
+                    case GeometryType::MULTIPOINT:
+                        return GeometryDetailedType::MULTIPOINTZ;
+                    case GeometryType::MULTILINESTRING:
+                        return GeometryDetailedType::MULTILINESTRINGZ;
+                    case GeometryType::MULTIPOLYGON:
+                        return GeometryDetailedType::MULTIPOLYGONZ;
+                    case GeometryType::GEOMETRYCOLLECTION:
+                        return GeometryDetailedType::GEOMETRYCOLLECTIONZ;
+                    case GeometryType::CIRCULARSTRING:
+                        return GeometryDetailedType::CIRCULARSTRINGZ;
+                    case GeometryType::COMPOUNDCURVE:
+                        return GeometryDetailedType::COMPOUNDCURVEZ;
+                    case GeometryType::CURVEPOLYGON:
+                        return GeometryDetailedType::CURVEPOLYGONZ;
+                    case GeometryType::MULTICURVE:
+                        return GeometryDetailedType::MULTICURVEZ;
+                    case GeometryType::MULTISURFACE:
+                        return GeometryDetailedType::MULTISURFACEZ;
+                    case GeometryType::CURVE:
+                        return GeometryDetailedType::CURVEZ;
+                    case GeometryType::SURFACE:
+                        return GeometryDetailedType::SURFACEZ;
+                    case GeometryType::POLYHEDRALSURFACE:
+                        return GeometryDetailedType::POLYHEDRALSURFACEZ;
+                    case GeometryType::TIN:
+                        return GeometryDetailedType::TINZ;
+                }
+            }
+            case DimensionType::XYM:
+            {
+                switch (type)
+                {
+                    case GeometryType::GEOMETRY:
+                        return GeometryDetailedType::GEOMETRYM;
+                    case GeometryType::POINT:
+                        return GeometryDetailedType::POINTM;
+                    case GeometryType::LINESTRING:
+                        return GeometryDetailedType::LINESTRINGM;
+                    case GeometryType::POLYGON:
+                        return GeometryDetailedType::POLYGONM;
+                    case GeometryType::MULTIPOINT:
+                        return GeometryDetailedType::MULTIPOINTM;
+                    case GeometryType::MULTILINESTRING:
+                        return GeometryDetailedType::MULTILINESTRINGM;
+                    case GeometryType::MULTIPOLYGON:
+                        return GeometryDetailedType::MULTIPOLYGONM;
+                    case GeometryType::GEOMETRYCOLLECTION:
+                        return GeometryDetailedType::GEOMETRYCOLLECTIONM;
+                    case GeometryType::CIRCULARSTRING:
+                        return GeometryDetailedType::CIRCULARSTRINGM;
+                    case GeometryType::COMPOUNDCURVE:
+                        return GeometryDetailedType::COMPOUNDCURVEM;
+                    case GeometryType::CURVEPOLYGON:
+                        return GeometryDetailedType::CURVEPOLYGONM;
+                    case GeometryType::MULTICURVE:
+                        return GeometryDetailedType::MULTICURVEM;
+                    case GeometryType::MULTISURFACE:
+                        return GeometryDetailedType::MULTISURFACEM;
+                    case GeometryType::CURVE:
+                        return GeometryDetailedType::CURVEM;
+                    case GeometryType::SURFACE:
+                        return GeometryDetailedType::SURFACEM;
+                    case GeometryType::POLYHEDRALSURFACE:
+                        return GeometryDetailedType::POLYHEDRALSURFACEM;
+                    case GeometryType::TIN:
+                        return GeometryDetailedType::TINM;
+                }
+            }
+            case DimensionType::XYZM:
+            {
+                switch (type)
+                {
+                    case GeometryType::GEOMETRY:
+                        return GeometryDetailedType::GEOMETRYZM;
+                    case GeometryType::POINT:
+                        return GeometryDetailedType::POINTZM;
+                    case GeometryType::LINESTRING:
+                        return GeometryDetailedType::LINESTRINGZM;
+                    case GeometryType::POLYGON:
+                        return GeometryDetailedType::POLYGONZM;
+                    case GeometryType::MULTIPOINT:
+                        return GeometryDetailedType::MULTIPOINTZM;
+                    case GeometryType::MULTILINESTRING:
+                        return GeometryDetailedType::MULTILINESTRINGZM;
+                    case GeometryType::MULTIPOLYGON:
+                        return GeometryDetailedType::MULTIPOLYGONZM;
+                    case GeometryType::GEOMETRYCOLLECTION:
+                        return GeometryDetailedType::GEOMETRYCOLLECTIONZM;
+                    case GeometryType::CIRCULARSTRING:
+                        return GeometryDetailedType::CIRCULARSTRINGZM;
+                    case GeometryType::COMPOUNDCURVE:
+                        return GeometryDetailedType::COMPOUNDCURVEZM;
+                    case GeometryType::CURVEPOLYGON:
+                        return GeometryDetailedType::CURVEPOLYGONZM;
+                    case GeometryType::MULTICURVE:
+                        return GeometryDetailedType::MULTICURVEZM;
+                    case GeometryType::MULTISURFACE:
+                        return GeometryDetailedType::MULTISURFACEZM;
+                    case GeometryType::CURVE:
+                        return GeometryDetailedType::CURVEZM;
+                    case GeometryType::SURFACE:
+                        return GeometryDetailedType::SURFACEZM;
+                    case GeometryType::POLYHEDRALSURFACE:
+                        return GeometryDetailedType::POLYHEDRALSURFACEZM;
+                    case GeometryType::TIN:
+                        return GeometryDetailedType::TINZM;
+                }
+            }
+        }
+        return GeometryDetailedType::GEOMETRY;
+    }
+
+    std::string type_str() const override
+    {
+        return static_cast<const Derived*>(this)->type_str_();
     }
 
     bool empty() const override
     {
-        return static_cast<const T*>(this)->empty_();
+        return static_cast<const Derived*>(this)->empty_();
     }
 
     size_t size() const override
     {
-        return static_cast<const T*>(this)->size_();
+        return static_cast<const Derived*>(this)->size_();
     }
 
-    std::unique_ptr<BasicGeometry> clone() override
+    std::unique_ptr<Geometry> clone() override
     {
-        return std::unique_ptr<T>(new T(*static_cast<T*>(this)));
+        return std::unique_ptr<Derived>(new Derived(*static_cast<Derived*>(this)));
     };
+
+    std::vector<std::tuple<double, double>> xy() const override
+    {
+        return static_cast<const Derived*>(this)->xy_();
+    }
+
+    std::vector<std::tuple<double, double, double>> xyz() const override
+    {
+        return static_cast<const Derived*>(this)->xyz_();
+    }
+
+    std::vector<std::tuple<double, double, double>> xym() const override
+    {
+        return static_cast<const Derived*>(this)->xym_();
+    }
+
+    std::vector<std::tuple<double, double, double, double>> xyzm() const override
+    {
+        return static_cast<const Derived*>(this)->xyzm_();
+    }
+
+    DimensionType get_dimension() const override
+    {
+        return dimension;
+    }
+
+    Bounds get_bounds() const override
+    {
+        return bounds;
+    }
+
+    bool has_z() const override
+    {
+        return dimension == DimensionType::XYZ or dimension == DimensionType::XYZM;
+    }
+
+    bool has_m() const override
+    {
+        return dimension == DimensionType::XYM or dimension == DimensionType::XYZM;
+    }
+
+    int8_t get_num_dimension() const override
+    {
+        switch (dimension)
+        {
+            case DimensionType::XY:
+                return 2;
+            case DimensionType::XYZ:
+            case DimensionType::XYM:
+                return 3;
+            default:
+                return 4;
+        }
+    }
 };
 
 }  // namespace shapes
@@ -260,12 +775,16 @@ class Geometry : public BasicGeometry
 // #include <simo/geom/point.hpp>
 
 
+#include <iostream>
 #include <initializer_list>
 #include <stdexcept>
 #include <memory>
 #include <tuple>
 #include <string>
 #include <type_traits>
+#include <sstream>
+#include <iomanip>
+#include <regex>
 #include <json/json.hpp>
 // #include <simo/geom/geometry.hpp>
 
@@ -279,27 +798,46 @@ namespace simo
 {
 namespace shapes
 {
+namespace exceptions
+{
 
-/// @todo (pavel) improve these types
-
-class exception : public std::exception
+/*!
+ * @brief base shapes exception
+ */
+class shapes_exception : public std::exception
 {
   public:
+    explicit shapes_exception(const char* what)
+            : m_what(what) {}
+
     const char* what() const noexcept override
     {
-        return "shapes error";
+        return m_what.c_str();
+    }
+
+  protected:
+
+    void set_reason(const std::string& reason)
+    {
+        m_what.append(": ");
+        m_what.append(reason);
+    }
+
+  private:
+    std::string m_what{};
+};
+
+class parse_error : public shapes_exception
+{
+  public:
+    explicit parse_error(const std::string& reason)
+        : shapes_exception("parse error")
+    {
+        set_reason(reason);
     }
 };
 
-class parse_error : public exception
-{
-  public:
-    const char* what() const noexcept override
-    {
-        return "parse error";
-    }
-};
-
+}  // namespace exceptions
 }  // namespace shapes
 }  // namespace simo
 
@@ -309,109 +847,233 @@ namespace simo
 namespace shapes
 {
 
-class Point : public Geometry<Point>
+class Point : public BasicGeometry<Point>
 {
   public:
+    /// the x-coordinate value for this Point
     double x;
+
+    /// the y-coordinate value for this Point
     double y;
+
+    /// the z-coordinate value for this Point, if it has one.
     double z;
 
+    /// the m-coordinate value for this Point, if it has one.
+    double m;
+
+    /*!
+     * @brief creates a Point
+     *
+     * @note the default behaviour is to create a 2-dimensional point with coordinates (0, 0)
+     *
+     * @since 0.0.1
+     */
     Point()
         : x(0), y(0), z(0)
     {
-        ndim = 2;
+        dimension = DimensionType::XY;
     }
 
+    /*!
+     * @brief creates a Point from coordinates (x, y)
+     *
+     * @param x the x-coordinate value
+     * @param y the y-coordinate value
+     *
+     * @since 0.0.1
+     */
     Point(double x, double y)
         : x(x), y(y), z(0)
     {
-        ndim = 2;
+        dimension = DimensionType::XY;
     }
 
+    /*!
+     * @brief creates a Point from coordinates (x, y, z)
+     *
+     * @param x the x-coordinate value
+     * @param y the y-coordinate value
+     * @param z the z-coordinate value
+     *
+     * @since 0.0.1
+     */
     Point(double x, double y, double z)
         : x(x), y(y), z(z)
     {
-        ndim = 3;
+        dimension = DimensionType::XYZ;
     }
 
+    /*!
+     * @brief creates a Point from coordinates (x, y, z, m)
+     *
+     * @param x the x-coordinate value
+     * @param y the y-coordinate value
+     * @param z the z-coordinate value
+     * @param m the m-coordinate (measure) value
+     *
+     * @since 0.0.1
+     */
+    Point(double x, double y, double z, double m)
+        : x(x), y(y), z(z), m(m)
+    {
+        dimension = DimensionType::XYZM;
+    }
+
+    /*!
+     * @brief creates a Point
+     *
+     * @param init the coordinates list
+     *
+     * @throw exception if the given number of coordinates is either less than two or greater than four
+     *
+     * @since 0.0.1
+     */
     template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     Point(std::initializer_list<T> init)
     {
         if (init.size() == 2)
         {
-            x    = *init.begin();
-            y    = *(init.begin() + 1);
-            z    = 0;
-            ndim = 2;
+            x      = *init.begin();
+            y      = *(init.begin() + 1);
+            z      = 0;
+            dimension = DimensionType::XY;
         }
         else if (init.size() == 3)
         {
-            x    = *init.begin();
-            y    = *(init.begin() + 1);
-            z    = *(init.begin() + 2);
-            ndim = 3;
+            x      = *init.begin();
+            y      = *(init.begin() + 1);
+            z      = *(init.begin() + 2);
+            dimension = DimensionType::XYZ;
+        }
+        else if (init.size() == 4)
+        {
+            x      = *init.begin();
+            y      = *(init.begin() + 1);
+            z      = *(init.begin() + 2);
+            m      = *(init.begin() + 3);
+            dimension = DimensionType::XYZM;
         }
         else
         {
-            throw exception();
+            throw exceptions::shapes_exception("invalid dimensions");
         }
     }
 
-    GeometryType geom_type_() const
+    /*!
+     * @copydoc Geometry::type()
+     */
+    GeometryType type_() const
     {
         return GeometryType::POINT;
     }
 
-    std::string geom_type_str_() const
+    /*!
+     * @copydoc Geometry::type_str()
+     */
+    std::string type_str_() const
     {
         return "Point";
     }
 
+    /*!
+     * @copydoc Geometry::empty()
+     */
     bool empty_() const
     {
         return false;
     }
 
+    /*!
+     * @copydoc Geometry::size()
+     */
     size_t size_() const
     {
-        return static_cast<size_t>(ndim);
+        return static_cast<size_t>(get_num_dimension());
     }
 
+    /*!
+     * @copydoc Geometry::xy()
+     */
+    std::vector<std::tuple<double, double>> xy_() const
+    {
+        return {std::make_tuple(x, y)};
+    }
+
+    /*!
+    * @copydoc Geometry::xyz()
+    */
+    std::vector<std::tuple<double, double, double>> xyz_() const
+    {
+        return {std::make_tuple(x, y, z)};
+    }
+
+    /*!
+    * @copydoc Geometry::xym()
+    */
+    std::vector<std::tuple<double, double, double>> xym_() const
+    {
+        return {std::make_tuple(x, y, m)};
+    }
+
+    /*!
+    * @copydoc Geometry::xyzm()
+    */
+    std::vector<std::tuple<double, double, double, double>> xyzm_() const
+    {
+        return {std::make_tuple(x, y, z, m)};
+    }
+
+    /*!
+     * @brief returns the coordinate at the given index
+     *
+     * @param pos the coordinate position
+     * @return a double with the coordinate value
+     *
+     * @throw exception if the position is not found
+     *
+     * @since 0.0.1
+     */
     double at(size_t pos)
     {
         if (pos >= size_())
         {
-            throw exception();
+            throw exceptions::shapes_exception("index out of bounds");
         }
         if (pos == 0)
             return x;
         if (pos == 1)
             return y;
-        return z;
+        if (pos == 2)
+            return z;
+        return m;
     }
 
+    /*!
+     * @copydoc Point::at()
+     */
     double operator[](size_t pos)
     {
         return at(pos);
     }
 
-    std::tuple<double, double> xy() const
-    {
-        return std::make_tuple(x, y);
-    }
-
-    std::tuple<double, double, double> xyz() const
-    {
-        return std::make_tuple(x, y, z);
-    }
-
+    /*!
+     * @brief creates a Point from a geojson string
+     *
+     * @param json the geojson string
+     * @return a Point object
+     *
+     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
+     *
+     * @since 0.0.1
+     */
     static Point from_json(const std::string& json)
     {
         nlohmann::json j = nlohmann::json::parse(json);
         std::string type = j.at("type").get<std::string>();
         if (type != "Point")
         {
-            throw parse_error();
+            throw exceptions::parse_error("invalid geometry type");
         }
 
         std::vector<double> coords = j.at("coordinates");
@@ -423,88 +1085,133 @@ class Point : public Geometry<Point>
         {
             return {coords[0], coords[1], coords[2]};
         }
-
-        throw parse_error();
+        else if (coords.size() == 4)
+        {
+            return {coords[0], coords[1], coords[2], coords[3]};
+        }
+        throw exceptions::parse_error("invalid dimensions");
     }
 
-    std::string to_json()
+    /*!
+     * @brief dumps the geojson representation of the Point
+     *
+     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
+     *
+     * @return a geojson string
+     *
+     * @since 0.0.1
+     */
+    std::string json()
     {
-        auto coordinates = std::vector<double>{x, y};
-        if (ndim == 3)
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(precision);
+        ss << "{\"type\":\"Point\",\"coordinates\":";
+        ss << "[" << x << "," << y;
+        if (has_z())
         {
-            coordinates.push_back(z);
+            ss << "," << z;
         }
-        nlohmann::json j = {{"type", "Point"}, {"coordinates", coordinates}};
-        return j.dump();
+        if (has_m())
+        {
+            ss << "," << m;
+        }
+        ss << "]}";
+        return ss.str();
+    }
+
+    /*!
+     * @brief creates a Point from a WKT string
+     *
+     * @param wkt the WKT string
+     * @return a Point object
+     *
+     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
+     *
+     * @since 0.0.1
+     */
+    static Point from_wkt(const std::string& wkt)
+    {
+        /// @todo (pavel) ensure the number of coordinates for POINT, POINTZ, POINTM, POINTZM
+        /// @todo (pavel) empty spaces
+        std::regex tagged_text_regex("(?:POINT|Point){1}[Z]?[M]?\\((.*)\\)");
+        std::smatch tagged_text_match;
+        std::string tagged_text;
+        if (std::regex_search(wkt, tagged_text_match, tagged_text_regex) && tagged_text_match.size() > 1)
+        {
+            tagged_text = tagged_text_match.str(1);
+            std::regex coords_regex("\\s+");
+            std::sregex_token_iterator iter(tagged_text.begin(), tagged_text.end(), coords_regex, -1);
+            std::sregex_token_iterator end;
+
+            /// @todo (pavel) add another point constructor Point(const std::vector<double> coords) ...
+            std::vector<double> coords;
+            for (; iter != end; ++iter)
+            {
+                coords.push_back(std::stod(*iter));
+            }
+            if (coords.size() == 2)
+            {
+                return {coords[0], coords[1]};
+            }
+            else if (coords.size() == 3)
+            {
+                return {coords[0], coords[1], coords[2]};
+            }
+            else if (coords.size() == 4)
+            {
+                return {coords[0], coords[1], coords[2], coords[3]};
+            }
+            else
+            {
+                throw exceptions::parse_error("invalid dimensions");
+            }
+        }
+        throw exceptions::parse_error("invalid tagged text");
+    }
+
+    /*!
+     * @brief dumps the WKT representation of the point
+     *
+     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
+     *
+     * @return a WKT string
+     *
+     * @since 0.0.1
+     */
+    std::string wkt()
+    {
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(precision);
+        ss << "POINT";
+        if (has_z())
+        {
+            ss << "Z";
+        }
+        if (has_m())
+        {
+            ss << "M";
+        }
+        ss << "(";
+        ss << x << " " << y;
+        if (has_z())
+        {
+            ss << " " << z;
+        }
+        if (has_m())
+        {
+            ss << " " << m;
+        }
+        ss << ")";
+        return ss.str();
     }
 };
 
-}  // namespace shapes
-}  // namespace simo
-// #include <simo/geom/bounds.hpp>
-
-// #include <simo/geom/multipoint.hpp>
-
-
-#include <vector>
-#include <set>
-// #include <simo/geom/geometry.hpp>
-
-// #include <simo/geom/point.hpp>
-
-// #include <simo/geom/bounds.hpp>
-
-
-namespace simo
-{
-namespace shapes
-{
-
-class MultiPoint : public Geometry<MultiPoint>
+template <typename Derived>
+class PointCollection
 {
   public:
-    MultiPoint() = default;
-
     typedef std::vector<Point>::iterator iterator;
     typedef std::vector<Point>::const_iterator const_iterator;
-
-    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-    MultiPoint(std::initializer_list<std::initializer_list<T>> list)
-    {
-        for (const auto& coordinates : list)
-        {
-            Point p(coordinates);
-            bounds.extend(p.x, p.y);
-            m_points.push_back(std::move(p));
-        }
-        /// @todo (pavel) check dimensions?
-    }
-
-    explicit MultiPoint(std::vector<Point> points)
-        : m_points(std::move(points))
-    {
-        /// @todo (pavel) check dimensions?
-    }
-
-    GeometryType geom_type_() const
-    {
-        return GeometryType::MULTIPOINT;
-    }
-
-    std::string geom_type_str_() const
-    {
-        return "MultiPoint";
-    }
-
-    bool empty_() const
-    {
-        return m_points.empty();
-    }
-
-    size_t size_() const
-    {
-        return m_points.size();
-    }
 
     iterator begin()
     {
@@ -536,33 +1243,175 @@ class MultiPoint : public Geometry<MultiPoint>
         return m_points.at(pos);
     }
 
-    std::vector<std::tuple<double, double>> xy() const
+  protected:
+    std::vector<Point> m_points;
+};
+
+}  // namespace shapes
+}  // namespace simo
+// #include <simo/geom/bounds.hpp>
+
+// #include <simo/geom/multipoint.hpp>
+
+
+#include <vector>
+#include <set>
+#include <sstream>
+#include <iomanip>
+// #include <simo/geom/geometry.hpp>
+
+// #include <simo/geom/point.hpp>
+
+// #include <simo/geom/bounds.hpp>
+
+
+namespace simo
+{
+namespace shapes
+{
+
+class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<MultiPoint>
+{
+  public:
+    /*!
+     * @brief creates an empty MultiPoint
+     *
+     * @since 0.0.1
+     */
+    MultiPoint() = default;
+
+     /*!
+      * @brief creates a MultiPoint from a given initializer list
+      *
+      * @param init the initializer list
+      *
+      * @since 0.0.1
+      */
+    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    MultiPoint(std::initializer_list<std::initializer_list<T>> init)
+    {
+        m_points.reserve(init.size());
+        for (const auto& coords : init)
+        {
+            Point p(coords);
+            bounds.extend(p.x, p.y);
+            m_points.push_back(std::move(p));
+        }
+    }
+
+    /*!
+     * @brief creates a MultiPoint from a given point vector
+     *
+     * @param points the point list
+     *
+     * @since 0.0.1
+     */
+    explicit MultiPoint(const std::vector<Point>& points)
+    {
+        m_points = points;
+    }
+
+    /*!
+    * @copydoc Geometry::type()
+    */
+    GeometryType type_() const
+    {
+        return GeometryType::MULTIPOINT;
+    }
+
+    /*!
+    * @copydoc Geometry::type_str()
+    */
+    std::string type_str_() const
+    {
+        return "MultiPoint";
+    }
+
+    /*!
+    * @copydoc Geometry::empty()
+    */
+    bool empty_() const
+    {
+        return m_points.empty();
+    }
+
+    /*!
+    * @copydoc Geometry::size()
+    */
+    size_t size_() const
+    {
+        return m_points.size();
+    }
+
+    /*!
+    * @copydoc Geometry::xy()
+    */
+    std::vector<std::tuple<double, double>> xy_() const
     {
         std::vector<std::tuple<double, double>> res;
         for (const auto& point : m_points)
         {
-            res.push_back(point.xy());
+            res.emplace_back(point.x, point.y);
         }
         return res;
     }
 
-    std::vector<std::tuple<double, double, double>> xyz() const
+    /*!
+    * @copydoc Geometry::xyz()
+    */
+    std::vector<std::tuple<double, double, double>> xyz_() const
     {
         std::vector<std::tuple<double, double, double>> res;
         for (const auto& point : m_points)
         {
-            res.push_back(point.xyz());
+            res.emplace_back(point.x, point.y, point.z);
         }
         return res;
     }
 
+    /*!
+    * @copydoc Geometry::xym()
+    */
+    std::vector<std::tuple<double, double, double>> xym_() const
+    {
+        std::vector<std::tuple<double, double, double>> res;
+        for (const auto& point : m_points)
+        {
+            res.emplace_back(point.x, point.y, point.m);
+        }
+        return res;
+    }
+
+    /*!
+    * @copydoc Geometry::xyzm()
+    */
+    std::vector<std::tuple<double, double, double, double>> xyzm_() const
+    {
+        std::vector<std::tuple<double, double, double, double>> res;
+        for (const auto& point : m_points)
+        {
+            res.emplace_back(point.x, point.y, point.z, point.m);
+        }
+        return res;
+    }
+
+    /*!
+      * @brief creates a MultiPoint from a geojson string
+      *
+      * @param json the geojson string
+      * @return a MultiPoint object
+      *
+      * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
+      *
+      * @since 0.0.1
+      */
     static MultiPoint from_json(const std::string& json)
     {
         nlohmann::json j = nlohmann::json::parse(json);
         std::string type = j.at("type").get<std::string>();
         if (type != "MultiPoint")
         {
-            throw parse_error();
+            throw exceptions::parse_error("invalid geometry type");
         }
 
         auto coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
@@ -579,33 +1428,108 @@ class MultiPoint : public Geometry<MultiPoint>
             }
             else
             {
-                throw parse_error();
+                throw exceptions::parse_error("invalid dimensions");
             }
         }
         return MultiPoint(res);
     }
 
-    std::string to_json()
+    /*!
+     * @brief dumps the geojson representation of the MultiPoint
+     *
+     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
+     *
+     * @return a geojson string
+     *
+     * @since 0.0.1
+     */
+    std::string json()
     {
-        auto coords = std::vector<std::vector<double>>();
-        coords.reserve(m_points.size());
-        for (const auto& p : *this)
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(precision);
+        ss << "{\"type\":\"MultiPoint\",\"coordinates\":[";
+        for(size_t i = 0; i < m_points.size(); ++i)
         {
-            if (p.ndim == 2)
+            if (i > 0)
             {
-                coords.emplace_back(std::vector<double>{p.x, p.y});
+                ss << ",";
             }
-            else if (p.ndim == 3)
+            const auto& p = m_points[i];
+            switch (p.dimension)
             {
-                coords.emplace_back(std::vector<double>{p.x, p.y, p.z});
+                case DimensionType::XY:
+                {
+                    ss << "[" << p.x << "," << p.y << "]";
+                    break;
+                }
+                case DimensionType::XYZ:
+                {
+                    ss << "[" << p.x << "," << p.y << "," << p.z << "]";
+                    break;
+                }
+                case DimensionType::XYM:
+                {
+                    ss << "[" << p.x << "," << p.y << "," << p.m << "]";
+                    break;
+                }
+                case DimensionType::XYZM:
+                {
+                    ss << "[" << p.x << "," << p.y << "," << p.z << "," << p.m << "]";
+                    break;
+                }
             }
         }
-        nlohmann::json j = {{"type", "MultiPoint"}, {"coordinates", coords}};
-        return j.dump();
+        ss << "]}";
+        return ss.str();
     }
 
-  private:
-    std::vector<Point> m_points;
+    /*!
+     * @brief creates a MultiPoint from a WKT string
+     *
+     * @param wkt the WKT string
+     * @return a MultiPoint object
+     *
+     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
+     *
+     * @since 0.0.1
+     */
+    std::string wkt()
+    {
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(precision);
+
+        ss << "MULTIPOINT";
+        if (has_z())
+        {
+            ss << "Z";
+        }
+        if (has_m())
+        {
+            ss << "M";
+        }
+
+        ss << "(";
+        for (size_t i = 0; i < m_points.size(); ++i)
+        {
+            const Point& p = m_points[i];
+            if (i > 0)
+            {
+                ss << ",";
+            }
+            ss << "(" << p.x << " " << p.y;
+            if (has_z())
+            {
+                ss << " " << p.z;
+            }
+            if (has_m())
+            {
+                ss << " " << p.m;
+            }
+            ss << ")";
+        }
+        ss << ")";
+        return ss.str();
+    }
 };
 
 }  // namespace shapes

@@ -498,13 +498,13 @@ class BasicGeometry : public Geometry
     {
         switch (dimension)
         {
-            case DimensionType::XY:
-                return 2;
+            case DimensionType::XYZM:
+                return 4;
             case DimensionType::XYZ:
             case DimensionType::XYM:
                 return 3;
             default:
-                return 4;
+                return 2;
         }
     }
 };
