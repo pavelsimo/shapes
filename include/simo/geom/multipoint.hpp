@@ -54,7 +54,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         m_points = points;
     }
 
-   /*!
+    /*!
     * @copydoc Geometry::type()
     */
     GeometryType type_() const
@@ -62,7 +62,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         return GeometryType::MULTIPOINT;
     }
 
-   /*!
+    /*!
     * @copydoc Geometry::type_str()
     */
     std::string type_str_() const
@@ -70,7 +70,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         return "MultiPoint";
     }
 
-   /*!
+    /*!
     * @copydoc Geometry::empty()
     */
     bool empty_() const
@@ -78,7 +78,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         return m_points.empty();
     }
 
-   /*!
+    /*!
     * @copydoc Geometry::size()
     */
     size_t size_() const
@@ -86,7 +86,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         return m_points.size();
     }
 
-   /*!
+    /*!
     * @copydoc Geometry::xy()
     */
     std::vector<std::tuple<double, double>> xy_() const
@@ -99,7 +99,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         return res;
     }
 
-   /*!
+    /*!
     * @copydoc Geometry::xyz()
     */
     std::vector<std::tuple<double, double, double>> xyz_() const
@@ -112,7 +112,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         return res;
     }
 
-   /*!
+    /*!
     * @copydoc Geometry::xym()
     */
     std::vector<std::tuple<double, double, double>> xym_() const
@@ -125,7 +125,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         return res;
     }
 
-   /*!
+    /*!
     * @copydoc Geometry::xyzm()
     */
     std::vector<std::tuple<double, double, double, double>> xyzm_() const
