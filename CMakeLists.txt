@@ -33,11 +33,6 @@ else()
     set(SHAPES_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 endif()
 
-# re2c
-add_custom_target(parser COMMENT "re2c lexer code generation"
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-        COMMAND re2c -i -b -o ${PROJECT_SOURCE_DIR}/include/simo/io/wkt_reader.hpp ${PROJECT_SOURCE_DIR}/include/simo/io/wkt_reader.re)
-
 # clang-format
 find_program(CLANG_FORMAT clang-format)
 if (NOT ${CLANG_FORMAT} STREQUAL "CLANG_FORMAT-NOTFOUND")
@@ -45,6 +40,7 @@ if (NOT ${CLANG_FORMAT} STREQUAL "CLANG_FORMAT-NOTFOUND")
     file(GLOB_RECURSE HPP_FILES
             ${PROJECT_SOURCE_DIR}/include/simo/*.hpp
             ${PROJECT_SOURCE_DIR}/include/simo/geom/*.hpp
+            ${PROJECT_SOURCE_DIR}/include/simo/io/*.hpp
             ${PROJECT_SOURCE_DIR}/tests/*.cpp
             )
     add_custom_target(shapes_format COMMENT "applying clang-format"
@@ -68,9 +64,14 @@ target_include_directories(
 )
 
 # amalgamate
-add_custom_target(amalgamate COMMENT "merging the headers"
+add_custom_target(shapes_amalgamate COMMENT "merging the headers"
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         COMMAND python ${PROJECT_SOURCE_DIR}/thirdparty/amalgamate/amalgamate.py -c ${PROJECT_SOURCE_DIR}/thirdparty/amalgamate/config.json -s . --verbose=yes)
+
+# re2c lexer
+add_custom_target(shapes_lexer COMMENT "re2c lexer code generation"
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+        COMMAND re2c -i -b -o ${PROJECT_SOURCE_DIR}/include/simo/io/wkt_reader.hpp ${PROJECT_SOURCE_DIR}/include/simo/io/wkt_reader.re)
 
 # doxygen
 find_package(Doxygen)

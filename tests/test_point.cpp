@@ -94,11 +94,74 @@ TEST_CASE("Point tests")
         CHECK(p.wkt() == "POINT ZM (1.0 2.0 3.0 4.0)");
     }
 
-    SECTION("2d point - from wkt")
+    SECTION("point - from wkt")
     {
-        auto p = Point::from_wkt("POINT(1 2)");
-        CHECK(p.x == 1.0);
-        CHECK(p.y == 2.0);
+        struct test_case
+        {
+            std::string wkt;
+            double x = 0;
+            double y = 0;
+            double z = 0;
+            double m = 0;
+            GeometryDetailedType detailed_type;
+            DimensionType dimension;
+        };
+
+        std::vector<test_case> test_cases = {
+            {"POINT(1 2)", 1.0, 2.0, 0, 0, GeometryDetailedType::POINT, DimensionType::XY},
+            {"POINT (1 2)", 1.0, 2.0, 0, 0, GeometryDetailedType::POINT, DimensionType::XY},
+            {"POINTM(1 2 4)", 1.0, 2.0, 0, 4.0, GeometryDetailedType::POINTM, DimensionType::XYM},
+            {"POINT M(1 2 4)", 1.0, 2.0, 0, 4.0, GeometryDetailedType::POINTM, DimensionType::XYM},
+            {"POINT M (1 2 4)", 1.0, 2.0, 0, 4.0, GeometryDetailedType::POINTM, DimensionType::XYM},
+            {"POINTZ(1 2 3)", 1.0, 2.0, 3.0, 0, GeometryDetailedType::POINTZ, DimensionType::XYZ},
+            {"POINT Z(1 2 3)", 1.0, 2.0, 3.0, 0, GeometryDetailedType::POINTZ, DimensionType::XYZ},
+            {"POINT Z (1 2 3)", 1.0, 2.0, 3.0, 0, GeometryDetailedType::POINTZ, DimensionType::XYZ},
+            {"POINTZM(1 2 3 4)", 1.0, 2.0, 3.0, 4.0, GeometryDetailedType::POINTZM, DimensionType::XYZM},
+            {"POINT ZM(1 2 3 4)", 1.0, 2.0, 3.0, 4.0, GeometryDetailedType::POINTZM, DimensionType::XYZM},
+            {"POINT ZM (1 2 3 4)", 1.0, 2.0, 3.0, 4.0, GeometryDetailedType::POINTZM, DimensionType::XYZM},
+        };
+
+        for (auto test_case : test_cases)
+        {
+            CAPTURE(test_case.wkt);
+            CAPTURE(test_case.x);
+            CAPTURE(test_case.y);
+            CAPTURE(test_case.z);
+            CAPTURE(test_case.m);
+
+            auto p = Point::from_wkt(test_case.wkt);
+            CHECK(p.x == test_case.x);
+            CHECK(p.y == test_case.y);
+            CHECK(p.z == test_case.z);
+            CHECK(p.m == test_case.m);
+            CHECK(p.detailed_type() == test_case.detailed_type);
+            CHECK(p.dimension == test_case.dimension);
+        }
+    }
+
+    SECTION("invalid point wkt")
+    {
+        CHECK_THROWS(Point::from_wkt("POINT"));
+        CHECK_THROWS(Point::from_wkt("POINT ()"));
+        CHECK_THROWS(Point::from_wkt("POINT (1)"));
+        CHECK_THROWS(Point::from_wkt("POINT (1 2 3)"));
+        CHECK_THROWS(Point::from_wkt("POINT (1 2 3 4)"));
+        CHECK_THROWS(Point::from_wkt("POINT Z"));
+        CHECK_THROWS(Point::from_wkt("POINT Z ()"));
+        CHECK_THROWS(Point::from_wkt("POINT Z (1)"));
+        CHECK_THROWS(Point::from_wkt("POINT Z (1 2)"));
+        CHECK_THROWS(Point::from_wkt("POINT Z (1 2 3 4)"));
+        CHECK_THROWS(Point::from_wkt("POINT M"));
+        CHECK_THROWS(Point::from_wkt("POINT M ()"));
+        CHECK_THROWS(Point::from_wkt("POINT M (1)"));
+        CHECK_THROWS(Point::from_wkt("POINT M (1 2)"));
+        CHECK_THROWS(Point::from_wkt("POINT M (1 2 3 4)"));
+        CHECK_THROWS(Point::from_wkt("POINT ZM"));
+        CHECK_THROWS(Point::from_wkt("POINT ZM ()"));
+        CHECK_THROWS(Point::from_wkt("POINT ZM (1)"));
+        CHECK_THROWS(Point::from_wkt("POINT ZM (1 2)"));
+        CHECK_THROWS(Point::from_wkt("POINT ZM (1 2 3)"));
+        CHECK_THROWS(Point::from_wkt("POINT ZM (1 2 3 4 5)"));
     }
 
     SECTION("3d point - from wkt")
@@ -107,6 +170,7 @@ TEST_CASE("Point tests")
         CHECK(p.x == 1.0);
         CHECK(p.y == 2.0);
         CHECK(p.z == 3.0);
+        CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
     }
 
     SECTION("4d point - from wkt")

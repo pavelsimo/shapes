@@ -270,7 +270,7 @@ class Point : public BasicGeometry<Point>
     {
         if (pos >= size_())
         {
-            throw exceptions::shapes_exception("index out of bounds");
+            throw exceptions::shapes_exception("out of range");
         }
         if (pos == 0)
             return x;
@@ -384,36 +384,66 @@ class Point : public BasicGeometry<Point>
         point_text      = point_text.substr(1, point_text.size() - 2);
         std::stringstream in(point_text);
 
+        bool point_text_error = false;
         switch (tag)
         {
             case wkt_lexer::token_type::point_tagged_text:
             {
                 res.dimension = DimensionType::XY;
-                in >> res.x >> res.y;
+                in >> res.x;
+                if (in.eof())
+                    point_text_error = true;
+                in >> res.y;
                 break;
             }
             case wkt_lexer::token_type::point_z_tagged_text:
             {
                 res.dimension = DimensionType::XYZ;
-                in >> res.x >> res.y >> res.z;
+                in >> res.x;
+                if (in.eof())
+                    point_text_error = true;
+                in >> res.y;
+                if (in.eof())
+                    point_text_error = true;
+                in >> res.z;
                 break;
             }
             case wkt_lexer::token_type::point_m_tagged_text:
             {
                 res.dimension = DimensionType::XYM;
-                in >> res.x >> res.y >> res.m;
+                in >> res.x;
+                if (in.eof())
+                    point_text_error = true;
+                in >> res.y;
+                if (in.eof())
+                    point_text_error = true;
+                in >> res.m;
                 break;
             }
             case wkt_lexer::token_type::point_zm_tagged_text:
             {
                 res.dimension = DimensionType::XYZM;
-                in >> res.x >> res.y >> res.z >> res.m;
+                in >> res.x;
+                if (in.eof())
+                    point_text_error = true;
+                in >> res.y;
+                if (in.eof())
+                    point_text_error = true;
+                in >> res.z;
+                if (in.eof())
+                    point_text_error = true;
+                in >> res.m;
                 break;
             }
         }
 
-        tag = lexer.scan();
-        if (tag != wkt_lexer::token_type::end_of_input)
+        if (point_text_error or not in.eof())
+        {
+            throw exceptions::parse_error("invalid point dimensions");
+        }
+
+        auto token = lexer.scan();
+        if (token != wkt_lexer::token_type::end_of_input)
         {
             throw exceptions::parse_error("invalid point");
         }
