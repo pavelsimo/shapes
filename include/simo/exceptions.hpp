@@ -17,7 +17,7 @@ class shapes_exception : public std::exception
 {
   public:
     explicit shapes_exception(const char* what)
-            : m_what(what) {}
+        : m_what(what) {}
 
     const char* what() const noexcept override
     {
@@ -25,7 +25,6 @@ class shapes_exception : public std::exception
     }
 
   protected:
-
     void set_reason(const std::string& reason)
     {
         m_what.append(": ");

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.7.2)
 
 project(shapes LANGUAGES CXX VERSION 0.0.1)
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -31,6 +32,11 @@ if (SHAPES_SINGLE_HEADER)
 else()
     set(SHAPES_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 endif()
+
+# re2c
+add_custom_target(parser COMMENT "re2c lexer code generation"
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+        COMMAND re2c -i -b -o ${PROJECT_SOURCE_DIR}/include/simo/io/wkt_reader.hpp ${PROJECT_SOURCE_DIR}/include/simo/io/wkt_reader.re)
 
 # clang-format
 find_program(CLANG_FORMAT clang-format)

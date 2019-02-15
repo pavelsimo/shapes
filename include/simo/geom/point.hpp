@@ -13,6 +13,7 @@
 #include <json/json.hpp>
 #include <simo/geom/geometry.hpp>
 #include <simo/exceptions.hpp>
+#include <simo/io/wkt_reader.hpp>
 
 namespace simo
 {
@@ -130,9 +131,9 @@ class Point : public BasicGeometry<Point>
     static Point from_xym(double x, double y, double m)
     {
         Point p;
-        p.x = x;
-        p.y = y;
-        p.m = m;
+        p.x         = x;
+        p.y         = y;
+        p.m         = m;
         p.dimension = DimensionType::XYM;
         return p;
     }
@@ -166,23 +167,23 @@ class Point : public BasicGeometry<Point>
     {
         if (init.size() == 2)
         {
-            x      = *init.begin();
-            y      = *(init.begin() + 1);
+            x         = *init.begin();
+            y         = *(init.begin() + 1);
             dimension = DimensionType::XY;
         }
         else if (init.size() == 3)
         {
-            x      = *init.begin();
-            y      = *(init.begin() + 1);
-            z      = *(init.begin() + 2);
+            x         = *init.begin();
+            y         = *(init.begin() + 1);
+            z         = *(init.begin() + 2);
             dimension = DimensionType::XYZ;
         }
         else if (init.size() == 4)
         {
-            x      = *init.begin();
-            y      = *(init.begin() + 1);
-            z      = *(init.begin() + 2);
-            m      = *(init.begin() + 3);
+            x         = *init.begin();
+            y         = *(init.begin() + 1);
+            z         = *(init.begin() + 2);
+            m         = *(init.begin() + 3);
             dimension = DimensionType::XYZM;
         }
         else
@@ -362,42 +363,62 @@ class Point : public BasicGeometry<Point>
      */
     static Point from_wkt(const std::string& wkt)
     {
-        /// @todo (pavel) ensure the number of coordinates for POINT, POINTZ, POINTM, POINTZM
-        /// @todo (pavel) empty spaces
-        std::regex tagged_text_regex("(?:POINT|Point){1}[Z]?[M]?\\((.*)\\)");
-        std::smatch tagged_text_match;
-        std::string tagged_text;
-        if (std::regex_search(wkt, tagged_text_match, tagged_text_regex) && tagged_text_match.size() > 1)
+        Point res;
+        wkt_lexer lexer(wkt.c_str());
+        auto tag = lexer.scan();
+        if (tag != wkt_lexer::token_type::point_tagged_text and
+            tag != wkt_lexer::token_type::point_z_tagged_text and
+            tag != wkt_lexer::token_type::point_m_tagged_text and
+            tag != wkt_lexer::token_type::point_zm_tagged_text)
         {
-            tagged_text = tagged_text_match.str(1);
-            std::regex coords_regex("\\s+");
-            std::sregex_token_iterator iter(tagged_text.begin(), tagged_text.end(), coords_regex, -1);
-            std::sregex_token_iterator end;
+            throw exceptions::parse_error("invalid point tag");
+        }
 
-            /// @todo (pavel) add another point constructor Point(const std::vector<double> coords) ...
-            std::vector<double> coords;
-            for (; iter != end; ++iter)
+        auto text = lexer.scan();
+        if (text != wkt_lexer::token_type::point_text)
+        {
+            throw exceptions::parse_error("invalid point text");
+        }
+
+        auto point_text = lexer.get_token();
+        point_text      = point_text.substr(1, point_text.size() - 2);
+        std::stringstream in(point_text);
+
+        switch (tag)
+        {
+            case wkt_lexer::token_type::point_tagged_text:
             {
-                coords.push_back(std::stod(*iter));
+                res.dimension = DimensionType::XY;
+                in >> res.x >> res.y;
+                break;
             }
-            if (coords.size() == 2)
+            case wkt_lexer::token_type::point_z_tagged_text:
             {
-                return {coords[0], coords[1]};
+                res.dimension = DimensionType::XYZ;
+                in >> res.x >> res.y >> res.z;
+                break;
             }
-            else if (coords.size() == 3)
+            case wkt_lexer::token_type::point_m_tagged_text:
             {
-                return {coords[0], coords[1], coords[2]};
+                res.dimension = DimensionType::XYM;
+                in >> res.x >> res.y >> res.m;
+                break;
             }
-            else if (coords.size() == 4)
+            case wkt_lexer::token_type::point_zm_tagged_text:
             {
-                return {coords[0], coords[1], coords[2], coords[3]};
-            }
-            else
-            {
-                throw exceptions::parse_error("invalid dimensions");
+                res.dimension = DimensionType::XYZM;
+                in >> res.x >> res.y >> res.z >> res.m;
+                break;
             }
         }
-        throw exceptions::parse_error("invalid tagged text");
+
+        tag = lexer.scan();
+        if (tag != wkt_lexer::token_type::end_of_input)
+        {
+            throw exceptions::parse_error("invalid point");
+        }
+
+        return res;
     }
 
     /*!
@@ -413,7 +434,7 @@ class Point : public BasicGeometry<Point>
     {
         std::stringstream ss;
         ss << std::fixed << std::setprecision(precision);
-        ss << "POINT";
+        ss << "POINT ";
         if (has_z())
         {
             ss << "Z";
@@ -421,6 +442,10 @@ class Point : public BasicGeometry<Point>
         if (has_m())
         {
             ss << "M";
+        }
+        if (has_z() or has_m())
+        {
+            ss << " ";
         }
         ss << "(";
         ss << x << " " << y;

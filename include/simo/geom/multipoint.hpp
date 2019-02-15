@@ -23,7 +23,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
      */
     MultiPoint() = default;
 
-     /*!
+    /*!
       * @brief creates a MultiPoint from a given initializer list
       *
       * @param init the initializer list
@@ -54,7 +54,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         m_points = points;
     }
 
-    /*!
+   /*!
     * @copydoc Geometry::type()
     */
     GeometryType type_() const
@@ -62,7 +62,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         return GeometryType::MULTIPOINT;
     }
 
-    /*!
+   /*!
     * @copydoc Geometry::type_str()
     */
     std::string type_str_() const
@@ -70,7 +70,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         return "MultiPoint";
     }
 
-    /*!
+   /*!
     * @copydoc Geometry::empty()
     */
     bool empty_() const
@@ -78,7 +78,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         return m_points.empty();
     }
 
-    /*!
+   /*!
     * @copydoc Geometry::size()
     */
     size_t size_() const
@@ -86,7 +86,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         return m_points.size();
     }
 
-    /*!
+   /*!
     * @copydoc Geometry::xy()
     */
     std::vector<std::tuple<double, double>> xy_() const
@@ -99,7 +99,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         return res;
     }
 
-    /*!
+   /*!
     * @copydoc Geometry::xyz()
     */
     std::vector<std::tuple<double, double, double>> xyz_() const
@@ -112,7 +112,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         return res;
     }
 
-    /*!
+   /*!
     * @copydoc Geometry::xym()
     */
     std::vector<std::tuple<double, double, double>> xym_() const
@@ -125,7 +125,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         return res;
     }
 
-    /*!
+   /*!
     * @copydoc Geometry::xyzm()
     */
     std::vector<std::tuple<double, double, double, double>> xyzm_() const
@@ -139,15 +139,15 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
     }
 
     /*!
-      * @brief creates a MultiPoint from a geojson string
-      *
-      * @param json the geojson string
-      * @return a MultiPoint object
-      *
-      * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
-      *
-      * @since 0.0.1
-      */
+     * @brief creates a MultiPoint from a geojson string
+     *
+     * @param json the geojson string
+     * @return a MultiPoint object
+     *
+     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
+     *
+     * @since 0.0.1
+     */
     static MultiPoint from_json(const std::string& json)
     {
         nlohmann::json j = nlohmann::json::parse(json);
@@ -191,7 +191,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         std::stringstream ss;
         ss << std::fixed << std::setprecision(precision);
         ss << "{\"type\":\"MultiPoint\",\"coordinates\":[";
-        for(size_t i = 0; i < m_points.size(); ++i)
+        for (size_t i = 0; i < m_points.size(); ++i)
         {
             if (i > 0)
             {

@@ -61,14 +61,14 @@ TEST_CASE("Point tests")
 
     SECTION("2d point - to json")
     {
-        auto p = Point{1, 2};
+        auto p      = Point{1, 2};
         p.precision = 1;
         CHECK(p.json() == R"({"type":"Point","coordinates":[1.0,2.0]})");
     }
 
     SECTION("3d point - to json")
     {
-        auto p = Point{1, 2, 3};
+        auto p      = Point{1, 2, 3};
         p.precision = 1;
         CHECK(p.json() == R"({"type":"Point","coordinates":[1.0,2.0,3.0]})");
     }
@@ -77,21 +77,21 @@ TEST_CASE("Point tests")
     {
         Point p     = {1.0, 2.0};
         p.precision = 1;
-        CHECK(p.wkt() == "POINT(1.0 2.0)");
+        CHECK(p.wkt() == "POINT (1.0 2.0)");
     }
 
     SECTION("3d point - to wkt")
     {
         Point p     = {1.0, 2.0, 3.0};
         p.precision = 1;
-        CHECK(p.wkt() == "POINTZ(1.0 2.0 3.0)");
+        CHECK(p.wkt() == "POINT Z (1.0 2.0 3.0)");
     }
 
     SECTION("4d point - to wkt")
     {
         Point p     = {1.0, 2.0, 3.0, 4.0};
         p.precision = 1;
-        CHECK(p.wkt() == "POINTZM(1.0 2.0 3.0 4.0)");
+        CHECK(p.wkt() == "POINT ZM (1.0 2.0 3.0 4.0)");
     }
 
     SECTION("2d point - from wkt")
@@ -103,7 +103,7 @@ TEST_CASE("Point tests")
 
     SECTION("3d point - from wkt")
     {
-        auto p = Point::from_wkt("POINTZ(1 2 3)");
+        auto p = Point::from_wkt("POINT Z (1 2 3)");
         CHECK(p.x == 1.0);
         CHECK(p.y == 2.0);
         CHECK(p.z == 3.0);
@@ -111,7 +111,7 @@ TEST_CASE("Point tests")
 
     SECTION("4d point - from wkt")
     {
-        auto p = Point::from_wkt("POINTZM(1 2 3 4)");
+        auto p = Point::from_wkt("POINT ZM (1 2 3 4)");
         CHECK(p.x == 1.0);
         CHECK(p.y == 2.0);
         CHECK(p.z == 3.0);
