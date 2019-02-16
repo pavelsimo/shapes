@@ -385,7 +385,9 @@ class Point : public BasicGeometry<Point>
         auto point_text_str = lexer.get_token();
         if (point_text_str != "EMPTY")
         {
-            point_text_str = point_text_str.substr(1, point_text_str.size() - 2);
+            std::size_t lpos = point_text_str.find("(") + 1;
+            std::size_t rpos = point_text_str.find(")") - 1;
+            point_text_str = point_text_str.substr(lpos, rpos);
             std::stringstream in(point_text_str);
             bool parse_error = false;
             switch (point_tag)
@@ -444,7 +446,7 @@ class Point : public BasicGeometry<Point>
                 }
             }
 
-            if (parse_error or not in.eof())
+            if (parse_error)
             {
                 throw exceptions::parse_error("invalid point text");
             }

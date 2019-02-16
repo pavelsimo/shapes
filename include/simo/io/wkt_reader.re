@@ -71,17 +71,17 @@ class wkt_lexer
         comma           = ",";
 
         // point
-        point_tagged_text     = "POINT" ws*;
+        point_tagged_text     = ws* "POINT" ws*;
         point_tagged_text     { return token_type::point_tagged_text; }
-        point_z_tagged_text   = "POINT" ws* "Z" ws*;
+        point_z_tagged_text   = ws* "POINT" ws* "Z" ws*;
         point_z_tagged_text   { return token_type::point_z_tagged_text; }
-        point_m_tagged_text   = "POINT" ws* "M" ws*;
+        point_m_tagged_text   = ws* "POINT" ws* "M" ws*;
         point_m_tagged_text   { return token_type::point_m_tagged_text; }
-        point_zm_tagged_text  = "POINT" ws* "ZM" ws*;
+        point_zm_tagged_text  = ws* "POINT" ws* "ZM" ws*;
         point_zm_tagged_text  { return token_type::point_zm_tagged_text; }
 
-        left_paren      = "(";
-        right_paren     = ")";
+        left_paren      = ws* "(";
+        right_paren     = ")" ws*;
         point_2         = ws* number ws+ number ws*;
         point_3         = ws* number ws+ number ws+ number ws*;
         point_4         = ws* number ws+ number ws+ number ws+ number ws*;
@@ -95,14 +95,12 @@ class wkt_lexer
         point_4_text      = (empty_set|left_paren point_4 right_paren);
         point_4_text      { return token_type::point_4_text; }
 
-        //
         // multipoint
-        //
-//            multipoint_tagged_text  = ws* "MULTIPOINT" zm?;
-//            multipoint_tagged_text  { return token_type::multipoint_tagged_text; }
+//        multipoint_tagged_text  = ws* "MULTIPOINT" zm?;
+//        multipoint_tagged_text  { return token_type::multipoint_tagged_text; }
 //
-//            multipoint_text         = (empty_set|left_paren point_text (comma point_text)* right_paren);
-//            multipoint_text         { return token_type::multipoint_text; }
+//        multipoint_text         = (empty_set|left_paren point_text (comma point_text)* right_paren);
+//        multipoint_text         { return token_type::multipoint_text; }
 
         end             { return token_type::end_of_input; }
         .               { return token_type::parse_error; }
@@ -115,11 +113,11 @@ class wkt_lexer
     }
 
   private:
-    /// the buffer
+    /// pointer to the buffer
     const char* content = nullptr;
-    /// pointer to he beginning of the current symbol
+    /// pointer to the beginning of the current token
     const char* start = nullptr;
-    /// pointer to the current symbol
+    /// pointer to the current token
     const char* cursor = nullptr;
     /// pointer to the end of the buffer
     const char* limit = nullptr;

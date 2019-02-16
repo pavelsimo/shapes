@@ -188,6 +188,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
      */
     std::string json()
     {
+        /// @todo (pavel) add properties to specify z, m and zm
         std::stringstream ss;
         ss << std::fixed << std::setprecision(precision);
         ss << "{\"type\":\"MultiPoint\",\"coordinates\":[";
@@ -224,6 +225,21 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         }
         ss << "]}";
         return ss.str();
+    }
+
+    /*!
+     * @brief creates a Point from a WKT string
+     *
+     * @param wkt the WKT string
+     * @return a Point object
+     *
+     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
+     *
+     * @since 0.0.1
+     */
+    static MultiPoint from_wkt(const std::string& wkt)
+    {
+        throw exceptions::shapes_exception("not implemented");
     }
 
     /*!
