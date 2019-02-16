@@ -365,81 +365,89 @@ class Point : public BasicGeometry<Point>
     {
         Point res;
         wkt_lexer lexer(wkt.c_str());
-        auto tag = lexer.scan();
-        if (tag != wkt_lexer::token_type::point_tagged_text and
-            tag != wkt_lexer::token_type::point_z_tagged_text and
-            tag != wkt_lexer::token_type::point_m_tagged_text and
-            tag != wkt_lexer::token_type::point_zm_tagged_text)
+        auto point_tag = lexer.scan();
+        if (point_tag != wkt_lexer::token_type::point_tagged_text and
+            point_tag != wkt_lexer::token_type::point_z_tagged_text and
+            point_tag != wkt_lexer::token_type::point_m_tagged_text and
+            point_tag != wkt_lexer::token_type::point_zm_tagged_text)
         {
             throw exceptions::parse_error("invalid point tag");
         }
 
-        auto text = lexer.scan();
-        if (text != wkt_lexer::token_type::point_text)
+        auto point_text = lexer.scan();
+        if (point_text != wkt_lexer::token_type::point_2_text and
+            point_text != wkt_lexer::token_type::point_3_text and
+            point_text != wkt_lexer::token_type::point_4_text)
         {
             throw exceptions::parse_error("invalid point text");
         }
 
-        auto point_text = lexer.get_token();
-        point_text      = point_text.substr(1, point_text.size() - 2);
-        std::stringstream in(point_text);
-
-        bool point_text_error = false;
-        switch (tag)
+        auto point_text_str = lexer.get_token();
+        if (point_text_str != "EMPTY")
         {
-            case wkt_lexer::token_type::point_tagged_text:
+            point_text_str = point_text_str.substr(1, point_text_str.size() - 2);
+            std::stringstream in(point_text_str);
+            bool parse_error = false;
+            switch (point_tag)
             {
-                res.dimension = DimensionType::XY;
-                in >> res.x;
-                if (in.eof())
-                    point_text_error = true;
-                in >> res.y;
-                break;
+                case wkt_lexer::token_type::point_tagged_text:
+                {
+                    res.dimension = DimensionType::XY;
+                    if (point_text == wkt_lexer::token_type::point_2_text)
+                    {
+                        in >> res.x >> res.y;
+                    }
+                    else
+                    {
+                        parse_error = true;
+                    }
+                    break;
+                }
+                case wkt_lexer::token_type::point_z_tagged_text:
+                {
+                    res.dimension = DimensionType::XYZ;
+                    if (point_text == wkt_lexer::token_type::point_3_text)
+                    {
+                        in >> res.x >> res.y >> res.z;
+                    }
+                    else
+                    {
+                        parse_error = true;
+                    }
+                    break;
+                }
+                case wkt_lexer::token_type::point_m_tagged_text:
+                {
+                    res.dimension = DimensionType::XYM;
+                    if (point_text == wkt_lexer::token_type::point_3_text)
+                    {
+                        in >> res.x >> res.y >> res.m;
+                    }
+                    else
+                    {
+                        parse_error = true;
+                    }
+                    break;
+                }
+                case wkt_lexer::token_type::point_zm_tagged_text:
+                {
+                    res.dimension = DimensionType::XYZM;
+                    if (point_text == wkt_lexer::token_type::point_4_text)
+                    {
+                        in >> res.x >> res.y >> res.z >> res.m;
+                    }
+                    else
+                    {
+                        parse_error = true;
+                    }
+                    break;
+                }
             }
-            case wkt_lexer::token_type::point_z_tagged_text:
-            {
-                res.dimension = DimensionType::XYZ;
-                in >> res.x;
-                if (in.eof())
-                    point_text_error = true;
-                in >> res.y;
-                if (in.eof())
-                    point_text_error = true;
-                in >> res.z;
-                break;
-            }
-            case wkt_lexer::token_type::point_m_tagged_text:
-            {
-                res.dimension = DimensionType::XYM;
-                in >> res.x;
-                if (in.eof())
-                    point_text_error = true;
-                in >> res.y;
-                if (in.eof())
-                    point_text_error = true;
-                in >> res.m;
-                break;
-            }
-            case wkt_lexer::token_type::point_zm_tagged_text:
-            {
-                res.dimension = DimensionType::XYZM;
-                in >> res.x;
-                if (in.eof())
-                    point_text_error = true;
-                in >> res.y;
-                if (in.eof())
-                    point_text_error = true;
-                in >> res.z;
-                if (in.eof())
-                    point_text_error = true;
-                in >> res.m;
-                break;
-            }
-        }
 
-        if (point_text_error or not in.eof())
-        {
-            throw exceptions::parse_error("invalid point dimensions");
+            if (parse_error or not in.eof())
+            {
+                throw exceptions::parse_error("invalid point text");
+            }
         }
 
         auto token = lexer.scan();

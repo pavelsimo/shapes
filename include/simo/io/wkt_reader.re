@@ -16,7 +16,9 @@ class wkt_lexer
         point_z_tagged_text,
         point_m_tagged_text,
         point_zm_tagged_text,
-        point_text,
+        point_2_text,
+        point_3_text,
+        point_4_text,
         multipoint_tagged_text,
         multipoint_text,
         parse_error,
@@ -71,22 +73,27 @@ class wkt_lexer
         // point
         point_tagged_text     = "POINT" ws*;
         point_tagged_text     { return token_type::point_tagged_text; }
-        point_tagged_text_z   = "POINT" ws* "Z" ws*;
-        point_tagged_text_z   { return token_type::point_z_tagged_text; }
-        point_tagged_text_m   = "POINT" ws* "M" ws*;
-        point_tagged_text_m   { return token_type::point_m_tagged_text; }
-        point_tagged_text_zm  = "POINT" ws* "ZM" ws*;
-        point_tagged_text_zm  { return token_type::point_zm_tagged_text; }
+        point_z_tagged_text   = "POINT" ws* "Z" ws*;
+        point_z_tagged_text   { return token_type::point_z_tagged_text; }
+        point_m_tagged_text   = "POINT" ws* "M" ws*;
+        point_m_tagged_text   { return token_type::point_m_tagged_text; }
+        point_zm_tagged_text  = "POINT" ws* "ZM" ws*;
+        point_zm_tagged_text  { return token_type::point_zm_tagged_text; }
 
         left_paren      = "(";
         right_paren     = ")";
-        x               = number;
-        y               = number;
-        z               = number;
-        m               = number;
-        point           = ws* x ws+ y (ws+ z)? (ws+ m)? ws*;
-        point_text      = (empty_set|left_paren point right_paren);
-        point_text      { return token_type::point_text; }
+        point_2         = ws* number ws+ number ws*;
+        point_3         = ws* number ws+ number ws+ number ws*;
+        point_4         = ws* number ws+ number ws+ number ws+ number ws*;
+
+        point_2_text      = (empty_set|left_paren point_2 right_paren);
+        point_2_text      { return token_type::point_2_text; }
+
+        point_3_text      = (empty_set|left_paren point_3 right_paren);
+        point_3_text      { return token_type::point_3_text; }
+
+        point_4_text      = (empty_set|left_paren point_4 right_paren);
+        point_4_text      { return token_type::point_4_text; }
 
         //
         // multipoint
