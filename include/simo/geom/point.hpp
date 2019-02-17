@@ -44,7 +44,7 @@ class Point : public BasicGeometry<Point>
      */
     Point()
     {
-        dimension = DimensionType::XY;
+        set_dim(DimensionType::XY);
     }
 
     /*!
@@ -58,7 +58,7 @@ class Point : public BasicGeometry<Point>
     Point(double x, double y)
         : x(x), y(y)
     {
-        dimension = DimensionType::XY;
+        set_dim(DimensionType::XY);
     }
 
     /*!
@@ -73,7 +73,7 @@ class Point : public BasicGeometry<Point>
     Point(double x, double y, double z)
         : x(x), y(y), z(z)
     {
-        dimension = DimensionType::XYZ;
+        set_dim(DimensionType::XYZ);
     }
 
     /*!
@@ -89,7 +89,7 @@ class Point : public BasicGeometry<Point>
     Point(double x, double y, double z, double m)
         : x(x), y(y), z(z), m(m)
     {
-        dimension = DimensionType::XYZM;
+        set_dim(DimensionType::XYZM);
     }
 
     /*!
@@ -131,10 +131,10 @@ class Point : public BasicGeometry<Point>
     static Point from_xym(double x, double y, double m)
     {
         Point p;
-        p.x         = x;
-        p.y         = y;
-        p.m         = m;
-        p.dimension = DimensionType::XYM;
+        p.x = x;
+        p.y = y;
+        p.m = m;
+        p.set_dim(DimensionType::XYM);
         return p;
     }
 
@@ -156,6 +156,7 @@ class Point : public BasicGeometry<Point>
     /*!
      * @brief creates a Point
      *
+     * @tparam T an arithmetic value (e.g. int, float, double)
      * @param init the coordinates list
      *
      * @throw exception if the given number of coordinates is either less than two or greater than four
@@ -167,24 +168,24 @@ class Point : public BasicGeometry<Point>
     {
         if (init.size() == 2)
         {
-            x         = *init.begin();
-            y         = *(init.begin() + 1);
-            dimension = DimensionType::XY;
+            x = *init.begin();
+            y = *(init.begin() + 1);
+            set_dim(DimensionType::XY);
         }
         else if (init.size() == 3)
         {
-            x         = *init.begin();
-            y         = *(init.begin() + 1);
-            z         = *(init.begin() + 2);
-            dimension = DimensionType::XYZ;
+            x = *init.begin();
+            y = *(init.begin() + 1);
+            z = *(init.begin() + 2);
+            set_dim(DimensionType::XYZ);
         }
         else if (init.size() == 4)
         {
-            x         = *init.begin();
-            y         = *(init.begin() + 1);
-            z         = *(init.begin() + 2);
-            m         = *(init.begin() + 3);
-            dimension = DimensionType::XYZM;
+            x = *init.begin();
+            y = *(init.begin() + 1);
+            z = *(init.begin() + 2);
+            m = *(init.begin() + 3);
+            set_dim(DimensionType::XYZM);
         }
         else
         {
@@ -193,7 +194,7 @@ class Point : public BasicGeometry<Point>
     }
 
     /*!
-     * @copydoc Geometry::type()
+     * @private
      */
     GeometryType type_() const
     {
@@ -201,7 +202,7 @@ class Point : public BasicGeometry<Point>
     }
 
     /*!
-     * @copydoc Geometry::type_str()
+     * @private
      */
     std::string type_str_() const
     {
@@ -209,7 +210,7 @@ class Point : public BasicGeometry<Point>
     }
 
     /*!
-     * @copydoc Geometry::empty()
+     * @private
      */
     bool empty_() const
     {
@@ -217,15 +218,15 @@ class Point : public BasicGeometry<Point>
     }
 
     /*!
-     * @copydoc Geometry::size()
+     * @private
      */
     size_t size_() const
     {
-        return static_cast<size_t>(get_num_dimension());
+        return static_cast<size_t>(ndim());
     }
 
     /*!
-     * @copydoc Geometry::xy()
+     * @private
      */
     std::vector<std::tuple<double, double>> xy_() const
     {
@@ -233,7 +234,7 @@ class Point : public BasicGeometry<Point>
     }
 
     /*!
-    * @copydoc Geometry::xyz()
+    * @private
     */
     std::vector<std::tuple<double, double, double>> xyz_() const
     {
@@ -241,7 +242,7 @@ class Point : public BasicGeometry<Point>
     }
 
     /*!
-    * @copydoc Geometry::xym()
+    * @private
     */
     std::vector<std::tuple<double, double, double>> xym_() const
     {
@@ -249,7 +250,7 @@ class Point : public BasicGeometry<Point>
     }
 
     /*!
-    * @copydoc Geometry::xyzm()
+    * @private
     */
     std::vector<std::tuple<double, double, double, double>> xyzm_() const
     {
@@ -301,6 +302,7 @@ class Point : public BasicGeometry<Point>
      */
     static Point from_json(const std::string& json)
     {
+        /// @todo (pavel) read properties to specify z, m and zm
         nlohmann::json j = nlohmann::json::parse(json);
         std::string type = j.at("type").get<std::string>();
         if (type != "Point")
@@ -335,6 +337,7 @@ class Point : public BasicGeometry<Point>
      */
     std::string json()
     {
+        /// @todo (pavel) add properties to specify z, m and zm
         std::stringstream ss;
         ss << std::fixed << std::setprecision(precision);
         ss << "{\"type\":\"Point\",\"coordinates\":";
@@ -387,16 +390,16 @@ class Point : public BasicGeometry<Point>
         {
             std::size_t lpos = point_text_str.find("(") + 1;
             std::size_t rpos = point_text_str.find(")") - 1;
-            point_text_str = point_text_str.substr(lpos, rpos);
+            point_text_str   = point_text_str.substr(lpos, rpos);
             std::stringstream in(point_text_str);
             bool parse_error = false;
             switch (point_tag)
             {
                 case wkt_lexer::token_type::point_tagged_text:
                 {
-                    res.dimension = DimensionType::XY;
                     if (point_text == wkt_lexer::token_type::point_2_text)
                     {
+                        res.set_dim(DimensionType::XY);
                         in >> res.x >> res.y;
                     }
                     else
@@ -407,9 +410,9 @@ class Point : public BasicGeometry<Point>
                 }
                 case wkt_lexer::token_type::point_z_tagged_text:
                 {
-                    res.dimension = DimensionType::XYZ;
                     if (point_text == wkt_lexer::token_type::point_3_text)
                     {
+                        res.set_dim(DimensionType::XYZ);
                         in >> res.x >> res.y >> res.z;
                     }
                     else
@@ -420,9 +423,9 @@ class Point : public BasicGeometry<Point>
                 }
                 case wkt_lexer::token_type::point_m_tagged_text:
                 {
-                    res.dimension = DimensionType::XYM;
                     if (point_text == wkt_lexer::token_type::point_3_text)
                     {
+                        res.set_dim(DimensionType::XYM);
                         in >> res.x >> res.y >> res.m;
                     }
                     else
@@ -433,9 +436,9 @@ class Point : public BasicGeometry<Point>
                 }
                 case wkt_lexer::token_type::point_zm_tagged_text:
                 {
-                    res.dimension = DimensionType::XYZM;
                     if (point_text == wkt_lexer::token_type::point_4_text)
                     {
+                        res.set_dim(DimensionType::XYZM);
                         in >> res.x >> res.y >> res.z >> res.m;
                     }
                     else
@@ -443,6 +446,10 @@ class Point : public BasicGeometry<Point>
                         parse_error = true;
                     }
                     break;
+                }
+                default:
+                {
+
                 }
             }
 
@@ -500,47 +507,6 @@ class Point : public BasicGeometry<Point>
         ss << ")";
         return ss.str();
     }
-};
-
-template <typename Derived>
-class PointCollection
-{
-  public:
-    typedef std::vector<Point>::iterator iterator;
-    typedef std::vector<Point>::const_iterator const_iterator;
-
-    iterator begin()
-    {
-        return m_points.begin();
-    }
-
-    const_iterator begin() const
-    {
-        return m_points.begin();
-    }
-
-    iterator end()
-    {
-        return m_points.end();
-    }
-
-    const_iterator end() const
-    {
-        return m_points.end();
-    }
-
-    Point at(size_t pos)
-    {
-        return m_points.at(pos);
-    }
-
-    Point operator[](size_t pos)
-    {
-        return m_points.at(pos);
-    }
-
-  protected:
-    std::vector<Point> m_points;
 };
 
 }  // namespace shapes

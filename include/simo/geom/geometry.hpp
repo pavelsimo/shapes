@@ -126,6 +126,10 @@ enum class GeometryDetailedType
 class Geometry
 {
   public:
+
+    /// virtual destructor
+    virtual ~Geometry() = default;
+
     /*!
      * @brief returns the geometry type (e.g. GeometryType::Point, GeometryType::MultiPoint)
      * @return the geometry type
@@ -174,7 +178,15 @@ class Geometry
      *
      * @since 0.0.1
      */
-    virtual DimensionType get_dimension() const = 0;
+    virtual DimensionType dim() const = 0;
+
+    /*!
+     * @brief set the dimension type
+     * @param value the dimension type
+     *
+     * @since 0.0.1
+     */
+    virtual void set_dim(DimensionType value) = 0;
 
     /*!
      * @brief returns the number of dimensions of the geometry
@@ -184,7 +196,7 @@ class Geometry
      *
      * @since 0.0.1
      */
-    virtual int8_t get_num_dimension() const = 0;
+    virtual int8_t ndim() const = 0;
 
     /*!
      * @brief returns the geometry bounds
@@ -192,7 +204,7 @@ class Geometry
      *
      * @since 0.0.1
      */
-    virtual Bounds get_bounds() const = 0;
+    virtual Bounds& bounds() = 0;
 
     /*!
      * @brief returns a clone of the given geometry
@@ -256,17 +268,12 @@ template <typename Derived>
 class BasicGeometry : public Geometry
 {
   public:
+
     /// serialization precision
     int8_t precision = 1;
 
     /// a spatial reference identifier (SRID) is a unique identifier associated with a specific coordinate system
     int32_t srid = -1;
-
-    /// geometry bounds
-    Bounds bounds;
-
-    /// the dimension type (x, y), (x, y, z), (x, y, m) or (x, y, z, m)
-    DimensionType dimension;
 
     GeometryType type() const override
     {
@@ -276,7 +283,7 @@ class BasicGeometry : public Geometry
     GeometryDetailedType detailed_type() const override
     {
         auto type = static_cast<const Derived*>(this)->type_();
-        switch (dimension)
+        switch (dim_)
         {
             case DimensionType::XY:
             {
@@ -482,29 +489,34 @@ class BasicGeometry : public Geometry
         return static_cast<const Derived*>(this)->xyzm_();
     }
 
-    DimensionType get_dimension() const override
+    DimensionType dim() const override
     {
-        return dimension;
+        return dim_;
     }
 
-    Bounds get_bounds() const override
+    void set_dim(DimensionType value) override
     {
-        return bounds;
+        dim_ = value;
+    }
+
+    Bounds& bounds() override
+    {
+        return bounds_;
     }
 
     bool has_z() const override
     {
-        return dimension == DimensionType::XYZ or dimension == DimensionType::XYZM;
+        return dim_ == DimensionType::XYZ or dim_ == DimensionType::XYZM;
     }
 
     bool has_m() const override
     {
-        return dimension == DimensionType::XYM or dimension == DimensionType::XYZM;
+        return dim_ == DimensionType::XYM or dim_ == DimensionType::XYZM;
     }
 
-    int8_t get_num_dimension() const override
+    int8_t ndim() const override
     {
-        switch (dimension)
+        switch (dim_)
         {
             case DimensionType::XYZM:
                 return 4;
@@ -515,6 +527,13 @@ class BasicGeometry : public Geometry
                 return 2;
         }
     }
+
+  private:
+    /// geometry bounds
+    Bounds bounds_;
+
+    /// the dimension type (x, y), (x, y, z), (x, y, m) or (x, y, z, m)
+    DimensionType dim_;
 };
 
 }  // namespace shapes

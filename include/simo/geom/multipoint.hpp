@@ -5,7 +5,7 @@
 #include <sstream>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/point.hpp>
+#include <simo/geom/point_collection.hpp>
 #include <simo/geom/bounds.hpp>
 
 namespace simo
@@ -26,6 +26,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
     /*!
       * @brief creates a MultiPoint from a given initializer list
       *
+      * @tparam T an arithmetic value (e.g. int, float, double)
       * @param init the initializer list
       *
       * @since 0.0.1
@@ -37,7 +38,8 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         for (const auto& coords : init)
         {
             Point p(coords);
-            bounds.extend(p.x, p.y);
+            Bounds& b = bounds();
+            b.extend(p.x, p.y);
             m_points.push_back(std::move(p));
         }
     }
@@ -55,7 +57,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
     }
 
     /*!
-    * @copydoc Geometry::type()
+    * @private
     */
     GeometryType type_() const
     {
@@ -63,79 +65,11 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
     }
 
     /*!
-    * @copydoc Geometry::type_str()
+    * @private
     */
     std::string type_str_() const
     {
         return "MultiPoint";
-    }
-
-    /*!
-    * @copydoc Geometry::empty()
-    */
-    bool empty_() const
-    {
-        return m_points.empty();
-    }
-
-    /*!
-    * @copydoc Geometry::size()
-    */
-    size_t size_() const
-    {
-        return m_points.size();
-    }
-
-    /*!
-    * @copydoc Geometry::xy()
-    */
-    std::vector<std::tuple<double, double>> xy_() const
-    {
-        std::vector<std::tuple<double, double>> res;
-        for (const auto& point : m_points)
-        {
-            res.emplace_back(point.x, point.y);
-        }
-        return res;
-    }
-
-    /*!
-    * @copydoc Geometry::xyz()
-    */
-    std::vector<std::tuple<double, double, double>> xyz_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        for (const auto& point : m_points)
-        {
-            res.emplace_back(point.x, point.y, point.z);
-        }
-        return res;
-    }
-
-    /*!
-    * @copydoc Geometry::xym()
-    */
-    std::vector<std::tuple<double, double, double>> xym_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        for (const auto& point : m_points)
-        {
-            res.emplace_back(point.x, point.y, point.m);
-        }
-        return res;
-    }
-
-    /*!
-    * @copydoc Geometry::xyzm()
-    */
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
-    {
-        std::vector<std::tuple<double, double, double, double>> res;
-        for (const auto& point : m_points)
-        {
-            res.emplace_back(point.x, point.y, point.z, point.m);
-        }
-        return res;
     }
 
     /*!
@@ -150,6 +84,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
      */
     static MultiPoint from_json(const std::string& json)
     {
+        /// @todo (pavel) read properties to specify z, m and zm
         nlohmann::json j = nlohmann::json::parse(json);
         std::string type = j.at("type").get<std::string>();
         if (type != "MultiPoint")
@@ -199,7 +134,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
                 ss << ",";
             }
             const auto& p = m_points[i];
-            switch (p.dimension)
+            switch (p.dim())
             {
                 case DimensionType::XY:
                 {
@@ -228,17 +163,18 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
     }
 
     /*!
-     * @brief creates a Point from a WKT string
+     * @brief creates a MultiPoint from a WKT string
      *
      * @param wkt the WKT string
-     * @return a Point object
+     * @return a MultiPoint object
      *
      * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
      *
      * @since 0.0.1
      */
-    static MultiPoint from_wkt(const std::string& wkt)
+    static MultiPoint from_wkt(const std::string&)
     {
+
         throw exceptions::shapes_exception("not implemented");
     }
 

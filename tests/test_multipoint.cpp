@@ -47,10 +47,10 @@ TEST_CASE("MultiPoint tests")
     SECTION("2d multipoint - bounds")
     {
         MultiPoint mp = {{1.0, 2.0}, {3.0, 4.0}};
-        CHECK(mp.bounds.maxx == 3.0);
-        CHECK(mp.bounds.maxy == 4.0);
-        CHECK(mp.bounds.minx == 1.0);
-        CHECK(mp.bounds.miny == 2.0);
+        CHECK(mp.bounds().maxx == 3.0);
+        CHECK(mp.bounds().maxy == 4.0);
+        CHECK(mp.bounds().minx == 1.0);
+        CHECK(mp.bounds().miny == 2.0);
     }
 
     SECTION("2d multipoint - for each")

@@ -17,7 +17,7 @@ TEST_CASE("Point tests")
         Point p;
         CHECK(p.x == 0);
         CHECK(p.y == 0);
-        CHECK(p.dimension == DimensionType::XY);
+        CHECK(p.dim() == DimensionType::XY);
     }
 
     SECTION("2d point constructor - initializer list")
@@ -26,7 +26,7 @@ TEST_CASE("Point tests")
         CHECK(p.x == 1);
         CHECK(p.y == 2);
         CHECK(p.z == 0);
-        CHECK(p.dimension == DimensionType::XY);
+        CHECK(p.dim() == DimensionType::XY);
     }
 
     SECTION("3d point constructor - initializer list")
@@ -35,7 +35,7 @@ TEST_CASE("Point tests")
         CHECK(p.x == 1);
         CHECK(p.y == 2);
         CHECK(p.z == 3);
-        CHECK(p.dimension == DimensionType::XYZ);
+        CHECK(p.dim() == DimensionType::XYZ);
         CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
     }
 
@@ -44,7 +44,7 @@ TEST_CASE("Point tests")
         auto p = Point::from_json(R"({"type": "Point", "coordinates": [1.0, 2.0]})");
         CHECK(p.x == 1.0);
         CHECK(p.y == 2.0);
-        CHECK(p.dimension == DimensionType::XY);
+        CHECK(p.dim() == DimensionType::XY);
         CHECK(p.type_str() == "Point");
     }
 
@@ -54,7 +54,7 @@ TEST_CASE("Point tests")
         CHECK(p.x == 1.0);
         CHECK(p.y == 2.0);
         CHECK(p.z == 3.0);
-        CHECK(p.dimension == DimensionType::XYZ);
+        CHECK(p.dim() == DimensionType::XYZ);
         CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
         CHECK(p.type_str() == "Point");
     }
@@ -125,7 +125,7 @@ TEST_CASE("Point tests")
             {"   POINT     ZM     (    1          2    5       9)  ", 1.0, 2.0, 5.0, 9.0, GeometryDetailedType::POINTZM, DimensionType::XYZM},
         };
 
-        for (auto test_case : test_cases)
+        for (const auto test_case : test_cases)
         {
             CAPTURE(test_case.wkt);
             CAPTURE(test_case.x);
@@ -139,7 +139,7 @@ TEST_CASE("Point tests")
             CHECK(p.z == test_case.z);
             CHECK(p.m == test_case.m);
             CHECK(p.detailed_type() == test_case.detailed_type);
-            CHECK(p.dimension == test_case.dimension);
+            CHECK(p.dim() == test_case.dimension);
         }
     }
 
@@ -205,7 +205,7 @@ TEST_CASE("Point tests")
         CHECK(p.z == 0);
         CHECK(p.m == 0);
         CHECK(p.detailed_type() == GeometryDetailedType::POINT);
-        CHECK(p.dimension == DimensionType::XY);
+        CHECK(p.dim() == DimensionType::XY);
     }
 
     SECTION("2d point index operator")
