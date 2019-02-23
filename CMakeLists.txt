@@ -70,8 +70,13 @@ add_custom_target(shapes_amalgamate COMMENT "merging the headers"
 
 # re2c lexer
 add_custom_target(shapes_lexer COMMENT "re2c lexer code generation"
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-        COMMAND re2c -i -b -o ${PROJECT_SOURCE_DIR}/include/simo/io/wkt_reader.hpp ${PROJECT_SOURCE_DIR}/include/simo/io/wkt_reader.re)
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/include/simo/io
+        COMMAND re2c -i -b -o wkt_lexer.hpp wkt_lexer.re)
+
+# lemon parser
+add_custom_target(shapes_parser COMMENT "lemon parser"
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/include/simo/io
+        COMMAND lemon -m -q -l wkt_parser.y)
 
 # doxygen
 find_package(Doxygen)

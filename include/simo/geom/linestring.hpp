@@ -5,7 +5,7 @@
 #include <sstream>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/point.hpp>
+#include <simo/geom/point_def.hpp>
 #include <simo/geom/bounds.hpp>
 
 namespace simo
@@ -111,7 +111,7 @@ class LineString : public BasicGeometry<LineString>, public PointCollection<Line
      *
      * @since 0.0.1
      */
-    static LineString from_wkt(const std::string& wkt)
+    static LineString from_wkt(const std::string&)
     {
         throw exceptions::shapes_exception("not implemented");
     }

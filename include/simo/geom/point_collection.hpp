@@ -11,11 +11,10 @@ template <typename Derived>
 class PointCollection
 {
   public:
-
-    /// DOCUMENT ME!
+    /// iterator type
     typedef std::vector<Point>::iterator iterator;
 
-    /// DOCUMENT ME!
+    /// const iterator type
     typedef std::vector<Point>::const_iterator const_iterator;
 
     /*!
