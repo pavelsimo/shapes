@@ -3,7 +3,7 @@
 
 using namespace simo::shapes;
 
-TEST_CASE("Point tests")
+TEST_CASE("Point")
 {
     SECTION("geometry type")
     {

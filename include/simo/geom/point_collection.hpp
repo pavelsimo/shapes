@@ -7,6 +7,9 @@ namespace simo
 namespace shapes
 {
 
+/// @todo (pavel) add method to get first point
+/// @todo (pavel) add method to get last point
+
 template <typename Derived>
 class PointCollection
 {

@@ -16,7 +16,6 @@ namespace shapes
 class LinearRing : public BasicGeometry<LinearRing>, public PointCollection<LinearRing>
 {
   public:
-
     /*!
      * @brief creates an empty LinearRing
      *
@@ -39,8 +38,9 @@ class LinearRing : public BasicGeometry<LinearRing>, public PointCollection<Line
         Bounds& b = bounds();
         for (const auto& coords : init)
         {
-            b.extend(coords[0], coords[1]);
-            m_points.emplace_back(coords);
+            Point p(coords);
+            b.extend(p.x, p.y);
+            m_points.emplace_back(std::move(p));
         }
         check_valid();
     }
@@ -76,7 +76,7 @@ class LinearRing : public BasicGeometry<LinearRing>, public PointCollection<Line
     }
 
   private:
-    void check_valid()
+    void check_valid() const
     {
         if (empty())
         {
@@ -85,8 +85,7 @@ class LinearRing : public BasicGeometry<LinearRing>, public PointCollection<Line
 
         if (m_points.size() < 4)
         {
-            throw exceptions::value_error("number of points found " + std::to_string(m_points.size()) +
-                                          ", LinearRing should be either empty or with 4 or more points");
+            throw exceptions::value_error("LinearRing should be either empty or with 4 or more points");
         }
 
         if (not is_closed())

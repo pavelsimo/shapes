@@ -95,14 +95,6 @@ class Geometry
     virtual Bounds& bounds() = 0;
 
     /*!
-     * @brief returns a clone of the given geometry
-     * @return a geometry clone
-     *
-     * @since 0.0.1
-     */
-    virtual std::unique_ptr<Geometry> clone() = 0;
-
-    /*!
      * @brief returns the geometry (x, y) coordinates as a tuple
      * @return a vector of (x, y) tuples
      *
@@ -164,6 +156,7 @@ template <typename Derived>
 class BasicGeometry : public Geometry
 {
   public:
+
     /// serialization precision
     int8_t precision = 1;
 
@@ -358,11 +351,6 @@ class BasicGeometry : public Geometry
     {
         return static_cast<const Derived*>(this)->size_();
     }
-
-    std::unique_ptr<Geometry> clone() override
-    {
-        return std::unique_ptr<Derived>(new Derived(*static_cast<Derived*>(this)));
-    };
 
     std::vector<std::tuple<double, double>> xy() const override
     {

@@ -38,8 +38,9 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         Bounds& b = bounds();
         for (const auto& coords : init)
         {
-            b.extend(coords[0], coords[1]);
-            m_points.emplace_back(coords);
+            Point p(coords);
+            b.extend(p.x, p.y);
+            m_points.emplace_back(std::move(p));
         }
     }
 

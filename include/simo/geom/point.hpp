@@ -139,15 +139,15 @@ class Point : public BasicGeometry<Point>
     }
 
     /*!
-       * @brief creates a Point from coordinates (x, y, z, m)
-       *
-       * @param x the x-coordinate value
-       * @param y the y-coordinate value
-       * @param z the z-coordinate value
-       * @param m the m-coordinate value
-       *
-       * @since 0.0.1
-       */
+     * @brief creates a Point from coordinates (x, y, z, m)
+     *
+     * @param x the x-coordinate value
+     * @param y the y-coordinate value
+     * @param z the z-coordinate value
+     * @param m the m-coordinate value
+     *
+     * @since 0.0.1
+     */
     static Point from_xyzm(double x, double y, double z, double m)
     {
         return {x, y, z, m};
@@ -189,13 +189,11 @@ class Point : public BasicGeometry<Point>
         }
         else
         {
-            throw exceptions::shapes_exception("invalid dimensions");
+            throw exceptions::value_error("invalid point");
         }
     }
 
-    /*!
-     * @private
-     */
+    /// @private
     GeometryType type_() const
     {
         return GeometryType::POINT;
@@ -337,7 +335,7 @@ class Point : public BasicGeometry<Point>
         {
             return {coords[0], coords[1], coords[2], coords[3]};
         }
-        throw exceptions::parse_error("invalid dimensions");
+        throw exceptions::parse_error("");
     }
 
     /*!
@@ -393,7 +391,7 @@ class Point : public BasicGeometry<Point>
             case DimensionType::XYZM:
                 return {result.coords[0], result.coords[1], result.coords[2], result.coords[3]};
             default:
-                throw exceptions::parse_error("parser error");
+                throw exceptions::parse_error("");
         }
     }
 

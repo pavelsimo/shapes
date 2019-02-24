@@ -38,8 +38,9 @@ class LineString : public BasicGeometry<LineString>, public PointCollection<Line
         Bounds& b = bounds();
         for (const auto& coords : init)
         {
-            b.extend(coords[0], coords[1]);
-            m_points.emplace_back(coords);
+            Point p(coords);
+            b.extend(p.x, p.y);
+            m_points.emplace_back(std::move(p));
         }
         check_valid();
     }
@@ -135,15 +136,14 @@ class LineString : public BasicGeometry<LineString>, public PointCollection<Line
     void check_valid()
     {
         /// @todo (pavel): substitute with is_empty
-        if (m_points.size() == 0)
+        if (empty())
         {
             return;
         }
 
         if (m_points.size() < 2)
         {
-            throw exceptions::value_error("number of points found " + std::to_string(m_points.size()) +
-                                          ", LineString should be either empty or with 2 or more points");
+            throw exceptions::value_error("LineString should be either empty or with 2 or more points");
         }
 
         if (m_points.size() == 2)
