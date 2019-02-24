@@ -6,7 +6,7 @@
 A lightweight header-only planar geometry library for Modern C++
 
 - Inspired by python [shapely](https://pypi.org/project/Shapely/) 
-- Complaint with OGC [Simple Features](https://en.wikipedia.org/wiki/Simple_Features)
+- Based on OGC [Simple Features](https://en.wikipedia.org/wiki/Simple_Features)
 
 ## Installation
 
