@@ -40,8 +40,10 @@ SOFTWARE.
 
 #include <simo/shapes_fwd.hpp>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/point.hpp>
 #include <simo/geom/bounds.hpp>
+#include <simo/geom/point.hpp>
+#include <simo/geom/linearring.hpp>
+#include <simo/geom/linestring.hpp>
 #include <simo/geom/multipoint.hpp>
 
 #endif  // SIMO_SHAPES_HPP

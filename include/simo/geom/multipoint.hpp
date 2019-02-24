@@ -35,12 +35,11 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
     MultiPoint(std::initializer_list<std::initializer_list<T>> init)
     {
         m_points.reserve(init.size());
+        Bounds& b = bounds();
         for (const auto& coords : init)
         {
-            Point p(coords);
-            Bounds& b = bounds();
-            b.extend(p.x, p.y);
-            m_points.push_back(std::move(p));
+            b.extend(coords[0], coords[1]);
+            m_points.emplace_back(coords);
         }
     }
 
@@ -53,7 +52,12 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
      */
     explicit MultiPoint(const std::vector<Point>& points)
     {
-        m_points = points;
+        m_points  = points;
+        Bounds& b = bounds();
+        for (const auto& p : m_points)
+        {
+            b.extend(p.x, p.y);
+        }
     }
 
     /*!
@@ -175,7 +179,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
     static MultiPoint from_wkt(const std::string&)
     {
 
-        throw exceptions::shapes_exception("not implemented");
+        throw exceptions::not_implemented_error();
     }
 
     /*!

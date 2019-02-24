@@ -36,8 +36,8 @@ enum class GeometryType
     TIN                = 16
 };
 
-/// primitive type for the geometry
-enum class PrimitiveType
+/// element type for the geometry
+enum class ElementType
 {
     POINT      = 1,
     LINESTRING = 2,

@@ -13,7 +13,6 @@ namespace shapes
 class wkt_reader
 {
   public:
-
     /*!
      * @brief creates a WKT reader
      *
@@ -76,7 +75,6 @@ class wkt_reader
     }
 
   private:
-
     /// pointer to the parser
     void* m_parser = nullptr;
 };

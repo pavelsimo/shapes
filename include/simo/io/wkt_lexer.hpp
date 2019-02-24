@@ -11,7 +11,6 @@ namespace shapes
 class wkt_lexer
 {
   public:
-
     wkt_lexer(const char* source)
         : content(source)
     {
@@ -27,248 +26,584 @@ class wkt_lexer
 
         start = cursor;
 
-        
-{
-	char yych;
-	unsigned int yyaccept = 0;
-	static const unsigned char yybm[] = {
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0, 128, 128,   0,   0, 128,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		128,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		 64,  64,  64,  64,  64,  64,  64,  64, 
-		 64,  64,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-	};
-	yych = *cursor;
-	if (yych <= ')') {
-		if (yych <= '\r') {
-			if (yych <= 0x08) {
-				if (yych >= 0x01) goto shapes_wkt_lexer_4;
-			} else {
-				if (yych <= '\n') goto shapes_wkt_lexer_6;
-				if (yych <= '\f') goto shapes_wkt_lexer_4;
-				goto shapes_wkt_lexer_6;
-			}
-		} else {
-			if (yych <= ' ') {
-				if (yych <= 0x1F) goto shapes_wkt_lexer_4;
-				goto shapes_wkt_lexer_6;
-			} else {
-				if (yych <= '\'') goto shapes_wkt_lexer_4;
-				if (yych <= '(') goto shapes_wkt_lexer_8;
-				goto shapes_wkt_lexer_10;
-			}
-		}
-	} else {
-		if (yych <= '0') {
-			if (yych <= ',') {
-				if (yych <= '+') goto shapes_wkt_lexer_4;
-				goto shapes_wkt_lexer_12;
-			} else {
-				if (yych <= '-') goto shapes_wkt_lexer_14;
-				if (yych <= '/') goto shapes_wkt_lexer_4;
-				goto shapes_wkt_lexer_15;
-			}
-		} else {
-			if (yych <= 'E') {
-				if (yych <= '9') goto shapes_wkt_lexer_17;
-				if (yych <= 'D') goto shapes_wkt_lexer_4;
-				goto shapes_wkt_lexer_19;
-			} else {
-				if (yych == 'P') goto shapes_wkt_lexer_20;
-				goto shapes_wkt_lexer_4;
-			}
-		}
-	}
-	++cursor;
-	{ return WKT_END_OF_INPUT; }
-shapes_wkt_lexer_4:
-	++cursor;
-shapes_wkt_lexer_5:
-	{ return WKT_PARSE_ERROR; }
-shapes_wkt_lexer_6:
-	++cursor;
-	{ return scan(); }
-shapes_wkt_lexer_8:
-	++cursor;
-	{ return WKT_LPAREN; }
-shapes_wkt_lexer_10:
-	++cursor;
-	{ return WKT_RPAREN; }
-shapes_wkt_lexer_12:
-	++cursor;
-	{ return WKT_COMMA; }
-shapes_wkt_lexer_14:
-	yych = *++cursor;
-	if (yych <= '/') goto shapes_wkt_lexer_5;
-	if (yych <= '0') goto shapes_wkt_lexer_15;
-	if (yych <= '9') goto shapes_wkt_lexer_17;
-	goto shapes_wkt_lexer_5;
-shapes_wkt_lexer_15:
-	yyaccept = 0;
-	yych = *(marker = ++cursor);
-	if (yych <= 'D') {
-		if (yych == '.') goto shapes_wkt_lexer_21;
-	} else {
-		if (yych <= 'E') goto shapes_wkt_lexer_23;
-		if (yych == 'e') goto shapes_wkt_lexer_23;
-	}
-shapes_wkt_lexer_16:
-	{ return WKT_NUM; }
-shapes_wkt_lexer_17:
-	yyaccept = 0;
-	yych = *(marker = ++cursor);
-	if (yybm[0+yych] & 64) {
-		goto shapes_wkt_lexer_17;
-	}
-	if (yych <= 'D') {
-		if (yych == '.') goto shapes_wkt_lexer_21;
-		goto shapes_wkt_lexer_16;
-	} else {
-		if (yych <= 'E') goto shapes_wkt_lexer_23;
-		if (yych == 'e') goto shapes_wkt_lexer_23;
-		goto shapes_wkt_lexer_16;
-	}
-shapes_wkt_lexer_19:
-	yyaccept = 1;
-	yych = *(marker = ++cursor);
-	if (yych == 'M') goto shapes_wkt_lexer_24;
-	goto shapes_wkt_lexer_5;
-shapes_wkt_lexer_20:
-	yyaccept = 1;
-	yych = *(marker = ++cursor);
-	if (yych == 'O') goto shapes_wkt_lexer_25;
-	goto shapes_wkt_lexer_5;
-shapes_wkt_lexer_21:
-	yych = *++cursor;
-	if (yych <= '/') goto shapes_wkt_lexer_22;
-	if (yych <= '9') goto shapes_wkt_lexer_26;
-shapes_wkt_lexer_22:
-	cursor = marker;
-	if (yyaccept <= 1) {
-		if (yyaccept == 0) {
-			goto shapes_wkt_lexer_16;
-		} else {
-			goto shapes_wkt_lexer_5;
-		}
-	} else {
-		goto shapes_wkt_lexer_38;
-	}
-shapes_wkt_lexer_23:
-	yych = *++cursor;
-	if (yych <= ',') {
-		if (yych == '+') goto shapes_wkt_lexer_28;
-		goto shapes_wkt_lexer_22;
-	} else {
-		if (yych <= '-') goto shapes_wkt_lexer_28;
-		if (yych <= '/') goto shapes_wkt_lexer_22;
-		if (yych <= '9') goto shapes_wkt_lexer_29;
-		goto shapes_wkt_lexer_22;
-	}
-shapes_wkt_lexer_24:
-	yych = *++cursor;
-	if (yych == 'P') goto shapes_wkt_lexer_31;
-	goto shapes_wkt_lexer_22;
-shapes_wkt_lexer_25:
-	yych = *++cursor;
-	if (yych == 'I') goto shapes_wkt_lexer_32;
-	goto shapes_wkt_lexer_22;
-shapes_wkt_lexer_26:
-	yyaccept = 0;
-	yych = *(marker = ++cursor);
-	if (yych <= 'D') {
-		if (yych <= '/') goto shapes_wkt_lexer_16;
-		if (yych <= '9') goto shapes_wkt_lexer_26;
-		goto shapes_wkt_lexer_16;
-	} else {
-		if (yych <= 'E') goto shapes_wkt_lexer_23;
-		if (yych == 'e') goto shapes_wkt_lexer_23;
-		goto shapes_wkt_lexer_16;
-	}
-shapes_wkt_lexer_28:
-	yych = *++cursor;
-	if (yych <= '/') goto shapes_wkt_lexer_22;
-	if (yych >= ':') goto shapes_wkt_lexer_22;
-shapes_wkt_lexer_29:
-	yych = *++cursor;
-	if (yych <= '/') goto shapes_wkt_lexer_16;
-	if (yych <= '9') goto shapes_wkt_lexer_29;
-	goto shapes_wkt_lexer_16;
-shapes_wkt_lexer_31:
-	yych = *++cursor;
-	if (yych == 'T') goto shapes_wkt_lexer_33;
-	goto shapes_wkt_lexer_22;
-shapes_wkt_lexer_32:
-	yych = *++cursor;
-	if (yych == 'N') goto shapes_wkt_lexer_34;
-	goto shapes_wkt_lexer_22;
-shapes_wkt_lexer_33:
-	yych = *++cursor;
-	if (yych == 'Y') goto shapes_wkt_lexer_35;
-	goto shapes_wkt_lexer_22;
-shapes_wkt_lexer_34:
-	yych = *++cursor;
-	if (yych == 'T') goto shapes_wkt_lexer_37;
-	goto shapes_wkt_lexer_22;
-shapes_wkt_lexer_35:
-	++cursor;
-	{ return WKT_EMPTY_SET; }
-shapes_wkt_lexer_37:
-	yyaccept = 2;
-	yych = *(marker = ++cursor);
-	if (yybm[0+yych] & 128) {
-		goto shapes_wkt_lexer_39;
-	}
-	if (yych == 'M') goto shapes_wkt_lexer_41;
-	if (yych == 'Z') goto shapes_wkt_lexer_43;
-shapes_wkt_lexer_38:
-	{ return WKT_POINT_TAGGED_TEXT; }
-shapes_wkt_lexer_39:
-	yych = *++cursor;
-	if (yybm[0+yych] & 128) {
-		goto shapes_wkt_lexer_39;
-	}
-	if (yych == 'M') goto shapes_wkt_lexer_41;
-	if (yych == 'Z') goto shapes_wkt_lexer_43;
-	goto shapes_wkt_lexer_22;
-shapes_wkt_lexer_41:
-	++cursor;
-	{ return WKT_POINT_M_TAGGED_TEXT; }
-shapes_wkt_lexer_43:
-	yych = *++cursor;
-	if (yych == 'M') goto shapes_wkt_lexer_45;
-	{ return WKT_POINT_Z_TAGGED_TEXT; }
-shapes_wkt_lexer_45:
-	++cursor;
-	{ return WKT_POINT_ZM_TAGGED_TEXT; }
-}
-
+        {
+            char yych;
+            unsigned int yyaccept             = 0;
+            static const unsigned char yybm[] = {
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                128,
+                128,
+                0,
+                0,
+                128,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                128,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+            };
+            yych = *cursor;
+            if (yych <= ')')
+            {
+                if (yych <= '\r')
+                {
+                    if (yych <= 0x08)
+                    {
+                        if (yych >= 0x01)
+                            goto shapes_wkt_lexer_4;
+                    }
+                    else
+                    {
+                        if (yych <= '\n')
+                            goto shapes_wkt_lexer_6;
+                        if (yych <= '\f')
+                            goto shapes_wkt_lexer_4;
+                        goto shapes_wkt_lexer_6;
+                    }
+                }
+                else
+                {
+                    if (yych <= ' ')
+                    {
+                        if (yych <= 0x1F)
+                            goto shapes_wkt_lexer_4;
+                        goto shapes_wkt_lexer_6;
+                    }
+                    else
+                    {
+                        if (yych <= '\'')
+                            goto shapes_wkt_lexer_4;
+                        if (yych <= '(')
+                            goto shapes_wkt_lexer_8;
+                        goto shapes_wkt_lexer_10;
+                    }
+                }
+            }
+            else
+            {
+                if (yych <= '0')
+                {
+                    if (yych <= ',')
+                    {
+                        if (yych <= '+')
+                            goto shapes_wkt_lexer_4;
+                        goto shapes_wkt_lexer_12;
+                    }
+                    else
+                    {
+                        if (yych <= '-')
+                            goto shapes_wkt_lexer_14;
+                        if (yych <= '/')
+                            goto shapes_wkt_lexer_4;
+                        goto shapes_wkt_lexer_15;
+                    }
+                }
+                else
+                {
+                    if (yych <= 'E')
+                    {
+                        if (yych <= '9')
+                            goto shapes_wkt_lexer_17;
+                        if (yych <= 'D')
+                            goto shapes_wkt_lexer_4;
+                        goto shapes_wkt_lexer_19;
+                    }
+                    else
+                    {
+                        if (yych == 'P')
+                            goto shapes_wkt_lexer_20;
+                        goto shapes_wkt_lexer_4;
+                    }
+                }
+            }
+            ++cursor;
+            {
+                return WKT_END_OF_INPUT;
+            }
+        shapes_wkt_lexer_4:
+            ++cursor;
+        shapes_wkt_lexer_5:
+        {
+            return WKT_PARSE_ERROR;
+        }
+        shapes_wkt_lexer_6:
+            ++cursor;
+            {
+                return scan();
+            }
+        shapes_wkt_lexer_8:
+            ++cursor;
+            {
+                return WKT_LPAREN;
+            }
+        shapes_wkt_lexer_10:
+            ++cursor;
+            {
+                return WKT_RPAREN;
+            }
+        shapes_wkt_lexer_12:
+            ++cursor;
+            {
+                return WKT_COMMA;
+            }
+        shapes_wkt_lexer_14:
+            yych = *++cursor;
+            if (yych <= '/')
+                goto shapes_wkt_lexer_5;
+            if (yych <= '0')
+                goto shapes_wkt_lexer_15;
+            if (yych <= '9')
+                goto shapes_wkt_lexer_17;
+            goto shapes_wkt_lexer_5;
+        shapes_wkt_lexer_15:
+            yyaccept = 0;
+            yych     = *(marker = ++cursor);
+            if (yych <= 'D')
+            {
+                if (yych == '.')
+                    goto shapes_wkt_lexer_21;
+            }
+            else
+            {
+                if (yych <= 'E')
+                    goto shapes_wkt_lexer_23;
+                if (yych == 'e')
+                    goto shapes_wkt_lexer_23;
+            }
+        shapes_wkt_lexer_16:
+        {
+            return WKT_NUM;
+        }
+        shapes_wkt_lexer_17:
+            yyaccept = 0;
+            yych     = *(marker = ++cursor);
+            if (yybm[0 + yych] & 64)
+            {
+                goto shapes_wkt_lexer_17;
+            }
+            if (yych <= 'D')
+            {
+                if (yych == '.')
+                    goto shapes_wkt_lexer_21;
+                goto shapes_wkt_lexer_16;
+            }
+            else
+            {
+                if (yych <= 'E')
+                    goto shapes_wkt_lexer_23;
+                if (yych == 'e')
+                    goto shapes_wkt_lexer_23;
+                goto shapes_wkt_lexer_16;
+            }
+        shapes_wkt_lexer_19:
+            yyaccept = 1;
+            yych     = *(marker = ++cursor);
+            if (yych == 'M')
+                goto shapes_wkt_lexer_24;
+            goto shapes_wkt_lexer_5;
+        shapes_wkt_lexer_20:
+            yyaccept = 1;
+            yych     = *(marker = ++cursor);
+            if (yych == 'O')
+                goto shapes_wkt_lexer_25;
+            goto shapes_wkt_lexer_5;
+        shapes_wkt_lexer_21:
+            yych = *++cursor;
+            if (yych <= '/')
+                goto shapes_wkt_lexer_22;
+            if (yych <= '9')
+                goto shapes_wkt_lexer_26;
+        shapes_wkt_lexer_22:
+            cursor = marker;
+            if (yyaccept <= 1)
+            {
+                if (yyaccept == 0)
+                {
+                    goto shapes_wkt_lexer_16;
+                }
+                else
+                {
+                    goto shapes_wkt_lexer_5;
+                }
+            }
+            else
+            {
+                goto shapes_wkt_lexer_38;
+            }
+        shapes_wkt_lexer_23:
+            yych = *++cursor;
+            if (yych <= ',')
+            {
+                if (yych == '+')
+                    goto shapes_wkt_lexer_28;
+                goto shapes_wkt_lexer_22;
+            }
+            else
+            {
+                if (yych <= '-')
+                    goto shapes_wkt_lexer_28;
+                if (yych <= '/')
+                    goto shapes_wkt_lexer_22;
+                if (yych <= '9')
+                    goto shapes_wkt_lexer_29;
+                goto shapes_wkt_lexer_22;
+            }
+        shapes_wkt_lexer_24:
+            yych = *++cursor;
+            if (yych == 'P')
+                goto shapes_wkt_lexer_31;
+            goto shapes_wkt_lexer_22;
+        shapes_wkt_lexer_25:
+            yych = *++cursor;
+            if (yych == 'I')
+                goto shapes_wkt_lexer_32;
+            goto shapes_wkt_lexer_22;
+        shapes_wkt_lexer_26:
+            yyaccept = 0;
+            yych     = *(marker = ++cursor);
+            if (yych <= 'D')
+            {
+                if (yych <= '/')
+                    goto shapes_wkt_lexer_16;
+                if (yych <= '9')
+                    goto shapes_wkt_lexer_26;
+                goto shapes_wkt_lexer_16;
+            }
+            else
+            {
+                if (yych <= 'E')
+                    goto shapes_wkt_lexer_23;
+                if (yych == 'e')
+                    goto shapes_wkt_lexer_23;
+                goto shapes_wkt_lexer_16;
+            }
+        shapes_wkt_lexer_28:
+            yych = *++cursor;
+            if (yych <= '/')
+                goto shapes_wkt_lexer_22;
+            if (yych >= ':')
+                goto shapes_wkt_lexer_22;
+        shapes_wkt_lexer_29:
+            yych = *++cursor;
+            if (yych <= '/')
+                goto shapes_wkt_lexer_16;
+            if (yych <= '9')
+                goto shapes_wkt_lexer_29;
+            goto shapes_wkt_lexer_16;
+        shapes_wkt_lexer_31:
+            yych = *++cursor;
+            if (yych == 'T')
+                goto shapes_wkt_lexer_33;
+            goto shapes_wkt_lexer_22;
+        shapes_wkt_lexer_32:
+            yych = *++cursor;
+            if (yych == 'N')
+                goto shapes_wkt_lexer_34;
+            goto shapes_wkt_lexer_22;
+        shapes_wkt_lexer_33:
+            yych = *++cursor;
+            if (yych == 'Y')
+                goto shapes_wkt_lexer_35;
+            goto shapes_wkt_lexer_22;
+        shapes_wkt_lexer_34:
+            yych = *++cursor;
+            if (yych == 'T')
+                goto shapes_wkt_lexer_37;
+            goto shapes_wkt_lexer_22;
+        shapes_wkt_lexer_35:
+            ++cursor;
+            {
+                return WKT_EMPTY_SET;
+            }
+        shapes_wkt_lexer_37:
+            yyaccept = 2;
+            yych     = *(marker = ++cursor);
+            if (yybm[0 + yych] & 128)
+            {
+                goto shapes_wkt_lexer_39;
+            }
+            if (yych == 'M')
+                goto shapes_wkt_lexer_41;
+            if (yych == 'Z')
+                goto shapes_wkt_lexer_43;
+        shapes_wkt_lexer_38:
+        {
+            return WKT_POINT_TAGGED_TEXT;
+        }
+        shapes_wkt_lexer_39:
+            yych = *++cursor;
+            if (yybm[0 + yych] & 128)
+            {
+                goto shapes_wkt_lexer_39;
+            }
+            if (yych == 'M')
+                goto shapes_wkt_lexer_41;
+            if (yych == 'Z')
+                goto shapes_wkt_lexer_43;
+            goto shapes_wkt_lexer_22;
+        shapes_wkt_lexer_41:
+            ++cursor;
+            {
+                return WKT_POINT_M_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_43:
+            yych = *++cursor;
+            if (yych == 'M')
+                goto shapes_wkt_lexer_45;
+            {
+                return WKT_POINT_Z_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_45:
+            ++cursor;
+            {
+                return WKT_POINT_ZM_TAGGED_TEXT;
+            }
+        }
     }
 
     std::string get_token() const

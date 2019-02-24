@@ -11,7 +11,6 @@ template <typename Derived>
 class PointCollection
 {
   public:
-
     /// iterator type
     typedef std::vector<Point>::iterator iterator;
 
@@ -80,9 +79,7 @@ class PointCollection
         return m_points.at(pos);
     }
 
-    /*!
-     * @private
-     */
+    /// @private
     std::vector<std::tuple<double, double>> xy_() const
     {
         std::vector<std::tuple<double, double>> res;
@@ -93,9 +90,7 @@ class PointCollection
         return res;
     }
 
-    /*!
-     * @private
-     */
+    /// @private
     std::vector<std::tuple<double, double, double>> xyz_() const
     {
         std::vector<std::tuple<double, double, double>> res;
@@ -106,9 +101,7 @@ class PointCollection
         return res;
     }
 
-    /*!
-     * @private
-     */
+    /// @private
     std::vector<std::tuple<double, double, double>> xym_() const
     {
         std::vector<std::tuple<double, double, double>> res;
@@ -119,9 +112,7 @@ class PointCollection
         return res;
     }
 
-    /*!
-     * @private
-     */
+    /// @private
     std::vector<std::tuple<double, double, double, double>> xyzm_() const
     {
         std::vector<std::tuple<double, double, double, double>> res;
@@ -132,20 +123,27 @@ class PointCollection
         return res;
     }
 
-    /*!
-     * @private
-     */
+    /// @private
     bool empty_() const
     {
         return m_points.empty();
     }
 
-    /*!
-     * @private
-     */
+    /// @private
     size_t size_() const
     {
         return m_points.size();
+    }
+
+    /// @private
+    bool is_closed_() const
+    {
+        if (m_points.size() < 2)
+        {
+            return false;
+        }
+        size_t last_index = m_points.size() - 1;
+        return m_points[0] == m_points[last_index];
     }
 
   protected:

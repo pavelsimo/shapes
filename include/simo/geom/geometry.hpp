@@ -149,6 +149,14 @@ class Geometry
      * @since 0.0.1
      */
     virtual bool has_m() const = 0;
+
+    /*!
+     * @brief whether the geometry is closed
+     * @return true if the geometry is closed, otherwise false
+     *
+     * @since 0.0.1
+     */
+    virtual bool is_closed() const = 0;
 };
 
 /// basic geometry type
@@ -399,6 +407,11 @@ class BasicGeometry : public Geometry
     bool has_m() const override
     {
         return dim_ == DimensionType::XYM or dim_ == DimensionType::XYZM;
+    }
+
+    bool is_closed() const override
+    {
+        return static_cast<const Derived*>(this)->is_closed_();
     }
 
     int8_t ndim() const override

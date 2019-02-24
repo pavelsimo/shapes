@@ -5,7 +5,7 @@
 #include <sstream>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/point_def.hpp>
+#include <simo/geom/point_collection.hpp>
 #include <simo/geom/bounds.hpp>
 
 namespace simo
@@ -35,13 +35,13 @@ class LineString : public BasicGeometry<LineString>, public PointCollection<Line
     LineString(std::initializer_list<std::initializer_list<T>> init)
     {
         m_points.reserve(init.size());
+        Bounds& b = bounds();
         for (const auto& coords : init)
         {
-            Point p(coords);
-            Bounds& b = bounds();
-            b.extend(p.x, p.y);
-            m_points.push_back(std::move(p));
+            b.extend(coords[0], coords[1]);
+            m_points.emplace_back(coords);
         }
+        check_valid();
     }
 
     /*!
@@ -84,7 +84,7 @@ class LineString : public BasicGeometry<LineString>, public PointCollection<Line
      */
     static LineString from_json(const std::string& json)
     {
-        throw exceptions::shapes_exception("not implemented");
+        throw exceptions::not_implemented_error();
     }
 
     /*!
@@ -98,7 +98,7 @@ class LineString : public BasicGeometry<LineString>, public PointCollection<Line
      */
     std::string json()
     {
-        throw exceptions::shapes_exception("not implemented");
+        throw exceptions::not_implemented_error();
     }
 
     /*!
@@ -113,7 +113,7 @@ class LineString : public BasicGeometry<LineString>, public PointCollection<Line
      */
     static LineString from_wkt(const std::string&)
     {
-        throw exceptions::shapes_exception("not implemented");
+        throw exceptions::not_implemented_error();
     }
 
     /*!
@@ -128,7 +128,31 @@ class LineString : public BasicGeometry<LineString>, public PointCollection<Line
      */
     std::string wkt()
     {
-        throw exceptions::shapes_exception("not implemented");
+        throw exceptions::not_implemented_error();
+    }
+
+  private:
+    void check_valid()
+    {
+        /// @todo (pavel): substitute with is_empty
+        if (m_points.size() == 0)
+        {
+            return;
+        }
+
+        if (m_points.size() < 2)
+        {
+            throw exceptions::value_error("number of points found " + std::to_string(m_points.size()) +
+                                          ", LineString should be either empty or with 2 or more points");
+        }
+
+        if (m_points.size() == 2)
+        {
+            if (m_points[0] == m_points[1])
+            {
+                throw exceptions::value_error("LineString with exactly two equal points");
+            }
+        }
     }
 };
 

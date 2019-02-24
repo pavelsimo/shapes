@@ -199,13 +199,13 @@ TEST_CASE("Point tests")
 
     SECTION("empty point - from wkt")
     {
-//        auto p = Point::from_wkt("POINT EMPTY");
-//        CHECK(p.x == 0);
-//        CHECK(p.y == 0);
-//        CHECK(p.z == 0);
-//        CHECK(p.m == 0);
-//        CHECK(p.detailed_type() == GeometryDetailedType::POINT);
-//        CHECK(p.dim() == DimensionType::XY);
+        //        auto p = Point::from_wkt("POINT EMPTY");
+        //        CHECK(p.x == 0);
+        //        CHECK(p.y == 0);
+        //        CHECK(p.z == 0);
+        //        CHECK(p.m == 0);
+        //        CHECK(p.detailed_type() == GeometryDetailedType::POINT);
+        //        CHECK(p.dim() == DimensionType::XY);
     }
 
     SECTION("2d point index operator")

@@ -45,6 +45,31 @@ class parse_error : public shapes_exception
     }
 };
 
+class not_implemented_error : public shapes_exception
+{
+  public:
+    not_implemented_error()
+        : shapes_exception("not implemented error")
+    {
+    }
+
+    explicit not_implemented_error(const std::string& reason)
+        : shapes_exception("not implemented error")
+    {
+        set_reason(reason);
+    }
+};
+
+class value_error : public shapes_exception
+{
+  public:
+    explicit value_error(const std::string& reason)
+        : shapes_exception("value error")
+    {
+        set_reason(reason);
+    }
+};
+
 }  // namespace exceptions
 }  // namespace shapes
 }  // namespace simo

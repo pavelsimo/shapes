@@ -201,28 +201,28 @@ class Point : public BasicGeometry<Point>
         return GeometryType::POINT;
     }
 
-    /*!
-     * @private
-     */
+    /// @private
     std::string type_str_() const
     {
         return "Point";
     }
 
-    /*!
-     * @private
-     */
+    /// @private
     bool empty_() const
     {
         return false;
     }
 
-    /*!
-     * @private
-     */
+    /// @private
     size_t size_() const
     {
         return static_cast<size_t>(ndim());
+    }
+
+    /// @private
+    bool is_closed_() const
+    {
+        return false;
     }
 
     /*!
@@ -233,25 +233,19 @@ class Point : public BasicGeometry<Point>
         return {std::make_tuple(x, y)};
     }
 
-   /*!
-    * @private
-    */
+    /// @private
     std::vector<std::tuple<double, double, double>> xyz_() const
     {
         return {std::make_tuple(x, y, z)};
     }
 
-   /*!
-    * @private
-    */
+    /// @private
     std::vector<std::tuple<double, double, double>> xym_() const
     {
         return {std::make_tuple(x, y, m)};
     }
 
-   /*!
-    * @private
-    */
+    /// @private
     std::vector<std::tuple<double, double, double, double>> xyzm_() const
     {
         return {std::make_tuple(x, y, z, m)};
@@ -288,6 +282,26 @@ class Point : public BasicGeometry<Point>
     double operator[](size_t pos)
     {
         return at(pos);
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param other
+     * @return
+     */
+    bool operator==(const Point& other) const
+    {
+        return x == other.x and y == other.y and z == other.z and m == other.m;
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param other
+     * @return
+     */
+    bool operator!=(const Point& other) const
+    {
+        return not(*this == other);
     }
 
     /*!
