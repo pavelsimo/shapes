@@ -11,6 +11,7 @@ template <typename Derived>
 class PointCollection
 {
   public:
+
     /// iterator type
     typedef std::vector<Point>::iterator iterator;
 
@@ -18,8 +19,9 @@ class PointCollection
     typedef std::vector<Point>::const_iterator const_iterator;
 
     /*!
-     * @brief DOCUMENT ME!
-     * @return
+     * @return returns an iterator pointing to the first element in the PointCollection
+     *
+     * @since 0.0.1
      */
     iterator begin()
     {
@@ -27,8 +29,9 @@ class PointCollection
     }
 
     /*!
-     * @brief DOCUMENT ME!
-     * @return
+     * @return returns a constant iterator pointing to the first element in the PointCollection
+     *
+     * @since 0.0.1
      */
     const_iterator begin() const
     {
@@ -36,8 +39,9 @@ class PointCollection
     }
 
     /*!
+     * @return returns an iterator pointing to the past-the-end element in the PointCollection
      *
-     * @return
+     * @since 0.0.1
      */
     iterator end()
     {
@@ -45,8 +49,9 @@ class PointCollection
     }
 
     /*!
+     * @return returns a const iterator pointing to the past-the-end element in the PointCollection
      *
-     * @return
+     * @since 0.0.1
      */
     const_iterator end() const
     {
@@ -54,21 +59,23 @@ class PointCollection
     }
 
     /*!
+     * @param pos the element position
+     * @return returns a reference to the element at position n in the vector
      *
-     * @param pos
-     * @return
+     * @since 0.0.1
      */
-    Point at(size_t pos)
+    Point& at(size_t pos)
     {
         return m_points.at(pos);
     }
 
     /*!
+     * @param pos the element position
+     * @return returns a reference to the element at position n in the vector
      *
-     * @param pos
-     * @return
+     * @since 0.0.1
      */
-    Point operator[](size_t pos)
+    Point& operator[](size_t pos)
     {
         return m_points.at(pos);
     }

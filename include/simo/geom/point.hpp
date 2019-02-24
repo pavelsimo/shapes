@@ -233,7 +233,7 @@ class Point : public BasicGeometry<Point>
         return {std::make_tuple(x, y)};
     }
 
-    /*!
+   /*!
     * @private
     */
     std::vector<std::tuple<double, double, double>> xyz_() const
@@ -241,7 +241,7 @@ class Point : public BasicGeometry<Point>
         return {std::make_tuple(x, y, z)};
     }
 
-    /*!
+   /*!
     * @private
     */
     std::vector<std::tuple<double, double, double>> xym_() const
@@ -249,7 +249,7 @@ class Point : public BasicGeometry<Point>
         return {std::make_tuple(x, y, m)};
     }
 
-    /*!
+   /*!
     * @private
     */
     std::vector<std::tuple<double, double, double, double>> xyzm_() const

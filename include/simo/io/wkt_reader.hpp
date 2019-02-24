@@ -13,16 +13,31 @@ namespace shapes
 class wkt_reader
 {
   public:
+
+    /*!
+     * @brief creates a WKT reader
+     *
+     * @since 0.0.1
+     */
     wkt_reader()
         : m_parser(ParseAlloc(malloc))
     {
     }
 
+    /// wkt_reader destructor
     ~wkt_reader()
     {
         ParseFree(m_parser, free);
     }
 
+    /*!
+     * @brief parse the given wkt string
+     *
+     * @param wkt the wkt string
+     * @return wkt_result object
+     *
+     * @since 0.0.1
+     */
     wkt_result read(const char* wkt)
     {
         wkt_lexer lexer(wkt);
@@ -30,7 +45,7 @@ class wkt_reader
         while (true)
         {
             int token = lexer.scan();
-            std::cout << lexer.get_token() << "\t: " << token << "\n";
+            //std::cout << lexer.get_token() << "\t: " << token << "\n";
 
             if (token == WKT_END_OF_INPUT)
             {
@@ -61,6 +76,7 @@ class wkt_reader
     }
 
   private:
+
     /// pointer to the parser
     void* m_parser = nullptr;
 };
