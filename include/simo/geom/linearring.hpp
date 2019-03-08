@@ -15,6 +15,7 @@ namespace shapes
 
 class LinearRing : public BasicGeometry<LinearRing>, public PointCollection<LinearRing>
 {
+  /// @todo (pavel) add missing orientation of the ring: cw, ccw
   public:
     /*!
      * @brief creates an empty LinearRing
@@ -42,13 +43,14 @@ class LinearRing : public BasicGeometry<LinearRing>, public PointCollection<Line
             b.extend(p.x, p.y);
             m_points.emplace_back(std::move(p));
         }
-        check_valid();
+        valid_or_throw();
     }
 
     /*!
      * @brief creates a LinearRing from a given point vector
      *
      * @param points the point list
+     * @param validate whether to validate the geometry
      *
      * @since 0.0.1
      */
@@ -60,7 +62,7 @@ class LinearRing : public BasicGeometry<LinearRing>, public PointCollection<Line
         {
             b.extend(p.x, p.y);
         }
-        check_valid();
+        valid_or_throw();
     }
 
     /// @private
@@ -76,7 +78,8 @@ class LinearRing : public BasicGeometry<LinearRing>, public PointCollection<Line
     }
 
   private:
-    void check_valid() const
+
+    void valid_or_throw() const
     {
         if (empty())
         {

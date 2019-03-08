@@ -42,7 +42,7 @@ class LineString : public BasicGeometry<LineString>, public PointCollection<Line
             b.extend(p.x, p.y);
             m_points.emplace_back(std::move(p));
         }
-        check_valid();
+        valid_or_throw();
     }
 
     /*!
@@ -83,7 +83,7 @@ class LineString : public BasicGeometry<LineString>, public PointCollection<Line
      *
      * @since 0.0.1
      */
-    static LineString from_json(const std::string& json)
+    static LineString from_json(const std::string&)
     {
         throw exceptions::not_implemented_error();
     }
@@ -133,9 +133,9 @@ class LineString : public BasicGeometry<LineString>, public PointCollection<Line
     }
 
   private:
-    void check_valid()
+
+    void valid_or_throw()
     {
-        /// @todo (pavel): substitute with is_empty
         if (empty())
         {
             return;
