@@ -15,12 +15,12 @@ namespace shapes
 
 class Polygon : public BasicGeometry<Polygon>
 {
-  public:
-    ///
-    std::unique_ptr<LinearRing> exterior;
+public:
+    /// linear ring that represents the shell of the polygon
+    LinearRing exterior;
 
-    ///
-    std::unique_ptr<std::vector<LinearRing>> interiors;
+    /// collection of linear rings that represent the holes of the polygon
+    std::vector<LinearRing> interiors;
 
     /*!
      * @brief creates an empty Polygon
@@ -30,22 +30,41 @@ class Polygon : public BasicGeometry<Polygon>
     Polygon() = default;
 
     /*!
-     * @brief DOCUMENT ME!
-     * @param exterior
+     * @brief creates a Polygon
+     * @param shell the shell of the polygon as a Point sequence
+     *
+     * @since 0.0.1
      */
-    explicit Polygon(const std::vector<Point>& exterior)
-        : exterior(std::make_unique<LinearRing>(exterior))
+    explicit Polygon(const std::vector<Point>& shell)
+        : exterior(shell)
     {
+        Bounds& b = bounds();
+        Bounds& b_ext = exterior.bounds();
+        b.extend(b_ext.minx, b_ext.miny);
+        b.extend(b_ext.maxx, b_ext.maxy);
     }
 
     /*!
-     * @brief DOCUMENT ME!
-     * @param exterior
-     * @param interiors
+     * @brief creates a Polygon
+     * @param shell the shell of the polygon as a Point sequence
+     * @param holes one or more collection of points, each representing a hole in the polygon
+     *
+     * @since 0.0.1
      */
-    Polygon(const std::vector<Point>& exterior, const std::vector<std::vector<Point>>& interiors)
-        : exterior(std::make_unique<LinearRing>(exterior))
+    Polygon(const std::vector<Point>& shell, const std::vector<std::vector<Point>>& holes)
+        : exterior(shell)
     {
+        Bounds& b = bounds();
+        Bounds& b_ext = exterior.bounds();
+        b.extend(b_ext.minx, b_ext.miny);
+        b.extend(b_ext.maxx, b_ext.maxy);
+        for (const auto& hole: holes)
+        {
+            interiors.emplace_back(hole);
+            Bounds& b_int = interiors[interiors.size() - 1].bounds();
+            b.extend(b_int.minx, b_int.miny);
+            b.extend(b_int.maxx, b_int.maxy);
+        }
     }
 
     /// @private
