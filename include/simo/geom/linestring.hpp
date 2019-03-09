@@ -133,7 +133,6 @@ class LineString : public BasicGeometry<LineString>, public PointCollection<Line
     }
 
   private:
-
     void valid_or_throw()
     {
         if (empty())

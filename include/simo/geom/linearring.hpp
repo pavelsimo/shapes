@@ -15,8 +15,10 @@ namespace shapes
 
 class LinearRing : public BasicGeometry<LinearRing>, public PointCollection<LinearRing>
 {
-  /// @todo (pavel) add missing orientation of the ring: cw, ccw
   public:
+    /// two-dimensional rotation direction, clockwise=true, counterclockwise=false
+    bool clockwise = true;
+
     /*!
      * @brief creates an empty LinearRing
      *
@@ -78,7 +80,6 @@ class LinearRing : public BasicGeometry<LinearRing>, public PointCollection<Line
     }
 
   private:
-
     void valid_or_throw() const
     {
         if (empty())

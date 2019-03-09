@@ -35,6 +35,9 @@ class shapes_exception : public std::exception
     std::string m_what{};
 };
 
+/*!
+ * @todo (pavel) DOCUMENT ME!
+ */
 class parse_error : public shapes_exception
 {
   public:
@@ -45,6 +48,9 @@ class parse_error : public shapes_exception
     }
 };
 
+/*!
+ * @todo (pavel) DOCUMENT ME!
+ */
 class not_implemented_error : public shapes_exception
 {
   public:
@@ -60,6 +66,9 @@ class not_implemented_error : public shapes_exception
     }
 };
 
+/*!
+ * @todo (pavel) DOCUMENT ME!
+ */
 class value_error : public shapes_exception
 {
   public:

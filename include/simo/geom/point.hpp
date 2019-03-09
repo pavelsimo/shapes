@@ -283,7 +283,7 @@ class Point : public BasicGeometry<Point>
     }
 
     /*!
-     * @brief DOCUMENT ME!
+     * @brief @todo (pavel) DOCUMENT ME!
      * @param other
      * @return
      */
@@ -293,7 +293,7 @@ class Point : public BasicGeometry<Point>
     }
 
     /*!
-     * @brief DOCUMENT ME!
+     * @brief @todo (pavel) DOCUMENT ME!
      * @param other
      * @return
      */

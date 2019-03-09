@@ -149,6 +149,10 @@ class Geometry
      * @since 0.0.1
      */
     virtual bool is_closed() const = 0;
+
+    /// @todo (pavel) is_3d()
+    /// @todo (pavel) is_measured()
+    /// @todo (pavel) detailed_type_str()
 };
 
 /// basic geometry type
@@ -156,7 +160,6 @@ template <typename Derived>
 class BasicGeometry : public Geometry
 {
   public:
-
     /// serialization precision
     int8_t precision = 1;
 
