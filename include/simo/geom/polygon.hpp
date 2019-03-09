@@ -15,7 +15,7 @@ namespace shapes
 
 class Polygon : public BasicGeometry<Polygon>
 {
-public:
+  public:
     /// linear ring that represents the shell of the polygon
     LinearRing exterior;
 
@@ -38,7 +38,7 @@ public:
     explicit Polygon(const std::vector<Point>& shell)
         : exterior(shell)
     {
-        Bounds& b = bounds();
+        Bounds& b     = bounds();
         Bounds& b_ext = exterior.bounds();
         b.extend(b_ext.minx, b_ext.miny);
         b.extend(b_ext.maxx, b_ext.maxy);
@@ -54,11 +54,11 @@ public:
     Polygon(const std::vector<Point>& shell, const std::vector<std::vector<Point>>& holes)
         : exterior(shell)
     {
-        Bounds& b = bounds();
+        Bounds& b     = bounds();
         Bounds& b_ext = exterior.bounds();
         b.extend(b_ext.minx, b_ext.miny);
         b.extend(b_ext.maxx, b_ext.maxy);
-        for (const auto& hole: holes)
+        for (const auto& hole : holes)
         {
             interiors.emplace_back(hole);
             Bounds& b_int = interiors[interiors.size() - 1].bounds();
