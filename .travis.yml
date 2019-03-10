@@ -14,8 +14,13 @@ matrix:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['g++-8', 'ninja-build']
       env:
+        - CTEST_OUTPUT_ON_FAILURE=1
         - SHAPES_CXX=g++-8
-        - SHAPES_CC=gcc-8
+        - GIT_NAME=travis-ci
+        - GIT_EMAIL=pavel.simo@gmail.com
+        - GITHUB_REPO=pavelsimo/pavelsimo.github.io
+        - GIT_SOURCE=docs
+        - GIT_BRANCH=master
 
       after_success:
         - bash <(curl -s https://codecov.io/bash)
@@ -192,14 +197,6 @@ matrix:
         apt:
           sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-trusty-6.0']
           packages: ['g++-6', 'clang-6.0', 'ninja-build']
-
-env:
-  - CTEST_OUTPUT_ON_FAILURE=1
-  - GIT_NAME=travis-ci
-  - GIT_EMAIL=pavel.simo@gmail.com
-  - GITHUB_REPO=pavelsimo/pavelsimo.github.io
-  - GIT_SOURCE=docs
-  - GIT_BRANCH=master
 
 install:
 - |
