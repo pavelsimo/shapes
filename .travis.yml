@@ -14,9 +14,9 @@ matrix:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['g++-8', 'ninja-build']
       env:
-        - CTEST_OUTPUT_ON_FAILURE=1
         - SHAPES_CXX=g++-8
         - SHAPES_CC=gcc-8
+        - SHAPES_DOC=true
         - GIT_NAME=travis-ci
         - GIT_EMAIL=pavel.simo@gmail.com
         - GITHUB_REPO=pavelsimo/pavelsimo.github.io
@@ -28,9 +28,6 @@ matrix:
         - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then cd build && mv docs/html docs/shapes && rm -rf docs/latex && bash "$TRAVIS_BUILD_DIR/thirdparty/git-update-ghpages/git-update-ghpages" -e; fi
 
     # osx clang
-
-    - os: osx
-      osx_image: xcode6.4
 
     - os: osx
       osx_image: xcode7.3
@@ -203,15 +200,15 @@ install:
 - |
   if [[ (-x $(which brew)) ]]; then
     brew update
-    brew install cmake ninja doxygen
+    brew install cmake ninja
+    - if [[ "${SHAPES_DOC}" != "" ]]; then brew install doxygen; fi
     cmake --version
   else
     wget -O cmake.sh https://cmake.org/files/v3.10/cmake-3.10.0-rc1-Linux-x86_64.sh
     mkdir -p /tmp/cmake
     sudo sh cmake.sh --skip-license --exclude-subdir --prefix=/tmp/cmake
     export PATH=/tmp/cmake/bin:$PATH
-
-    sudo apt-get install doxygen
+    - if [[ "${SHAPES_DOC}" != "" ]]; then sudo apt-get install doxygen; fi
   fi
 
 - if [[ "${SHAPES_CXX}" != "" ]]; then export CXX=${SHAPES_CXX}; export CC=${SHAPES_CC}; fi
@@ -220,9 +217,9 @@ install:
 
 script:
 - mkdir -p build && cd build
-- cmake .. -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE
+- cmake -GNinja -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE ..
 - cmake --build . -- -j2
-- cmake --build . --target shapes_documentation
-- ctest -V -j2
+- if [[ "${SHAPES_DOC}" != "" ]]; then cmake --build . --target shapes_documentation; fi
+- ctest --output-on-failure --verbose -j2
 - cd ..
 
