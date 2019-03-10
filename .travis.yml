@@ -28,7 +28,7 @@ matrix:
 
       after_success:
         - bash <(curl -s https://codecov.io/bash)
-        - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then "$TRAVIS_BUILD_DIR/thirdparty/git-update-ghpages/git-update-ghpages" -e; fi
+        - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then bash "$TRAVIS_BUILD_DIR/thirdparty/git-update-ghpages/git-update-ghpages" -e; fi
 
 install:
 - if [[ "${SHAPES_CXX}" != "" ]]; then export CXX=${SHAPES_CXX}; export CC=${SHAPES_CC}; fi
