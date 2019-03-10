@@ -17,12 +17,6 @@ matrix:
         - SHAPES_CXX=g++-8
         - SHAPES_CC=gcc-8
 
-      script:
-        - mkdir -p build
-        - cd build
-        - cmake --build . --target shapes_documentation
-        - cd ..
-
       after_success:
         - bash <(curl -s https://codecov.io/bash)
         - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then mv docs/html docs/shapes && rm -rf docs/latex && bash "$TRAVIS_BUILD_DIR/thirdparty/git-update-ghpages/git-update-ghpages" -e; fi
@@ -224,6 +218,7 @@ script:
 - mkdir -p build && cd build
 - cmake .. -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE
 - cmake --build . -- -j2
+- cmake --build . --target shapes_documentation
 - ctest -V -j2
 - cd ..
 
