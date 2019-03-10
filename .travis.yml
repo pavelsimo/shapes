@@ -201,14 +201,14 @@ install:
   if [[ (-x $(which brew)) ]]; then
     brew update
     brew install cmake ninja
-    - if [[ "${SHAPES_DOC}" != "" ]]; then brew install doxygen; fi
+    if [[ "${SHAPES_DOC}" != "" ]]; then brew install doxygen; fi
     cmake --version
   else
     wget -O cmake.sh https://cmake.org/files/v3.10/cmake-3.10.0-rc1-Linux-x86_64.sh
     mkdir -p /tmp/cmake
     sudo sh cmake.sh --skip-license --exclude-subdir --prefix=/tmp/cmake
     export PATH=/tmp/cmake/bin:$PATH
-    - if [[ "${SHAPES_DOC}" != "" ]]; then sudo apt-get install doxygen; fi
+    if [[ "${SHAPES_DOC}" != "" ]]; then sudo apt-get install doxygen; fi
   fi
 
 - if [[ "${SHAPES_CXX}" != "" ]]; then export CXX=${SHAPES_CXX}; export CC=${SHAPES_CC}; fi
