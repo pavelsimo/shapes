@@ -12,14 +12,14 @@ matrix:
       addons:
         apt:
           sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-8', 'ninja-build', 'doxygen']
+          packages: ['g++-8', 'ninja-build']
       env:
         - SHAPES_CXX=g++-8
         - SHAPES_CC=gcc-8
 
       after_success:
         - bash <(curl -s https://codecov.io/bash)
-        - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then mv docs/html docs/shapes && rm -rf docs/latex && bash "$TRAVIS_BUILD_DIR/thirdparty/git-update-ghpages/git-update-ghpages" -e; fi
+        - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then cd build && mv docs/html docs/shapes && rm -rf docs/latex && bash "$TRAVIS_BUILD_DIR/thirdparty/git-update-ghpages/git-update-ghpages" -e; fi
 
     # osx clang
 
@@ -205,9 +205,15 @@ install:
 - |
   if [[ (-x $(which brew)) ]]; then
     brew update
-    brew install cmake ninja
-    brew upgrade cmake
+    brew install cmake ninja doxygen
     cmake --version
+  else
+    wget -O cmake.sh https://cmake.org/files/v3.10/cmake-3.10.0-rc1-Linux-x86_64.sh
+    mkdir -p /tmp/cmake
+    sudo sh cmake.sh --skip-license --exclude-subdir --prefix=/tmp/cmake
+    export PATH=/tmp/cmake/bin:$PATH
+
+    sudo apt-get install doxygen
   fi
 
 - if [[ "${SHAPES_CXX}" != "" ]]; then export CXX=${SHAPES_CXX}; export CC=${SHAPES_CC}; fi
