@@ -18,8 +18,10 @@ matrix:
         - SHAPES_CC=gcc-8
 
       script:
+        - mkdir -p build
         - cd build
         - cmake --build . --target shapes_documentation
+        - cd ..
 
       after_success:
         - bash <(curl -s https://codecov.io/bash)
@@ -219,7 +221,7 @@ install:
 - $CXX --version
 
 script:
-- mkdir build && cd build
+- mkdir -p build && cd build
 - cmake .. -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE
 - cmake --build . -- -j2
 - ctest -V -j2
