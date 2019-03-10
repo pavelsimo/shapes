@@ -24,6 +24,7 @@ matrix:
         - $CXX --version
         - cmake . -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE
         - cmake --build . -- -j2
+        - cmake --build . --target shapes_documentation
         - ctest -V -j2
 
       after_success:
