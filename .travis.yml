@@ -17,7 +17,8 @@ matrix:
         - GIT_NAME=travis-ci
         - GIT_EMAIL=pavel.simo@gmail.com
         - GITHUB_REPO=pavelsimo/pavelsimo.github.io
-        - GIT_SOURCE=docs/html
+        - GIT_SOURCE=docs
+        - GIT_BRANCH=master
 
       script:
         - $CC --version
