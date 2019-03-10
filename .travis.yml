@@ -14,8 +14,8 @@ matrix:
         - SHAPES_CXX=g++-8
         - SHAPES_CC=gcc-8
         - CTEST_OUTPUT_ON_FAILURE=1
-        - GIT_NAME: travis-ci
-        - GIT_EMAIL: pavel.simo@gmail.com
+        - GIT_NAME=travis-ci
+        - GIT_EMAIL=pavel.simo@gmail.com
         - GITHUB_REPO=pavelsimo/pavelsimo.github.io
         - GIT_SOURCE=docs/html
 
