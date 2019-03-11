@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.1)
 project(shapes LANGUAGES CXX VERSION 0.0.1)
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 11)
 
 # regex
 set(HAVE_STD_REGEX 1)
