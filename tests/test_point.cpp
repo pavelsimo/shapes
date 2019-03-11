@@ -149,10 +149,10 @@ TEST_CASE("Point")
                 struct test_case
                 {
                     std::string wkt;
-                    double x = 0;
-                    double y = 0;
-                    double z = 0;
-                    double m = 0;
+                    double x;
+                    double y;
+                    double z;
+                    double m;
                     GeometryDetailedType detailed_type;
                     DimensionType dimension;
                 };
