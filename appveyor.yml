@@ -2,7 +2,7 @@ image:
   - Visual Studio 2017
 build_script:
 - cmd: >-
-    mkdir build
+    mkdir -p build
     cd build
     cmake .. -G "Visual Studio 15"
     cmake --build . --config "Debug"
