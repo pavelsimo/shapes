@@ -5,12 +5,12 @@ init:
   - cmake --version
   - msbuild /version
 
+before_build:
+  - cmake . -G "Visual Studio 15"
+
 build_script:
 - cmd: >-
-    cd build
-    cmake .. -G "Visual Studio 15"
     cmake --build . --config Release
-
 
 test_script:
   - ctest -C Release -V --output-on-failure --verbose
