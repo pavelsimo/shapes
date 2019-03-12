@@ -1,5 +1,6 @@
 # shapes
 [![Build Status](https://travis-ci.org/pavelsimo/shapes.svg?branch=master)](https://travis-ci.org/pavelsimo/shapes)
+[![Build Status](https://ci.appveyor.com/api/projects/status/nhl73vfksg69jbx2?svg=true)](https://ci.appveyor.com/project/pavelsimo/shapes)
 [![codecov](https://codecov.io/gh/pavelsimo/shapes/branch/master/graph/badge.svg)](https://codecov.io/gh/pavelsimo/shapes)
 [![Documentation](https://img.shields.io/badge/docs-doxygen-blue.svg)](https://pavelsimo.github.io/shapes)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/022c774e43264ec4a04c4ccdeda9ae27)](https://www.codacy.com/app/pavelsimo/shapes?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pavelsimo/shapes&amp;utm_campaign=Badge_Grade)
