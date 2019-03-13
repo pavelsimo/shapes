@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ciso646>
 #include <iostream>
 #include <initializer_list>
 #include <stdexcept>

@@ -20,7 +20,7 @@ set(SHAPES_LIBRARY ${PROJECT_NAME})
 
 # warning settings
 if (MSVC)
-    add_compile_options(/W3)
+    add_compile_options(/W4)
 else()
     add_compile_options(-Wall -Wextra -Wpedantic)
 endif()

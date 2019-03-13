@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ciso646>
 #include <vector>
 #include <set>
 #include <sstream>

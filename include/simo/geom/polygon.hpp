@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <ciso646>
 #include <vector>
 #include <set>
 #include <sstream>
@@ -69,30 +70,30 @@ class Polygon : public BasicGeometry<Polygon>
         }
     }
 
-//    /*!
-//     * @brief @todo (pavel) DOCUMENT ME!
-//     * @param exterior
-//     *
-//     * @since 0.0.1
-//     */
-//    explicit Polygon(LinearRing exterior)
-//    : exterior(std::move(exterior))
-//    {
-//        throw exceptions::not_implemented_error();
-//    }
-//
-//    /*!
-//     * @brief @todo (pavel) DOCUMENT ME!
-//     * @param exterior
-//     * @param interiors
-//     *
-//     * @since 0.0.1
-//     */
-//    Polygon(LinearRing exterior, std::vector<LinearRing> interiors)
-//            : exterior(std::move(exterior)), interiors(std::move(interiors))
-//    {
-//        throw exceptions::not_implemented_error();
-//    }
+    /*!
+     * @brief @todo (pavel) DOCUMENT ME!
+     * @param exterior
+     *
+     * @since 0.0.1
+     */
+    explicit Polygon(LinearRing exterior)
+    : exterior(std::move(exterior))
+    {
+        throw exceptions::not_implemented_error();
+    }
+
+    /*!
+     * @brief @todo (pavel) DOCUMENT ME!
+     * @param exterior
+     * @param interiors
+     *
+     * @since 0.0.1
+     */
+    Polygon(LinearRing exterior, std::vector<LinearRing> interiors)
+            : exterior(std::move(exterior)), interiors(std::move(interiors))
+    {
+        throw exceptions::not_implemented_error();
+    }
 
     /// @private
     GeometryType type_() const

@@ -31,6 +31,7 @@ SOFTWARE.
 #ifndef SIMO_SHAPES_HPP
 #define SIMO_SHAPES_HPP
 
+#include <ciso646>
 #include <algorithm>
 #include <memory>
 #include <string>

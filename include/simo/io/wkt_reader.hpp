@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ciso646>
 #include <simo/geom/geometry.hpp>
 #include <simo/exceptions.hpp>
 #include <simo/io/wkt_parser.hpp>
