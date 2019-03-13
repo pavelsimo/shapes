@@ -17,6 +17,7 @@ matrix:
         - SHAPES_CXX=g++-8
         - SHAPES_CC=gcc-8
         - SHAPES_DOC=true
+        - SHAPES_ENABLE_COVERAGE=ON
         - GIT_NAME=travis-ci
         - GIT_EMAIL=pavel.simo@gmail.com
         - GITHUB_REPO=pavelsimo/pavelsimo.github.io
@@ -215,7 +216,7 @@ install:
 
 script:
 - mkdir -p build && cd build
-- cmake -GNinja -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE ..
+- cmake -GNinja ..
 - cmake --build . -- -j2
 - if [[ "${SHAPES_DOC}" != "" ]]; then cmake --build . --target shapes_documentation; fi
 - ctest --output-on-failure --verbose -j2
