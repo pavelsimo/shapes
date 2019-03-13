@@ -74,7 +74,7 @@ endif ()
 ##############
 
 add_custom_target(shapes_clang_tidy COMMENT "applying clang-tidy"
-        COMMAND clang-tidy -p=${PROJECT_BINARY_DIR} -checks=modernize-*,cppcoreguidelines-*,portability-*,bugprone-*,readability-*,cert-* ${HPP_FILES})
+        COMMAND clang-tidy -p=${PROJECT_BINARY_DIR} -header-filter=.* -checks=modernize-*,cppcoreguidelines-*,portability-*,bugprone-*,readability-*,cert-*,google-* ${HPP_FILES})
 
 ##############
 # amalgamate #
