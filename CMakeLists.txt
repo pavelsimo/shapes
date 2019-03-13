@@ -53,7 +53,7 @@ target_include_directories(
 file(GLOB_RECURSE HPP_FILES
     ${PROJECT_SOURCE_DIR}/include/simo/*.hpp
     ${PROJECT_SOURCE_DIR}/include/simo/geom/*.hpp
-    #${PROJECT_SOURCE_DIR}/include/simo/io/*.hpp
+    ${PROJECT_SOURCE_DIR}/include/simo/io/*.hpp
     ${PROJECT_SOURCE_DIR}/tests/*.cpp
 )
 
