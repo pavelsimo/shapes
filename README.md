@@ -8,8 +8,8 @@
 
 A lightweight header-only planar geometry library for Modern C++
 
-  - Inspired by python [shapely](https://pypi.org/project/Shapely/)
-  - Based on OGC [Simple Features](https://en.wikipedia.org/wiki/Simple_Features)
+- Inspired by python [shapely](https://pypi.org/project/Shapely/)
+- Based on OGC [Simple Features](https://en.wikipedia.org/wiki/Simple_Features)
 
 ## Installation
 
@@ -68,9 +68,9 @@ MULTIPOINTZ((1.0 2.0 3.0),(4.0 5.0 6.0))
 
 This project would not have been possible without the following amazing tools, many thanks to its developers!
 
-  - [JSON for Modern C++](https://github.com/nlohmann/json)
-  - [amalgamate.py](https://github.com/edlund/amalgamate)
-  - [Catch2](https://github.com/catchorg/Catch2)
+- [JSON for Modern C++](https://github.com/nlohmann/json)
+- [amalgamate.py](https://github.com/edlund/amalgamate)
+- [Catch2](https://github.com/catchorg/Catch2)
 
 ## License
 
