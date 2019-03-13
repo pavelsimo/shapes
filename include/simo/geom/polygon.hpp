@@ -1,5 +1,3 @@
-#include <utility>
-
 #pragma once
 
 #include <ciso646>
@@ -7,6 +5,7 @@
 #include <set>
 #include <sstream>
 #include <iomanip>
+#include <utility>
 #include <simo/geom/geometry.hpp>
 #include <simo/geom/linearring.hpp>
 #include <simo/geom/bounds.hpp>
