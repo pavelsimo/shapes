@@ -178,7 +178,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
      *
      * @since 0.0.1
      */
-    static MultiPoint from_wkt(const std::string&)
+    static MultiPoint from_wkt(const std::string& /*wkt*/)
     {
 
         throw exceptions::not_implemented_error();

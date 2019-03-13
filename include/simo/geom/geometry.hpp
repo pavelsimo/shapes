@@ -422,10 +422,10 @@ class BasicGeometry : public Geometry
 
   private:
     /// geometry bounds
-    Bounds bounds_;
+    Bounds bounds_{};
 
     /// the dimension type (x, y), (x, y, z), (x, y, m) or (x, y, z, m)
-    DimensionType dim_;
+    DimensionType dim_ = DimensionType::XY;
 };
 
 }  // namespace shapes

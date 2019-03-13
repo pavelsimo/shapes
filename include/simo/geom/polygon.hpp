@@ -22,7 +22,7 @@ class Polygon : public BasicGeometry<Polygon>
     LinearRing exterior;
 
     /// collection of linear rings that represent the holes of the polygon
-    std::vector<LinearRing> interiors;
+    std::vector<LinearRing> interiors{};
 
     /*!
      * @brief creates an empty Polygon
@@ -60,6 +60,7 @@ class Polygon : public BasicGeometry<Polygon>
         Bounds& b_ext = exterior.bounds();
         b.extend(b_ext.minx, b_ext.miny);
         b.extend(b_ext.maxx, b_ext.maxy);
+        interiors.reserve(holes.size());
         for (const auto& hole : holes)
         {
             interiors.emplace_back(hole);

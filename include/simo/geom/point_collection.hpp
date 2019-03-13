@@ -16,10 +16,10 @@ class PointCollection
 {
   public:
     /// iterator type
-    typedef std::vector<Point>::iterator iterator;
+    using iterator = std::vector<Point>::iterator;
 
     /// const iterator type
-    typedef std::vector<Point>::const_iterator const_iterator;
+    using const_iterator = std::vector<Point>::const_iterator;
 
     /*!
      * @return returns an iterator pointing to the first element in the PointCollection

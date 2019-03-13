@@ -43,10 +43,7 @@ class Point : public BasicGeometry<Point>
      *
      * @since 0.0.1
      */
-    Point()
-    {
-        set_dim(DimensionType::XY);
-    }
+    Point() = default;
 
     /*!
      * @brief creates a Point from coordinates (x, y)
@@ -266,12 +263,22 @@ class Point : public BasicGeometry<Point>
         {
             throw exceptions::shapes_exception("out of range");
         }
+
         if (pos == 0)
+        {
             return x;
+        }
+
         if (pos == 1)
+        {
             return y;
+        }
+
         if (pos == 2)
+        {
             return z;
+        }
+
         return m;
     }
 

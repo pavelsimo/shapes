@@ -84,7 +84,7 @@ class LineString : public BasicGeometry<LineString>, public PointCollection<Line
      *
      * @since 0.0.1
      */
-    static LineString from_json(const std::string&)
+    static LineString from_json(const std::string& /*json*/)
     {
         throw exceptions::not_implemented_error();
     }
@@ -113,7 +113,7 @@ class LineString : public BasicGeometry<LineString>, public PointCollection<Line
      *
      * @since 0.0.1
      */
-    static LineString from_wkt(const std::string&)
+    static LineString from_wkt(const std::string& /*wkt*/)
     {
         throw exceptions::not_implemented_error();
     }
