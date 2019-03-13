@@ -134,7 +134,7 @@ class Polygon : public BasicGeometry<Polygon>
      *
      * @since 0.0.1
      */
-    static Polygon from_json(const std::string&)
+    static Polygon from_json(const std::string& /*json*/)
     {
         throw exceptions::not_implemented_error();
     }
@@ -163,7 +163,7 @@ class Polygon : public BasicGeometry<Polygon>
      *
      * @since 0.0.1
      */
-    static Polygon from_wkt(const std::string&)
+    static Polygon from_wkt(const std::string& /*wkt*/)
     {
         throw exceptions::not_implemented_error();
     }
