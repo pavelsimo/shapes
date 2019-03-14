@@ -26,8 +26,9 @@ matrix:
 
       after_success:
         - cd build
-        - bash <(curl -s https://codecov.io/bash)
-        - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then mv docs/html docs/shapes && rm -rf docs/latex && bash "$TRAVIS_BUILD_DIR/thirdparty/git-update-ghpages/git-update-ghpages" -e; fi
+        - mv docs/html docs/shapes
+        - rm -rf docs/latex
+        - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then bash "$TRAVIS_BUILD_DIR/thirdparty/git-update-ghpages/git-update-ghpages" -e; fi
         - cd ..
 
     # osx clang
@@ -222,5 +223,6 @@ script:
 - cmake --build . -- -j2
 - if [[ "${SHAPES_DOC}" != "" ]]; then cmake --build . --target shapes_documentation; fi
 - ctest --output-on-failure --verbose -j2
+- if [[ "${SHAPES_ENABLE_COVERAGE}" != "" ]]; then bash <(curl -s https://codecov.io/bash); fi
 - cd ..
 
