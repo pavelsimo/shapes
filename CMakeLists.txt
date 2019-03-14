@@ -109,8 +109,8 @@ add_custom_target(shapes_parser COMMENT "lemon parser"
 if(SHAPES_ENABLE_COVERAGE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -g -O0 -fprofile-arcs -ftest-coverage -Wno-unused-command-line-argument")
     add_custom_target(shapes_coverage COMMENT "coverage report files"
-            COMMAND lcov --directory . --capture --output-file coverage.info --rc lcov_branch_coverage=1
-            COMMAND lcov -e coverage.info ${SOURCE_FILES} --output-file coverage.info.filtered --rc lcov_branch_coverage=1
+            COMMAND lcov --directory . --capture --output-file coverage.info
+            COMMAND lcov -e coverage.info ${SOURCE_FILES} --output-file coverage.info.filtered
             COMMAND mv -f coverage.info.filtered coverage.info)
 endif()
 
