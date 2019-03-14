@@ -1,6 +1,6 @@
-option(SHAPES_ENABLE_COVERAGE "whether to enable coverage" OFF)
+
 if(SHAPES_ENABLE_COVERAGE)
-    add_compile_options(--coverage -O0)
+    add_compile_options(--coverage -O0 -g)
 endif()
 
 file(GLOB files "test_*.cpp")

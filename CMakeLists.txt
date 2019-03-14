@@ -13,8 +13,14 @@ set(CMAKE_VERBOSE_MAKEFILE on)
 set(SHAPES_VERSION_MAJOR 0)
 set(SHAPES_VERSION_MINOR 0)
 set(SHAPES_VERSION_PATCH 1)
-
 set(SHAPES_LIBRARY ${PROJECT_NAME})
+
+###########
+# options #
+###########
+option(SHAPES_SINGLE_HEADER "whether to use a single header or multiple headers" OFF)
+option(SHAPES_ENABLE_COVERAGE "whether to enable coverage" OFF)
+option(SHAPES_TESTING "build tests" ON)
 
 ####################
 # warning settings #
@@ -28,7 +34,8 @@ endif()
 ####################
 # include settings #
 ####################
-option(SHAPES_SINGLE_HEADER "whether to use a single header or multiple headers" OFF)
+
+
 if (SHAPES_SINGLE_HEADER)
     set(SHAPES_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/single_include)
 else()
@@ -118,7 +125,6 @@ else()
 endif()
 
 include(CTest)
-option(SHAPES_TESTING "build tests" ON)
 if(SHAPES_TESTING)
     enable_testing()
     add_subdirectory(tests)

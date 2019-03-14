@@ -10,6 +10,7 @@ matrix:
     - os: linux
       compiler: gcc
       addons:
+
         apt:
           sources: ['ubuntu-toolchain-r-test']
           packages: ['g++-8', 'ninja-build']
@@ -220,15 +221,13 @@ install:
 
 script:
 - mkdir -p build && cd build
-- cmake -GNinja ..
+- cmake -GNinja .. -D SHAPES_ENABLE_COVERAGE:BOOL=TRUE
 - cmake --build . -- -j2
 - ctest --output-on-failure --verbose -j2
 - |
   if [[ "${SHAPES_ENABLE_COVERAGE}" != "" ]]; then
-    lcov --directory . --capture --output-file coverage.info
-    lcov --remove coverage.info '/usr/*' "${HOME}"'/.cache/*' --output-file coverage.info
-    lcov --list coverage.info
-    bash <(curl -s https://codecov.io/bash) -f coverage.info || echo "Codecov did not collect coverage reports"
+    ls -lah .
+    bash <(curl -s https://codecov.io/bash)
   fi
 - if [[ "${SHAPES_DOC}" != "" ]]; then cmake --build . --target shapes_documentation; fi
 - cd ..
