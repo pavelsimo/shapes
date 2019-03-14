@@ -35,7 +35,6 @@ endif()
 # include settings #
 ####################
 
-
 if (SHAPES_SINGLE_HEADER)
     set(SHAPES_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/single_include)
 else()
@@ -57,7 +56,7 @@ target_include_directories(
         $<INSTALL_INTERFACE:include>
 )
 
-file(GLOB_RECURSE HPP_FILES
+file(GLOB_RECURSE SOURCE_FILES
     ${PROJECT_SOURCE_DIR}/include/simo/*.hpp
     ${PROJECT_SOURCE_DIR}/include/simo/geom/*.hpp
     ${PROJECT_SOURCE_DIR}/include/simo/io/*.hpp
@@ -71,7 +70,7 @@ find_program(CLANG_FORMAT clang-format)
 if (NOT ${CLANG_FORMAT} STREQUAL "CLANG_FORMAT-NOTFOUND")
     message(STATUS "clang-format found: ${CLANG_FORMAT}")
     add_custom_target(shapes_format COMMENT "applying clang-format"
-            COMMAND ${CLANG_FORMAT} -i ${HPP_FILES})
+            COMMAND ${CLANG_FORMAT} -i ${SOURCE_FILES})
 else()
     message(STATUS "clang-format not found")
 endif ()
@@ -81,7 +80,7 @@ endif ()
 ##############
 
 add_custom_target(shapes_clang_tidy COMMENT "applying clang-tidy"
-        COMMAND clang-tidy -p=${PROJECT_BINARY_DIR} -header-filter=.* -checks=modernize-*,cppcoreguidelines-*,portability-*,bugprone-*,readability-*,cert-*,google-* ${HPP_FILES})
+        COMMAND clang-tidy -p=${PROJECT_BINARY_DIR} -header-filter=.* -checks=modernize-*,cppcoreguidelines-*,portability-*,bugprone-*,readability-*,cert-*,google-* ${SOURCE_FILES})
 
 ##############
 # amalgamate #
@@ -103,6 +102,17 @@ add_custom_target(shapes_lexer COMMENT "re2c lexer code generation"
 add_custom_target(shapes_parser COMMENT "lemon parser"
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/include/simo/io
         COMMAND lemon -m -q -l wkt_parser.y)
+
+############
+# coverage #
+############
+if(SHAPES_ENABLE_COVERAGE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -g -O0 -fprofile-arcs -ftest-coverage -Wno-unused-command-line-argument")
+    add_custom_target(shapes_coverage COMMENT "coverage report files"
+            COMMAND lcov --directory . --capture --output-file coverage.info --rc lcov_branch_coverage=1
+            COMMAND lcov -e coverage.info ${SOURCE_FILES} --output-file coverage.info.filtered --rc lcov_branch_coverage=1
+            COMMAND mv -f coverage.info.filtered coverage.info)
+endif()
 
 ###########
 # doxygen #
