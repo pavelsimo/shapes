@@ -211,7 +211,7 @@ install:
     if [[ "${SHAPES_DOC}" != "" ]]; then brew install doxygen; fi
   else
     if [[ "${SHAPES_DOC}" != "" ]]; then sudo apt-get install doxygen; fi
-    if [[ "${SHAPES_ENABLE_COVERAGE}" != "" ]]; then sudo apt-get install lcov; fi
+    if [[ "${SHAPES_ENABLE_COVERAGE}" != "" ]]; then sudo apt install gcov lcov gcovr; fi
   fi
 
 - if [[ "${SHAPES_CXX}" != "" ]]; then export CXX=${SHAPES_CXX}; export CC=${SHAPES_CC}; fi
