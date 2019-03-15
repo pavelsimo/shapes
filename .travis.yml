@@ -237,9 +237,9 @@ script:
 - if [[ "${SHAPES_DOC}" != "" ]]; then cmake --build . --target shapes_documentation; fi
 - |
   if [[ "${SHAPES_ENABLE_COVERAGE}" != "" ]]; then
-    #lcov --version
-    #cmake --build . --target shapes_coverage
     lcov --directory . --capture  --gcov-tool /usr/bin/gcov-8 --output-file coverage.info
+    lcov --remove coverage.info '/usr/*' --output-file coverage.info
+    lcov --list coverage.info
     bash <(curl -s https://codecov.io/bash) -f coverage.info
   fi
 - cd ..

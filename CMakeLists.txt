@@ -110,11 +110,19 @@ add_custom_target(shapes_parser COMMENT "lemon parser"
 ############
 # coverage #
 ############
-if(SHAPES_ENABLE_COVERAGE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -g -O0 -fprofile-arcs -ftest-coverage")
-    add_custom_target(shapes_coverage COMMENT "coverage report files"
-            COMMAND lcov --directory . --capture --output-file coverage.info)
-endif()
+if(SHAPES_ENABLE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    # add required flags (GCC & LLVM/Clang)
+    target_compile_options(coverage_config INTERFACE
+            -O0        # no optimization
+            -g         # generate debug info
+            --coverage # sets all required flags
+            )
+    if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.13)
+        target_link_options(coverage_config INTERFACE --coverage)
+    else()
+        target_link_libraries(coverage_config INTERFACE --coverage)
+    endif()
+endif(SHAPES_ENABLE_COVERAGE)
 
 ###########
 # doxygen #
