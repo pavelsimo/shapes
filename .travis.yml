@@ -221,6 +221,7 @@ install:
     mkdir -p /tmp/cmake
     sudo sh cmake.sh --skip-license --exclude-subdir --prefix=/tmp/cmake
     export PATH=/tmp/cmake/bin:$PATH
+
   fi
 
 - if [[ "${SHAPES_CXX}" != "" ]]; then export CXX=${SHAPES_CXX}; export CC=${SHAPES_CC}; fi
@@ -238,7 +239,8 @@ script:
   if [[ "${SHAPES_ENABLE_COVERAGE}" != "" ]]; then
     #lcov --version
     #cmake --build . --target shapes_coverage
-    bash <(curl -s https://codecov.io/bash)
+    lcov --directory . --capture  --gcov-tool /usr/bin/gcov-8 --output-file coverage.info
+    bash <(curl -s https://codecov.io/bash) -f coverage.info
   fi
 - cd ..
 
