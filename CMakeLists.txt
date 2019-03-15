@@ -1,19 +1,23 @@
 cmake_minimum_required(VERSION 3.1)
 
 project(shapes LANGUAGES CXX VERSION 0.0.1)
+
+###########
+# globals #
+###########
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
 set(CMAKE_CXX_STANDARD 11)
-
-# regex
 set(HAVE_STD_REGEX 1)
 add_definitions(-DHAVE_STD_REGEX)
 set(CMAKE_VERBOSE_MAKEFILE on)
+set(SHAPES_LIBRARY ${PROJECT_NAME})
 
-# versioning
+###########
+# version #
+###########
 set(SHAPES_VERSION_MAJOR 0)
 set(SHAPES_VERSION_MINOR 0)
 set(SHAPES_VERSION_PATCH 1)
-set(SHAPES_LIBRARY ${PROJECT_NAME})
 
 ###########
 # options #

@@ -8,15 +8,15 @@ matrix:
     # codecov, doxygen docs
 
     - os: linux
-      compiler: gcc
+      compiler: clang
       addons:
 
         apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-8', 'ninja-build']
+          sources: ['ubuntu-toolchain-r-test', 'llvm-toolchain-xenial-6.0']
+          packages: ['g++-6', 'clang-6.0', 'ninja-build']
       env:
-        - SHAPES_CXX=g++-8
-        - SHAPES_CC=gcc-8
+        - SHAPES_CXX=clang++-6.0
+        - SHAPES_CC=clang-6.0
         - SHAPES_DOC=true
         - SHAPES_ENABLE_COVERAGE=ON
         - GIT_NAME=travis-ci
@@ -209,7 +209,9 @@ install:
     brew install cmake ninja
     brew upgrade cmake
     if [[ "${SHAPES_DOC}" != "" ]]; then brew install doxygen; fi
-  else
+  fi
+
+  if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
     if [[ "${SHAPES_DOC}" != "" ]]; then sudo apt-get install doxygen; fi
     if [[ "${SHAPES_ENABLE_COVERAGE}" != "" ]]; then sudo apt-get install lcov; fi
   fi
