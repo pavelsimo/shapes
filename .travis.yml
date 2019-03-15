@@ -237,9 +237,7 @@ script:
 - if [[ "${SHAPES_DOC}" != "" ]]; then cmake --build . --target shapes_documentation; fi
 - |
   if [[ "${SHAPES_ENABLE_COVERAGE}" != "" ]]; then
-    for filename in `find ../include -type f -name '*.hpp'`; do
-      gcov-8 -n -o . "$filename" > /dev/null
-    done
+    for filename in `find "${$TRAVIS_BUILD_DIR}" -type f -name '*.hpp'`; do echo $filename; gcov-8 -n -o . $filename; done
     bash <(curl -s https://codecov.io/bash)
   fi
 - cd ..
