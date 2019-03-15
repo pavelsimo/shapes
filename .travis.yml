@@ -25,11 +25,11 @@ matrix:
         - GIT_BRANCH=master
 
       after_success:
-        - cd build
+        - #cd build
         - mv docs/html docs/shapes
         - rm -rf docs/latex
         - if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then bash "$TRAVIS_BUILD_DIR/thirdparty/git-update-ghpages/git-update-ghpages" -e; fi
-        - cd ..
+        - #cd ..
 
     # osx clang
 
@@ -230,15 +230,15 @@ install:
 - $CXX --version
 
 script:
-- mkdir -p build && cd build
-- cmake .. -GNinja -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE
+#- mkdir -p build && cd build
+- cmake . -GNinja -DSHAPES_ENABLE_COVERAGE:BOOL=TRUE
 - cmake --build . -- -j2
 - ctest -j2 --output-on-failure --verbose
 - if [[ "${SHAPES_DOC}" != "" ]]; then cmake --build . --target shapes_documentation; fi
 - |
   if [[ "${SHAPES_ENABLE_COVERAGE}" != "" ]]; then
-    for filename in `find "${$TRAVIS_BUILD_DIR}" -type f -name '*.hpp'`; do echo $filename; gcov-8 -n -o . $filename; done
+    #for filename in `find "${$TRAVIS_BUILD_DIR}/include" -type f -name '*.hpp'`; do echo $filename; gcov-8 -n -o . $filename; done
     bash <(curl -s https://codecov.io/bash)
   fi
-- cd ..
+#- cd ..
 
