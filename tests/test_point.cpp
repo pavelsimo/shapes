@@ -14,6 +14,8 @@ TEST_CASE("Point")
             CHECK(p.x == 0);
             CHECK(p.y == 0);
             CHECK(p.dim() == DimensionType::XY);
+            CHECK(p.type() == GeometryType::POINT);
+            CHECK(p.detailed_type() == GeometryDetailedType::POINT);
             CHECK(p.type_str() == "Point");
         }
 
@@ -24,6 +26,9 @@ TEST_CASE("Point")
             CHECK(p.y == 2);
             CHECK(p.z == 0);
             CHECK(p.dim() == DimensionType::XY);
+            CHECK(p.type() == GeometryType::POINT);
+            CHECK(p.detailed_type() == GeometryDetailedType::POINT);
+            CHECK(p.type_str() == "Point");
         }
 
         SECTION("xyz - initializer list")
@@ -33,12 +38,27 @@ TEST_CASE("Point")
             CHECK(p.y == 2);
             CHECK(p.z == 3);
             CHECK(p.dim() == DimensionType::XYZ);
+            CHECK(p.type() == GeometryType::POINT);
             CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
+            CHECK(p.type_str() == "Point");
+        }
+
+        SECTION("xym - initializer list")
+        {
+            // not supported
         }
 
         SECTION("xyzm - initializer list")
         {
-            /// @todo (pavel) add test
+            Point p = {1, 2, 3, 4};
+            CHECK(p.x == 1);
+            CHECK(p.y == 2);
+            CHECK(p.z == 3);
+            CHECK(p.m == 4);
+            CHECK(p.dim() == DimensionType::XYZM);
+            CHECK(p.type() == GeometryType::POINT);
+            CHECK(p.detailed_type() == GeometryDetailedType::POINTZM);
+            CHECK(p.type_str() == "Point");
         }
     }
 
@@ -52,6 +72,8 @@ TEST_CASE("Point")
                 CHECK(p.x == 1.0);
                 CHECK(p.y == 2.0);
                 CHECK(p.dim() == DimensionType::XY);
+                CHECK(p.type() == GeometryType::POINT);
+                CHECK(p.detailed_type() == GeometryDetailedType::POINT);
                 CHECK(p.type_str() == "Point");
             }
 
@@ -62,6 +84,7 @@ TEST_CASE("Point")
                 CHECK(p.y == 2.0);
                 CHECK(p.z == 3.0);
                 CHECK(p.dim() == DimensionType::XYZ);
+                CHECK(p.type() == GeometryType::POINT);
                 CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
                 CHECK(p.type_str() == "Point");
             }
@@ -79,13 +102,21 @@ TEST_CASE("Point")
 
         SECTION("wkt")
         {
+            SECTION("xy - from wkt")
+            {
+                /// @todo (pavel) add test
+            }
+
             SECTION("xyz - from wkt")
             {
                 auto p = Point::from_wkt("POINT Z (1 2 3)");
                 CHECK(p.x == 1.0);
                 CHECK(p.y == 2.0);
                 CHECK(p.z == 3.0);
+                CHECK(p.dim() == DimensionType::XYZ);
+                CHECK(p.type() == GeometryType::POINT);
                 CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
+                CHECK(p.type_str() == "Point");
             }
 
             SECTION("xyzm - from wkt")
@@ -95,7 +126,10 @@ TEST_CASE("Point")
                 CHECK(p.y == 2.0);
                 CHECK(p.z == 3.0);
                 CHECK(p.m == 4.0);
+                CHECK(p.dim() == DimensionType::XYZM);
+                CHECK(p.type() == GeometryType::POINT);
                 CHECK(p.detailed_type() == GeometryDetailedType::POINTZM);
+                CHECK(p.type_str() == "Point");
             }
 
             SECTION("empty - from wkt")
