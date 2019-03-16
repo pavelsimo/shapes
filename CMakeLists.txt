@@ -1,23 +1,15 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(shapes LANGUAGES CXX VERSION 0.0.1)
-
-###########
-# globals #
-###########
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
-set(CMAKE_CXX_STANDARD 11)
-set(HAVE_STD_REGEX 1)
-add_definitions(-DHAVE_STD_REGEX)
-set(CMAKE_VERBOSE_MAKEFILE on)
-set(SHAPES_LIBRARY ${PROJECT_NAME})
-
-###########
-# version #
-###########
+project(shapes LANGUAGES CXX)
 set(SHAPES_VERSION_MAJOR 0)
 set(SHAPES_VERSION_MINOR 0)
 set(SHAPES_VERSION_PATCH 1)
+set(SHAPES_LIBRARY ${PROJECT_NAME})
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_VERBOSE_MAKEFILE on)
 
 ###########
 # options #
@@ -29,10 +21,17 @@ option(SHAPES_TESTING "build tests" ON)
 ####################
 # warning settings #
 ####################
-if (MSVC)
-    add_compile_options(/W4)
-else()
-    add_compile_options(-Wall -Wextra -Wpedantic)
+
+if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU" )
+    add_compile_options(-Wall -Wextra -Wunreachable-code -Wpedantic)
+endif()
+
+if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
+    add_compile_options(-Wweak-vtables -Wexit-time-destructors -Wglobal-constructors -Wmissing-noreturn)
+endif()
+
+if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+    add_compile_options(/W4 /w44265 /w44061 /w44062)
 endif()
 
 ####################
@@ -44,7 +43,6 @@ if (SHAPES_SINGLE_HEADER)
 else()
     set(SHAPES_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
 endif()
-
 
 add_library(${SHAPES_LIBRARY} INTERFACE)
 add_library(${SHAPES_LIBRARY}::${SHAPES_LIBRARY} ALIAS ${SHAPES_LIBRARY})
