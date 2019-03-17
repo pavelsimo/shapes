@@ -193,21 +193,21 @@ TEST_CASE("Point")
                 };
 
                 std::vector<test_case> test_cases = {
-                        {"POINT(1 2)", 1.0, 2.0, 0, 0, GeometryDetailedType::POINT, DimensionType::XY},
-                        {"POINT (1 2)", 1.0, 2.0, 0, 0, GeometryDetailedType::POINT, DimensionType::XY},
-                        {"POINTM(1 2 4)", 1.0, 2.0, 0, 4.0, GeometryDetailedType::POINTM, DimensionType::XYM},
-                        {"POINT M(1 2 4)", 1.0, 2.0, 0, 4.0, GeometryDetailedType::POINTM, DimensionType::XYM},
-                        {"POINT M (1 2 4)", 1.0, 2.0, 0, 4.0, GeometryDetailedType::POINTM, DimensionType::XYM},
-                        {"POINTZ(1 2 3)", 1.0, 2.0, 3.0, 0, GeometryDetailedType::POINTZ, DimensionType::XYZ},
-                        {"POINT Z(1 2 3)", 1.0, 2.0, 3.0, 0, GeometryDetailedType::POINTZ, DimensionType::XYZ},
-                        {"POINT Z (1 2 3)", 1.0, 2.0, 3.0, 0, GeometryDetailedType::POINTZ, DimensionType::XYZ},
-                        {"POINTZM(1 2 3 4)", 1.0, 2.0, 3.0, 4.0, GeometryDetailedType::POINTZM, DimensionType::XYZM},
-                        {"POINT ZM(1 2 3 4)", 1.0, 2.0, 3.0, 4.0, GeometryDetailedType::POINTZM, DimensionType::XYZM},
-                        {"POINT ZM (1 2 3 4)", 1.0, 2.0, 3.0, 4.0, GeometryDetailedType::POINTZM, DimensionType::XYZM},
-                        {"   POINT (1 2)  ", 1.0, 2.0, 0, 0, GeometryDetailedType::POINT, DimensionType::XY},
-                        {"   POINT (1          2)  ", 1.0, 2.0, 0, 0, GeometryDetailedType::POINT, DimensionType::XY},
-                        {"   POINT Z (    1          2    3)  ", 1.0, 2.0, 3.0, 0, GeometryDetailedType::POINTZ, DimensionType::XYZ},
-                        {"   POINT     ZM     (    1          2    5       9)  ", 1.0, 2.0, 5.0, 9.0, GeometryDetailedType::POINTZM, DimensionType::XYZM},
+                    {"POINT(1 2)", 1.0, 2.0, 0, 0, GeometryDetailedType::POINT, DimensionType::XY},
+                    {"POINT (1 2)", 1.0, 2.0, 0, 0, GeometryDetailedType::POINT, DimensionType::XY},
+                    {"POINTM(1 2 4)", 1.0, 2.0, 0, 4.0, GeometryDetailedType::POINTM, DimensionType::XYM},
+                    {"POINT M(1 2 4)", 1.0, 2.0, 0, 4.0, GeometryDetailedType::POINTM, DimensionType::XYM},
+                    {"POINT M (1 2 4)", 1.0, 2.0, 0, 4.0, GeometryDetailedType::POINTM, DimensionType::XYM},
+                    {"POINTZ(1 2 3)", 1.0, 2.0, 3.0, 0, GeometryDetailedType::POINTZ, DimensionType::XYZ},
+                    {"POINT Z(1 2 3)", 1.0, 2.0, 3.0, 0, GeometryDetailedType::POINTZ, DimensionType::XYZ},
+                    {"POINT Z (1 2 3)", 1.0, 2.0, 3.0, 0, GeometryDetailedType::POINTZ, DimensionType::XYZ},
+                    {"POINTZM(1 2 3 4)", 1.0, 2.0, 3.0, 4.0, GeometryDetailedType::POINTZM, DimensionType::XYZM},
+                    {"POINT ZM(1 2 3 4)", 1.0, 2.0, 3.0, 4.0, GeometryDetailedType::POINTZM, DimensionType::XYZM},
+                    {"POINT ZM (1 2 3 4)", 1.0, 2.0, 3.0, 4.0, GeometryDetailedType::POINTZM, DimensionType::XYZM},
+                    {"   POINT (1 2)  ", 1.0, 2.0, 0, 0, GeometryDetailedType::POINT, DimensionType::XY},
+                    {"   POINT (1          2)  ", 1.0, 2.0, 0, 0, GeometryDetailedType::POINT, DimensionType::XY},
+                    {"   POINT Z (    1          2    3)  ", 1.0, 2.0, 3.0, 0, GeometryDetailedType::POINTZ, DimensionType::XYZ},
+                    {"   POINT     ZM     (    1          2    5       9)  ", 1.0, 2.0, 5.0, 9.0, GeometryDetailedType::POINTZM, DimensionType::XYZM},
                 };
 
                 for (const auto test_case : test_cases)
@@ -355,5 +355,4 @@ TEST_CASE("Point")
             /// @todo (pavel) add test
         }
     }
-
 }

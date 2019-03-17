@@ -148,8 +148,8 @@ TEST_CASE("MultiPoint")
 
     SECTION("2d multipoint - wkt")
     {
-//        MultiPoint mp = {{1.0, 2.0}, {4.0, 5.0}};
-//        mp.precision  = 1;
-//        CHECK(mp.wkt() == "MULTIPOINT((1.0 2.0),(4.0 5.0))");
+        //        MultiPoint mp = {{1.0, 2.0}, {4.0, 5.0}};
+        //        mp.precision  = 1;
+        //        CHECK(mp.wkt() == "MULTIPOINT((1.0 2.0),(4.0 5.0))");
     }
 }
