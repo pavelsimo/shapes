@@ -429,6 +429,7 @@ class BasicGeometry : public Geometry
             case DimensionType::XYZM:
                 return 4;
             case DimensionType::XYZ:
+                // fall through
             case DimensionType::XYM:
                 return 3;
             default:
