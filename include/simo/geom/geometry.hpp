@@ -167,11 +167,13 @@ class BasicGeometry : public Geometry
     /// a spatial reference identifier (SRID) is a unique identifier associated with a specific coordinate system
     int32_t srid = -1;
 
+    /// @copydoc Geometry::type()
     GeometryType type() const override
     {
         return static_cast<const Derived*>(this)->type_();
     }
 
+    /// @copydoc Geometry::detailed_type()
     GeometryDetailedType detailed_type() const override
     {
         auto type = static_cast<const Derived*>(this)->type_();
@@ -341,71 +343,85 @@ class BasicGeometry : public Geometry
         return GeometryDetailedType::GEOMETRY;
     }
 
+    /// @copydoc Geometry::type_str()
     std::string type_str() const override
     {
         return static_cast<const Derived*>(this)->type_str_();
     }
 
+    /// @copydoc Geometry::empty()
     bool empty() const override
     {
         return static_cast<const Derived*>(this)->empty_();
     }
 
+    /// @copydoc Geometry::size()
     size_t size() const override
     {
         return static_cast<const Derived*>(this)->size_();
     }
 
+    /// @copydoc Geometry::xy()
     std::vector<std::tuple<double, double>> xy() const override
     {
         return static_cast<const Derived*>(this)->xy_();
     }
 
+    /// @copydoc Geometry::xyz()
     std::vector<std::tuple<double, double, double>> xyz() const override
     {
         return static_cast<const Derived*>(this)->xyz_();
     }
 
+    /// @copydoc Geometry::xym()
     std::vector<std::tuple<double, double, double>> xym() const override
     {
         return static_cast<const Derived*>(this)->xym_();
     }
 
+    /// @copydoc Geometry::xyzm()
     std::vector<std::tuple<double, double, double, double>> xyzm() const override
     {
         return static_cast<const Derived*>(this)->xyzm_();
     }
 
+    /// @copydoc Geometry::dim()
     DimensionType dim() const override
     {
         return dim_;
     }
 
+    /// @copydoc Geometry::set_dim()
     void set_dim(DimensionType value) override
     {
         dim_ = value;
     }
 
+    /// @copydoc Geometry::bounds()
     Bounds& bounds() override
     {
         return bounds_;
     }
 
+    /// @copydoc Geometry::has_z()
     bool has_z() const override
     {
         return dim_ == DimensionType::XYZ or dim_ == DimensionType::XYZM;
     }
 
+    /// @copydoc Geometry::has_m()
     bool has_m() const override
     {
         return dim_ == DimensionType::XYM or dim_ == DimensionType::XYZM;
     }
 
+    /// @copydoc Geometry::is_closed()
     bool is_closed() const override
     {
         return static_cast<const Derived*>(this)->is_closed_();
     }
 
+    /// @copydoc Geometry::ndim()
     int8_t ndim() const override
     {
         switch (dim_)

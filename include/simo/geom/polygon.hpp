@@ -33,95 +33,29 @@ class Polygon : public BasicGeometry<Polygon>
 
     /*!
      * @brief creates a Polygon
-     * @param shell the shell of the polygon as a Point sequence
+     * @param rings a LinearRing sequence with the shell and holes of the polygon
      *
      * @since 0.0.1
      */
-    explicit Polygon(const std::vector<Point>& shell)
-        : exterior(shell)
+    Polygon(std::initializer_list<LinearRing> rings)
     {
-        Bounds& b     = bounds();
-        Bounds& b_ext = exterior.bounds();
-        b.extend(b_ext.minx, b_ext.miny);
-        b.extend(b_ext.maxx, b_ext.maxy);
-    }
-
-    /*!
-     * @brief creates a Polygon
-     * @param shell the shell of the polygon as a Point sequence
-     * @param holes one or more collection of points, each representing a hole in the polygon
-     *
-     * @since 0.0.1
-     */
-    Polygon(const std::vector<Point>& shell, const std::vector<std::vector<Point>>& holes)
-        : exterior(shell)
-    {
-        Bounds& b     = bounds();
-        Bounds& b_ext = exterior.bounds();
-        b.extend(b_ext.minx, b_ext.miny);
-        b.extend(b_ext.maxx, b_ext.maxy);
-        interiors.reserve(holes.size());
-        for (const auto& hole : holes)
+        if (rings.size() >= 1)
         {
-            interiors.emplace_back(hole);
-            Bounds& b_int = interiors[interiors.size() - 1].bounds();
-            b.extend(b_int.minx, b_int.miny);
-            b.extend(b_int.maxx, b_int.maxy);
+            auto ring     = rings.begin();
+            Bounds& b     = bounds();
+            exterior      = LinearRing(*ring);
+            Bounds& b_ext = exterior.bounds();
+            b.extend(b_ext.minx, b_ext.miny);
+            b.extend(b_ext.maxx, b_ext.maxy);
+            ring++;
+            for (; ring != rings.end(); ++ring)
+            {
+                interiors.emplace_back(*ring);
+                Bounds& b_int = interiors[interiors.size() - 1].bounds();
+                b.extend(b_int.minx, b_int.miny);
+                b.extend(b_int.maxx, b_int.maxy);
+            }
         }
-    }
-
-    /// @private
-    GeometryType type_() const
-    {
-        return GeometryType::POLYGON;
-    }
-
-    /// @private
-    std::string type_str_() const
-    {
-        return "Polygon";
-    }
-
-    /// @private
-    bool empty_() const
-    {
-        throw exceptions::not_implemented_error();
-    }
-
-    /// @private
-    size_t size_() const
-    {
-        throw exceptions::not_implemented_error();
-    }
-
-    /// @private
-    bool is_closed_() const
-    {
-        throw exceptions::not_implemented_error();
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double>> xy_() const
-    {
-        throw exceptions::not_implemented_error();
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xyz_() const
-    {
-        throw exceptions::not_implemented_error();
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xym_() const
-    {
-        throw exceptions::not_implemented_error();
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
-    {
-        throw exceptions::not_implemented_error();
     }
 
     /*!
@@ -179,6 +113,69 @@ class Polygon : public BasicGeometry<Polygon>
      * @since 0.0.1
      */
     std::string wkt()
+    {
+        throw exceptions::not_implemented_error();
+    }
+
+  private:
+    /// for implementation encapsulation
+    friend class BasicGeometry;
+
+    /// @private
+    GeometryType type_() const
+    {
+        return GeometryType::POLYGON;
+    }
+
+    /// @private
+    std::string type_str_() const
+    {
+        return "Polygon";
+    }
+
+    /// @private
+    bool empty_() const
+    {
+        return size_() == 0;
+    }
+
+    /// @private
+    size_t size_() const
+    {
+        size_t size = exterior.size();
+        for (const auto& interior : interiors)
+        {
+            size += interior.size();
+        }
+        return size;
+    }
+
+    /// @private
+    bool is_closed_() const
+    {
+        return true;
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double>> xy_() const
+    {
+        throw exceptions::not_implemented_error();
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xyz_() const
+    {
+        throw exceptions::not_implemented_error();
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xym_() const
+    {
+        throw exceptions::not_implemented_error();
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double, double>> xyzm_() const
     {
         throw exceptions::not_implemented_error();
     }

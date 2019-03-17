@@ -14,6 +14,7 @@ namespace simo
 namespace shapes
 {
 
+/// @todo (pavel) DOCUMENT ME!
 class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<MultiPoint>
 {
   public:
@@ -60,22 +61,6 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         {
             b.extend(p.x, p.y);
         }
-    }
-
-    /*!
-    * @private
-    */
-    GeometryType type_() const
-    {
-        return GeometryType::MULTIPOINT;
-    }
-
-    /*!
-    * @private
-    */
-    std::string type_str_() const
-    {
-        return "MultiPoint";
     }
 
     /*!
@@ -230,6 +215,93 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         }
         ss << ")";
         return ss.str();
+    }
+
+  private:
+    /// for implementation encapsulation
+    friend class BasicGeometry;
+
+    /*!
+    * @private
+    */
+    GeometryType type_() const
+    {
+        return GeometryType::MULTIPOINT;
+    }
+
+    /*!
+    * @private
+    */
+    std::string type_str_() const
+    {
+        return "MultiPoint";
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double>> xy_() const
+    {
+        std::vector<std::tuple<double, double>> res;
+        for (const auto& point : m_points)
+        {
+            res.emplace_back(point.x, point.y);
+        }
+        return res;
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xyz_() const
+    {
+        std::vector<std::tuple<double, double, double>> res;
+        for (const auto& point : m_points)
+        {
+            res.emplace_back(point.x, point.y, point.z);
+        }
+        return res;
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xym_() const
+    {
+        std::vector<std::tuple<double, double, double>> res;
+        for (const auto& point : m_points)
+        {
+            res.emplace_back(point.x, point.y, point.m);
+        }
+        return res;
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double, double>> xyzm_() const
+    {
+        std::vector<std::tuple<double, double, double, double>> res;
+        for (const auto& point : m_points)
+        {
+            res.emplace_back(point.x, point.y, point.z, point.m);
+        }
+        return res;
+    }
+
+    /// @private
+    bool empty_() const
+    {
+        return m_points.empty();
+    }
+
+    /// @private
+    size_t size_() const
+    {
+        return m_points.size();
+    }
+
+    /// @private
+    bool is_closed_() const
+    {
+        if (m_points.size() < 2)
+        {
+            return false;
+        }
+        size_t last_index = m_points.size() - 1;
+        return m_points[0] == m_points[last_index];
     }
 };
 

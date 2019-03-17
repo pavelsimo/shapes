@@ -191,62 +191,6 @@ class Point : public BasicGeometry<Point>
         }
     }
 
-    /// @private
-    GeometryType type_() const
-    {
-        return GeometryType::POINT;
-    }
-
-    /// @private
-    std::string type_str_() const
-    {
-        return "Point";
-    }
-
-    /// @private
-    bool empty_() const
-    {
-        return false;
-    }
-
-    /// @private
-    size_t size_() const
-    {
-        return static_cast<size_t>(ndim());
-    }
-
-    /// @private
-    bool is_closed_() const
-    {
-        return false;
-    }
-
-    /*!
-     * @private
-     */
-    std::vector<std::tuple<double, double>> xy_() const
-    {
-        return {std::make_tuple(x, y)};
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xyz_() const
-    {
-        return {std::make_tuple(x, y, z)};
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xym_() const
-    {
-        return {std::make_tuple(x, y, m)};
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
-    {
-        return {std::make_tuple(x, y, z, m)};
-    }
-
     /*!
      * @brief returns the coordinate at the given index
      *
@@ -441,6 +385,66 @@ class Point : public BasicGeometry<Point>
         }
         ss << ")";
         return ss.str();
+    }
+
+  private:
+    /// for implementation encapsulation
+    friend class BasicGeometry;
+
+    /// @private
+    GeometryType type_() const
+    {
+        return GeometryType::POINT;
+    }
+
+    /// @private
+    std::string type_str_() const
+    {
+        return "Point";
+    }
+
+    /// @private
+    bool empty_() const
+    {
+        return false;
+    }
+
+    /// @private
+    size_t size_() const
+    {
+        return static_cast<size_t>(ndim());
+    }
+
+    /// @private
+    bool is_closed_() const
+    {
+        return false;
+    }
+
+    /*!
+     * @private
+     */
+    std::vector<std::tuple<double, double>> xy_() const
+    {
+        return {std::make_tuple(x, y)};
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xyz_() const
+    {
+        return {std::make_tuple(x, y, z)};
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xym_() const
+    {
+        return {std::make_tuple(x, y, m)};
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double, double>> xyzm_() const
+    {
+        return {std::make_tuple(x, y, z, m)};
     }
 };
 
