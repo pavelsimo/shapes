@@ -70,7 +70,6 @@ class LinearRing : public BasicGeometry<LinearRing>, public PointCollection<Line
     }
 
   private:
-
     /// for implementation encapsulation
     friend class BasicGeometry;
 

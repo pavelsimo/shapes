@@ -59,7 +59,6 @@ class LineString : public BasicGeometry<LineString>, public PointCollection<Line
         m_points = points;
     }
 
-
     /*!
      * @brief creates a LineString from a geojson string
      *
