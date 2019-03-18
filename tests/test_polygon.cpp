@@ -2,7 +2,7 @@
 #include <catch/catch.hpp>
 #include <simo/shapes.hpp>
 
-using namespace simo::shapes;
+using namespace simo;
 
 TEST_CASE("Polygon")
 {
@@ -10,17 +10,17 @@ TEST_CASE("Polygon")
     {
         SECTION("empty")
         {
-            Polygon p;
+            shapes::Polygon p;
             CHECK(p.empty());
             CHECK(p.size() == 0);
-            CHECK(p.type() == GeometryType::POLYGON);
-            CHECK(p.detailed_type() == GeometryDetailedType::POLYGON);
+            CHECK(p.type() == shapes::GeometryType::POLYGON);
+            CHECK(p.detailed_type() == shapes::GeometryDetailedType::POLYGON);
             CHECK(p.type_str() == "Polygon");
         }
 
         SECTION("xy shell - initializer list")
         {
-            Polygon p = {
+            shapes::Polygon p = {
                 {{1, 2}, {3, 4}, {5, 6}, {1, 2}}  // exterior
             };
             CHECK(p.exterior[0].x == 1);
@@ -31,8 +31,8 @@ TEST_CASE("Polygon")
             CHECK(p.exterior[2].y == 6);
             CHECK(p.exterior[3].x == 1);
             CHECK(p.exterior[3].y == 2);
-            CHECK(p.type() == GeometryType::POLYGON);
-            CHECK(p.detailed_type() == GeometryDetailedType::POLYGON);
+            CHECK(p.type() == shapes::GeometryType::POLYGON);
+            CHECK(p.detailed_type() == shapes::GeometryDetailedType::POLYGON);
             CHECK(p.type_str() == "Polygon");
         }
 
@@ -43,7 +43,7 @@ TEST_CASE("Polygon")
 
         SECTION("xyz shell - initializer list")
         {
-            Polygon p = {
+            shapes::Polygon p = {
                 {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}}  // exterior
             };
             CHECK(p.exterior[0].x == 1);
@@ -56,7 +56,7 @@ TEST_CASE("Polygon")
 
         SECTION("xyz shell, holes - initializer list")
         {
-            Polygon p = {
+            shapes::Polygon p = {
                 {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}},  // exterior
                 {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}}   // interior
             };
@@ -68,7 +68,7 @@ TEST_CASE("Polygon")
             CHECK(p.exterior[1].z == 6);
 
             CHECK(p.interiors.size() == 1);
-            LinearRing& interior = p.interiors[0];
+            shapes::LinearRing& interior = p.interiors[0];
             CHECK(interior[0].x == 1);
             CHECK(interior[0].y == 2);
             CHECK(interior[0].z == 3);

@@ -22,7 +22,7 @@ class Polygon : public BasicGeometry<Polygon>
     LinearRing exterior;
 
     /// collection of linear rings that represent the holes of the polygon
-    std::vector<LinearRing> interiors{};
+    std::vector<LinearRing> interiors;
 
     /*!
      * @brief creates an empty Polygon
