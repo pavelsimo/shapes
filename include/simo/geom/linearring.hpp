@@ -71,6 +71,7 @@ class LinearRing : public BasicGeometry<LinearRing>, public PointCollection<Line
 
   private:
     /// for implementation encapsulation
+    template<class T>
     friend class BasicGeometry;
 
     /// @private

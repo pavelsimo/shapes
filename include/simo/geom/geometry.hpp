@@ -157,7 +157,7 @@ class Geometry
 };
 
 /// basic geometry type
-template <typename Derived>
+template <typename T>
 class BasicGeometry : public Geometry
 {
   public:
@@ -170,13 +170,13 @@ class BasicGeometry : public Geometry
     /// @copydoc Geometry::type()
     GeometryType type() const override
     {
-        return static_cast<const Derived*>(this)->type_();
+        return static_cast<const T*>(this)->type_();
     }
 
     /// @copydoc Geometry::detailed_type()
     GeometryDetailedType detailed_type() const override
     {
-        auto type = static_cast<const Derived*>(this)->type_();
+        auto type = static_cast<const T*>(this)->type_();
         switch (dim_)
         {
             case DimensionType::XY:
@@ -346,43 +346,43 @@ class BasicGeometry : public Geometry
     /// @copydoc Geometry::type_str()
     std::string type_str() const override
     {
-        return static_cast<const Derived*>(this)->type_str_();
+        return static_cast<const T*>(this)->type_str_();
     }
 
     /// @copydoc Geometry::empty()
     bool empty() const override
     {
-        return static_cast<const Derived*>(this)->empty_();
+        return static_cast<const T*>(this)->empty_();
     }
 
     /// @copydoc Geometry::size()
     size_t size() const override
     {
-        return static_cast<const Derived*>(this)->size_();
+        return static_cast<const T*>(this)->size_();
     }
 
     /// @copydoc Geometry::xy()
     std::vector<std::tuple<double, double>> xy() const override
     {
-        return static_cast<const Derived*>(this)->xy_();
+        return static_cast<const T*>(this)->xy_();
     }
 
     /// @copydoc Geometry::xyz()
     std::vector<std::tuple<double, double, double>> xyz() const override
     {
-        return static_cast<const Derived*>(this)->xyz_();
+        return static_cast<const T*>(this)->xyz_();
     }
 
     /// @copydoc Geometry::xym()
     std::vector<std::tuple<double, double, double>> xym() const override
     {
-        return static_cast<const Derived*>(this)->xym_();
+        return static_cast<const T*>(this)->xym_();
     }
 
     /// @copydoc Geometry::xyzm()
     std::vector<std::tuple<double, double, double, double>> xyzm() const override
     {
-        return static_cast<const Derived*>(this)->xyzm_();
+        return static_cast<const T*>(this)->xyzm_();
     }
 
     /// @copydoc Geometry::dim()
@@ -418,7 +418,7 @@ class BasicGeometry : public Geometry
     /// @copydoc Geometry::is_closed()
     bool is_closed() const override
     {
-        return static_cast<const Derived*>(this)->is_closed_();
+        return static_cast<const T*>(this)->is_closed_();
     }
 
     /// @copydoc Geometry::ndim()

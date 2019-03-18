@@ -389,6 +389,7 @@ class Point : public BasicGeometry<Point>
 
   private:
     /// for implementation encapsulation
+    template<class T>
     friend class BasicGeometry;
 
     /// @private

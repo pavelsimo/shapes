@@ -120,6 +120,7 @@ class LineString : public BasicGeometry<LineString>, public PointCollection<Line
 
   private:
     /// for implementation encapsulation
+    template<class T>
     friend class BasicGeometry;
 
     /// @private
