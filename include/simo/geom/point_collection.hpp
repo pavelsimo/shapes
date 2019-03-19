@@ -8,7 +8,7 @@ namespace simo
 namespace shapes
 {
 
-template <typename Derived>
+template <typename T>
 class PointCollection
 {
   public:

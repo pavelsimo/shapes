@@ -219,8 +219,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
 
   private:
     /// for implementation encapsulation
-    template<class T>
-    friend class BasicGeometry;
+    friend class BasicGeometry<MultiPoint>;
 
     /*!
     * @private

@@ -119,8 +119,7 @@ class Polygon : public BasicGeometry<Polygon>
 
   private:
     /// for implementation encapsulation
-    template<class T>
-    friend class BasicGeometry;
+    friend class BasicGeometry<Polygon>;
 
     /// @private
     GeometryType type_() const

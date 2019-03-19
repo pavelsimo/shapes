@@ -21,6 +21,7 @@ namespace simo
 namespace shapes
 {
 
+/// @todo (pavel) DOCUMENT ME!
 class Point : public BasicGeometry<Point>
 {
   public:
