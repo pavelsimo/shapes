@@ -60,6 +60,12 @@ TEST_CASE("Point")
             CHECK(p.detailed_type() == GeometryDetailedType::POINTZM);
             CHECK(p.type_str() == "Point");
         }
+
+        SECTION("throws - initializer list")
+        {
+            CHECK_THROWS(Point{1, 2, 3, 4 , 5});
+            CHECK_THROWS(Point{1});
+        }
     }
 
     SECTION("from_... methods")
@@ -319,7 +325,19 @@ TEST_CASE("Point")
 
         SECTION("xyzm - index operator")
         {
-            /// @todo (pavel) add test
+            Point p = {1, 2, 3, 4};
+            CHECK(p[0] == 1.0);
+            CHECK(p[1] == 2.0);
+            CHECK(p[2] == 3.0);
+            CHECK(p[3] == 4.0);
+            CHECK(p.size() == 4);
+            CHECK_THROWS(p[4]);
+            size_t n = 0;
+            for (size_t i = 0; i < p.size(); ++i)
+            {
+                n++;
+            }
+            CHECK(n == p.size());
         }
     }
 
@@ -347,12 +365,23 @@ TEST_CASE("Point")
 
         SECTION("xym - tuples")
         {
-            /// @todo (pavel) add test
+            Point p = Point::from_xym(1.0, 2.0, 3.0);
+            double x, y, m;
+            std::tie(x, y, m) = p.xym()[0];
+            CHECK(x == 1.0);
+            CHECK(y == 2.0);
+            CHECK(m == 3.0);
         }
 
         SECTION("xyzm - tuples")
         {
-            /// @todo (pavel) add test
+            Point p = {1.0, 2.0, 3.0, 4.0};
+            double x, y, z, m;
+            std::tie(x, y, z, m) = p.xyzm()[0];
+            CHECK(x == 1.0);
+            CHECK(y == 2.0);
+            CHECK(z == 3.0);
+            CHECK(m == 4.0);
         }
     }
 }
