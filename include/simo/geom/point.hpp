@@ -21,8 +21,12 @@ namespace simo
 namespace shapes
 {
 
-/// @todo (pavel) DOCUMENT ME!
-class Point : public BasicGeometry<Point>
+/*!
+ * @brief represents a Point
+ *
+ * @since 0.0.1
+ */
+class Point : public BaseGeometry<Point>
 {
   public:
     /// the x-coordinate value for this Point
@@ -57,7 +61,7 @@ class Point : public BasicGeometry<Point>
     Point(double x, double y)
         : x(x), y(y)
     {
-        set_dim(DimensionType::XY);
+        dim = DimensionType::XY;
     }
 
     /*!
@@ -72,7 +76,7 @@ class Point : public BasicGeometry<Point>
     Point(double x, double y, double z)
         : x(x), y(y), z(z)
     {
-        set_dim(DimensionType::XYZ);
+        dim = DimensionType::XYZ;
     }
 
     /*!
@@ -88,7 +92,7 @@ class Point : public BasicGeometry<Point>
     Point(double x, double y, double z, double m)
         : x(x), y(y), z(z), m(m)
     {
-        set_dim(DimensionType::XYZM);
+        dim = DimensionType::XYZM;
     }
 
     /*!
@@ -130,10 +134,10 @@ class Point : public BasicGeometry<Point>
     static Point from_xym(double x, double y, double m)
     {
         Point p;
-        p.x = x;
-        p.y = y;
-        p.m = m;
-        p.set_dim(DimensionType::XYM);
+        p.x   = x;
+        p.y   = y;
+        p.m   = m;
+        p.dim = DimensionType::XYM;
         return p;
     }
 
@@ -167,24 +171,24 @@ class Point : public BasicGeometry<Point>
     {
         if (init.size() == 2)
         {
-            x = *init.begin();
-            y = *(init.begin() + 1);
-            set_dim(DimensionType::XY);
+            x   = *init.begin();
+            y   = *(init.begin() + 1);
+            dim = DimensionType::XY;
         }
         else if (init.size() == 3)
         {
-            x = *init.begin();
-            y = *(init.begin() + 1);
-            z = *(init.begin() + 2);
-            set_dim(DimensionType::XYZ);
+            x   = *init.begin();
+            y   = *(init.begin() + 1);
+            z   = *(init.begin() + 2);
+            dim = DimensionType::XYZ;
         }
         else if (init.size() == 4)
         {
-            x = *init.begin();
-            y = *(init.begin() + 1);
-            z = *(init.begin() + 2);
-            m = *(init.begin() + 3);
-            set_dim(DimensionType::XYZM);
+            x   = *init.begin();
+            y   = *(init.begin() + 1);
+            z   = *(init.begin() + 2);
+            m   = *(init.begin() + 3);
+            dim = DimensionType::XYZM;
         }
         else
         {
@@ -221,7 +225,7 @@ class Point : public BasicGeometry<Point>
 
         if (pos == 2)
         {
-            return dim() == DimensionType::XYM ? m : z;
+            return dim == DimensionType::XYM ? m : z;
         }
 
         return m;
@@ -394,7 +398,7 @@ class Point : public BasicGeometry<Point>
 
   private:
     /// for implementation encapsulation
-    friend class BasicGeometry<Point>;
+    friend class BaseGeometry<Point>;
 
     /// @private
     GeometryType type_() const

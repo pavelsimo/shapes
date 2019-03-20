@@ -15,7 +15,12 @@ namespace simo
 namespace shapes
 {
 
-class Polygon : public BasicGeometry<Polygon>
+/*!
+ * @brief represents a Polygon
+ *
+ * @since 0.0.1
+ */
+class Polygon : public BaseGeometry<Polygon>
 {
   public:
     /// linear ring that represents the shell of the polygon
@@ -42,16 +47,16 @@ class Polygon : public BasicGeometry<Polygon>
         if (rings.size() >= 1)
         {
             auto ring     = rings.begin();
-            Bounds& b     = bounds();
+            Bounds& b     = bounds;
             exterior      = LinearRing(*ring);
-            Bounds& b_ext = exterior.bounds();
+            Bounds& b_ext = exterior.bounds;
             b.extend(b_ext.minx, b_ext.miny);
             b.extend(b_ext.maxx, b_ext.maxy);
             ring++;
             for (; ring != rings.end(); ++ring)
             {
                 interiors.emplace_back(*ring);
-                Bounds& b_int = interiors[interiors.size() - 1].bounds();
+                Bounds& b_int = interiors[interiors.size() - 1].bounds;
                 b.extend(b_int.minx, b_int.miny);
                 b.extend(b_int.maxx, b_int.maxy);
             }
@@ -118,8 +123,8 @@ class Polygon : public BasicGeometry<Polygon>
     }
 
   private:
-    /// for implementation encapsulation
-    friend class BasicGeometry<Polygon>;
+    /// for allow BaseGeometry to access Polygon private members
+    friend class BaseGeometry<Polygon>;
 
     /// @private
     GeometryType type_() const

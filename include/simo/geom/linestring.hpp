@@ -14,8 +14,12 @@ namespace simo
 namespace shapes
 {
 
-/// @todo (pavel) DOCUMENT ME!
-class LineString : public BasicGeometry<LineString>, public Curve<LineString>
+/*!
+ * @brief represents a LineString
+ *
+ * @since 0.0.1
+ */
+class LineString : public BaseGeometry<LineString>, public Curve<LineString>
 {
   public:
     /*!
@@ -37,11 +41,10 @@ class LineString : public BasicGeometry<LineString>, public Curve<LineString>
     LineString(std::initializer_list<std::initializer_list<T>> init)
     {
         m_points.reserve(init.size());
-        Bounds& b = bounds();
         for (const auto& coords : init)
         {
             Point p(coords);
-            b.extend(p.x, p.y);
+            bounds.extend(p.x, p.y);
             m_points.emplace_back(std::move(p));
         }
         valid_or_throw();
@@ -120,7 +123,7 @@ class LineString : public BasicGeometry<LineString>, public Curve<LineString>
 
   private:
     /// for implementation encapsulation
-    friend class BasicGeometry<LineString>;
+    friend class BaseGeometry<LineString>;
 
     /// @private
     void valid_or_throw()

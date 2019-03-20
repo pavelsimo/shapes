@@ -13,7 +13,7 @@ TEST_CASE("Point")
             Point p;
             CHECK(p.x == 0);
             CHECK(p.y == 0);
-            CHECK(p.dim() == DimensionType::XY);
+            CHECK(p.dim == DimensionType::XY);
             CHECK(p.type() == GeometryType::POINT);
             CHECK(p.detailed_type() == GeometryDetailedType::POINT);
             CHECK(p.type_str() == "Point");
@@ -25,7 +25,7 @@ TEST_CASE("Point")
             CHECK(p.x == 1);
             CHECK(p.y == 2);
             CHECK(p.z == 0);
-            CHECK(p.dim() == DimensionType::XY);
+            CHECK(p.dim == DimensionType::XY);
             CHECK(p.type() == GeometryType::POINT);
             CHECK(p.detailed_type() == GeometryDetailedType::POINT);
             CHECK(p.type_str() == "Point");
@@ -37,7 +37,7 @@ TEST_CASE("Point")
             CHECK(p.x == 1);
             CHECK(p.y == 2);
             CHECK(p.z == 3);
-            CHECK(p.dim() == DimensionType::XYZ);
+            CHECK(p.dim == DimensionType::XYZ);
             CHECK(p.type() == GeometryType::POINT);
             CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
             CHECK(p.type_str() == "Point");
@@ -55,7 +55,7 @@ TEST_CASE("Point")
             CHECK(p.y == 2);
             CHECK(p.z == 3);
             CHECK(p.m == 4);
-            CHECK(p.dim() == DimensionType::XYZM);
+            CHECK(p.dim == DimensionType::XYZM);
             CHECK(p.type() == GeometryType::POINT);
             CHECK(p.detailed_type() == GeometryDetailedType::POINTZM);
             CHECK(p.type_str() == "Point");
@@ -63,7 +63,7 @@ TEST_CASE("Point")
 
         SECTION("throws - initializer list")
         {
-            CHECK_THROWS(Point{1, 2, 3, 4 , 5});
+            CHECK_THROWS(Point{1, 2, 3, 4, 5});
             CHECK_THROWS(Point{1});
         }
     }
@@ -77,7 +77,7 @@ TEST_CASE("Point")
                 auto p = Point::from_json(R"({"type": "Point", "coordinates": [1.0, 2.0]})");
                 CHECK(p.x == 1.0);
                 CHECK(p.y == 2.0);
-                CHECK(p.dim() == DimensionType::XY);
+                CHECK(p.dim == DimensionType::XY);
                 CHECK(p.type() == GeometryType::POINT);
                 CHECK(p.detailed_type() == GeometryDetailedType::POINT);
                 CHECK(p.type_str() == "Point");
@@ -89,7 +89,7 @@ TEST_CASE("Point")
                 CHECK(p.x == 1.0);
                 CHECK(p.y == 2.0);
                 CHECK(p.z == 3.0);
-                CHECK(p.dim() == DimensionType::XYZ);
+                CHECK(p.dim == DimensionType::XYZ);
                 CHECK(p.type() == GeometryType::POINT);
                 CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
                 CHECK(p.type_str() == "Point");
@@ -119,7 +119,7 @@ TEST_CASE("Point")
                 CHECK(p.x == 1.0);
                 CHECK(p.y == 2.0);
                 CHECK(p.z == 3.0);
-                CHECK(p.dim() == DimensionType::XYZ);
+                CHECK(p.dim == DimensionType::XYZ);
                 CHECK(p.type() == GeometryType::POINT);
                 CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
                 CHECK(p.type_str() == "Point");
@@ -132,7 +132,7 @@ TEST_CASE("Point")
                 CHECK(p.y == 2.0);
                 CHECK(p.z == 3.0);
                 CHECK(p.m == 4.0);
-                CHECK(p.dim() == DimensionType::XYZM);
+                CHECK(p.dim == DimensionType::XYZM);
                 CHECK(p.type() == GeometryType::POINT);
                 CHECK(p.detailed_type() == GeometryDetailedType::POINTZM);
                 CHECK(p.type_str() == "Point");
@@ -230,7 +230,7 @@ TEST_CASE("Point")
                     CHECK(p.z == test_case.z);
                     CHECK(p.m == test_case.m);
                     CHECK(p.detailed_type() == test_case.detailed_type);
-                    CHECK(p.dim() == test_case.dimension);
+                    CHECK(p.dim == test_case.dimension);
                 }
             }
         }

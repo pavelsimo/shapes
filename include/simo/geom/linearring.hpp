@@ -14,10 +14,15 @@ namespace simo
 namespace shapes
 {
 
-/// @todo (pavel) DOCUMENT ME!
-class LinearRing : public BasicGeometry<LinearRing>, public Curve<LinearRing>
+/*!
+ * @brief represents a LinearRing
+ *
+ * @since 0.0.1
+ */
+class LinearRing : public BaseGeometry<LinearRing>, public Curve<LinearRing>
 {
   public:
+
     /// two-dimensional rotation direction, clockwise=true, counterclockwise=false
     bool clockwise = true;
 
@@ -40,11 +45,10 @@ class LinearRing : public BasicGeometry<LinearRing>, public Curve<LinearRing>
     LinearRing(std::initializer_list<std::initializer_list<T>> init)
     {
         m_points.reserve(init.size());
-        Bounds& b = bounds();
         for (const auto& coords : init)
         {
             Point p(coords);
-            b.extend(p.x, p.y);
+            bounds.extend(p.x, p.y);
             m_points.emplace_back(std::move(p));
         }
         valid_or_throw();
@@ -60,18 +64,17 @@ class LinearRing : public BasicGeometry<LinearRing>, public Curve<LinearRing>
      */
     explicit LinearRing(const std::vector<Point>& points)
     {
-        m_points  = points;
-        Bounds& b = bounds();
+        m_points = points;
         for (const auto& p : m_points)
         {
-            b.extend(p.x, p.y);
+            bounds.extend(p.x, p.y);
         }
         valid_or_throw();
     }
 
   private:
-    /// for implementation encapsulation
-    friend class BasicGeometry<LinearRing>;
+    /// for allow BaseGeometry to access LinearRing private members
+    friend class BaseGeometry<LinearRing>;
 
     /// @private
     void valid_or_throw() const

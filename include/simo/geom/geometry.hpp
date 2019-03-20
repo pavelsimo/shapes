@@ -12,153 +12,14 @@ namespace simo
 namespace shapes
 {
 
-/// geometry interface
-class Geometry
-{
-  public:
-    /// virtual destructor
-    virtual ~Geometry() = default;
-
-    /*!
-     * @brief returns the geometry type (e.g. GeometryType::Point, GeometryType::MultiPoint)
-     * @return the geometry type
-     *
-     * @since 0.0.1
-     */
-    virtual GeometryType type() const = 0;
-
-    /*!
-     * @brief returns the geometry detailed type (e.g. GeometryType::PointZ, GeometryType::MultiPointZM)
-     * @return the geometry detailed type
-     *
-     * @since 0.0.1
-     */
-    virtual GeometryDetailedType detailed_type() const = 0;
-
-    /*!
-     * @brief returns the geometry type as a string (e.g. Point, LineString)
-     * @return the geometry type as a string
-     *
-     * @since 0.0.1
-     */
-    virtual std::string type_str() const = 0;
-
-    /*!
-     * @brief returns true if the geometry is empty
-     * @return true if the the geometry is empty, otherwise false
-     *
-     * @since 0.0.1
-     */
-    virtual bool empty() const = 0;
-
-    /*!
-     * @brief returns the geometry size
-     * @return the size of the geometry
-     *
-     * @since 0.0.1
-     */
-    virtual size_t size() const = 0;
-
-    /*!
-     * @brief returns the dimension type of the geometry
-     * @return the dimension type
-     *
-     * @note the dimension type is (x, y), (x, y, z), (x, y, m) and (x, y, z, m)
-     *
-     * @since 0.0.1
-     */
-    virtual DimensionType dim() const = 0;
-
-    /*!
-     * @brief set the dimension type
-     * @param value the dimension type
-     *
-     * @since 0.0.1
-     */
-    virtual void set_dim(DimensionType value) = 0;
-
-    /*!
-     * @brief returns the number of dimensions of the geometry
-     * @return the number of dimensions
-     *
-     * @note the number of dimensions is (x, y) = 2, (x, y, z) = 3, (x, y, m) = 3 and (x, y, z, m) = 4
-     *
-     * @since 0.0.1
-     */
-    virtual int8_t ndim() const = 0;
-
-    /*!
-     * @brief returns the geometry bounds
-     * @return the geometry bounds
-     *
-     * @since 0.0.1
-     */
-    virtual Bounds& bounds() = 0;
-
-    /*!
-     * @brief returns the geometry (x, y) coordinates as a tuple
-     * @return a vector of (x, y) tuples
-     *
-     * @since 0.0.1
-     */
-    virtual std::vector<std::tuple<double, double>> xy() const = 0;
-
-    /*!
-     * @brief returns the geometry (x, y, z) coordinates as a tuple
-     * @return a vector of (x, y, z) tuples
-     *
-     * @since 0.0.1
-     */
-    virtual std::vector<std::tuple<double, double, double>> xyz() const = 0;
-
-    /*!
-     * @brief returns the geometry (x, y, m) coordinates as a tuple
-     * @return a vector of (x, y, m) tuples
-     *
-     * @since 0.0.1
-     */
-    virtual std::vector<std::tuple<double, double, double>> xym() const = 0;
-
-    /*!
-     * @brief returns the geometry (x, y, z, m) coordinates as a tuple
-     * @return a vector of (x, y, z, m) tuples
-     *
-     * @since 0.0.1
-     */
-    virtual std::vector<std::tuple<double, double, double, double>> xyzm() const = 0;
-
-    /*!
-     * @brief whether the geometry has z-coordinate
-     * @return true if the geometry has z-coordinate, otherwise false
-     *
-     * @since 0.0.1
-     */
-    virtual bool has_z() const = 0;
-
-    /*!
-     * @brief whether the geometry has m-coordinate
-     * @return true if the geometry has m-coordinate, otherwise false
-     *
-     * @since 0.0.1
-     */
-    virtual bool has_m() const = 0;
-
-    /*!
-     * @brief whether the geometry is closed
-     * @return true if the geometry is closed, otherwise false
-     *
-     * @since 0.0.1
-     */
-    virtual bool is_closed() const = 0;
-
-    /// @todo (pavel) is_3d()
-    /// @todo (pavel) is_measured()
-    /// @todo (pavel) detailed_type_str()
-};
-
-/// basic geometry type
+/*!
+ * @brief Abstract class for all geometries
+ * @tparam T the geometry type (e.g. Point, Polygon, LineString, ...)
+ *
+ * @since 0.0.1
+ */
 template <typename T>
-class BasicGeometry : public Geometry
+class BaseGeometry
 {
   public:
     /// serialization precision
@@ -167,17 +28,33 @@ class BasicGeometry : public Geometry
     /// a spatial reference identifier (SRID) is a unique identifier associated with a specific coordinate system
     int32_t srid = -1;
 
-    /// @copydoc Geometry::type()
-    GeometryType type() const override
+    /// the geometry bounds
+    Bounds bounds{};
+
+    /// the dimension type is either (x, y), (x, y, z), (x, y, m) or (x, y, z, m)
+    DimensionType dim = DimensionType::XY;
+
+    /*!
+     * @brief returns the geometry type (e.g. GeometryType::Point, GeometryType::MultiPoint)
+     * @return the geometry type
+     *
+     * @since 0.0.1
+     */
+    GeometryType type() const
     {
         return static_cast<const T*>(this)->type_();
     }
 
-    /// @copydoc Geometry::detailed_type()
-    GeometryDetailedType detailed_type() const override
+    /*!
+     * @brief returns the geometry detailed type (e.g. GeometryType::PointZ, GeometryType::MultiPointZM)
+     * @return the geometry detailed type
+     *
+     * @since 0.0.1
+     */
+    GeometryDetailedType detailed_type() const
     {
         auto type = static_cast<const T*>(this)->type_();
-        switch (dim_)
+        switch (dim)
         {
             case DimensionType::XY:
             {
@@ -343,88 +220,127 @@ class BasicGeometry : public Geometry
         return GeometryDetailedType::GEOMETRY;
     }
 
-    /// @copydoc Geometry::type_str()
-    std::string type_str() const override
+    /*!
+     * @brief returns the geometry type as a string (e.g. Point, LineString)
+     * @return the geometry type as a string
+     *
+     * @since 0.0.1
+     */
+    std::string type_str() const
     {
         return static_cast<const T*>(this)->type_str_();
     }
 
-    /// @copydoc Geometry::empty()
-    bool empty() const override
+    /*!
+     * @brief returns true if the geometry is empty
+     * @return true if the the geometry is empty, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool empty() const
     {
         return static_cast<const T*>(this)->empty_();
     }
 
-    /// @copydoc Geometry::size()
-    size_t size() const override
+    /*!
+     * @brief returns the geometry size
+     * @return the size of the geometry
+     *
+     * @since 0.0.1
+     */
+    size_t size() const
     {
         return static_cast<const T*>(this)->size_();
     }
 
-    /// @copydoc Geometry::xy()
-    std::vector<std::tuple<double, double>> xy() const override
+    /*!
+     * @brief returns the geometry (x, y) coordinates as a tuple
+     * @return a vector of (x, y) tuples
+     *
+     * @since 0.0.1
+     */
+    std::vector<std::tuple<double, double>> xy() const
     {
         return static_cast<const T*>(this)->xy_();
     }
 
-    /// @copydoc Geometry::xyz()
-    std::vector<std::tuple<double, double, double>> xyz() const override
+    /*!
+     * @brief returns the geometry (x, y, z) coordinates as a tuple
+     * @return a vector of (x, y, z) tuples
+     *
+     * @since 0.0.1
+     */
+    std::vector<std::tuple<double, double, double>> xyz() const
     {
         return static_cast<const T*>(this)->xyz_();
     }
 
-    /// @copydoc Geometry::xym()
-    std::vector<std::tuple<double, double, double>> xym() const override
+    /*!
+     * @brief returns the geometry (x, y, m) coordinates as a tuple
+     * @return a vector of (x, y, m) tuples
+     *
+     * @since 0.0.1
+     */
+    std::vector<std::tuple<double, double, double>> xym() const
     {
         return static_cast<const T*>(this)->xym_();
     }
 
-    /// @copydoc Geometry::xyzm()
-    std::vector<std::tuple<double, double, double, double>> xyzm() const override
+    /*!
+     * @brief returns the geometry (x, y, z, m) coordinates as a tuple
+     * @return a vector of (x, y, z, m) tuples
+     *
+     * @since 0.0.1
+     */
+    std::vector<std::tuple<double, double, double, double>> xyzm() const
     {
         return static_cast<const T*>(this)->xyzm_();
     }
 
-    /// @copydoc Geometry::dim()
-    DimensionType dim() const override
+    /*!
+     * @brief whether the geometry has z-coordinate
+     * @return true if the geometry has z-coordinate, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool has_z() const
     {
-        return dim_;
+        return dim == DimensionType::XYZ or dim == DimensionType::XYZM;
     }
 
-    /// @copydoc Geometry::set_dim()
-    void set_dim(DimensionType value) override
+    /*!
+     * @brief whether the geometry has m-coordinate
+     * @return true if the geometry has m-coordinate, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool has_m() const
     {
-        dim_ = value;
+        return dim == DimensionType::XYM or dim == DimensionType::XYZM;
     }
 
-    /// @copydoc Geometry::bounds()
-    Bounds& bounds() override
-    {
-        return bounds_;
-    }
-
-    /// @copydoc Geometry::has_z()
-    bool has_z() const override
-    {
-        return dim_ == DimensionType::XYZ or dim_ == DimensionType::XYZM;
-    }
-
-    /// @copydoc Geometry::has_m()
-    bool has_m() const override
-    {
-        return dim_ == DimensionType::XYM or dim_ == DimensionType::XYZM;
-    }
-
-    /// @copydoc Geometry::is_closed()
-    bool is_closed() const override
+    /*!
+     * @brief whether the geometry is closed
+     * @return true if the geometry is closed, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool is_closed() const
     {
         return static_cast<const T*>(this)->is_closed_();
     }
 
-    /// @copydoc Geometry::ndim()
-    int8_t ndim() const override
+    /*!
+     * @brief returns the number of dimensions of the geometry
+     * @return the number of dimensions
+     *
+     * @note the number of dimensions is (x, y) = 2, (x, y, z) = 3, (x, y, m) = 3 and (x, y, z, m) = 4
+     *
+     * @since 0.0.1
+     */
+    int8_t ndim() const
     {
-        switch (dim_)
+        switch (dim)
         {
             case DimensionType::XYZM:
                 return 4;
@@ -436,14 +352,21 @@ class BasicGeometry : public Geometry
                 return 2;
         }
     }
-
-  private:
-    /// geometry bounds
-    Bounds bounds_{};
-
-    /// the dimension type (x, y), (x, y, z), (x, y, m) or (x, y, z, m)
-    DimensionType dim_ = DimensionType::XY;
 };
+
+/*!
+ * @brief
+ */
+typedef union Geometry
+{
+    Point* point;
+    MultiPoint* multipoint;
+    LineString* linestring;
+    MultiLineString* multilinestring;
+    Polygon* polygon;
+    MultiPolygon* multipolygon;
+    GeometryCollection* geometrycollection;
+} Geometry;
 
 }  // namespace shapes
 }  // namespace simo

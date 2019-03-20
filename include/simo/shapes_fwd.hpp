@@ -7,15 +7,21 @@ namespace simo
 namespace shapes
 {
 
-class Geometry;
-
 class Point;
 
 class MultiPoint;
+
+class Polygon;
+
+class MultiPolygon;
+
+class LineString;
+
+class MultiLineString;
+
+class GeometryCollection;
 
 class Bounds;
 
 }  // namespace shapes
 }  // namespace simo
-
-//class bounds_t;

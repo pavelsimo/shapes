@@ -14,8 +14,12 @@ namespace simo
 namespace shapes
 {
 
-/// @todo (pavel) DOCUMENT ME!
-class MultiPoint : public BasicGeometry<MultiPoint>, public Curve<MultiPoint>
+/*!
+ * @brief represents a MultiPoint
+ *
+ * @since 0.0.1
+ */
+class MultiPoint : public BaseGeometry<MultiPoint>, public Curve<MultiPoint>
 {
   public:
     /*!
@@ -37,11 +41,10 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public Curve<MultiPoint>
     MultiPoint(std::initializer_list<std::initializer_list<T>> init)
     {
         m_points.reserve(init.size());
-        Bounds& b = bounds();
         for (const auto& coords : init)
         {
             Point p(coords);
-            b.extend(p.x, p.y);
+            bounds.extend(p.x, p.y);
             m_points.emplace_back(std::move(p));
         }
     }
@@ -55,11 +58,10 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public Curve<MultiPoint>
      */
     explicit MultiPoint(const std::vector<Point>& points)
     {
-        m_points  = points;
-        Bounds& b = bounds();
+        m_points = points;
         for (const auto& p : m_points)
         {
-            b.extend(p.x, p.y);
+            bounds.extend(p.x, p.y);
         }
     }
 
@@ -125,7 +127,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public Curve<MultiPoint>
                 ss << ",";
             }
             const auto& p = m_points[i];
-            switch (p.dim())
+            switch (p.dim)
             {
                 case DimensionType::XY:
                 {
@@ -219,7 +221,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public Curve<MultiPoint>
 
   private:
     /// for implementation encapsulation
-    friend class BasicGeometry<MultiPoint>;
+    friend class BaseGeometry<MultiPoint>;
 
     /*!
     * @private
