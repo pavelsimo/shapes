@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/point_collection.hpp>
+#include <simo/geom/curve.hpp>
 #include <simo/geom/bounds.hpp>
 
 namespace simo
@@ -15,7 +15,7 @@ namespace shapes
 {
 
 /// @todo (pavel) DOCUMENT ME!
-class LineString : public BasicGeometry<LineString>, public PointCollection<LineString>
+class LineString : public BasicGeometry<LineString>, public Curve<LineString>
 {
   public:
     /*!

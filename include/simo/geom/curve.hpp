@@ -9,7 +9,7 @@ namespace shapes
 {
 
 template <typename T>
-class PointCollection
+class Curve
 {
   public:
     /// iterator type

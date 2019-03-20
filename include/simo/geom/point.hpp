@@ -218,7 +218,7 @@ class Point : public BasicGeometry<Point>
         {
             return y;
         }
-
+        /// @todo (pavel) for Point::xym the second position should return the m-coordinate
         if (pos == 2)
         {
             return z;
