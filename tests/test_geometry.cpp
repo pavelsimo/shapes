@@ -15,6 +15,7 @@ TEST_CASE("Geometry")
             CHECK(geom->type() == GeometryType::POINT);
             CHECK(geom->detailed_type() == GeometryDetailedType::POINT);
             CHECK(geom->ndim() == 2);
+            CHECK(geom->size() == 2);
             CHECK(not geom->has_z());
             CHECK(not geom->has_m());
             CHECK(not geom->is_closed());
@@ -32,6 +33,7 @@ TEST_CASE("Geometry")
             CHECK(geom->detailed_type() == GeometryDetailedType::POINTZ);
             CHECK(geom->ndim() == 3);
             CHECK(geom->has_z());
+            CHECK(geom->size() == 3);
             CHECK(not geom->has_m());
             CHECK(not geom->is_closed());
             double x, y, z;
@@ -43,6 +45,7 @@ TEST_CASE("Geometry")
 
         SECTION("xym")
         {
+
             /// @todo (pavel) add test
         }
 
@@ -55,6 +58,7 @@ TEST_CASE("Geometry")
             CHECK(geom->ndim() == 4);
             CHECK(geom->has_z());
             CHECK(geom->has_m());
+            CHECK(geom->size() == 4);
             CHECK(not geom->is_closed());
             double x, y, z, m;
             std::tie(x, y, z, m) = geom->xyzm()[0];
