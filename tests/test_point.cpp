@@ -320,7 +320,18 @@ TEST_CASE("Point")
 
         SECTION("xym - index operator")
         {
-            /// @todo (pavel) add test
+            Point p = Point::from_xym(1, 2, 3);
+            CHECK(p[0] == 1.0);
+            CHECK(p[1] == 2.0);
+            CHECK(p[2] == 3.0);
+            CHECK(p.size() == 3);
+            CHECK_THROWS(p[3]);
+            size_t n = 0;
+            for (size_t i = 0; i < p.size(); ++i)
+            {
+                n++;
+            }
+            CHECK(n == p.size());
         }
 
         SECTION("xyzm - index operator")
