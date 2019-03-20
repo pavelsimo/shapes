@@ -218,27 +218,28 @@ class Point : public BasicGeometry<Point>
         {
             return y;
         }
-        /// @todo (pavel) for Point::xym the second position should return the m-coordinate
+
         if (pos == 2)
         {
-            return z;
+            return dim() == DimensionType::XYM ? m : z;
         }
 
         return m;
     }
 
-    /*!
-     * @copydoc Point::at()
-     */
+    /// @copydoc Point::at()
     double operator[](size_t pos)
     {
         return at(pos);
     }
 
     /*!
-     * @brief @todo (pavel) DOCUMENT ME!
-     * @param other
-     * @return
+     * @brief returns true if all coordinates are equal, otherwise false
+     *
+     * @param other the point to compare
+     * @return true if all coordinates are equal, otherwise false
+     *
+     * @since 0.0.1
      */
     bool operator==(const Point& other) const
     {
@@ -246,9 +247,12 @@ class Point : public BasicGeometry<Point>
     }
 
     /*!
-     * @brief @todo (pavel) DOCUMENT ME!
-     * @param other
-     * @return
+     * @brief returns true if at least one coordinate is different, otherwise false
+     *
+     * @param other the point to compare
+     * @return true if at least one coordinate is different, otherwise false
+     *
+     * @since 0.0.1
      */
     bool operator!=(const Point& other) const
     {
