@@ -18,7 +18,7 @@ class WktLexer
   public:
 
     /*!
-     * @brief creates a WktLexer from the given source
+     * @brief creates a wkt lexer from the given source
      * @param source the source string
      *
      * @since 0.0.1

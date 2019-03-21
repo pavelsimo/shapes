@@ -21,7 +21,7 @@ class ShapesException : public std::exception
   public:
     /*!
      * @brief creates a shapes exception
-     * @param what the exception reason
+     * @param reason the exception reason
      *
      * @since 0.0.1
      */

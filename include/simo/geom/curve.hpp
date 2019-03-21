@@ -10,7 +10,9 @@ namespace shapes
 
 /*!
  * @brief represents a curve
- * @tparam T the geometry type
+ * @tparam T the curve geometry type (e.g. LineString, LinearRing)
+ *
+ * @since 0.0.1
  */
 template <typename T>
 class Curve
@@ -23,7 +25,7 @@ class Curve
     using const_iterator = std::vector<Point>::const_iterator;
 
     /*!
-     * @return returns an iterator pointing to the first element in the PointCollection
+     * @return returns an iterator pointing to the first element in the Curve
      *
      * @since 0.0.1
      */
@@ -33,7 +35,7 @@ class Curve
     }
 
     /*!
-     * @return returns a constant iterator pointing to the first element in the PointCollection
+     * @return returns a constant iterator pointing to the first element in the Curve
      *
      * @since 0.0.1
      */
@@ -43,7 +45,7 @@ class Curve
     }
 
     /*!
-     * @return returns an iterator pointing to the past-the-end element in the PointCollection
+     * @return returns an iterator pointing to the past-the-end element in the Curve
      *
      * @since 0.0.1
      */
@@ -53,7 +55,7 @@ class Curve
     }
 
     /*!
-     * @return returns a const iterator pointing to the past-the-end element in the PointCollection
+     * @return returns a const iterator pointing to the past-the-end element in the Curve
      *
      * @since 0.0.1
      */
