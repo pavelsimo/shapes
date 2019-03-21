@@ -7,12 +7,26 @@ namespace simo
 namespace shapes
 {
 
-struct wkt_result
+/*!
+ * @brief a Well-known text (WKT) markup language parser result
+ *
+ * @since 0.0.1
+ */
+struct WktResult
 {
+    /// whether there is a parser error
     int parser_error;
+
+    /// the dimension type of the geometry
     DimensionType dim;
+
+    /// the number of dimensiones
     int ndim;
+
+    /// the coordinates as a sequence of numbers
     std::vector<double> coords;
+
+    /// the offsets in the coordinates sequence
     std::vector<std::size_t> offsets;
 };
 

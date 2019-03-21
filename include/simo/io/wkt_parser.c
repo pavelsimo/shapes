@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <ciso646>
 #include <iostream>
 #include <cassert>
 #include "wkt_parser.h"
@@ -82,9 +83,9 @@ typedef union {
 #define YYSTACKDEPTH 1048576
 #endif
 #if INTERFACE
-#define ParseARG_SDECL  struct simo::shapes::wkt_result *result ;
-#define ParseARG_PDECL , struct simo::shapes::wkt_result *result 
-#define ParseARG_FETCH  struct simo::shapes::wkt_result *result  = yypParser->result 
+#define ParseARG_SDECL  struct simo::shapes::WktResult *result ;
+#define ParseARG_PDECL , struct simo::shapes::WktResult *result 
+#define ParseARG_FETCH  struct simo::shapes::WktResult *result  = yypParser->result 
 #define ParseARG_STORE yypParser->result  = result 
 #endif
 #define YYNSTATE 31

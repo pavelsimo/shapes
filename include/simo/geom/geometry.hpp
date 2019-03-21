@@ -13,8 +13,8 @@ namespace shapes
 {
 
 /*!
- * @brief Abstract class for all geometries
- * @tparam T the geometry type (e.g. Point, Polygon, LineString, ...)
+ * @brief abstract class for all geometries
+ * @tparam T the geometry type (e.g. Point, Polygon, LineString)
  *
  * @since 0.0.1
  */
@@ -355,17 +355,19 @@ class BaseGeometry
 };
 
 /*!
- * @brief
+ * @brief the geometry type
+ *
+ * @since 0.0.1
  */
 typedef union Geometry
 {
-    Point* point;
-    MultiPoint* multipoint;
-    LineString* linestring;
-    MultiLineString* multilinestring;
-    Polygon* polygon;
-    MultiPolygon* multipolygon;
-    GeometryCollection* geometrycollection;
+    Point* point;                             /// Point value
+    MultiPoint* multipoint;                   /// MultiPoint value
+    LineString* linestring;                   /// LineString value
+    MultiLineString* multilinestring;         /// MultiLineString value
+    Polygon* polygon;                         /// Polygon value
+    MultiPolygon* multipolygon;               /// MultiPolygon value
+    GeometryCollection* geometrycollection;   /// GeometryCollection value
 } Geometry;
 
 }  // namespace shapes

@@ -15,7 +15,7 @@ namespace shapes
 {
 
 /*!
- * @brief represents a LinearRing
+ * @brief represents a linear ring
  *
  * @since 0.0.1
  */
@@ -86,12 +86,12 @@ class LinearRing : public BaseGeometry<LinearRing>, public Curve<LinearRing>
 
         if (m_points.size() < 4)
         {
-            throw exceptions::value_error("LinearRing should be either empty or with 4 or more points");
+            throw exceptions::ValueError("LinearRing should be either empty or with 4 or more points");
         }
 
         if (not is_closed())
         {
-            throw exceptions::value_error("LinearRing is not closed, first and last point are different");
+            throw exceptions::ValueError("LinearRing is not closed, first and last point are different");
         }
 
         /// @todo (pavel) check for self-intersections

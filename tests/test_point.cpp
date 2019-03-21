@@ -253,6 +253,16 @@ TEST_CASE("Point")
                 p.precision = 1;
                 CHECK(p.json() == R"({"type":"Point","coordinates":[1.0,2.0,3.0]})");
             }
+
+            SECTION("xym - to json")
+            {
+                /// @todo (pavel) add test
+            }
+
+            SECTION("xyzm - to json")
+            {
+                /// @todo (pavel) add test
+            }
         }
 
         SECTION("wkt")
@@ -273,7 +283,9 @@ TEST_CASE("Point")
 
             SECTION("xym - to wkt")
             {
-                /// @todo (pavel) add test
+                Point p     = Point::from_xym(1.0, 2.0, 3.0);
+                p.precision = 1;
+                CHECK(p.wkt() == "POINT M (1.0 2.0 3.0)");
             }
 
             SECTION("xyzm - to wkt")

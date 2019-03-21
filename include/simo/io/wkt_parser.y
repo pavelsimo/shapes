@@ -6,7 +6,7 @@
 #include <cassert>
 }
 
-%extra_argument { struct simo::shapes::wkt_result *result }
+%extra_argument { struct simo::shapes::WktResult *result }
 
 %token_type {double}
 

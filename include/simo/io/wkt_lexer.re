@@ -8,17 +8,34 @@ namespace simo
 namespace shapes
 {
 
-class wkt_lexer
+/*!
+ * @brief a Well-known text (WKT) markup language lexer
+ *
+ * @since 0.0.1
+ */
+class WktLexer
 {
   public:
 
-    wkt_lexer(const char* source)
+    /*!
+     * @brief creates a WktLexer from the given source
+     * @param source the source string
+     *
+     * @since 0.0.1
+     */
+    WktLexer(const char* source)
         : content(source)
     {
         start = cursor = source;
         limit          = content + strlen(source);
     }
 
+    /*!
+     * @brief scan the next token
+     * @return the numeric token identifier
+     *
+     * @since 0.0.1
+     */
     int scan()
     {
 
@@ -83,6 +100,12 @@ class wkt_lexer
         */
     }
 
+    /*!
+     * @brief returns the current token string
+     * @return the token string
+     *
+     * @since 0.0.1
+     */
     std::string get_token() const
     {
         return std::string(reinterpret_cast<const char*>(start), static_cast<size_t>(cursor - start));
@@ -91,10 +114,13 @@ class wkt_lexer
   private:
     /// pointer to the buffer
     const char* content = nullptr;
+
     /// pointer to the beginning of the current token
     const char* start = nullptr;
+
     /// pointer to the current token
     const char* cursor = nullptr;
+
     /// pointer to the end of the buffer
     const char* limit = nullptr;
 };

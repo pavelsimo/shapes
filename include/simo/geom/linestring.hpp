@@ -15,7 +15,7 @@ namespace shapes
 {
 
 /*!
- * @brief represents a LineString
+ * @brief represents a line string
  *
  * @since 0.0.1
  */
@@ -74,7 +74,7 @@ class LineString : public BaseGeometry<LineString>, public Curve<LineString>
      */
     static LineString from_json(const std::string& /*json*/)
     {
-        throw exceptions::not_implemented_error();
+        throw exceptions::NotImplementedError();
     }
 
     /*!
@@ -88,7 +88,7 @@ class LineString : public BaseGeometry<LineString>, public Curve<LineString>
      */
     std::string json()
     {
-        throw exceptions::not_implemented_error();
+        throw exceptions::NotImplementedError();
     }
 
     /*!
@@ -103,7 +103,7 @@ class LineString : public BaseGeometry<LineString>, public Curve<LineString>
      */
     static LineString from_wkt(const std::string& /*wkt*/)
     {
-        throw exceptions::not_implemented_error();
+        throw exceptions::NotImplementedError();
     }
 
     /*!
@@ -118,7 +118,7 @@ class LineString : public BaseGeometry<LineString>, public Curve<LineString>
      */
     std::string wkt()
     {
-        throw exceptions::not_implemented_error();
+        throw exceptions::NotImplementedError();
     }
 
   private:
@@ -135,14 +135,14 @@ class LineString : public BaseGeometry<LineString>, public Curve<LineString>
 
         if (m_points.size() < 2)
         {
-            throw exceptions::value_error("LineString should be either empty or with 2 or more points");
+            throw exceptions::ValueError("LineString should be either empty or with 2 or more points");
         }
 
         if (m_points.size() == 2)
         {
             if (m_points[0] == m_points[1])
             {
-                throw exceptions::value_error("LineString with exactly two equal points");
+                throw exceptions::ValueError("LineString with exactly two equal points");
             }
         }
     }

@@ -15,7 +15,7 @@ namespace shapes
 {
 
 /*!
- * @brief represents a MultiPoint
+ * @brief represents a sequence of points
  *
  * @since 0.0.1
  */
@@ -82,7 +82,7 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public Curve<MultiPoint>
         std::string type = j.at("type").get<std::string>();
         if (type != "MultiPoint")
         {
-            throw exceptions::parse_error("invalid geometry type");
+            throw exceptions::ParseError("invalid geometry type");
         }
 
         auto coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
@@ -99,7 +99,7 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public Curve<MultiPoint>
             }
             else
             {
-                throw exceptions::parse_error("invalid dimensions");
+                throw exceptions::ParseError("invalid dimensions");
             }
         }
         return MultiPoint(res);
@@ -168,7 +168,7 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public Curve<MultiPoint>
     static MultiPoint from_wkt(const std::string& /*wkt*/)
     {
 
-        throw exceptions::not_implemented_error();
+        throw exceptions::NotImplementedError();
     }
 
     /*!

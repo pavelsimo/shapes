@@ -13,68 +13,120 @@ namespace exceptions
 
 /*!
  * @brief base shapes exception
+ *
+ * @since 0.0.1
  */
-class shapes_exception : public std::exception
+class ShapesException : public std::exception
 {
   public:
-    explicit shapes_exception(const char* what)
-        : m_what(what) {}
+    /*!
+     * @brief creates a shapes exception
+     * @param what the exception reason
+     *
+     * @since 0.0.1
+     */
+    explicit ShapesException(const char* reason)
+        : m_reason(reason) {}
 
+    /*!
+     * @brief returns the exception reason
+     * @return a string with the exception reason
+     *
+     * @since 0.0.1
+     */
     const char* what() const noexcept override
     {
-        return m_what.c_str();
+        return m_reason.c_str();
     }
 
   protected:
+    /*!
+     * @brief set the exception reason
+     * @param reason the exception reason
+     *
+     * @since 0.0.1
+     */
     void set_reason(const std::string& reason)
     {
-        m_what.append(": ");
-        m_what.append(reason);
+        m_reason.append(": ");
+        m_reason.append(reason);
     }
 
   private:
-    std::string m_what{};
+    std::string m_reason{};
 };
 
 /*!
- * @todo (pavel) DOCUMENT ME!
+ * @brief exception thrown when an error has been found while parsing
+ *
+ * @since 0.0.1
  */
-class parse_error : public shapes_exception
+class ParseError : public ShapesException
 {
   public:
-    explicit parse_error(const std::string& reason)
-        : shapes_exception("parse error")
+    /*!
+     * @brief creates a parse error with the given reason
+     * @param reason the reason message
+     *
+     * @since 0.0.1
+     */
+    explicit ParseError(const std::string& reason)
+        : ShapesException("parse error")
     {
         set_reason(reason);
     }
 };
 
 /*!
- * @todo (pavel) DOCUMENT ME!
+ * @brief exception thrown when method or routine is not implemented
+ *
+ * @since 0.0.1
  */
-class not_implemented_error : public shapes_exception
+class NotImplementedError : public ShapesException
 {
   public:
-    not_implemented_error()
-        : shapes_exception("not implemented error")
+
+    /*!
+     * @brief creates a not implemented error exception
+     *
+     * @since 0.0.1
+     */
+    NotImplementedError()
+        : ShapesException("not implemented error")
     {
     }
 
-    explicit not_implemented_error(const std::string& reason)
-        : shapes_exception("not implemented error")
+    /*!
+     * @brief creates a not implemented error exception
+     *
+     * @param reason the reason message
+     *
+     * @since 0.0.1
+     */
+    explicit NotImplementedError(const std::string& reason)
+        : ShapesException("not implemented error")
     {
         set_reason(reason);
     }
 };
 
 /*!
- * @todo (pavel) DOCUMENT ME!
+ * @brief exception thrown when a value error is found
+ *
+ * @since 0.0.1
  */
-class value_error : public shapes_exception
+class ValueError : public ShapesException
 {
   public:
-    explicit value_error(const std::string& reason)
-        : shapes_exception("value error")
+
+    /*!
+     * @brief creates a value error exception
+     * @param reason the exception reason
+     *
+     * @since 0.0.1
+     */
+    explicit ValueError(const std::string& reason)
+        : ShapesException("value error")
     {
         set_reason(reason);
     }

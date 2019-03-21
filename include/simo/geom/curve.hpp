@@ -8,6 +8,10 @@ namespace simo
 namespace shapes
 {
 
+/*!
+ * @brief represents a curve
+ * @tparam T the geometry type
+ */
 template <typename T>
 class Curve
 {
@@ -81,6 +85,8 @@ class Curve
     }
 
   protected:
+
+    /// the shape points of the curve
     std::vector<Point> m_points;
 };
 

@@ -17,9 +17,16 @@ namespace shapes
 class Bounds
 {
   public:
+    /// the minimum x-coordinate
     double minx;
+
+    /// the minimum y-coordinate
     double miny;
+
+    /// the maximum x-coordinate
     double maxx;
+
+    /// the maximum y-coordinate
     double maxy;
 
     /*!

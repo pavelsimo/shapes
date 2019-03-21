@@ -22,7 +22,7 @@ namespace shapes
 {
 
 /*!
- * @brief represents a Point
+ * @brief represents a point
  *
  * @since 0.0.1
  */
@@ -192,7 +192,7 @@ class Point : public BaseGeometry<Point>
         }
         else
         {
-            throw exceptions::value_error("invalid point");
+            throw exceptions::ValueError("invalid point");
         }
     }
 
@@ -210,7 +210,7 @@ class Point : public BaseGeometry<Point>
     {
         if (pos >= size_())
         {
-            throw exceptions::shapes_exception("out of range");
+            throw exceptions::ShapesException("out of range");
         }
 
         if (pos == 0)
@@ -280,7 +280,7 @@ class Point : public BaseGeometry<Point>
         std::string type = j.at("type").get<std::string>();
         if (type != "Point")
         {
-            throw exceptions::parse_error("invalid geometry type");
+            throw exceptions::ParseError("invalid geometry type");
         }
 
         std::vector<double> coords = j.at("coordinates");
@@ -296,7 +296,7 @@ class Point : public BaseGeometry<Point>
         {
             return {coords[0], coords[1], coords[2], coords[3]};
         }
-        throw exceptions::parse_error("");
+        throw exceptions::ParseError("");
     }
 
     /*!
@@ -339,7 +339,7 @@ class Point : public BaseGeometry<Point>
      */
     static Point from_wkt(const std::string& wkt)
     {
-        wkt_reader reader{};
+        WktReader reader{};
         auto result = reader.read(wkt.c_str());
         switch (result.dim)
         {
@@ -352,7 +352,7 @@ class Point : public BaseGeometry<Point>
             case DimensionType::XYZM:
                 return {result.coords[0], result.coords[1], result.coords[2], result.coords[3]};
             default:
-                throw exceptions::parse_error("");
+                throw exceptions::ParseError("");
         }
     }
 

@@ -11,7 +11,12 @@ namespace simo
 namespace shapes
 {
 
-class wkt_reader
+/*!
+ * @brief a Well-known text (WKT) markup language reader
+ *
+ * @since 0.0.1
+ */
+class WktReader
 {
   public:
     /*!
@@ -19,13 +24,13 @@ class wkt_reader
      *
      * @since 0.0.1
      */
-    wkt_reader()
+    WktReader()
         : m_parser(ParseAlloc(malloc))
     {
     }
 
-    /// wkt_reader destructor
-    ~wkt_reader()
+    /// destructor
+    ~WktReader()
     {
         ParseFree(m_parser, free);
     }
@@ -34,18 +39,17 @@ class wkt_reader
      * @brief parse the given wkt string
      *
      * @param wkt the wkt string
-     * @return wkt_result object
+     * @return a wkt result object
      *
      * @since 0.0.1
      */
-    wkt_result read(const char* wkt)
+    WktResult read(const char* wkt)
     {
-        wkt_lexer lexer(wkt);
-        wkt_result result{};
+        WktLexer lexer(wkt);
+        WktResult result{};
         while (true)
         {
             int token = lexer.scan();
-            //std::cout << lexer.get_token() << "\t: " << token << "\n";
 
             if (token == WKT_END_OF_INPUT)
             {
@@ -54,7 +58,7 @@ class wkt_reader
 
             if (token == WKT_PARSE_ERROR)
             {
-                throw exceptions::parse_error("wkt lexer error");
+                throw exceptions::ParseError("wkt lexer error");
             }
 
             if (token == WKT_NUM)
@@ -68,7 +72,7 @@ class wkt_reader
 
             if (result.parser_error == 1)
             {
-                throw exceptions::parse_error("wkt parser error");
+                throw exceptions::ParseError("wkt parser error");
             }
         }
         Parse(m_parser, 0, 0, &result);
@@ -76,6 +80,7 @@ class wkt_reader
     }
 
   private:
+
     /// pointer to the parser
     void* m_parser = nullptr;
 };

@@ -16,7 +16,7 @@ namespace shapes
 {
 
 /*!
- * @brief represents a Polygon
+ * @brief represents a polygon
  *
  * @since 0.0.1
  */
@@ -75,7 +75,7 @@ class Polygon : public BaseGeometry<Polygon>
      */
     static Polygon from_json(const std::string& /*json*/)
     {
-        throw exceptions::not_implemented_error();
+        throw exceptions::NotImplementedError();
     }
 
     /*!
@@ -89,7 +89,7 @@ class Polygon : public BaseGeometry<Polygon>
      */
     std::string json()
     {
-        throw exceptions::not_implemented_error();
+        throw exceptions::NotImplementedError();
     }
 
     /*!
@@ -104,7 +104,7 @@ class Polygon : public BaseGeometry<Polygon>
      */
     static Polygon from_wkt(const std::string& /*wkt*/)
     {
-        throw exceptions::not_implemented_error();
+        throw exceptions::NotImplementedError();
     }
 
     /*!
@@ -119,7 +119,7 @@ class Polygon : public BaseGeometry<Polygon>
      */
     std::string wkt()
     {
-        throw exceptions::not_implemented_error();
+        throw exceptions::NotImplementedError();
     }
 
   private:
@@ -164,25 +164,25 @@ class Polygon : public BaseGeometry<Polygon>
     /// @private
     std::vector<std::tuple<double, double>> xy_() const
     {
-        throw exceptions::not_implemented_error();
+        throw exceptions::NotImplementedError();
     }
 
     /// @private
     std::vector<std::tuple<double, double, double>> xyz_() const
     {
-        throw exceptions::not_implemented_error();
+        throw exceptions::NotImplementedError();
     }
 
     /// @private
     std::vector<std::tuple<double, double, double>> xym_() const
     {
-        throw exceptions::not_implemented_error();
+        throw exceptions::NotImplementedError();
     }
 
     /// @private
     std::vector<std::tuple<double, double, double, double>> xyzm_() const
     {
-        throw exceptions::not_implemented_error();
+        throw exceptions::NotImplementedError();
     }
 };
 
