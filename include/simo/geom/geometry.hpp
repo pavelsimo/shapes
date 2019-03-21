@@ -361,13 +361,13 @@ class BaseGeometry
  */
 typedef union Geometry
 {
-    Point* point;                             ///< Point value
-    MultiPoint* multipoint;                   ///< MultiPoint value
-    LineString* linestring;                   ///< LineString value
-    MultiLineString* multilinestring;         ///< MultiLineString value
-    Polygon* polygon;                         ///< Polygon value
-    MultiPolygon* multipolygon;               ///< MultiPolygon value
-    GeometryCollection* geometrycollection;   ///< GeometryCollection value
+    Point* point;                            ///< Point value
+    MultiPoint* multipoint;                  ///< MultiPoint value
+    LineString* linestring;                  ///< LineString value
+    MultiLineString* multilinestring;        ///< MultiLineString value
+    Polygon* polygon;                        ///< Polygon value
+    MultiPolygon* multipolygon;              ///< MultiPolygon value
+    GeometryCollection* geometrycollection;  ///< GeometryCollection value
 } Geometry;
 
 }  // namespace shapes

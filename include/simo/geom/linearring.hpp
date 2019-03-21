@@ -22,7 +22,6 @@ namespace shapes
 class LinearRing : public BaseGeometry<LinearRing>, public Curve<LinearRing>
 {
   public:
-
     /// two-dimensional rotation direction, clockwise=true, counterclockwise=false
     bool clockwise = true;
 

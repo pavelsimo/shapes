@@ -85,7 +85,6 @@ class ParseError : public ShapesException
 class NotImplementedError : public ShapesException
 {
   public:
-
     /*!
      * @brief creates a not implemented error exception
      *
@@ -118,7 +117,6 @@ class NotImplementedError : public ShapesException
 class ValueError : public ShapesException
 {
   public:
-
     /*!
      * @brief creates a value error exception
      * @param reason the exception reason
