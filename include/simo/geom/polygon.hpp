@@ -64,6 +64,45 @@ class Polygon : public BaseGeometry<Polygon>
     }
 
     /*!
+     * @brief creates a Polygon
+     * @param shell the shell of the polygon as a Point sequence
+     *
+     * @since 0.0.1
+     */
+    explicit Polygon(const std::vector<Point>& shell)
+        : exterior(shell)
+    {
+        Bounds& b     = bounds;
+        Bounds& b_ext = exterior.bounds;
+        b.extend(b_ext.minx, b_ext.miny);
+        b.extend(b_ext.maxx, b_ext.maxy);
+    }
+
+    /*!
+     * @brief creates a Polygon
+     * @param shell the shell of the polygon as a Point sequence
+     * @param holes one or more collection of points, each representing a hole in the polygon
+     *
+     * @since 0.0.1
+     */
+    Polygon(const std::vector<Point>& shell, const std::vector<std::vector<Point>>& holes)
+        : exterior(shell)
+    {
+        Bounds& b     = bounds;
+        Bounds& b_ext = exterior.bounds;
+        b.extend(b_ext.minx, b_ext.miny);
+        b.extend(b_ext.maxx, b_ext.maxy);
+        interiors.reserve(holes.size());
+        for (const auto& hole : holes)
+        {
+            interiors.emplace_back(hole);
+            Bounds& b_int = interiors[interiors.size() - 1].bounds;
+            b.extend(b_int.minx, b_int.miny);
+            b.extend(b_int.maxx, b_int.maxy);
+        }
+    }
+
+    /*!
      * @brief creates a Polygon from a geojson string
      *
      * @param json the geojson string
@@ -121,6 +160,8 @@ class Polygon : public BaseGeometry<Polygon>
     {
         throw exceptions::NotImplementedError();
     }
+
+    /// @todo (pavel) add from_bounds method
 
   private:
     /// for allow BaseGeometry to access Polygon private members
