@@ -80,7 +80,6 @@ class WktReader
     }
 
   private:
-
     /// pointer to the parser
     void* m_parser = nullptr;
 };

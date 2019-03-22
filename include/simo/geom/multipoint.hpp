@@ -31,7 +31,6 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public Curve<MultiPoint>
 
     /*!
       * @brief creates a MultiPoint from a given initializer list
-      *
       * @tparam T an arithmetic value (e.g. int, float, double)
       * @param init the initializer list
       *
@@ -51,7 +50,6 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public Curve<MultiPoint>
 
     /*!
      * @brief creates a MultiPoint from a given point vector
-     *
      * @param points the point list
      *
      * @since 0.0.1
@@ -67,11 +65,9 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public Curve<MultiPoint>
 
     /*!
      * @brief creates a MultiPoint from a geojson string
-     *
      * @param json the geojson string
      * @return a MultiPoint object
-     *
-     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
+     * @sa https://tools.ietf.org/html/rfc7946
      *
      * @since 0.0.1
      */
@@ -107,9 +103,7 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public Curve<MultiPoint>
 
     /*!
      * @brief dumps the geojson representation of the MultiPoint
-     *
      * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
-     *
      * @return a geojson string
      *
      * @since 0.0.1
@@ -157,11 +151,9 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public Curve<MultiPoint>
 
     /*!
      * @brief creates a MultiPoint from a WKT string
-     *
      * @param wkt the WKT string
      * @return a MultiPoint object
-     *
-     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
      * @since 0.0.1
      */
@@ -173,11 +165,9 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public Curve<MultiPoint>
 
     /*!
      * @brief creates a MultiPoint from a WKT string
-     *
      * @param wkt the WKT string
      * @return a MultiPoint object
-     *
-     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
+     * @note https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
      * @since 0.0.1
      */

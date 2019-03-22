@@ -15,7 +15,7 @@ namespace shapes
 {
 
 /*!
- * @brief represents a line string
+ * @brief a line string is a curve where each consecutive pair of points defines a line segment.
  *
  * @since 0.0.1
  */
@@ -30,13 +30,12 @@ class LineString : public BaseGeometry<LineString>, public Curve<LineString>
     LineString() = default;
 
     /*!
-      * @brief creates a LineString from a given initializer list
-      *
-      * @tparam T an arithmetic value (e.g. int, float, double)
-      * @param init the initializer list
-      *
-      * @since 0.0.1
-      */
+     * @brief creates a LineString from a given initializer list
+     * @tparam T an arithmetic value (e.g. int, float, double)
+     * @param init the initializer list
+     *
+     * @since 0.0.1
+     */
     template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     LineString(std::initializer_list<std::initializer_list<T>> init)
     {
@@ -45,14 +44,13 @@ class LineString : public BaseGeometry<LineString>, public Curve<LineString>
         {
             Point p(coords);
             bounds.extend(p.x, p.y);
-            m_points.emplace_back(std::move(p));
+            m_points.emplace_back(p);
         }
         valid_or_throw();
     }
 
     /*!
      * @brief creates a LineString from a given point vector
-     *
      * @param points the point list
      *
      * @since 0.0.1
@@ -60,15 +58,17 @@ class LineString : public BaseGeometry<LineString>, public Curve<LineString>
     explicit LineString(const std::vector<Point>& points)
     {
         m_points = points;
+        for (const auto& p : m_points)
+        {
+            bounds.extend(p.x, p.y);
+        }
     }
 
     /*!
      * @brief creates a LineString from a geojson string
-     *
      * @param json the geojson string
      * @return a LineString object
-     *
-     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
+     * @sa https://tools.ietf.org/html/rfc7946
      *
      * @since 0.0.1
      */
@@ -79,10 +79,8 @@ class LineString : public BaseGeometry<LineString>, public Curve<LineString>
 
     /*!
      * @brief dumps the geojson representation of the LineString
-     *
-     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
-     *
      * @return a geojson string
+     * @sa https://tools.ietf.org/html/rfc7946
      *
      * @since 0.0.1
      */
@@ -93,11 +91,9 @@ class LineString : public BaseGeometry<LineString>, public Curve<LineString>
 
     /*!
      * @brief creates a LineString from a WKT string
-     *
      * @param wkt the WKT string
      * @return a LineString object
-     *
-     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
      * @since 0.0.1
      */
@@ -108,11 +104,9 @@ class LineString : public BaseGeometry<LineString>, public Curve<LineString>
 
     /*!
      * @brief creates a LineString from a WKT string
-     *
      * @param wkt the WKT string
      * @return a LineString object
-     *
-     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
      * @since 0.0.1
      */
@@ -122,7 +116,7 @@ class LineString : public BaseGeometry<LineString>, public Curve<LineString>
     }
 
   private:
-    /// for implementation encapsulation
+    /// for allow BaseGeometry to access LineString private members
     friend class BaseGeometry<LineString>;
 
     /// @private

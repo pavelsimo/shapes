@@ -104,11 +104,9 @@ class Polygon : public BaseGeometry<Polygon>
 
     /*!
      * @brief creates a Polygon from a geojson string
-     *
      * @param json the geojson string
      * @return a Polygon object
-     *
-     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
+     * @sa https://tools.ietf.org/html/rfc7946
      *
      * @since 0.0.1
      */
@@ -119,9 +117,7 @@ class Polygon : public BaseGeometry<Polygon>
 
     /*!
      * @brief dumps the geojson representation of the Polygon
-     *
-     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
-     *
+     * @sa https://tools.ietf.org/html/rfc7946
      * @return a geojson string
      *
      * @since 0.0.1
@@ -133,11 +129,9 @@ class Polygon : public BaseGeometry<Polygon>
 
     /*!
      * @brief creates a Polygon from a WKT string
-     *
      * @param wkt the WKT string
      * @return a Polygon object
-     *
-     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
      * @since 0.0.1
      */
@@ -148,11 +142,9 @@ class Polygon : public BaseGeometry<Polygon>
 
     /*!
      * @brief creates a Polygon from a WKT string
-     *
      * @param wkt the WKT string
      * @return a Polygon object
-     *
-     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
      * @since 0.0.1
      */

@@ -397,7 +397,7 @@ class Point : public BaseGeometry<Point>
     }
 
   private:
-    /// for implementation encapsulation
+    /// for allow BaseGeometry to access Point private members
     friend class BaseGeometry<Point>;
 
     /// @private

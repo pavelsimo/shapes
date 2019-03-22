@@ -35,7 +35,6 @@ class LinearRing : public BaseGeometry<LinearRing>, public Curve<LinearRing>
 
     /*!
       * @brief creates a LinearRing from a given initializer list
-      *
       * @tparam T an arithmetic value (e.g. int, float, double)
       * @param init the initializer list
       *
@@ -56,9 +55,7 @@ class LinearRing : public BaseGeometry<LinearRing>, public Curve<LinearRing>
 
     /*!
      * @brief creates a LinearRing from a given point vector
-     *
      * @param points the point list
-     * @param validate whether to validate the geometry
      *
      * @since 0.0.1
      */
