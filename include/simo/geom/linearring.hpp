@@ -15,7 +15,8 @@ namespace shapes
 {
 
 /*!
- * @brief represents a linear ring
+ * @brief a linear ring is a line string that is both closed and simple, in shapes this feature is implicitly closed,
+ * there is no need to specify the last coordinate, it will always be identical to the first.
  *
  * @since 0.0.1
  */
