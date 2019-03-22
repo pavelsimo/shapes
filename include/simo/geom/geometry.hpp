@@ -31,7 +31,7 @@ class BaseGeometry
     /// the geometry bounds
     Bounds bounds{};
 
-    /// the dimension type is either (x, y), (x, y, z), (x, y, m) or (x, y, z, m)
+    /// the dimension type is either 2D (x, y), 3D (x, y, z), 4D (x, y, z, m) or 2D with measure-coordinate (x, y, m)
     DimensionType dim = DimensionType::XY;
 
     /*!
