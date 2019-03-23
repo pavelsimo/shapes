@@ -15,7 +15,7 @@ namespace shapes
  * @since 0.0.1
  */
 template <typename T>
-class Curve
+class PointSequence
 {
   public:
     /// iterator type
@@ -87,8 +87,7 @@ class Curve
     }
 
   protected:
-
-    /// the shape points of the curve
+    /// the point sequence
     std::vector<Point> m_points;
 };
 
