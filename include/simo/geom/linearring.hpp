@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/curve.hpp>
+#include <simo/geom/detail/point_sequence.hpp>
 #include <simo/geom/bounds.hpp>
 
 namespace simo
@@ -20,7 +20,7 @@ namespace shapes
  *
  * @since 0.0.1
  */
-class LinearRing : public BaseGeometry<LinearRing>, public Curve<LinearRing>
+class LinearRing : public BaseGeometry<LinearRing>, public PointSequence<LinearRing>
 {
   public:
     /// two-dimensional rotation direction, clockwise=true, counterclockwise=false

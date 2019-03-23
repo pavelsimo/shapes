@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/curve.hpp>
+#include <simo/geom/detail/point_sequence.hpp>
 #include <simo/geom/bounds.hpp>
 
 namespace simo
@@ -19,7 +19,7 @@ namespace shapes
  *
  * @since 0.0.1
  */
-class LineString : public BaseGeometry<LineString>, public Curve<LineString>
+class LineString : public BaseGeometry<LineString>, public PointSequence<LineString>
 {
   public:
     /*!

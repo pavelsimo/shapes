@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/curve.hpp>
+#include <simo/geom/detail/point_sequence.hpp>
 #include <simo/geom/bounds.hpp>
 
 namespace simo
@@ -19,7 +19,7 @@ namespace shapes
  *
  * @since 0.0.1
  */
-class MultiPoint : public BaseGeometry<MultiPoint>, public Curve<MultiPoint>
+class MultiPoint : public BaseGeometry<MultiPoint>, public PointSequence<MultiPoint>
 {
   public:
     /*!
@@ -44,7 +44,7 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public Curve<MultiPoint>
         {
             Point p(coords);
             bounds.extend(p.x, p.y);
-            m_points.emplace_back(std::move(p));
+            m_points.emplace_back(p);
         }
     }
 

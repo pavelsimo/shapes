@@ -43,9 +43,10 @@ SOFTWARE.
 #include <simo/geom/geometry.hpp>
 #include <simo/geom/bounds.hpp>
 #include <simo/geom/point.hpp>
-#include <simo/geom/linearring.hpp>
-#include <simo/geom/linestring.hpp>
 #include <simo/geom/multipoint.hpp>
+#include <simo/geom/linestring.hpp>
+#include <simo/geom/multilinestring.hpp>
 #include <simo/geom/polygon.hpp>
+#include <simo/geom/linearring.hpp>
 
 #endif  // SIMO_SHAPES_HPP
