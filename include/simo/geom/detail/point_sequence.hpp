@@ -25,7 +25,7 @@ class PointSequence
     using const_iterator = std::vector<Point>::const_iterator;
 
     /*!
-     * @return returns an iterator pointing to the first element in the Curve
+     * @return returns an iterator pointing to the first element in the PointSequence
      *
      * @since 0.0.1
      */
@@ -35,7 +35,7 @@ class PointSequence
     }
 
     /*!
-     * @return returns a constant iterator pointing to the first element in the Curve
+     * @return returns a constant iterator pointing to the first element in the PointSequence
      *
      * @since 0.0.1
      */
@@ -45,7 +45,7 @@ class PointSequence
     }
 
     /*!
-     * @return returns an iterator pointing to the past-the-end element in the Curve
+     * @return returns an iterator pointing to the past-the-end element in the PointSequence
      *
      * @since 0.0.1
      */
@@ -55,7 +55,7 @@ class PointSequence
     }
 
     /*!
-     * @return returns a const iterator pointing to the past-the-end element in the Curve
+     * @return returns a const iterator pointing to the past-the-end element in the PointSequence
      *
      * @since 0.0.1
      */
@@ -66,7 +66,7 @@ class PointSequence
 
     /*!
      * @param pos the element position
-     * @return returns a reference to the element at position n in the vector
+     * @return returns a reference to the element at position n in the PointSequence
      *
      * @since 0.0.1
      */
@@ -77,7 +77,7 @@ class PointSequence
 
     /*!
      * @param pos the element position
-     * @return returns a reference to the element at position n in the vector
+     * @return returns a reference to the element at position n in the PointSequence
      *
      * @since 0.0.1
      */
