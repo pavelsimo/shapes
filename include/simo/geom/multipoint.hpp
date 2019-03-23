@@ -103,8 +103,8 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public Curve<MultiPoint>
 
     /*!
      * @brief dumps the geojson representation of the MultiPoint
-     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
      * @return a geojson string
+     * @sa https://tools.ietf.org/html/rfc7946
      *
      * @since 0.0.1
      */
@@ -167,7 +167,7 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public Curve<MultiPoint>
      * @brief creates a MultiPoint from a WKT string
      * @param wkt the WKT string
      * @return a MultiPoint object
-     * @note https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
      * @since 0.0.1
      */

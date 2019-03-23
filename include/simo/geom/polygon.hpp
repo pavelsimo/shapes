@@ -117,8 +117,8 @@ class Polygon : public BaseGeometry<Polygon>
 
     /*!
      * @brief dumps the geojson representation of the Polygon
-     * @sa https://tools.ietf.org/html/rfc7946
      * @return a geojson string
+     * @sa https://tools.ietf.org/html/rfc7946
      *
      * @since 0.0.1
      */

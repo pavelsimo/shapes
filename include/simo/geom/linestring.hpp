@@ -15,7 +15,7 @@ namespace shapes
 {
 
 /*!
- * @brief a line string is a curve where each consecutive pair of points defines a line segment.
+ * @brief a LineString is a curve where each consecutive pair of points defines a line segment.
  *
  * @since 0.0.1
  */

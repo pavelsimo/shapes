@@ -333,7 +333,6 @@ class BaseGeometry
     /*!
      * @brief returns the number of dimensions of the geometry
      * @return the number of dimensions
-     *
      * @note the number of dimensions is (x, y) = 2, (x, y, z) = 3, (x, y, m) = 3 and (x, y, z, m) = 4
      *
      * @since 0.0.1

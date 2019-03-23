@@ -43,7 +43,6 @@ class Point : public BaseGeometry<Point>
 
     /*!
      * @brief creates a Point
-     *
      * @note the default behaviour is to create a 2-dimensional point with coordinates (0, 0)
      *
      * @since 0.0.1
@@ -52,7 +51,6 @@ class Point : public BaseGeometry<Point>
 
     /*!
      * @brief creates a Point from coordinates (x, y)
-     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      *
@@ -66,7 +64,6 @@ class Point : public BaseGeometry<Point>
 
     /*!
      * @brief creates a Point from coordinates (x, y, z)
-     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      * @param z the z-coordinate value
@@ -81,7 +78,6 @@ class Point : public BaseGeometry<Point>
 
     /*!
      * @brief creates a Point from coordinates (x, y, z, m)
-     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      * @param z the z-coordinate value
@@ -97,7 +93,6 @@ class Point : public BaseGeometry<Point>
 
     /*!
      * @brief creates a Point from coordinates (x, y)
-     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      *
@@ -110,7 +105,6 @@ class Point : public BaseGeometry<Point>
 
     /*!
      * @brief creates a Point from coordinates (x, y, z)
-     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      * @param z the z-coordinate value
@@ -124,7 +118,6 @@ class Point : public BaseGeometry<Point>
 
     /*!
      * @brief creates a Point from coordinates (x, y, m)
-     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      * @param m the m-coordinate value
@@ -143,7 +136,6 @@ class Point : public BaseGeometry<Point>
 
     /*!
      * @brief creates a Point from coordinates (x, y, z, m)
-     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      * @param z the z-coordinate value
@@ -158,10 +150,8 @@ class Point : public BaseGeometry<Point>
 
     /*!
      * @brief creates a Point
-     *
      * @tparam T an arithmetic value (e.g. int, float, double)
      * @param init the coordinates list
-     *
      * @throw exception if the given number of coordinates is either less than two or greater than four
      *
      * @since 0.0.1
@@ -198,10 +188,8 @@ class Point : public BaseGeometry<Point>
 
     /*!
      * @brief returns the coordinate at the given index
-     *
      * @param pos the coordinate position
      * @return a double with the coordinate value
-     *
      * @throw exception if the position is not found
      *
      * @since 0.0.1
@@ -239,7 +227,6 @@ class Point : public BaseGeometry<Point>
 
     /*!
      * @brief returns true if all coordinates are equal, otherwise false
-     *
      * @param other the point to compare
      * @return true if all coordinates are equal, otherwise false
      *
@@ -252,7 +239,6 @@ class Point : public BaseGeometry<Point>
 
     /*!
      * @brief returns true if at least one coordinate is different, otherwise false
-     *
      * @param other the point to compare
      * @return true if at least one coordinate is different, otherwise false
      *
@@ -265,11 +251,9 @@ class Point : public BaseGeometry<Point>
 
     /*!
      * @brief creates a Point from a geojson string
-     *
      * @param json the geojson string
      * @return a Point object
-     *
-     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
+     * @sa https://tools.ietf.org/html/rfc7946
      *
      * @since 0.0.1
      */
@@ -301,10 +285,8 @@ class Point : public BaseGeometry<Point>
 
     /*!
      * @brief dumps the geojson representation of the Point
-     *
-     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
-     *
      * @return a geojson string
+     * @sa https://tools.ietf.org/html/rfc7946
      *
      * @since 0.0.1
      */
@@ -329,11 +311,9 @@ class Point : public BaseGeometry<Point>
 
     /*!
      * @brief creates a Point from a WKT string
-     *
      * @param wkt the WKT string
      * @return a Point object
-     *
-     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
      * @since 0.0.1
      */
@@ -358,10 +338,8 @@ class Point : public BaseGeometry<Point>
 
     /*!
      * @brief dumps the WKT representation of the point
-     *
-     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
-     *
      * @return a WKT string
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
      * @since 0.0.1
      */
