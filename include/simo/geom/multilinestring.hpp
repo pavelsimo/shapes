@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/detail/point_sequence.hpp>
+#include <simo/geom/detail/geometry_sequence.hpp>
 #include <simo/geom/bounds.hpp>
 
 namespace simo
@@ -19,9 +19,10 @@ namespace shapes
  *
  * @since 0.0.1
  */
-class MultiLineString : public BaseGeometry<MultiLineString>
+class MultiLineString : public BaseGeometry<MultiLineString>, public GeometrySequence<LineString>
 {
   public:
+
     /*!
      * @brief creates an empty MultiLineString
      *
@@ -81,7 +82,7 @@ class MultiLineString : public BaseGeometry<MultiLineString>
     }
 
   private:
-    /// for implementation encapsulation
+    /// for allow BaseGeometry to access MultiLineString private members
     friend class BaseGeometry<MultiLineString>;
 
     /// @private

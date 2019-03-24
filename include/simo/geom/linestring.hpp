@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/detail/point_sequence.hpp>
+#include <simo/geom/detail/geometry_sequence.hpp>
 #include <simo/geom/bounds.hpp>
 
 namespace simo
@@ -19,7 +19,7 @@ namespace shapes
  *
  * @since 0.0.1
  */
-class LineString : public BaseGeometry<LineString>, public PointSequence<LineString>
+class LineString : public BaseGeometry<LineString>, public GeometrySequence<Point>
 {
   public:
     /*!
@@ -39,12 +39,12 @@ class LineString : public BaseGeometry<LineString>, public PointSequence<LineStr
     template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     LineString(std::initializer_list<std::initializer_list<T>> init)
     {
-        m_points.reserve(init.size());
+        seq.reserve(init.size());
         for (const auto& coords : init)
         {
             Point p(coords);
             bounds.extend(p.x, p.y);
-            m_points.emplace_back(p);
+            seq.emplace_back(p);
         }
         valid_or_throw();
     }
@@ -57,8 +57,8 @@ class LineString : public BaseGeometry<LineString>, public PointSequence<LineStr
      */
     explicit LineString(const std::vector<Point>& points)
     {
-        m_points = points;
-        for (const auto& p : m_points)
+        seq = points;
+        for (const auto& p : seq)
         {
             bounds.extend(p.x, p.y);
         }
@@ -127,14 +127,14 @@ class LineString : public BaseGeometry<LineString>, public PointSequence<LineStr
             return;
         }
 
-        if (m_points.size() < 2)
+        if (seq.size() < 2)
         {
             throw exceptions::ValueError("LineString should be either empty or with 2 or more points");
         }
 
-        if (m_points.size() == 2)
+        if (seq.size() == 2)
         {
-            if (m_points[0] == m_points[1])
+            if (seq[0] == seq[1])
             {
                 throw exceptions::ValueError("LineString with exactly two equal points");
             }
@@ -157,7 +157,7 @@ class LineString : public BaseGeometry<LineString>, public PointSequence<LineStr
     std::vector<std::tuple<double, double>> xy_() const
     {
         std::vector<std::tuple<double, double>> res;
-        for (const auto& point : m_points)
+        for (const auto& point : seq)
         {
             res.emplace_back(point.x, point.y);
         }
@@ -168,7 +168,7 @@ class LineString : public BaseGeometry<LineString>, public PointSequence<LineStr
     std::vector<std::tuple<double, double, double>> xyz_() const
     {
         std::vector<std::tuple<double, double, double>> res;
-        for (const auto& point : m_points)
+        for (const auto& point : seq)
         {
             res.emplace_back(point.x, point.y, point.z);
         }
@@ -179,7 +179,7 @@ class LineString : public BaseGeometry<LineString>, public PointSequence<LineStr
     std::vector<std::tuple<double, double, double>> xym_() const
     {
         std::vector<std::tuple<double, double, double>> res;
-        for (const auto& point : m_points)
+        for (const auto& point : seq)
         {
             res.emplace_back(point.x, point.y, point.m);
         }
@@ -190,7 +190,7 @@ class LineString : public BaseGeometry<LineString>, public PointSequence<LineStr
     std::vector<std::tuple<double, double, double, double>> xyzm_() const
     {
         std::vector<std::tuple<double, double, double, double>> res;
-        for (const auto& point : m_points)
+        for (const auto& point : seq)
         {
             res.emplace_back(point.x, point.y, point.z, point.m);
         }
@@ -200,24 +200,24 @@ class LineString : public BaseGeometry<LineString>, public PointSequence<LineStr
     /// @private
     bool empty_() const
     {
-        return m_points.empty();
+        return seq.empty();
     }
 
     /// @private
     size_t size_() const
     {
-        return m_points.size();
+        return seq.size();
     }
 
     /// @private
     bool is_closed_() const
     {
-        if (m_points.size() < 2)
+        if (seq.size() < 2)
         {
             return false;
         }
-        size_t last_index = m_points.size() - 1;
-        return m_points[0] == m_points[last_index];
+        size_t last_index = seq.size() - 1;
+        return seq[0] == seq[last_index];
     }
 };
 
