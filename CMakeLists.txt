@@ -103,7 +103,7 @@ add_custom_target(shapes_lexer COMMENT "re2c lexer code generation"
 ################
 add_custom_target(shapes_parser COMMENT "lemon parser"
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/include/simo/io
-        COMMAND lemon -m -q -l wkt_parser.y)
+        COMMAND lemon -l -q wkt_parser.y)
 
 ############
 # coverage #

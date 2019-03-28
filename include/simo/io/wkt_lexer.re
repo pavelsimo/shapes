@@ -80,12 +80,12 @@ class WktLexer
           // empty set
           empty_set       = "EMPTY";
           empty_set       { return WKT_EMPTY_SET; }
-          comma           = ",";
-          comma           { return WKT_COMMA; }
 
-          //
+          // comma
+          //comma           = ",";
+          //comma           { return WKT_COMMA; }
+
           // point
-          //
           point_tagged_text     = "POINT";
           point_tagged_text     { return WKT_POINT_TAGGED_TEXT; }
           point_z_tagged_text   = "POINT" ws* "Z";
@@ -94,6 +94,10 @@ class WktLexer
           point_m_tagged_text   { return WKT_POINT_M_TAGGED_TEXT; }
           point_zm_tagged_text  = "POINT" ws* "ZM";
           point_zm_tagged_text  { return WKT_POINT_ZM_TAGGED_TEXT; }
+
+
+
+
 
           end             { return WKT_END_OF_INPUT; }
           .               { return WKT_PARSE_ERROR; }

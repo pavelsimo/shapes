@@ -10,7 +10,6 @@
 #include <ciso646>
 #include <iostream>
 #include <cassert>
-#include "wkt_parser.h"
 /* Next is all token values, in a form suitable for use by makeheaders.
 ** This section will be null unless lemon is run with the -m switch.
 */
@@ -21,15 +20,6 @@
 **
 ** Each symbol here is a terminal symbol in the grammar.
 */
-#if INTERFACE
-#define WKT_NUM                         1
-#define WKT_POINT_TAGGED_TEXT           2
-#define WKT_LPAREN                      3
-#define WKT_RPAREN                      4
-#define WKT_POINT_Z_TAGGED_TEXT         5
-#define WKT_POINT_M_TAGGED_TEXT         6
-#define WKT_POINT_ZM_TAGGED_TEXT        7
-#endif
 /* Make sure the INTERFACE macro is defined.
 */
 #ifndef INTERFACE
@@ -70,11 +60,9 @@
 **                       defined, then do no error processing.
 */
 #define YYCODETYPE unsigned char
-#define YYNOCODE 17
+#define YYNOCODE 18
 #define YYACTIONTYPE unsigned char
-#if INTERFACE
 #define ParseTOKENTYPE double
-#endif
 typedef union {
   int yyinit;
   ParseTOKENTYPE yy0;
@@ -82,14 +70,12 @@ typedef union {
 #ifndef YYSTACKDEPTH
 #define YYSTACKDEPTH 1048576
 #endif
-#if INTERFACE
 #define ParseARG_SDECL  struct simo::shapes::WktResult *result ;
 #define ParseARG_PDECL , struct simo::shapes::WktResult *result 
 #define ParseARG_FETCH  struct simo::shapes::WktResult *result  = yypParser->result 
 #define ParseARG_STORE yypParser->result  = result 
-#endif
-#define YYNSTATE 31
-#define YYNRULE 10
+#define YYNSTATE 35
+#define YYNRULE 14
 #define YY_NO_ACTION      (YYNSTATE+YYNRULE+2)
 #define YY_ACCEPT_ACTION  (YYNSTATE+YYNRULE+1)
 #define YY_ERROR_ACTION   (YYNSTATE+YYNRULE)
@@ -159,35 +145,37 @@ static const YYMINORTYPE yyzerominor = { 0 };
 **  yy_default[]       Default action for each state.
 */
 static const YYACTIONTYPE yy_action[] = {
- /*     0 */    42,   13,   30,   27,   26,   25,   14,   10,   22,   16,
- /*    10 */    18,   20,    3,   17,    1,   11,   21,    9,   19,   31,
- /*    20 */    15,    6,   29,    8,    2,    7,   12,   43,   28,    5,
- /*    30 */    43,   23,    4,   43,   24,
+ /*     0 */    50,   20,   23,   24,   25,   26,   14,   28,   33,   11,
+ /*    10 */    16,   15,   13,   31,    7,   27,   12,   22,    3,    5,
+ /*    20 */    30,   51,   51,    6,   18,    8,   32,    9,   35,   17,
+ /*    30 */    34,   29,   21,   19,    1,   10,    2,   51,   51,   51,
+ /*    40 */     4,
 };
 static const YYCODETYPE yy_lookahead[] = {
- /*     0 */     9,   10,   11,   12,   13,   14,    2,   15,    1,    5,
- /*    10 */     6,    7,   15,   15,   15,   15,   15,   15,   15,    0,
- /*    20 */    15,   15,    4,   15,   15,    3,    3,   16,    4,    3,
- /*    30 */    16,    4,    3,   16,    4,
+ /*     0 */    10,   11,   12,   13,   14,   15,    2,    1,    3,    4,
+ /*    10 */     6,    7,    8,    3,    4,    3,    4,    3,    4,   16,
+ /*    20 */     5,   17,   17,   16,   16,   16,    5,   16,    0,   16,
+ /*    30 */     5,    5,   16,   16,   16,   16,   16,   17,   17,   17,
+ /*    40 */    16,
 };
 #define YY_SHIFT_USE_DFLT (-1)
 #define YY_SHIFT_MAX 21
 static const signed char yy_shift_ofst[] = {
- /*     0 */     4,    7,    7,    7,    7,    7,    7,    7,    7,    7,
- /*    10 */     7,    7,    7,   19,   22,   18,   23,   24,   26,   27,
- /*    20 */    29,   30,
+ /*     0 */     4,    6,    6,    6,    6,    6,    6,    6,    6,    6,
+ /*    10 */     6,    6,    6,   14,   12,    5,   10,   21,   25,   26,
+ /*    20 */    28,   15,
 };
-#define YY_REDUCE_USE_DFLT (-10)
+#define YY_REDUCE_USE_DFLT (-11)
 #define YY_REDUCE_MAX 12
 static const signed char yy_reduce_ofst[] = {
- /*     0 */    -9,   -8,   -3,   -2,   -1,    0,    1,    2,    3,    5,
- /*    10 */     6,    8,    9,
+ /*     0 */   -10,   20,   13,   24,    3,    7,    8,    9,   11,   16,
+ /*    10 */    17,   18,   19,
 };
 static const YYACTIONTYPE yy_default[] = {
- /*     0 */    41,   41,   41,   41,   41,   41,   41,   41,   41,   41,
- /*    10 */    41,   41,   41,   41,   41,   41,   41,   41,   41,   41,
- /*    20 */    41,   41,   36,   39,   40,   35,   34,   33,   38,   37,
- /*    30 */    32,
+ /*     0 */    49,   49,   49,   49,   49,   49,   49,   49,   49,   49,
+ /*    10 */    49,   49,   49,   49,   49,   49,   49,   49,   49,   49,
+ /*    20 */    49,   49,   48,   36,   37,   38,   39,   41,   40,   42,
+ /*    30 */    43,   44,   45,   46,   47,
 };
 #define YY_SZ_ACTTAB (int)(sizeof(yy_action)/sizeof(yy_action[0]))
 
@@ -281,10 +269,11 @@ void ParseTrace(FILE *TraceFILE, char *zTracePrompt){
 /* For tracing shifts, the names of all terminals and nonterminals
 ** are required.  The following table supplies these names */
 static const char *const yyTokenName[] = { 
-  "$",             "WKT_NUM",       "WKT_POINT_TAGGED_TEXT",  "WKT_LPAREN",  
-  "WKT_RPAREN",    "WKT_POINT_Z_TAGGED_TEXT",  "WKT_POINT_M_TAGGED_TEXT",  "WKT_POINT_ZM_TAGGED_TEXT",
-  "error",         "program",       "wkt_text",      "point",       
-  "point_z",       "point_m",       "point_zm",      "coord",       
+  "$",             "WKT_NUM",       "WKT_POINT_TAGGED_TEXT",  "WKT_EMPTY_SET",
+  "WKT_LPAREN",    "WKT_RPAREN",    "WKT_POINT_Z_TAGGED_TEXT",  "WKT_POINT_M_TAGGED_TEXT",
+  "WKT_POINT_ZM_TAGGED_TEXT",  "error",         "program",       "wkt_text",    
+  "point",         "point_z",       "point_m",       "point_zm",    
+  "coord",       
 };
 #endif /* NDEBUG */
 
@@ -298,10 +287,14 @@ static const char *const yyRuleName[] = {
  /*   3 */ "wkt_text ::= point_m",
  /*   4 */ "wkt_text ::= point_zm",
  /*   5 */ "coord ::= WKT_NUM",
- /*   6 */ "point ::= WKT_POINT_TAGGED_TEXT WKT_LPAREN coord coord WKT_RPAREN",
- /*   7 */ "point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_LPAREN coord coord coord WKT_RPAREN",
- /*   8 */ "point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_LPAREN coord coord coord WKT_RPAREN",
- /*   9 */ "point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_LPAREN coord coord coord coord WKT_RPAREN",
+ /*   6 */ "point ::= WKT_POINT_TAGGED_TEXT WKT_EMPTY_SET",
+ /*   7 */ "point ::= WKT_POINT_TAGGED_TEXT WKT_LPAREN coord coord WKT_RPAREN",
+ /*   8 */ "point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_LPAREN coord coord coord WKT_RPAREN",
+ /*   9 */ "point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  10 */ "point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_LPAREN coord coord coord WKT_RPAREN",
+ /*  11 */ "point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  12 */ "point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_LPAREN coord coord coord coord WKT_RPAREN",
+ /*  13 */ "point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_EMPTY_SET",
 };
 #endif /* NDEBUG */
 
@@ -608,16 +601,20 @@ static const struct {
   YYCODETYPE lhs;         /* Symbol on the left-hand side of the rule */
   unsigned char nrhs;     /* Number of right-hand side symbols in the rule */
 } yyRuleInfo[] = {
-  { 9, 1 },
   { 10, 1 },
-  { 10, 1 },
-  { 10, 1 },
-  { 10, 1 },
-  { 15, 1 },
-  { 11, 5 },
-  { 12, 6 },
+  { 11, 1 },
+  { 11, 1 },
+  { 11, 1 },
+  { 11, 1 },
+  { 16, 1 },
+  { 12, 2 },
+  { 12, 5 },
   { 13, 6 },
-  { 14, 7 },
+  { 13, 2 },
+  { 14, 6 },
+  { 14, 2 },
+  { 15, 7 },
+  { 15, 2 },
 };
 
 static void yy_accept(yyParser*);  /* Forward Declaration */
@@ -675,44 +672,84 @@ static void yy_reduce(
       case 5: /* coord ::= WKT_NUM */
 { yygotominor.yy0 = yymsp[0].minor.yy0; }
         break;
-      case 6: /* point ::= WKT_POINT_TAGGED_TEXT WKT_LPAREN coord coord WKT_RPAREN */
+      case 6: /* point ::= WKT_POINT_TAGGED_TEXT WKT_EMPTY_SET */
 {
-    result->coords.push_back(yymsp[-2].minor.yy0);
-    result->coords.push_back(yymsp[-1].minor.yy0);
-    result->ndim = 2;
-    result->dim = simo::shapes::DimensionType::XY;
-    result->offsets.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.ndim = 2;
+    result->data.dim = simo::shapes::DimensionType::XY;
+    result->data.offsets.push_back(0);
 }
         break;
-      case 7: /* point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_LPAREN coord coord coord WKT_RPAREN */
+      case 7: /* point ::= WKT_POINT_TAGGED_TEXT WKT_LPAREN coord coord WKT_RPAREN */
 {
-    result->coords.push_back(yymsp[-3].minor.yy0);
-    result->coords.push_back(yymsp[-2].minor.yy0);
-    result->coords.push_back(yymsp[-1].minor.yy0);
-    result->ndim = 3;
-    result->dim = simo::shapes::DimensionType::XYZ;
-    result->offsets.push_back(0);
+    result->data.coords.push_back(yymsp[-2].minor.yy0);
+    result->data.coords.push_back(yymsp[-1].minor.yy0);
+    result->data.ndim = 2;
+    result->data.dim = simo::shapes::DimensionType::XY;
+    result->data.offsets.push_back(0);
 }
         break;
-      case 8: /* point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_LPAREN coord coord coord WKT_RPAREN */
+      case 8: /* point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_LPAREN coord coord coord WKT_RPAREN */
 {
-    result->coords.push_back(yymsp[-3].minor.yy0);
-    result->coords.push_back(yymsp[-2].minor.yy0);
-    result->coords.push_back(yymsp[-1].minor.yy0);
-    result->ndim = 3;
-    result->dim = simo::shapes::DimensionType::XYM;
-    result->offsets.push_back(0);
+    result->data.coords.push_back(yymsp[-3].minor.yy0);
+    result->data.coords.push_back(yymsp[-2].minor.yy0);
+    result->data.coords.push_back(yymsp[-1].minor.yy0);
+    result->data.ndim = 3;
+    result->data.dim = simo::shapes::DimensionType::XYZ;
+    result->data.offsets.push_back(0);
 }
         break;
-      case 9: /* point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_LPAREN coord coord coord coord WKT_RPAREN */
+      case 9: /* point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_EMPTY_SET */
 {
-    result->coords.push_back(yymsp[-4].minor.yy0);
-    result->coords.push_back(yymsp[-3].minor.yy0);
-    result->coords.push_back(yymsp[-2].minor.yy0);
-    result->coords.push_back(yymsp[-1].minor.yy0);
-    result->ndim = 4;
-    result->dim = simo::shapes::DimensionType::XYZM;
-    result->offsets.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.ndim = 3;
+    result->data.dim = simo::shapes::DimensionType::XYZ;
+    result->data.offsets.push_back(0);
+}
+        break;
+      case 10: /* point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_LPAREN coord coord coord WKT_RPAREN */
+{
+    result->data.coords.push_back(yymsp[-3].minor.yy0);
+    result->data.coords.push_back(yymsp[-2].minor.yy0);
+    result->data.coords.push_back(yymsp[-1].minor.yy0);
+    result->data.ndim = 3;
+    result->data.dim = simo::shapes::DimensionType::XYM;
+    result->data.offsets.push_back(0);
+}
+        break;
+      case 11: /* point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_EMPTY_SET */
+{
+    result->data.coords.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.ndim = 3;
+    result->data.dim = simo::shapes::DimensionType::XYM;
+    result->data.offsets.push_back(0);
+}
+        break;
+      case 12: /* point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_LPAREN coord coord coord coord WKT_RPAREN */
+{
+    result->data.coords.push_back(yymsp[-4].minor.yy0);
+    result->data.coords.push_back(yymsp[-3].minor.yy0);
+    result->data.coords.push_back(yymsp[-2].minor.yy0);
+    result->data.coords.push_back(yymsp[-1].minor.yy0);
+    result->data.ndim = 4;
+    result->data.dim = simo::shapes::DimensionType::XYZM;
+    result->data.offsets.push_back(0);
+}
+        break;
+      case 13: /* point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_EMPTY_SET */
+{
+    result->data.coords.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.ndim = 4;
+    result->data.dim = simo::shapes::DimensionType::XYZM;
+    result->data.offsets.push_back(0);
 }
         break;
       default:
@@ -782,6 +819,13 @@ static void yy_syntax_error(
 #define TOKEN (yyminor.yy0)
 
     result->parser_error = 1;
+    int n = sizeof(yyTokenName) / sizeof(yyTokenName[0]);
+    for (int i = 0; i < n; ++i) {
+        int a = yy_find_shift_action(yypParser, (YYCODETYPE)i);
+        if (a < YYNSTATE + YYNRULE) {
+            printf("possible token: %s\n", yyTokenName[i]);
+        }
+    }
   ParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
 }
 
