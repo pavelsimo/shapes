@@ -22,7 +22,6 @@ namespace shapes
 class MultiLineString : public BaseGeometry<MultiLineString>, public GeometrySequence<LineString>
 {
   public:
-
     /*!
      * @brief creates an empty MultiLineString
      *

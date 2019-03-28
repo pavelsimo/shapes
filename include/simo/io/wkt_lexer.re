@@ -95,9 +95,15 @@ class WktLexer
           point_zm_tagged_text  = "POINT" ws* "ZM";
           point_zm_tagged_text  { return WKT_POINT_ZM_TAGGED_TEXT; }
 
-
-
-
+          // multipoint
+          multipoint_tagged_text     = "MULTIPOINT";
+          multipoint_tagged_text     { return WKT_MULTIPOINT_TAGGED_TEXT; }
+          multipoint_z_tagged_text   = "MULTIPOINT" ws* "Z";
+          multipoint_z_tagged_text   { return WKT_MULTIPOINT_Z_TAGGED_TEXT; }
+          multipoint_m_tagged_text   = "MULTIPOINT" ws* "M";
+          multipoint_m_tagged_text   { return WKT_MULTIPOINT_M_TAGGED_TEXT; }
+          multipoint_zm_tagged_text  = "MULTIPOINT" ws* "ZM";
+          multipoint_zm_tagged_text  { return WKT_MULTIPOINT_ZM_TAGGED_TEXT; }
 
           end             { return WKT_END_OF_INPUT; }
           .               { return WKT_PARSE_ERROR; }

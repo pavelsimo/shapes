@@ -322,15 +322,15 @@ class Point : public BaseGeometry<Point>
         WktReader reader{};
         auto result = reader.read(wkt.c_str());
         auto data   = result.data;
-        switch (data.dim)
+        switch (data.geom_type)
         {
-            case DimensionType::XY:
+            case GeometryDetailedType::POINT:
                 return {data.coords[0], data.coords[1]};
-            case DimensionType::XYZ:
+            case GeometryDetailedType::POINTZ:
                 return {data.coords[0], data.coords[1], data.coords[2]};
-            case DimensionType::XYM:
+            case GeometryDetailedType::POINTM:
                 return Point::from_xym(data.coords[0], data.coords[1], data.coords[2]);
-            case DimensionType::XYZM:
+            case GeometryDetailedType::POINTZM:
                 return {data.coords[0], data.coords[1], data.coords[2], data.coords[3]};
             default:
                 throw exceptions::ParseError("");

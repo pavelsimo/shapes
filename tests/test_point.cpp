@@ -141,13 +141,49 @@ TEST_CASE("Point")
 
             SECTION("empty - from wkt")
             {
-                auto p = Point::from_wkt("POINT EMPTY");
-                CHECK(p.x == 0);
-                CHECK(p.y == 0);
-                CHECK(p.z == 0);
-                CHECK(p.m == 0);
-                CHECK(p.detailed_type() == GeometryDetailedType::POINT);
-                CHECK(p.dim == DimensionType::XY);
+                SECTION("empty - xy")
+                {
+                    auto p = Point::from_wkt("POINT EMPTY");
+                    CHECK(p.x == 0);
+                    CHECK(p.y == 0);
+                    CHECK(p.z == 0);
+                    CHECK(p.m == 0);
+                    CHECK(p.detailed_type() == GeometryDetailedType::POINT);
+                    CHECK(p.dim == DimensionType::XY);
+                }
+
+                SECTION("empty - xyz")
+                {
+                    auto p = Point::from_wkt("POINT Z EMPTY");
+                    CHECK(p.x == 0);
+                    CHECK(p.y == 0);
+                    CHECK(p.z == 0);
+                    CHECK(p.m == 0);
+                    CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
+                    CHECK(p.dim == DimensionType::XYZ);
+                }
+
+                SECTION("empty - xym")
+                {
+                    auto p = Point::from_wkt("POINT M EMPTY");
+                    CHECK(p.x == 0);
+                    CHECK(p.y == 0);
+                    CHECK(p.z == 0);
+                    CHECK(p.m == 0);
+                    CHECK(p.detailed_type() == GeometryDetailedType::POINTM);
+                    CHECK(p.dim == DimensionType::XYM);
+                }
+
+                SECTION("empty - xyzm")
+                {
+                    auto p = Point::from_wkt("POINT ZM EMPTY");
+                    CHECK(p.x == 0);
+                    CHECK(p.y == 0);
+                    CHECK(p.z == 0);
+                    CHECK(p.m == 0);
+                    CHECK(p.detailed_type() == GeometryDetailedType::POINTZM);
+                    CHECK(p.dim == DimensionType::XYZM);
+                }
             }
 
             SECTION("no throw - from wkt")

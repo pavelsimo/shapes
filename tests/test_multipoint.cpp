@@ -152,4 +152,15 @@ TEST_CASE("MultiPoint")
         //        mp.precision  = 1;
         //        CHECK(mp.wkt() == "MULTIPOINT((1.0 2.0),(4.0 5.0))");
     }
+
+    SECTION("empty - from wkt")
+    {
+        SECTION("empty - xy")
+        {
+            auto mp = MultiPoint::from_wkt("MULTIPOINT EMPTY");
+            CHECK(mp.empty());
+            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINT);
+            CHECK(mp.dim == DimensionType::XY);
+        }
+    }
 }

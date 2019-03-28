@@ -47,13 +47,13 @@ class WktReader
     {
         WktLexer lexer(wkt);
         WktResult result{};
-#ifdef SHAPES_DEBUG
+#ifdef SHAPES_VERBOSE
         ParseTrace(stdout, "[shapes] ");
 #endif
         while (true)
         {
             int token = lexer.scan();
-#ifdef SHAPES_DEBUG
+#ifdef SHAPES_VERBOSE
             std::cout << "--> " << lexer.get_token() << '\n';
 #endif
             if (token == WKT_END_OF_INPUT)

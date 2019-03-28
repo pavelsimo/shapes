@@ -157,10 +157,52 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
      *
      * @since 0.0.1
      */
-    static MultiPoint from_wkt(const std::string& /*wkt*/)
+    static MultiPoint from_wkt(const std::string& wkt)
     {
-
-        throw exceptions::NotImplementedError();
+        WktReader reader{};
+        auto result = reader.read(wkt.c_str());
+        auto data   = result.data;
+        std::vector<Point> points;
+        points.reserve(data.coords.size());
+        /// @todo (pavel) add method get_dim(GeometryDetailedType)
+        /// @todo (pavel) add method get_ndim(GeometryDetailedType)
+        int ndim = 0;
+        DimensionType dim = DimensionType::XY;
+        switch (data.geom_type)
+        {
+            case GeometryDetailedType::MULTIPOINT:
+            {
+                ndim = 2;
+                break;
+            }
+            case GeometryDetailedType::MULTIPOINTZ:
+            {
+                ndim = 3;
+                dim = DimensionType::XYZ;
+                break;
+            }
+            case GeometryDetailedType::MULTIPOINTM:
+            {
+                ndim = 3;
+                dim = DimensionType::XYM;
+                break;
+            }
+            case GeometryDetailedType::MULTIPOINTZM:
+            {
+                ndim = 4;
+                dim = DimensionType::XYZM;
+                break;
+            }
+            default:
+                throw exceptions::ParseError("");
+        }
+        for (size_t i = 0; i < result.data.coords.size(); ++i)
+        {
+            /// @todo (pavel) set coordinates
+        }
+        MultiPoint res(points);
+        res.dim = dim;
+        return res;
     }
 
     /*!

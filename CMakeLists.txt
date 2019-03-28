@@ -17,6 +17,7 @@ set(CMAKE_VERBOSE_MAKEFILE on)
 option(SHAPES_SINGLE_HEADER "whether to use a single header or multiple headers" OFF)
 option(SHAPES_ENABLE_COVERAGE "whether to enable coverage" OFF)
 option(SHAPES_TESTING "build tests" ON)
+option(SHAPES_VERBOSE "verbose output" ON)
 
 ####################
 # warning settings #

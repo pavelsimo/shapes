@@ -6,5 +6,9 @@
 #define WKT_POINT_Z_TAGGED_TEXT         6
 #define WKT_POINT_M_TAGGED_TEXT         7
 #define WKT_POINT_ZM_TAGGED_TEXT        8
-#define WKT_END_OF_INPUT                99
-#define WKT_PARSE_ERROR                 100
+#define WKT_MULTIPOINT_TAGGED_TEXT      9
+#define WKT_MULTIPOINT_Z_TAGGED_TEXT   10
+#define WKT_MULTIPOINT_M_TAGGED_TEXT   11
+#define WKT_MULTIPOINT_ZM_TAGGED_TEXT  12
+#define WKT_END_OF_INPUT               99
+#define WKT_PARSE_ERROR                100
