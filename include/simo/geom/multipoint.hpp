@@ -196,10 +196,11 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
             default:
                 throw exceptions::ParseError("");
         }
+
+        Point p;
+        p.dim = dim;
         for (size_t i = 0; i < result.data.coords.size(); i += ndim)
         {
-            Point p;
-            p.dim = dim;
             for (size_t j = 0; j < size_t(ndim); ++j)
             {
                 p[j] = result.data.coords[i + j];

@@ -50,19 +50,9 @@ point ::= WKT_POINT_TAGGED_TEXT WKT_EMPTY_SET.
     result->data.geom_type = simo::shapes::GeometryDetailedType::POINT;
 }
 
-point ::= WKT_POINT_TAGGED_TEXT WKT_LPAREN coord(X) coord(Y) WKT_RPAREN.
+point ::= WKT_POINT_TAGGED_TEXT point_text.
 {
-    result->data.coords.push_back(X);
-    result->data.coords.push_back(Y);
     result->data.geom_type = simo::shapes::GeometryDetailedType::POINT;
-}
-
-point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_LPAREN coord(X) coord(Y) coord(Z) WKT_RPAREN.
-{
-    result->data.coords.push_back(X);
-    result->data.coords.push_back(Y);
-    result->data.coords.push_back(Z);
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZ;
 }
 
 point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_EMPTY_SET.
@@ -73,12 +63,9 @@ point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_EMPTY_SET.
     result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZ;
 }
 
-point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_LPAREN coord(X) coord(Y) coord(M) WKT_RPAREN.
+point_z ::= WKT_POINT_Z_TAGGED_TEXT point_text_z.
 {
-    result->data.coords.push_back(X);
-    result->data.coords.push_back(Y);
-    result->data.coords.push_back(M);
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTM;
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZ;
 }
 
 point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_EMPTY_SET.
@@ -89,13 +76,9 @@ point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_EMPTY_SET.
     result->data.geom_type = simo::shapes::GeometryDetailedType::POINTM;
 }
 
-point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_LPAREN coord(X) coord(Y) coord(Z) coord(M) WKT_RPAREN.
+point_m ::= WKT_POINT_M_TAGGED_TEXT point_text_m.
 {
-    result->data.coords.push_back(X);
-    result->data.coords.push_back(Y);
-    result->data.coords.push_back(Z);
-    result->data.coords.push_back(M);
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZM;
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTM;
 }
 
 point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_EMPTY_SET.
@@ -107,7 +90,10 @@ point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_EMPTY_SET.
     result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZM;
 }
 
-// multipoint
+point_zm ::= WKT_POINT_ZM_TAGGED_TEXT point_text_zm.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZM;
+}
 
 point_text ::= WKT_LPAREN coord(X) coord(Y) WKT_RPAREN.
 {
@@ -115,15 +101,48 @@ point_text ::= WKT_LPAREN coord(X) coord(Y) WKT_RPAREN.
     result->data.coords.push_back(Y);
 }
 
+point_text_z ::= WKT_LPAREN coord(X) coord(Y) coord(Z) WKT_RPAREN.
+{
+    result->data.coords.push_back(X);
+    result->data.coords.push_back(Y);
+    result->data.coords.push_back(Z);
+}
+
+point_text_m ::= WKT_LPAREN coord(X) coord(Y) coord(M) WKT_RPAREN.
+{
+    result->data.coords.push_back(X);
+    result->data.coords.push_back(Y);
+    result->data.coords.push_back(M);
+}
+
+point_text_zm ::= WKT_LPAREN coord(X) coord(Y) coord(Z) coord(M) WKT_RPAREN.
+{
+    result->data.coords.push_back(X);
+    result->data.coords.push_back(Y);
+    result->data.coords.push_back(Z);
+    result->data.coords.push_back(M);
+}
+
+// multipoint
+
 multipoint_text ::= .
 multipoint_text ::= WKT_COMMA point_text multipoint_text.
 
-multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN point_text multipoint_text WKT_RPAREN.
+multipoint_text_z ::= .
+multipoint_text_z ::= WKT_COMMA point_text_z multipoint_text_z.
+
+multipoint_text_m ::= .
+multipoint_text_m ::= WKT_COMMA point_text_m multipoint_text_m.
+
+multipoint_text_zm ::= .
+multipoint_text_zm ::= WKT_COMMA point_text_zm multipoint_text_zm.
+
+multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_EMPTY_SET.
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINT;
 }
 
-multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_EMPTY_SET.
+multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN point_text multipoint_text WKT_RPAREN.
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINT;
 }
@@ -133,12 +152,27 @@ multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_EMPTY_SET.
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTZ;
 }
 
+multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_LPAREN point_text_z multipoint_text_z WKT_RPAREN.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTZ;
+}
+
 multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_EMPTY_SET.
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTM;
 }
 
+multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_LPAREN point_text_m multipoint_text_m WKT_RPAREN.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTM;
+}
+
 multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_EMPTY_SET.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTZM;
+}
+
+multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN point_text_zm multipoint_text_zm WKT_RPAREN.
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTZM;
 }
