@@ -164,15 +164,70 @@ TEST_CASE("MultiPoint")
         }
     }
 
-
     SECTION("from...")
     {
-        SECTION("wkt")
+        SECTION("xy - from wkt")
         {
-            auto mp = MultiPoint::from_wkt("MULTIPOINT((122.3 47.6), (122.3 47.6))");
+            auto mp = MultiPoint::from_wkt("MULTIPOINT((1.4 2.3), (3.2 4.1))");
             CHECK(not mp.empty());
             CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINT);
             CHECK(mp.dim == DimensionType::XY);
+            const auto& p1 = mp[0];
+            CHECK(p1.x == 1.4);
+            CHECK(p1.y == 2.3);
+            const auto& p2 = mp[1];
+            CHECK(p2.x == 3.2);
+            CHECK(p2.y == 4.1);
+        }
+
+        SECTION("xyz - from wkt")
+        {
+            auto mp = MultiPoint::from_wkt("MULTIPOINTZ((1.4 2.3 1), (3.2 4.1 2))");
+            CHECK(not mp.empty());
+            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTZ);
+            CHECK(mp.dim == DimensionType::XYZ);
+            const auto& p1 = mp[0];
+            CHECK(p1.x == 1.4);
+            CHECK(p1.y == 2.3);
+            CHECK(p1.z == 1);
+            const auto& p2 = mp[1];
+            CHECK(p2.x == 3.2);
+            CHECK(p2.y == 4.1);
+            CHECK(p2.z == 2);
+        }
+
+        SECTION("xym - from wkt")
+        {
+            auto mp = MultiPoint::from_wkt("MULTIPOINTM((1.4 2.3 1), (3.2 4.1 2))");
+            CHECK(not mp.empty());
+            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTM);
+            CHECK(mp.dim == DimensionType::XYM);
+            const auto& p1 = mp[0];
+            CHECK(p1.x == 1.4);
+            CHECK(p1.y == 2.3);
+            CHECK(p1.m == 1);
+            const auto& p2 = mp[1];
+            CHECK(p2.x == 3.2);
+            CHECK(p2.y == 4.1);
+            CHECK(p2.m == 2);
+        }
+
+        SECTION("xyzm - from wkt")
+        {
+            auto mp = MultiPoint::from_wkt("MULTIPOINTZM((1.4 2.3 1 1), (3.2 4.1 2 2))");
+            CHECK(not mp.empty());
+            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTZM);
+            CHECK(mp.dim == DimensionType::XYZM);
+            const auto& p1 = mp[0];
+            CHECK(p1.x == 1.4);
+            CHECK(p1.y == 2.3);
+            CHECK(p1.z == 1);
+            CHECK(p1.m == 1);
+            const auto& p2 = mp[1];
+            CHECK(p2.x == 3.2);
+            CHECK(p2.y == 4.1);
+            CHECK(p2.z == 2);
+            CHECK(p2.m == 2);
         }
     }
 }

@@ -22,7 +22,7 @@ TEST_CASE("Point")
 
         SECTION("xy - initializer list")
         {
-            Point p = {1, 2};
+            auto p = Point{1, 2};
             CHECK(p.x == 1);
             CHECK(p.y == 2);
             CHECK(p.z == 0);
@@ -34,7 +34,7 @@ TEST_CASE("Point")
 
         SECTION("xyz - initializer list")
         {
-            Point p = {1, 2, 3};
+            auto p = Point{1, 2, 3};
             CHECK(p.x == 1);
             CHECK(p.y == 2);
             CHECK(p.z == 3);
@@ -51,7 +51,7 @@ TEST_CASE("Point")
 
         SECTION("xyzm - initializer list")
         {
-            Point p = {1, 2, 3, 4};
+            auto p = Point{1, 2, 3, 4};
             CHECK(p.x == 1);
             CHECK(p.y == 2);
             CHECK(p.z == 3);
