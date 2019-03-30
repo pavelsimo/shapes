@@ -163,4 +163,16 @@ TEST_CASE("MultiPoint")
             CHECK(mp.dim == DimensionType::XY);
         }
     }
+
+
+    SECTION("from...")
+    {
+        SECTION("wkt")
+        {
+            auto mp = MultiPoint::from_wkt("MULTIPOINT((122.3 47.6), (122.3 47.6))");
+            CHECK(not mp.empty());
+            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINT);
+            CHECK(mp.dim == DimensionType::XY);
+        }
+    }
 }

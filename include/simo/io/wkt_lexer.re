@@ -5,6 +5,7 @@
 
 namespace simo
 {
+
 namespace shapes
 {
 
@@ -82,8 +83,8 @@ class WktLexer
           empty_set       { return WKT_EMPTY_SET; }
 
           // comma
-          //comma           = ",";
-          //comma           { return WKT_COMMA; }
+          comma           = ",";
+          comma           { return WKT_COMMA; }
 
           // point
           point_tagged_text     = "POINT";

@@ -194,7 +194,7 @@ class Point : public BaseGeometry<Point>
      *
      * @since 0.0.1
      */
-    double at(size_t pos)
+    double& at(size_t pos)
     {
         if (pos >= size_())
         {
@@ -220,7 +220,7 @@ class Point : public BaseGeometry<Point>
     }
 
     /// @copydoc Point::at()
-    double operator[](size_t pos)
+    double& operator[](size_t pos)
     {
         return at(pos);
     }

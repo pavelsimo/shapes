@@ -196,9 +196,15 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
             default:
                 throw exceptions::ParseError("");
         }
-        for (size_t i = 0; i < result.data.coords.size(); ++i)
+        for (size_t i = 0; i < result.data.coords.size(); i += ndim)
         {
-            /// @todo (pavel) set coordinates
+            Point p;
+            p.dim = dim;
+            for (size_t j = 0; j < size_t(ndim); ++j)
+            {
+                p[j] = result.data.coords[i + j];
+            }
+            points.push_back(p);
         }
         MultiPoint res(points);
         res.dim = dim;
