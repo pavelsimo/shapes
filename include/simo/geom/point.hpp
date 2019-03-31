@@ -190,7 +190,8 @@ class Point : public BaseGeometry<Point>
      * @brief returns the coordinate at the given index
      * @param pos the coordinate position
      * @return a double with the coordinate value
-     * @throw exception if the position is not found
+     *
+     * @throw IndexError if the index at pos is out of range
      *
      * @since 0.0.1
      */
@@ -198,7 +199,7 @@ class Point : public BaseGeometry<Point>
     {
         if (pos >= size_())
         {
-            throw exceptions::ShapesException("out of range");
+            throw exceptions::IndexError("index at " + std::to_string(pos) + " is out of range");
         }
 
         if (pos == 0)

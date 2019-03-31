@@ -67,7 +67,8 @@ class GeometrySequence
     /*!
      * @param pos the element position
      * @return returns a reference to the element at position n in T
-     * @throw IndexError if the index @pos is out of range
+     *
+     * @throw IndexError if the index at pos is out of range
      *
      * @since 0.0.1
      */
