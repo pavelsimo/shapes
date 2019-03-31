@@ -130,6 +130,27 @@ class ValueError : public ShapesException
     }
 };
 
+/*!
+ * @brief exception thrown when a sequence index is out of range
+ *
+ * @since 0.0.1
+ */
+class IndexError : public ShapesException
+{
+  public:
+    /*!
+     * @brief creates a index error exception
+     * @param reason the exception reason
+     *
+     * @since 0.0.1
+     */
+    explicit IndexError(const std::string& reason)
+        : ShapesException("index error")
+    {
+        set_reason(reason);
+    }
+};
+
 }  // namespace exceptions
 }  // namespace shapes
 }  // namespace simo
