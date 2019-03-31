@@ -155,48 +155,28 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
      * @return a MultiPoint object
      * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
+     * @throw ParseError if a parser error occurs
+     *
      * @since 0.0.1
      */
     static MultiPoint from_wkt(const std::string& wkt)
     {
         WktReader reader{};
-        auto result = reader.read(wkt.c_str());
-        auto data   = result.data;
-        std::vector<Point> points;
-        points.reserve(data.coords.size());
-        /// @todo (pavel) add method get_dim(GeometryDetailedType)
-        /// @todo (pavel) add method get_ndim(GeometryDetailedType)
-        int ndim = 0;
-        DimensionType dim = DimensionType::XY;
-        switch (data.geom_type)
+        auto result      = reader.read(wkt.c_str());
+        const auto& data = result.data;
+        auto geom_type   = data.geom_type;
+        if (geom_type != GeometryDetailedType::MULTIPOINT and
+            geom_type != GeometryDetailedType::MULTIPOINTZ and
+            geom_type != GeometryDetailedType::MULTIPOINTM and
+            geom_type != GeometryDetailedType::MULTIPOINTZM)
         {
-            case GeometryDetailedType::MULTIPOINT:
-            {
-                ndim = 2;
-                break;
-            }
-            case GeometryDetailedType::MULTIPOINTZ:
-            {
-                ndim = 3;
-                dim = DimensionType::XYZ;
-                break;
-            }
-            case GeometryDetailedType::MULTIPOINTM:
-            {
-                ndim = 3;
-                dim = DimensionType::XYM;
-                break;
-            }
-            case GeometryDetailedType::MULTIPOINTZM:
-            {
-                ndim = 4;
-                dim = DimensionType::XYZM;
-                break;
-            }
-            default:
-                throw exceptions::ParseError("");
+            throw exceptions::ParseError("invalid WKT string");
         }
 
+        std::vector<Point> points;
+        points.reserve(data.coords.size());
+        auto dim = get_dim(data.geom_type);
+        int ndim = get_ndim(dim);
         Point p;
         p.dim = dim;
         for (size_t i = 0; i < result.data.coords.size(); i += ndim)
@@ -259,20 +239,16 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
     }
 
   private:
-    /// for implementation encapsulation
+    /// for allow BaseGeometry to access MultiPoint private members
     friend class BaseGeometry<MultiPoint>;
 
-    /*!
-    * @private
-    */
+    /// @private
     GeometryType type_() const
     {
         return GeometryType::MULTIPOINT;
     }
 
-    /*!
-    * @private
-    */
+    /// @private
     std::string type_str_() const
     {
         return "MultiPoint";

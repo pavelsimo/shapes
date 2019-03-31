@@ -315,6 +315,8 @@ class Point : public BaseGeometry<Point>
      * @return a Point object
      * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
+     * @throw ParseError if a parser error occurs
+     *
      * @since 0.0.1
      */
     static Point from_wkt(const std::string& wkt)
@@ -333,7 +335,7 @@ class Point : public BaseGeometry<Point>
             case GeometryDetailedType::POINTZM:
                 return {data.coords[0], data.coords[1], data.coords[2], data.coords[3]};
             default:
-                throw exceptions::ParseError("");
+                throw exceptions::ParseError("invalid WKT string");
         }
     }
 

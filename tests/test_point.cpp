@@ -4,7 +4,6 @@
 
 using namespace simo::shapes;
 
-
 TEST_CASE("Point")
 {
     SECTION("constructors")
