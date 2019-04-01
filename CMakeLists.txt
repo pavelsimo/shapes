@@ -9,7 +9,7 @@ set(SHAPES_LIBRARY ${PROJECT_NAME})
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_VERBOSE_MAKEFILE on)
+set(CMAKE_VERBOSE_MAKEFILE ON)
 
 ###########
 # options #
@@ -17,7 +17,7 @@ set(CMAKE_VERBOSE_MAKEFILE on)
 option(SHAPES_SINGLE_HEADER "whether to use a single header or multiple headers" OFF)
 option(SHAPES_ENABLE_COVERAGE "whether to enable coverage" OFF)
 option(SHAPES_TESTING "build tests" ON)
-option(SHAPES_VERBOSE "verbose output" ON)
+option(SHAPES_VERBOSE "whether to enable verbose output" OFF)
 
 ####################
 # warning settings #
@@ -38,6 +38,10 @@ endif()
 ####################
 # include settings #
 ####################
+
+if (SHAPES_VERBOSE)
+    add_definitions(-DSHAPES_VERBOSE)
+endif()
 
 if (SHAPES_SINGLE_HEADER)
     set(SHAPES_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/single_include)
