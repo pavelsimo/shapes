@@ -13,9 +13,55 @@ TEST_CASE("Point")
             Point p;
             CHECK(p.x == 0);
             CHECK(p.y == 0);
+            CHECK(p.z == 0);
+            CHECK(p.m == 0);
             CHECK(p.dim == DimensionType::XY);
             CHECK(p.type() == GeometryType::POINT);
             CHECK(p.detailed_type() == GeometryDetailedType::POINT);
+            CHECK(p.type_str() == "Point");
+        }
+
+        SECTION("xy - constructor")
+        {
+            Point p(1, 2);
+            CHECK(p.x == 1);
+            CHECK(p.y == 2);
+            CHECK(p.z == 0);
+            CHECK(p.m == 0);
+            CHECK(p.dim == DimensionType::XY);
+            CHECK(p.type() == GeometryType::POINT);
+            CHECK(p.detailed_type() == GeometryDetailedType::POINT);
+            CHECK(p.type_str() == "Point");
+        }
+
+        SECTION("xyz - constructor")
+        {
+            Point p(1, 2, 3);
+            CHECK(p.x == 1);
+            CHECK(p.y == 2);
+            CHECK(p.z == 3);
+            CHECK(p.m == 0);
+            CHECK(p.dim == DimensionType::XYZ);
+            CHECK(p.type() == GeometryType::POINT);
+            CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
+            CHECK(p.type_str() == "Point");
+        }
+
+        SECTION("xym - constructor")
+        {
+            // not supported
+        }
+
+        SECTION("xyzm - constructor")
+        {
+            Point p(1, 2, 3, 4);
+            CHECK(p.x == 1);
+            CHECK(p.y == 2);
+            CHECK(p.z == 3);
+            CHECK(p.m == 4);
+            CHECK(p.dim == DimensionType::XYZM);
+            CHECK(p.type() == GeometryType::POINT);
+            CHECK(p.detailed_type() == GeometryDetailedType::POINTZM);
             CHECK(p.type_str() == "Point");
         }
 
@@ -25,6 +71,7 @@ TEST_CASE("Point")
             CHECK(p.x == 1);
             CHECK(p.y == 2);
             CHECK(p.z == 0);
+            CHECK(p.m == 0);
             CHECK(p.dim == DimensionType::XY);
             CHECK(p.type() == GeometryType::POINT);
             CHECK(p.detailed_type() == GeometryDetailedType::POINT);
@@ -37,6 +84,7 @@ TEST_CASE("Point")
             CHECK(p.x == 1);
             CHECK(p.y == 2);
             CHECK(p.z == 3);
+            CHECK(p.m == 0);
             CHECK(p.dim == DimensionType::XYZ);
             CHECK(p.type() == GeometryType::POINT);
             CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
@@ -333,76 +381,141 @@ TEST_CASE("Point")
         }
     }
 
-    SECTION("index operator")
+    SECTION("operators")
     {
-        SECTION("xy - index operator")
+        SECTION("equal to - operator")
         {
-            Point p = {1, 2};
-            CHECK(p[0] == 1.0);
-            CHECK(p[1] == 2.0);
-            CHECK(p.size() == 2);
-            CHECK_THROWS(p[2]);
-            size_t n = 0;
-            for (size_t i = 0; i < p.size(); ++i)
+            SECTION("xy - equal to")
             {
-                n++;
+                Point p1 = {1.0, 2.0};
+                Point p2 = {1.0, 2.0};
+                CHECK(p1 == p2);
             }
-            CHECK(n == p.size());
+
+            SECTION("xyz - equal to")
+            {
+                Point p1 = {1.0, 2.0};
+                Point p2 = {1.0, 2.0};
+                CHECK(p1 == p2);
+            }
+
+            SECTION("xym - equal to")
+            {
+                Point p1 = Point::from_xym(1, 2, 3);
+                Point p2 = Point::from_xym(1, 2, 3);
+                CHECK(p1 == p2);
+            }
+
+            SECTION("xyzm - equal to")
+            {
+                Point p1 = {1.0, 2.0, 3.0, 4.0};
+                Point p2 = {1.0, 2.0, 3.0, 4.0};
+                CHECK(p1 == p2);
+            }
         }
 
-        SECTION("xyz - index operator")
+        SECTION("not equal to - operator")
         {
-            Point p = {1, 2, 3};
-            CHECK(p[0] == 1.0);
-            CHECK(p[1] == 2.0);
-            CHECK(p[2] == 3.0);
-            CHECK(p.size() == 3);
-            CHECK_THROWS(p[3]);
-            size_t n = 0;
-            for (size_t i = 0; i < p.size(); ++i)
+            SECTION("xy - not equal to")
             {
-                n++;
+                Point p1 = {1.0, 2.0};
+                Point p2 = {2.0, 3.0};
+                CHECK(p1 != p2);
             }
-            CHECK(n == p.size());
+
+            SECTION("xyz - not equal to")
+            {
+                Point p1 = {1.0, 2.0};
+                Point p2 = {2.0, 3.0};
+                CHECK(p1 != p2);
+            }
+
+            SECTION("xym - not equal to")
+            {
+                Point p1 = Point::from_xym(1, 2, 3);
+                Point p2 = Point::from_xym(2, 3, 4);
+                CHECK(p1 != p2);
+            }
+
+            SECTION("xyzm - not equal to")
+            {
+                Point p1 = {1.0, 2.0, 3.0, 4.0};
+                Point p2 = {2.0, 3.0, 4.0, 5.0};
+                CHECK(p1 != p2);
+            }
         }
 
-        SECTION("xym - index operator")
+        SECTION("index operator")
         {
-            Point p = Point::from_xym(1, 2, 3);
-            CHECK(p[0] == 1.0);
-            CHECK(p[1] == 2.0);
-            CHECK(p[2] == 3.0);
-            CHECK(p.size() == 3);
-            CHECK_THROWS(p[3]);
-            size_t n = 0;
-            for (size_t i = 0; i < p.size(); ++i)
+            SECTION("xy - index operator")
             {
-                n++;
+                Point p = {1, 2};
+                CHECK(p[0] == 1.0);
+                CHECK(p[1] == 2.0);
+                CHECK(p.size() == 2);
+                CHECK_THROWS(p[2]);
+                size_t n = 0;
+                for (size_t i = 0; i < p.size(); ++i)
+                {
+                    n++;
+                }
+                CHECK(n == p.size());
             }
-            CHECK(n == p.size());
+
+            SECTION("xyz - index operator")
+            {
+                Point p = {1, 2, 3};
+                CHECK(p[0] == 1.0);
+                CHECK(p[1] == 2.0);
+                CHECK(p[2] == 3.0);
+                CHECK(p.size() == 3);
+                CHECK_THROWS(p[3]);
+                size_t n = 0;
+                for (size_t i = 0; i < p.size(); ++i)
+                {
+                    n++;
+                }
+                CHECK(n == p.size());
+            }
+
+            SECTION("xym - index operator")
+            {
+                Point p = Point::from_xym(1, 2, 3);
+                CHECK(p[0] == 1.0);
+                CHECK(p[1] == 2.0);
+                CHECK(p[2] == 3.0);
+                CHECK(p.size() == 3);
+                CHECK_THROWS(p[3]);
+                size_t n = 0;
+                for (size_t i = 0; i < p.size(); ++i)
+                {
+                    n++;
+                }
+                CHECK(n == p.size());
+            }
+
+            SECTION("xyzm - index operator")
+            {
+                Point p = {1, 2, 3, 4};
+                CHECK(p[0] == 1.0);
+                CHECK(p[1] == 2.0);
+                CHECK(p[2] == 3.0);
+                CHECK(p[3] == 4.0);
+                CHECK(p.size() == 4);
+                CHECK_THROWS(p[4]);
+                size_t n = 0;
+                for (size_t i = 0; i < p.size(); ++i)
+                {
+                    n++;
+                }
+                CHECK(n == p.size());
+            }
         }
 
-        SECTION("xyzm - index operator")
-        {
-            Point p = {1, 2, 3, 4};
-            CHECK(p[0] == 1.0);
-            CHECK(p[1] == 2.0);
-            CHECK(p[2] == 3.0);
-            CHECK(p[3] == 4.0);
-            CHECK(p.size() == 4);
-            CHECK_THROWS(p[4]);
-            size_t n = 0;
-            for (size_t i = 0; i < p.size(); ++i)
-            {
-                n++;
-            }
-            CHECK(n == p.size());
-        }
     }
 
     SECTION("coordinates tuples")
     {
-
         SECTION("xy - tuples")
         {
             Point p = {1.0, 2.0};
