@@ -182,7 +182,7 @@ class Point : public BaseGeometry<Point>
         }
         else
         {
-            throw exceptions::ValueError("invalid number of dimensions " + std::to_string(init.size()));
+            throw exceptions::GeometryError("invalid number of dimensions " + std::to_string(init.size()));
         }
     }
 

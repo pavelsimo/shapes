@@ -23,6 +23,7 @@ namespace shapes
 class LinearRing : public BaseGeometry<LinearRing>, public GeometrySequence<Point>
 {
   public:
+
     /// two-dimensional rotation direction, clockwise=true, counterclockwise=false
     bool clockwise = true;
 
@@ -51,7 +52,7 @@ class LinearRing : public BaseGeometry<LinearRing>, public GeometrySequence<Poin
             bounds.extend(p.x, p.y);
             seq.emplace_back(p);
         }
-        valid_or_throw();
+        throw_for_invalid();
     }
 
     /*!
@@ -68,7 +69,7 @@ class LinearRing : public BaseGeometry<LinearRing>, public GeometrySequence<Poin
         {
             bounds.extend(p.x, p.y);
         }
-        valid_or_throw();
+        throw_for_invalid();
     }
 
   private:
@@ -76,7 +77,7 @@ class LinearRing : public BaseGeometry<LinearRing>, public GeometrySequence<Poin
     friend class BaseGeometry<LinearRing>;
 
     /// @private
-    void valid_or_throw() const
+    void throw_for_invalid() const
     {
         if (empty())
         {
@@ -85,12 +86,12 @@ class LinearRing : public BaseGeometry<LinearRing>, public GeometrySequence<Poin
 
         if (seq.size() < 4)
         {
-            throw exceptions::ValueError("LinearRing should be either empty or with 4 or more points");
+            throw exceptions::GeometryError("LinearRing should be either empty or with 4 or more points");
         }
 
         if (not is_closed())
         {
-            throw exceptions::ValueError("LinearRing is not closed, first and last point are different");
+            throw exceptions::GeometryError("LinearRing is not closed, first and last point are different");
         }
 
         /// @todo (pavel) check for self-intersections

@@ -110,20 +110,20 @@ class NotImplementedError : public ShapesException
 };
 
 /*!
- * @brief exception thrown when a value error is found
+ * @brief exception thrown when a geometry error is found
  *
  * @since 0.0.1
  */
-class ValueError : public ShapesException
+class GeometryError : public ShapesException
 {
   public:
     /*!
-     * @brief creates a value error exception
+     * @brief creates a geometry error exception
      * @param reason the exception reason
      *
      * @since 0.0.1
      */
-    explicit ValueError(const std::string& reason)
+    explicit GeometryError(const std::string& reason)
         : ShapesException("value error")
     {
         set_reason(reason);

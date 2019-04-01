@@ -46,7 +46,7 @@ class LineString : public BaseGeometry<LineString>, public GeometrySequence<Poin
             bounds.extend(p.x, p.y);
             seq.emplace_back(p);
         }
-        valid_or_throw();
+        throw_for_invalid();
     }
 
     /*!
@@ -120,7 +120,7 @@ class LineString : public BaseGeometry<LineString>, public GeometrySequence<Poin
     friend class BaseGeometry<LineString>;
 
     /// @private
-    void valid_or_throw()
+    void throw_for_invalid()
     {
         if (empty())
         {
@@ -129,14 +129,14 @@ class LineString : public BaseGeometry<LineString>, public GeometrySequence<Poin
 
         if (seq.size() < 2)
         {
-            throw exceptions::ValueError("LineString should be either empty or with 2 or more points");
+            throw exceptions::GeometryError("LineString should be either empty or with 2 or more points");
         }
 
         if (seq.size() == 2)
         {
             if (seq[0] == seq[1])
             {
-                throw exceptions::ValueError("LineString with exactly two equal points");
+                throw exceptions::GeometryError("LineString with exactly two equal points");
             }
         }
     }

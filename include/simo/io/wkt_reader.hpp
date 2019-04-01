@@ -63,6 +63,7 @@ class WktReader
 
             if (token == WKT_PARSE_ERROR)
             {
+                /// @todo (pavel) add position to the error message
                 throw exceptions::ParseError("wkt lexer error");
             }
 
@@ -77,6 +78,7 @@ class WktReader
 
             if (result.parser_error == 1)
             {
+                /// @todo (pavel) add position to the error message
                 throw exceptions::ParseError("wkt parser error");
             }
         }
