@@ -39,6 +39,8 @@ class LinearRing : public BaseGeometry<LinearRing>, public GeometrySequence<Poin
       * @tparam T an arithmetic value (e.g. int, float, double)
       * @param init the initializer list
       *
+      * @throw GeometryError DOCUMENT ME!
+      *
       * @since 0.0.1
       */
     template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
@@ -58,6 +60,8 @@ class LinearRing : public BaseGeometry<LinearRing>, public GeometrySequence<Poin
     /*!
      * @brief creates a LinearRing from a given point vector
      * @param points the point list
+     *
+     * @throw GeometryError DOCUMENT ME!
      *
      * @since 0.0.1
      */
