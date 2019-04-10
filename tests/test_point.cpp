@@ -235,12 +235,31 @@ TEST_CASE("Point")
 
             SECTION("no throw - from wkt")
             {
+                // omit spaces
                 CHECK_NOTHROW(Point::from_wkt("   POINT (1 2)  "));
                 CHECK_NOTHROW(Point::from_wkt("   POINT (1          2)  "));
                 CHECK_NOTHROW(Point::from_wkt("   POINT (    1          2    )  "));
                 CHECK_NOTHROW(Point::from_wkt("   POINT Z (    1          2    3)  "));
                 CHECK_NOTHROW(Point::from_wkt("   POINT     ZM     (    1          2    5       9)  "));
                 CHECK_NOTHROW(Point::from_wkt("   POINTZM     (    1          2    5     2)  "));
+
+                // wkt is case insensitive
+                CHECK_NOTHROW(Point::from_wkt("Point(1 2)"));
+                CHECK_NOTHROW(Point::from_wkt("PointZ(1 2 3)"));
+                CHECK_NOTHROW(Point::from_wkt("PointM(1 2 3)"));
+                CHECK_NOTHROW(Point::from_wkt("PointZM(1 2 3 4)"));
+                CHECK_NOTHROW(Point::from_wkt("point(1 2)"));
+                CHECK_NOTHROW(Point::from_wkt("pointz(1 2 3)"));
+                CHECK_NOTHROW(Point::from_wkt("pointm(1 2 3)"));
+                CHECK_NOTHROW(Point::from_wkt("pointzm(1 2 3 4)"));
+                CHECK_NOTHROW(Point::from_wkt("Point Empty"));
+                CHECK_NOTHROW(Point::from_wkt("Point Z Empty"));
+                CHECK_NOTHROW(Point::from_wkt("Point M Empty"));
+                CHECK_NOTHROW(Point::from_wkt("Point ZM Empty"));
+                CHECK_NOTHROW(Point::from_wkt("point empty"));
+                CHECK_NOTHROW(Point::from_wkt("point z empty"));
+                CHECK_NOTHROW(Point::from_wkt("point m empty"));
+                CHECK_NOTHROW(Point::from_wkt("point zm empty"));
             }
 
             SECTION("throws - from wkt")

@@ -60,8 +60,8 @@
 **                       defined, then do no error processing.
 */
 #define YYCODETYPE unsigned char
-#define YYNOCODE 55
-#define YYACTIONTYPE unsigned char
+#define YYNOCODE 91
+#define YYACTIONTYPE unsigned short int
 #define ParseTOKENTYPE double
 typedef union {
   int yyinit;
@@ -74,8 +74,8 @@ typedef union {
 #define ParseARG_PDECL , struct simo::shapes::WktResult *result 
 #define ParseARG_FETCH  struct simo::shapes::WktResult *result  = yypParser->result 
 #define ParseARG_STORE yypParser->result  = result 
-#define YYNSTATE 147
-#define YYNRULE 74
+#define YYNSTATE 227
+#define YYNRULE 118
 #define YY_NO_ACTION      (YYNSTATE+YYNRULE+2)
 #define YY_ACCEPT_ACTION  (YYNSTATE+YYNRULE+1)
 #define YY_ERROR_ACTION   (YYNSTATE+YYNRULE)
@@ -145,91 +145,117 @@ static const YYMINORTYPE yyzerominor = { 0 };
 **  yy_default[]       Default action for each state.
 */
 static const YYACTIONTYPE yy_action[] = {
- /*     0 */   222,   79,  128,  111,  144,  139,  127,  122,  105,   97,
- /*    10 */    93,   87,  143,  137,   24,   27,   23,   21,   22,  121,
- /*    20 */   103,   56,   67,   62,   65,   61,   66,   63,   64,   68,
- /*    30 */    27,   30,   38,   26,   33,   48,   41,   29,   36,   51,
- /*    40 */    43,   27,   30,   26,   46,  126,   26,   55,   54,   29,
- /*    50 */    52,   53,   27,   91,  110,   26,   47,   26,   42,   30,
- /*    60 */    83,   29,   37,   27,   30,  141,   29,   60,   80,   72,
- /*    70 */    30,  102,   59,   58,   92,   16,  109,  104,   69,  132,
- /*    80 */    20,   17,   86,   13,  125,  121,    4,  101,    1,  118,
- /*    90 */   138,   17,  121,    7,    5,  136,   96,  121,   16,    2,
- /*   100 */     9,  115,   98,   13,  121,    3,   18,   75,  100,   13,
- /*   110 */    20,   29,  119,  106,   34,  116,   28,   14,   57,   35,
- /*   120 */    73,   99,   25,   31,   39,   17,   12,   32,  113,   44,
- /*   130 */    16,   11,   20,   49,  223,  223,   10,  223,    8,   40,
- /*   140 */   123,    6,  223,  223,  223,   85,   19,   45,  147,  133,
- /*   150 */   130,   15,   70,  223,  134,  107,   71,  146,  140,   95,
- /*   160 */    81,  145,  223,   50,   76,  108,  117,   90,  131,  120,
- /*   170 */    82,  223,  142,  124,  114,  135,  223,   94,  223,  223,
- /*   180 */    84,  112,  223,  223,   78,  129,  223,  223,  223,  223,
- /*   190 */   223,   74,   89,  223,  223,  223,  223,  223,  223,   77,
- /*   200 */   223,  223,  223,   88,
+ /*     0 */   346,  101,  127,  128,  129,  130,  131,  132,  133,  134,
+ /*    10 */   135,  136,  137,  138,  139,  140,  141,  142,  143,  144,
+ /*    20 */   145,  146,  147,  148,  149,  150,   36,   37,   29,   28,
+ /*    30 */    25,  196,   17,  124,   89,   90,   92,   91,   26,   35,
+ /*    40 */    32,   31,   27,   33,   34,   30,  119,  122,  123,  125,
+ /*    50 */    94,   96,   98,  100,   37,   81,   57,   51,   40,   83,
+ /*    60 */    69,   56,   47,   87,   75,   81,  218,   51,   79,  202,
+ /*    70 */    81,   71,   38,   88,   23,   56,  198,   21,  120,   51,
+ /*    80 */   210,   13,  111,   81,   39,   59,   37,  117,  214,  164,
+ /*    90 */   171,   49,   70,   65,   12,   37,  118,  194,   37,   81,
+ /*   100 */    10,   41,   20,  173,  110,  168,  153,   50,    2,   51,
+ /*   110 */     3,  183,  178,    7,  112,   81,    4,    1,  153,  151,
+ /*   120 */   200,   56,  190,  114,   18,    6,  153,   11,  105,  206,
+ /*   130 */   153,   56,   51,   18,   52,  153,   56,  104,   80,   51,
+ /*   140 */   160,   56,   12,   45,   48,    7,   37,  154,   46,  156,
+ /*   150 */    11,   54,   42,  109,    6,   64,   53,   58,   55,  102,
+ /*   160 */     6,   20,   63,  204,   61,   67,  103,   60,  174,  162,
+ /*   170 */    62,   13,   24,  189,   23,  208,   73,   66,   76,  108,
+ /*   180 */   115,   68,   77,  212,  176,   72,    7,  158,   97,  179,
+ /*   190 */    14,  116,   82,  107,   74,  216,  181,   86,   84,   99,
+ /*   200 */    12,   22,   85,  184,  166,  121,  224,  197,  186,  225,
+ /*   210 */   180,  226,  126,  185,  227,  165,  175,  191,  207,  209,
+ /*   220 */   155,  170,   15,   16,  203,  219,  182,  161,  199,  213,
+ /*   230 */   205,  163,  193,  157,    9,  195,  211,   19,  152,  215,
+ /*   240 */   167,  177,  217,   78,  172,  220,   43,  201,    8,  221,
+ /*   250 */    93,  222,  187,  223,  159,  188,    5,  106,   44,   18,
+ /*   260 */   113,  347,  192,  347,  347,   95,  169,
 };
 static const YYCODETYPE yy_lookahead[] = {
- /*     0 */    19,   20,   21,   22,   23,   24,   25,   26,   27,   28,
- /*    10 */    29,   30,   31,   32,    2,   33,    4,    5,    6,    1,
- /*    20 */    36,   39,   10,   11,   12,   13,   14,   15,   16,   17,
- /*    30 */    33,   33,   35,   33,   34,   37,   39,   33,   38,   41,
- /*    40 */    36,   33,   33,   33,   40,   34,   33,   39,   38,   33,
- /*    50 */    41,   38,   33,    8,   37,   33,   40,   33,   39,   33,
- /*    60 */    38,   33,   38,   33,   33,    8,   33,   41,   40,   39,
- /*    70 */    33,    3,   41,   40,    8,    7,    3,    3,   41,    3,
- /*    80 */     7,    7,    3,    7,    3,    1,    7,   35,    7,    3,
- /*    90 */     3,    7,    1,    7,    7,    3,    3,    1,    7,    7,
- /*   100 */     7,    3,    3,    7,    1,    7,    7,   42,    8,    7,
- /*   110 */     7,   33,   42,   33,    9,   33,   33,    9,   40,   34,
- /*   120 */    43,   33,   33,   33,    9,    7,    9,   33,   33,    9,
- /*   130 */     7,    9,    7,    9,   54,   54,    9,   54,    9,   35,
- /*   140 */    43,    9,   54,   54,   54,   44,    9,   36,    0,    8,
- /*   150 */    44,    9,   45,   54,   45,    8,   46,    8,   46,    8,
- /*   160 */    47,   47,   54,   37,   48,    8,    8,   48,    8,    8,
- /*   170 */    49,   54,    8,    8,    8,    8,   54,   49,   54,   54,
- /*   180 */    50,   50,   54,   54,   51,   51,   54,   54,   54,   54,
- /*   190 */    54,   52,   52,   54,   54,   54,   54,   54,   54,   53,
- /*   200 */    54,   54,   54,   53,
+ /*     0 */    31,   32,   33,   34,   35,   36,   37,   38,   39,   40,
+ /*    10 */    41,   42,   43,   44,   45,   46,   47,   48,   49,   50,
+ /*    20 */    51,   52,   53,   54,   55,   56,    2,   57,    4,    5,
+ /*    30 */     6,   68,    7,   63,   10,   11,   12,   13,   14,   15,
+ /*    40 */    16,   17,   18,   19,   20,   21,   22,   23,   24,   25,
+ /*    50 */    26,   27,   28,   29,   57,   57,   59,   57,   58,   61,
+ /*    60 */    63,   57,   62,   65,   60,   57,    3,   57,   64,    3,
+ /*    70 */    57,    8,   62,   65,    8,   57,    3,    7,   65,   57,
+ /*    80 */     3,    8,   64,   57,   62,    8,   57,   71,    3,    3,
+ /*    90 */    71,   65,   63,    8,    8,   57,   69,    3,   57,   57,
+ /*   100 */     7,   63,    8,    3,   63,    3,    1,   65,    8,   57,
+ /*   110 */     8,    3,    3,    8,   62,   57,    8,    8,    1,    3,
+ /*   120 */    69,   57,    3,   65,    8,    8,    1,    8,   64,    3,
+ /*   130 */     1,   57,   57,    8,    8,    1,   57,   62,   64,   57,
+ /*   140 */     3,   57,    8,   64,   62,    8,   57,   57,   64,    3,
+ /*   150 */     8,    7,   63,   82,    8,   57,   78,    7,   78,   72,
+ /*   160 */     8,    8,   59,   82,    7,    7,   83,   79,   72,   57,
+ /*   170 */    79,    8,    7,    9,    8,   83,    7,   80,    7,   84,
+ /*   180 */    73,   80,   60,   84,   73,   81,    8,   57,   74,   74,
+ /*   190 */     7,   85,   57,   75,   81,   85,   75,   57,    7,   76,
+ /*   200 */     8,    7,   61,   76,   57,   77,    3,    9,   77,    3,
+ /*   210 */     9,    3,    3,    9,    0,   61,    9,   78,   86,    9,
+ /*   220 */     9,    9,    7,    7,   81,   89,    9,   60,   80,    9,
+ /*   230 */     9,    9,    9,   59,    7,   79,   87,    7,   58,   88,
+ /*   240 */     9,    9,    9,   57,    9,    3,    7,    9,    7,    3,
+ /*   250 */    66,    3,    9,    3,    9,   66,    7,   70,   58,    8,
+ /*   260 */    67,   90,   67,   90,   90,   68,   70,
 };
 #define YY_SHIFT_USE_DFLT (-1)
-#define YY_SHIFT_MAX 85
+#define YY_SHIFT_MAX 125
 static const short yy_shift_ofst[] = {
- /*     0 */    12,   84,   91,   96,  103,   18,   18,   18,   18,   18,
- /*    10 */    18,   18,   18,   18,   18,   18,   18,   18,   18,   18,
- /*    20 */    18,   68,   73,   74,   76,   18,   18,   18,   18,   18,
- /*    30 */    18,   18,   18,  105,  102,  105,  108,  108,  115,  118,
- /*    40 */   115,  117,  117,  120,  123,  120,  122,  122,  124,  125,
- /*    50 */   124,  127,  127,  129,  129,  132,  132,  137,  137,  142,
- /*    60 */   142,   79,   81,   86,   87,   92,   93,   98,   99,  166,
- /*    70 */   167,   57,  100,  165,   66,  161,   45,  164,  141,  148,
- /*    80 */   147,  149,  151,  157,  158,  160,
+ /*     0 */    24,  105,  117,  125,  134,  129,  129,  129,  129,  129,
+ /*    10 */   129,  129,  129,  129,  129,  129,  129,  129,  129,  129,
+ /*    20 */   129,  129,  129,  129,  129,   86,  119,  126,  137,  146,
+ /*    30 */    63,   66,   73,   77,   85,   94,  116,  129,  216,  216,
+ /*    40 */   239,  249,  249,  251,  239,   25,   25,   70,   70,   93,
+ /*    50 */    93,  129,  142,  144,  142,  144,  129,  150,  152,  153,
+ /*    60 */   157,  153,  157,  150,  129,  163,  158,  163,  158,  165,
+ /*    70 */   165,  166,  169,  166,  169,  171,  178,  171,  129,  183,
+ /*    80 */   183,  129,  129,  191,  192,  191,  129,  194,  194,  102,
+ /*    90 */   100,  108,  109,  164,  203,  198,  206,  201,  208,  204,
+ /*   100 */   209,  214,  207,  210,  211,  215,  212,  217,  220,  221,
+ /*   110 */   227,  222,  230,  223,  231,  232,  233,  235,  238,  242,
+ /*   120 */   241,  243,  246,  248,  245,  250,
 };
-#define YY_REDUCE_USE_DFLT (-20)
-#define YY_REDUCE_MAX 60
+#define YY_REDUCE_USE_DFLT (-38)
+#define YY_REDUCE_MAX 88
 static const short yy_reduce_ofst[] = {
- /*     0 */   -19,   -3,    4,    0,   -2,   78,  -18,    8,   10,   13,
- /*    10 */     9,   16,   19,   22,   24,   26,   28,   30,   31,   33,
- /*    20 */    37,  -16,   17,   52,   11,   80,   82,   83,   88,   89,
- /*    30 */    90,   94,   95,   65,   85,   70,   77,   97,  101,  104,
- /*    40 */   106,  107,  109,  110,  111,  112,  113,  114,  116,  126,
- /*    50 */   119,  121,  128,  130,  131,  133,  134,  139,  140,  146,
- /*    60 */   150,
+ /*     0 */   -31,    4,   -3,    0,   -2,   89,  -30,   18,   26,   38,
+ /*    10 */    42,   52,   58,   64,   74,   79,   22,   84,   75,   10,
+ /*    20 */    41,   82,    8,   13,   29,  154,  139,  132,  167,  174,
+ /*    30 */   136,  143,  148,  149,  151,  156,  180,  186,  184,  189,
+ /*    40 */   187,  193,  195,  200,  196,  197,  -37,   16,   19,   27,
+ /*    50 */    51,   90,   78,   71,   80,   81,   98,   87,  103,   88,
+ /*    60 */    83,   91,   92,   96,  112,   97,   95,  101,   99,  107,
+ /*    70 */   111,  104,  106,  113,  110,  114,  122,  115,  130,  118,
+ /*    80 */   121,  135,  140,  123,  141,  127,  147,  128,  131,
 };
 static const YYACTIONTYPE yy_default[] = {
- /*     0 */   221,  221,  221,  221,  221,  221,  221,  221,  221,  221,
- /*    10 */   221,  221,  221,  221,  221,  221,  221,  221,  221,  221,
- /*    20 */   221,  221,  221,  221,  221,  221,  221,  221,  221,  221,
- /*    30 */   221,  221,  221,  177,  221,  177,  179,  179,  181,  221,
- /*    40 */   181,  183,  183,  185,  221,  185,  187,  187,  189,  221,
- /*    50 */   189,  191,  191,  205,  205,  207,  207,  209,  209,  211,
- /*    60 */   211,  221,  221,  221,  221,  221,  221,  221,  221,  221,
- /*    70 */   221,  221,  221,  221,  221,  221,  221,  221,  221,  221,
- /*    80 */   221,  221,  221,  221,  221,  221,  202,  157,  212,  210,
- /*    90 */   190,  203,  218,  156,  192,  204,  213,  155,  219,  170,
- /*   100 */   174,  164,  165,  166,  163,  154,  171,  175,  173,  167,
- /*   110 */   168,  149,  206,  172,  176,  193,  169,  214,  215,  178,
- /*   120 */   194,  160,  153,  180,  195,  196,  162,  152,  148,  208,
- /*   130 */   182,  197,  161,  216,  184,  198,  199,  159,  217,  151,
- /*   140 */   186,  200,  220,  158,  150,  188,  201,
+ /*     0 */   345,  345,  345,  345,  345,  345,  345,  345,  345,  345,
+ /*    10 */   345,  345,  345,  345,  345,  345,  345,  345,  345,  345,
+ /*    20 */   345,  345,  345,  345,  345,  345,  345,  345,  345,  345,
+ /*    30 */   345,  345,  345,  345,  345,  345,  345,  345,  265,  265,
+ /*    40 */   277,  267,  267,  345,  277,  269,  269,  279,  279,  271,
+ /*    50 */   271,  345,  345,  309,  345,  309,  345,  281,  345,  345,
+ /*    60 */   311,  345,  311,  281,  345,  345,  313,  345,  313,  283,
+ /*    70 */   283,  345,  315,  345,  315,  285,  345,  285,  345,  287,
+ /*    80 */   287,  345,  345,  289,  345,  289,  345,  291,  291,  345,
+ /*    90 */   345,  345,  345,  345,  345,  345,  345,  345,  345,  345,
+ /*   100 */   345,  345,  345,  345,  345,  345,  345,  345,  345,  345,
+ /*   110 */   345,  345,  345,  345,  345,  345,  345,  345,  345,  345,
+ /*   120 */   345,  345,  345,  345,  345,  345,  344,  228,  229,  230,
+ /*   130 */   231,  232,  233,  234,  235,  236,  237,  238,  239,  240,
+ /*   140 */   241,  242,  243,  244,  245,  246,  247,  248,  249,  250,
+ /*   150 */   251,  253,  254,  252,  261,  273,  255,  256,  262,  274,
+ /*   160 */   257,  258,  263,  275,  259,  260,  264,  276,  293,  278,
+ /*   170 */   294,  280,  295,  296,  282,  297,  284,  298,  299,  286,
+ /*   180 */   300,  288,  301,  302,  290,  303,  292,  304,  266,  305,
+ /*   190 */   317,  318,  268,  306,  319,  320,  270,  307,  321,  322,
+ /*   200 */   272,  308,  323,  324,  310,  325,  329,  330,  312,  326,
+ /*   210 */   331,  332,  314,  327,  333,  334,  316,  328,  335,  336,
+ /*   220 */   337,  338,  339,  340,  341,  342,  343,
 };
 #define YY_SZ_ACTTAB (int)(sizeof(yy_action)/sizeof(yy_action[0]))
 
@@ -324,19 +350,28 @@ void ParseTrace(FILE *TraceFILE, char *zTracePrompt){
 ** are required.  The following table supplies these names */
 static const char *const yyTokenName[] = { 
   "$",             "WKT_NUM",       "WKT_POINT_TAGGED_TEXT",  "WKT_EMPTY_SET",
-  "WKT_POINT_Z_TAGGED_TEXT",  "WKT_POINT_M_TAGGED_TEXT",  "WKT_POINT_ZM_TAGGED_TEXT",  "WKT_LPAREN",  
-  "WKT_RPAREN",    "WKT_COMMA",     "WKT_MULTIPOINT_TAGGED_TEXT",  "WKT_MULTIPOINT_Z_TAGGED_TEXT",
+  "WKT_POINT_Z_TAGGED_TEXT",  "WKT_POINT_M_TAGGED_TEXT",  "WKT_POINT_ZM_TAGGED_TEXT",  "WKT_COMMA",   
+  "WKT_LPAREN",    "WKT_RPAREN",    "WKT_MULTIPOINT_TAGGED_TEXT",  "WKT_MULTIPOINT_Z_TAGGED_TEXT",
   "WKT_MULTIPOINT_M_TAGGED_TEXT",  "WKT_MULTIPOINT_ZM_TAGGED_TEXT",  "WKT_LINESTRING_TAGGED_TEXT",  "WKT_LINESTRING_Z_TAGGED_TEXT",
-  "WKT_LINESTRING_M_TAGGED_TEXT",  "WKT_LINESTRING_ZM_TAGGED_TEXT",  "error",         "program",     
+  "WKT_LINESTRING_M_TAGGED_TEXT",  "WKT_LINESTRING_ZM_TAGGED_TEXT",  "WKT_MULTILINESTRING_TAGGED_TEXT",  "WKT_MULTILINESTRING_Z_TAGGED_TEXT",
+  "WKT_MULTILINESTRING_M_TAGGED_TEXT",  "WKT_MULTILINESTRING_ZM_TAGGED_TEXT",  "WKT_POLYGON_TAGGED_TEXT",  "WKT_POLYGON_Z_TAGGED_TEXT",
+  "WKT_POLYGON_M_TAGGED_TEXT",  "WKT_POLYGON_ZM_TAGGED_TEXT",  "WKT_MULTIPOLYGON_TAGGED_TEXT",  "WKT_MULTIPOLYGON_Z_TAGGED_TEXT",
+  "WKT_MULTIPOLYGON_M_TAGGED_TEXT",  "WKT_MULTIPOLYGON_ZM_TAGGED_TEXT",  "error",         "program",     
   "wkt_text",      "point",         "point_z",       "point_m",     
   "point_zm",      "multipoint",    "multipoint_z",  "multipoint_m",
   "multipoint_zm",  "linestring",    "linestring_z",  "linestring_m",
-  "linestring_zm",  "coord",         "point_text",    "point_text_z",
+  "linestring_zm",  "multilinestring",  "multilinestring_z",  "multilinestring_m",
+  "multilinestring_zm",  "polygon",       "polygon_z",     "polygon_m",   
+  "polygon_zm",    "multipolygon",  "multipolygon_z",  "multipolygon_m",
+  "multipolygon_zm",  "coord",         "point_text",    "point_text_z",
   "point_text_m",  "point_text_zm",  "coord_xy",      "coord_xyz",   
-  "coord_xym",     "coord_xyzm",    "multipoint_text",  "multipoint_text_2",
+  "coord_xym",     "coord_xyzm",    "coord_xy_repeated",  "coord_xyz_repeated",
+  "coord_xym_repeated",  "coord_xyzm_repeated",  "multipoint_text",  "multipoint_text_2",
   "multipoint_text_z",  "multipoint_text_z_2",  "multipoint_text_m",  "multipoint_text_m_2",
   "multipoint_text_zm",  "multipoint_text_zm_2",  "linestring_text",  "linestring_text_z",
-  "linestring_text_m",  "linestring_text_zm",
+  "linestring_text_m",  "linestring_text_zm",  "linestring_text_repeated",  "linestring_text_z_repeated",
+  "linestring_text_m_repeated",  "linestring_text_zm_repeated",  "multilinestring_text",  "multilinestring_text_z",
+  "multilinestring_text_m",  "multilinestring_text_zm",
 };
 #endif /* NDEBUG */
 
@@ -357,67 +392,111 @@ static const char *const yyRuleName[] = {
  /*  10 */ "wkt_text ::= linestring_z",
  /*  11 */ "wkt_text ::= linestring_m",
  /*  12 */ "wkt_text ::= linestring_zm",
- /*  13 */ "coord ::= WKT_NUM",
- /*  14 */ "point ::= WKT_POINT_TAGGED_TEXT WKT_EMPTY_SET",
- /*  15 */ "point ::= WKT_POINT_TAGGED_TEXT point_text",
- /*  16 */ "point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_EMPTY_SET",
- /*  17 */ "point_z ::= WKT_POINT_Z_TAGGED_TEXT point_text_z",
- /*  18 */ "point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_EMPTY_SET",
- /*  19 */ "point_m ::= WKT_POINT_M_TAGGED_TEXT point_text_m",
- /*  20 */ "point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_EMPTY_SET",
- /*  21 */ "point_zm ::= WKT_POINT_ZM_TAGGED_TEXT point_text_zm",
- /*  22 */ "coord_xy ::= coord coord",
- /*  23 */ "coord_xyz ::= coord coord coord",
- /*  24 */ "coord_xym ::= coord coord coord",
- /*  25 */ "coord_xyzm ::= coord coord coord coord",
- /*  26 */ "point_text ::= WKT_LPAREN coord_xy WKT_RPAREN",
- /*  27 */ "point_text_z ::= WKT_LPAREN coord_xyz WKT_RPAREN",
- /*  28 */ "point_text_m ::= WKT_LPAREN coord_xym WKT_RPAREN",
- /*  29 */ "point_text_zm ::= WKT_LPAREN coord_xyzm WKT_RPAREN",
- /*  30 */ "multipoint_text ::=",
- /*  31 */ "multipoint_text ::= WKT_COMMA point_text multipoint_text",
- /*  32 */ "multipoint_text_2 ::=",
- /*  33 */ "multipoint_text_2 ::= WKT_COMMA coord_xy multipoint_text_2",
- /*  34 */ "multipoint_text_z ::=",
- /*  35 */ "multipoint_text_z ::= WKT_COMMA point_text_z multipoint_text_z",
- /*  36 */ "multipoint_text_z_2 ::=",
- /*  37 */ "multipoint_text_z_2 ::= WKT_COMMA coord_xyz multipoint_text_z_2",
- /*  38 */ "multipoint_text_m ::=",
- /*  39 */ "multipoint_text_m ::= WKT_COMMA point_text_m multipoint_text_m",
- /*  40 */ "multipoint_text_m_2 ::=",
- /*  41 */ "multipoint_text_m_2 ::= WKT_COMMA coord_xym multipoint_text_m_2",
- /*  42 */ "multipoint_text_zm ::=",
- /*  43 */ "multipoint_text_zm ::= WKT_COMMA point_text_zm multipoint_text_zm",
- /*  44 */ "multipoint_text_zm_2 ::=",
- /*  45 */ "multipoint_text_zm_2 ::= WKT_COMMA coord_xyzm multipoint_text_zm_2",
- /*  46 */ "multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_EMPTY_SET",
- /*  47 */ "multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN point_text multipoint_text WKT_RPAREN",
- /*  48 */ "multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN coord_xy multipoint_text_2 WKT_RPAREN",
- /*  49 */ "multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_EMPTY_SET",
- /*  50 */ "multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_LPAREN point_text_z multipoint_text_z WKT_RPAREN",
- /*  51 */ "multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_LPAREN coord_xyz multipoint_text_z_2 WKT_RPAREN",
- /*  52 */ "multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_EMPTY_SET",
- /*  53 */ "multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_LPAREN point_text_m multipoint_text_m WKT_RPAREN",
- /*  54 */ "multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_LPAREN coord_xym multipoint_text_m_2 WKT_RPAREN",
- /*  55 */ "multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_EMPTY_SET",
- /*  56 */ "multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN point_text_zm multipoint_text_zm WKT_RPAREN",
- /*  57 */ "multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN coord_xyzm multipoint_text_zm_2 WKT_RPAREN",
- /*  58 */ "linestring_text ::=",
- /*  59 */ "linestring_text ::= WKT_COMMA coord_xy linestring_text",
- /*  60 */ "linestring_text_z ::=",
- /*  61 */ "linestring_text_z ::= WKT_COMMA coord_xyz linestring_text_z",
- /*  62 */ "linestring_text_m ::=",
- /*  63 */ "linestring_text_m ::= WKT_COMMA coord_xym linestring_text_m",
- /*  64 */ "linestring_text_zm ::=",
- /*  65 */ "linestring_text_zm ::= WKT_COMMA coord_xyzm linestring_text_zm",
- /*  66 */ "linestring ::= WKT_LINESTRING_TAGGED_TEXT WKT_EMPTY_SET",
- /*  67 */ "linestring ::= WKT_LINESTRING_TAGGED_TEXT WKT_LPAREN coord_xy linestring_text WKT_RPAREN",
- /*  68 */ "linestring_z ::= WKT_LINESTRING_Z_TAGGED_TEXT WKT_EMPTY_SET",
- /*  69 */ "linestring_z ::= WKT_LINESTRING_Z_TAGGED_TEXT WKT_LPAREN coord_xyz linestring_text_z WKT_RPAREN",
- /*  70 */ "linestring_m ::= WKT_LINESTRING_M_TAGGED_TEXT WKT_EMPTY_SET",
- /*  71 */ "linestring_m ::= WKT_LINESTRING_M_TAGGED_TEXT WKT_LPAREN coord_xym linestring_text_m WKT_RPAREN",
- /*  72 */ "linestring_zm ::= WKT_LINESTRING_ZM_TAGGED_TEXT WKT_EMPTY_SET",
- /*  73 */ "linestring_zm ::= WKT_LINESTRING_ZM_TAGGED_TEXT WKT_LPAREN coord_xyzm linestring_text_zm WKT_RPAREN",
+ /*  13 */ "wkt_text ::= multilinestring",
+ /*  14 */ "wkt_text ::= multilinestring_z",
+ /*  15 */ "wkt_text ::= multilinestring_m",
+ /*  16 */ "wkt_text ::= multilinestring_zm",
+ /*  17 */ "wkt_text ::= polygon",
+ /*  18 */ "wkt_text ::= polygon_z",
+ /*  19 */ "wkt_text ::= polygon_m",
+ /*  20 */ "wkt_text ::= polygon_zm",
+ /*  21 */ "wkt_text ::= multipolygon",
+ /*  22 */ "wkt_text ::= multipolygon_z",
+ /*  23 */ "wkt_text ::= multipolygon_m",
+ /*  24 */ "wkt_text ::= multipolygon_zm",
+ /*  25 */ "coord ::= WKT_NUM",
+ /*  26 */ "point ::= WKT_POINT_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  27 */ "point ::= WKT_POINT_TAGGED_TEXT point_text",
+ /*  28 */ "point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  29 */ "point_z ::= WKT_POINT_Z_TAGGED_TEXT point_text_z",
+ /*  30 */ "point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  31 */ "point_m ::= WKT_POINT_M_TAGGED_TEXT point_text_m",
+ /*  32 */ "point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  33 */ "point_zm ::= WKT_POINT_ZM_TAGGED_TEXT point_text_zm",
+ /*  34 */ "coord_xy ::= coord coord",
+ /*  35 */ "coord_xyz ::= coord coord coord",
+ /*  36 */ "coord_xym ::= coord coord coord",
+ /*  37 */ "coord_xyzm ::= coord coord coord coord",
+ /*  38 */ "coord_xy_repeated ::=",
+ /*  39 */ "coord_xy_repeated ::= WKT_COMMA coord_xy coord_xy_repeated",
+ /*  40 */ "coord_xyz_repeated ::=",
+ /*  41 */ "coord_xyz_repeated ::= WKT_COMMA coord_xyz coord_xyz_repeated",
+ /*  42 */ "coord_xym_repeated ::=",
+ /*  43 */ "coord_xym_repeated ::= WKT_COMMA coord_xym coord_xym_repeated",
+ /*  44 */ "coord_xyzm_repeated ::=",
+ /*  45 */ "coord_xyzm_repeated ::= WKT_COMMA coord_xyzm coord_xyzm_repeated",
+ /*  46 */ "point_text ::= WKT_LPAREN coord_xy WKT_RPAREN",
+ /*  47 */ "point_text_z ::= WKT_LPAREN coord_xyz WKT_RPAREN",
+ /*  48 */ "point_text_m ::= WKT_LPAREN coord_xym WKT_RPAREN",
+ /*  49 */ "point_text_zm ::= WKT_LPAREN coord_xyzm WKT_RPAREN",
+ /*  50 */ "multipoint_text ::=",
+ /*  51 */ "multipoint_text ::= WKT_COMMA point_text multipoint_text",
+ /*  52 */ "multipoint_text_2 ::=",
+ /*  53 */ "multipoint_text_2 ::= WKT_COMMA coord_xy multipoint_text_2",
+ /*  54 */ "multipoint_text_z ::=",
+ /*  55 */ "multipoint_text_z ::= WKT_COMMA point_text_z multipoint_text_z",
+ /*  56 */ "multipoint_text_z_2 ::=",
+ /*  57 */ "multipoint_text_z_2 ::= WKT_COMMA coord_xyz multipoint_text_z_2",
+ /*  58 */ "multipoint_text_m ::=",
+ /*  59 */ "multipoint_text_m ::= WKT_COMMA point_text_m multipoint_text_m",
+ /*  60 */ "multipoint_text_m_2 ::=",
+ /*  61 */ "multipoint_text_m_2 ::= WKT_COMMA coord_xym multipoint_text_m_2",
+ /*  62 */ "multipoint_text_zm ::=",
+ /*  63 */ "multipoint_text_zm ::= WKT_COMMA point_text_zm multipoint_text_zm",
+ /*  64 */ "multipoint_text_zm_2 ::=",
+ /*  65 */ "multipoint_text_zm_2 ::= WKT_COMMA coord_xyzm multipoint_text_zm_2",
+ /*  66 */ "multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  67 */ "multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN point_text multipoint_text WKT_RPAREN",
+ /*  68 */ "multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN coord_xy multipoint_text_2 WKT_RPAREN",
+ /*  69 */ "multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  70 */ "multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_LPAREN point_text_z multipoint_text_z WKT_RPAREN",
+ /*  71 */ "multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_LPAREN coord_xyz multipoint_text_z_2 WKT_RPAREN",
+ /*  72 */ "multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  73 */ "multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_LPAREN point_text_m multipoint_text_m WKT_RPAREN",
+ /*  74 */ "multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_LPAREN coord_xym multipoint_text_m_2 WKT_RPAREN",
+ /*  75 */ "multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  76 */ "multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN point_text_zm multipoint_text_zm WKT_RPAREN",
+ /*  77 */ "multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN coord_xyzm multipoint_text_zm_2 WKT_RPAREN",
+ /*  78 */ "linestring_text ::= WKT_LPAREN coord_xy WKT_COMMA coord_xy coord_xy_repeated WKT_RPAREN",
+ /*  79 */ "linestring_text_z ::= WKT_LPAREN coord_xyz WKT_COMMA coord_xyz coord_xyz_repeated WKT_RPAREN",
+ /*  80 */ "linestring_text_m ::= WKT_LPAREN coord_xym WKT_COMMA coord_xym coord_xym_repeated WKT_RPAREN",
+ /*  81 */ "linestring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN",
+ /*  82 */ "linestring_text_repeated ::=",
+ /*  83 */ "linestring_text_repeated ::= WKT_COMMA linestring_text linestring_text_repeated",
+ /*  84 */ "linestring_text_z_repeated ::=",
+ /*  85 */ "linestring_text_z_repeated ::= WKT_COMMA linestring_text_z linestring_text_z_repeated",
+ /*  86 */ "linestring_text_m_repeated ::=",
+ /*  87 */ "linestring_text_m_repeated ::= WKT_COMMA linestring_text_m linestring_text_m_repeated",
+ /*  88 */ "linestring_text_zm_repeated ::=",
+ /*  89 */ "linestring_text_zm_repeated ::= WKT_COMMA linestring_text_zm linestring_text_zm_repeated",
+ /*  90 */ "linestring ::= WKT_LINESTRING_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  91 */ "linestring ::= WKT_LINESTRING_TAGGED_TEXT linestring_text",
+ /*  92 */ "linestring_z ::= WKT_LINESTRING_Z_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  93 */ "linestring_z ::= WKT_LINESTRING_Z_TAGGED_TEXT linestring_text_z",
+ /*  94 */ "linestring_m ::= WKT_LINESTRING_M_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  95 */ "linestring_m ::= WKT_LINESTRING_M_TAGGED_TEXT linestring_text_m",
+ /*  96 */ "linestring_zm ::= WKT_LINESTRING_ZM_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  97 */ "linestring_zm ::= WKT_LINESTRING_ZM_TAGGED_TEXT linestring_text_zm",
+ /*  98 */ "multilinestring_text ::= WKT_LPAREN linestring_text linestring_text_repeated WKT_RPAREN",
+ /*  99 */ "multilinestring_text_z ::= WKT_LPAREN linestring_text_z linestring_text_z_repeated WKT_RPAREN",
+ /* 100 */ "multilinestring_text_m ::= WKT_LPAREN linestring_text_m linestring_text_m_repeated WKT_RPAREN",
+ /* 101 */ "multilinestring_text_zm ::= WKT_LPAREN linestring_text_zm linestring_text_zm_repeated WKT_RPAREN",
+ /* 102 */ "multilinestring ::= WKT_MULTILINESTRING_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 103 */ "multilinestring ::= WKT_MULTILINESTRING_TAGGED_TEXT multilinestring_text",
+ /* 104 */ "multilinestring_z ::= WKT_MULTILINESTRING_Z_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 105 */ "multilinestring_z ::= WKT_MULTILINESTRING_Z_TAGGED_TEXT multilinestring_text_z",
+ /* 106 */ "multilinestring_m ::= WKT_MULTILINESTRING_M_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 107 */ "multilinestring_m ::= WKT_MULTILINESTRING_M_TAGGED_TEXT multilinestring_text_m",
+ /* 108 */ "multilinestring_zm ::= WKT_MULTILINESTRING_ZM_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 109 */ "multilinestring_zm ::= WKT_MULTILINESTRING_ZM_TAGGED_TEXT multilinestring_text_zm",
+ /* 110 */ "polygon ::= WKT_POLYGON_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 111 */ "polygon_z ::= WKT_POLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 112 */ "polygon_m ::= WKT_POLYGON_M_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 113 */ "polygon_zm ::= WKT_POLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 114 */ "multipolygon ::= WKT_MULTIPOLYGON_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 115 */ "multipolygon_z ::= WKT_MULTIPOLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 116 */ "multipolygon_m ::= WKT_MULTIPOLYGON_M_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 117 */ "multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET",
 };
 #endif /* NDEBUG */
 
@@ -724,80 +803,124 @@ static const struct {
   YYCODETYPE lhs;         /* Symbol on the left-hand side of the rule */
   unsigned char nrhs;     /* Number of right-hand side symbols in the rule */
 } yyRuleInfo[] = {
-  { 19, 1 },
-  { 20, 1 },
-  { 20, 1 },
-  { 20, 1 },
-  { 20, 1 },
-  { 20, 1 },
-  { 20, 1 },
-  { 20, 1 },
-  { 20, 1 },
-  { 20, 1 },
-  { 20, 1 },
-  { 20, 1 },
-  { 20, 1 },
-  { 33, 1 },
-  { 21, 2 },
-  { 21, 2 },
-  { 22, 2 },
-  { 22, 2 },
-  { 23, 2 },
-  { 23, 2 },
-  { 24, 2 },
-  { 24, 2 },
+  { 31, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 32, 1 },
+  { 57, 1 },
+  { 33, 2 },
+  { 33, 2 },
+  { 34, 2 },
+  { 34, 2 },
+  { 35, 2 },
+  { 35, 2 },
+  { 36, 2 },
+  { 36, 2 },
+  { 62, 2 },
+  { 63, 3 },
+  { 64, 3 },
+  { 65, 4 },
+  { 66, 0 },
+  { 66, 3 },
+  { 67, 0 },
+  { 67, 3 },
+  { 68, 0 },
+  { 68, 3 },
+  { 69, 0 },
+  { 69, 3 },
+  { 58, 3 },
+  { 59, 3 },
+  { 60, 3 },
+  { 61, 3 },
+  { 70, 0 },
+  { 70, 3 },
+  { 71, 0 },
+  { 71, 3 },
+  { 72, 0 },
+  { 72, 3 },
+  { 73, 0 },
+  { 73, 3 },
+  { 74, 0 },
+  { 74, 3 },
+  { 75, 0 },
+  { 75, 3 },
+  { 76, 0 },
+  { 76, 3 },
+  { 77, 0 },
+  { 77, 3 },
+  { 37, 2 },
+  { 37, 5 },
+  { 37, 5 },
   { 38, 2 },
-  { 39, 3 },
-  { 40, 3 },
-  { 41, 4 },
-  { 34, 3 },
-  { 35, 3 },
-  { 36, 3 },
-  { 37, 3 },
-  { 42, 0 },
-  { 42, 3 },
-  { 43, 0 },
-  { 43, 3 },
-  { 44, 0 },
-  { 44, 3 },
-  { 45, 0 },
-  { 45, 3 },
-  { 46, 0 },
-  { 46, 3 },
-  { 47, 0 },
-  { 47, 3 },
-  { 48, 0 },
-  { 48, 3 },
-  { 49, 0 },
-  { 49, 3 },
-  { 25, 2 },
-  { 25, 5 },
-  { 25, 5 },
-  { 26, 2 },
-  { 26, 5 },
-  { 26, 5 },
-  { 27, 2 },
-  { 27, 5 },
-  { 27, 5 },
-  { 28, 2 },
-  { 28, 5 },
-  { 28, 5 },
-  { 50, 0 },
-  { 50, 3 },
-  { 51, 0 },
-  { 51, 3 },
-  { 52, 0 },
-  { 52, 3 },
-  { 53, 0 },
-  { 53, 3 },
-  { 29, 2 },
-  { 29, 5 },
-  { 30, 2 },
-  { 30, 5 },
-  { 31, 2 },
-  { 31, 5 },
-  { 32, 2 },
-  { 32, 5 },
+  { 38, 5 },
+  { 38, 5 },
+  { 39, 2 },
+  { 39, 5 },
+  { 39, 5 },
+  { 40, 2 },
+  { 40, 5 },
+  { 40, 5 },
+  { 78, 6 },
+  { 79, 6 },
+  { 80, 6 },
+  { 81, 6 },
+  { 82, 0 },
+  { 82, 3 },
+  { 83, 0 },
+  { 83, 3 },
+  { 84, 0 },
+  { 84, 3 },
+  { 85, 0 },
+  { 85, 3 },
+  { 41, 2 },
+  { 41, 2 },
+  { 42, 2 },
+  { 42, 2 },
+  { 43, 2 },
+  { 43, 2 },
+  { 44, 2 },
+  { 44, 2 },
+  { 86, 4 },
+  { 87, 4 },
+  { 88, 4 },
+  { 89, 4 },
+  { 45, 2 },
+  { 45, 2 },
+  { 46, 2 },
+  { 46, 2 },
+  { 47, 2 },
+  { 47, 2 },
+  { 48, 2 },
+  { 48, 2 },
+  { 49, 2 },
+  { 50, 2 },
+  { 51, 2 },
+  { 52, 2 },
+  { 53, 2 },
+  { 54, 2 },
+  { 55, 2 },
+  { 56, 2 },
 };
 
 static void yy_accept(yyParser*);  /* Forward Declaration */
@@ -852,22 +975,22 @@ static void yy_reduce(
   **  #line <lineno> <thisfile>
   **     break;
   */
-      case 13: /* coord ::= WKT_NUM */
+      case 25: /* coord ::= WKT_NUM */
 { yygotominor.yy0 = yymsp[0].minor.yy0; }
         break;
-      case 14: /* point ::= WKT_POINT_TAGGED_TEXT WKT_EMPTY_SET */
+      case 26: /* point ::= WKT_POINT_TAGGED_TEXT WKT_EMPTY_SET */
 {
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
     result->data.geom_type = simo::shapes::GeometryDetailedType::POINT;
 }
         break;
-      case 15: /* point ::= WKT_POINT_TAGGED_TEXT point_text */
+      case 27: /* point ::= WKT_POINT_TAGGED_TEXT point_text */
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::POINT;
 }
         break;
-      case 16: /* point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_EMPTY_SET */
+      case 28: /* point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_EMPTY_SET */
 {
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
@@ -875,12 +998,12 @@ static void yy_reduce(
     result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZ;
 }
         break;
-      case 17: /* point_z ::= WKT_POINT_Z_TAGGED_TEXT point_text_z */
+      case 29: /* point_z ::= WKT_POINT_Z_TAGGED_TEXT point_text_z */
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZ;
 }
         break;
-      case 18: /* point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_EMPTY_SET */
+      case 30: /* point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_EMPTY_SET */
 {
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
@@ -888,12 +1011,12 @@ static void yy_reduce(
     result->data.geom_type = simo::shapes::GeometryDetailedType::POINTM;
 }
         break;
-      case 19: /* point_m ::= WKT_POINT_M_TAGGED_TEXT point_text_m */
+      case 31: /* point_m ::= WKT_POINT_M_TAGGED_TEXT point_text_m */
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::POINTM;
 }
         break;
-      case 20: /* point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_EMPTY_SET */
+      case 32: /* point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_EMPTY_SET */
 {
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
@@ -902,26 +1025,26 @@ static void yy_reduce(
     result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZM;
 }
         break;
-      case 21: /* point_zm ::= WKT_POINT_ZM_TAGGED_TEXT point_text_zm */
+      case 33: /* point_zm ::= WKT_POINT_ZM_TAGGED_TEXT point_text_zm */
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZM;
 }
         break;
-      case 22: /* coord_xy ::= coord coord */
+      case 34: /* coord_xy ::= coord coord */
 {
     result->data.coords.push_back(yymsp[-1].minor.yy0);
     result->data.coords.push_back(yymsp[0].minor.yy0);
 }
         break;
-      case 23: /* coord_xyz ::= coord coord coord */
-      case 24: /* coord_xym ::= coord coord coord */ yytestcase(yyruleno==24);
+      case 35: /* coord_xyz ::= coord coord coord */
+      case 36: /* coord_xym ::= coord coord coord */ yytestcase(yyruleno==36);
 {
     result->data.coords.push_back(yymsp[-2].minor.yy0);
     result->data.coords.push_back(yymsp[-1].minor.yy0);
     result->data.coords.push_back(yymsp[0].minor.yy0);
 }
         break;
-      case 25: /* coord_xyzm ::= coord coord coord coord */
+      case 37: /* coord_xyzm ::= coord coord coord coord */
 {
     result->data.coords.push_back(yymsp[-3].minor.yy0);
     result->data.coords.push_back(yymsp[-2].minor.yy0);
@@ -929,56 +1052,120 @@ static void yy_reduce(
     result->data.coords.push_back(yymsp[0].minor.yy0);
 }
         break;
-      case 46: /* multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_EMPTY_SET */
-      case 47: /* multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN point_text multipoint_text WKT_RPAREN */ yytestcase(yyruleno==47);
-      case 48: /* multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN coord_xy multipoint_text_2 WKT_RPAREN */ yytestcase(yyruleno==48);
+      case 66: /* multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_EMPTY_SET */
+      case 67: /* multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN point_text multipoint_text WKT_RPAREN */ yytestcase(yyruleno==67);
+      case 68: /* multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN coord_xy multipoint_text_2 WKT_RPAREN */ yytestcase(yyruleno==68);
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINT;
 }
         break;
-      case 49: /* multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_EMPTY_SET */
-      case 50: /* multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_LPAREN point_text_z multipoint_text_z WKT_RPAREN */ yytestcase(yyruleno==50);
-      case 51: /* multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_LPAREN coord_xyz multipoint_text_z_2 WKT_RPAREN */ yytestcase(yyruleno==51);
+      case 69: /* multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_EMPTY_SET */
+      case 70: /* multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_LPAREN point_text_z multipoint_text_z WKT_RPAREN */ yytestcase(yyruleno==70);
+      case 71: /* multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_LPAREN coord_xyz multipoint_text_z_2 WKT_RPAREN */ yytestcase(yyruleno==71);
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTZ;
 }
         break;
-      case 52: /* multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_EMPTY_SET */
-      case 53: /* multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_LPAREN point_text_m multipoint_text_m WKT_RPAREN */ yytestcase(yyruleno==53);
-      case 54: /* multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_LPAREN coord_xym multipoint_text_m_2 WKT_RPAREN */ yytestcase(yyruleno==54);
+      case 72: /* multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_EMPTY_SET */
+      case 73: /* multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_LPAREN point_text_m multipoint_text_m WKT_RPAREN */ yytestcase(yyruleno==73);
+      case 74: /* multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_LPAREN coord_xym multipoint_text_m_2 WKT_RPAREN */ yytestcase(yyruleno==74);
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTM;
 }
         break;
-      case 55: /* multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_EMPTY_SET */
-      case 56: /* multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN point_text_zm multipoint_text_zm WKT_RPAREN */ yytestcase(yyruleno==56);
-      case 57: /* multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN coord_xyzm multipoint_text_zm_2 WKT_RPAREN */ yytestcase(yyruleno==57);
+      case 75: /* multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_EMPTY_SET */
+      case 76: /* multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN point_text_zm multipoint_text_zm WKT_RPAREN */ yytestcase(yyruleno==76);
+      case 77: /* multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN coord_xyzm multipoint_text_zm_2 WKT_RPAREN */ yytestcase(yyruleno==77);
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTZM;
 }
         break;
-      case 66: /* linestring ::= WKT_LINESTRING_TAGGED_TEXT WKT_EMPTY_SET */
-      case 67: /* linestring ::= WKT_LINESTRING_TAGGED_TEXT WKT_LPAREN coord_xy linestring_text WKT_RPAREN */ yytestcase(yyruleno==67);
+      case 90: /* linestring ::= WKT_LINESTRING_TAGGED_TEXT WKT_EMPTY_SET */
+      case 91: /* linestring ::= WKT_LINESTRING_TAGGED_TEXT linestring_text */ yytestcase(yyruleno==91);
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::LINESTRING;
 }
         break;
-      case 68: /* linestring_z ::= WKT_LINESTRING_Z_TAGGED_TEXT WKT_EMPTY_SET */
-      case 69: /* linestring_z ::= WKT_LINESTRING_Z_TAGGED_TEXT WKT_LPAREN coord_xyz linestring_text_z WKT_RPAREN */ yytestcase(yyruleno==69);
+      case 92: /* linestring_z ::= WKT_LINESTRING_Z_TAGGED_TEXT WKT_EMPTY_SET */
+      case 93: /* linestring_z ::= WKT_LINESTRING_Z_TAGGED_TEXT linestring_text_z */ yytestcase(yyruleno==93);
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::LINESTRINGZ;
 }
         break;
-      case 70: /* linestring_m ::= WKT_LINESTRING_M_TAGGED_TEXT WKT_EMPTY_SET */
-      case 71: /* linestring_m ::= WKT_LINESTRING_M_TAGGED_TEXT WKT_LPAREN coord_xym linestring_text_m WKT_RPAREN */ yytestcase(yyruleno==71);
+      case 94: /* linestring_m ::= WKT_LINESTRING_M_TAGGED_TEXT WKT_EMPTY_SET */
+      case 95: /* linestring_m ::= WKT_LINESTRING_M_TAGGED_TEXT linestring_text_m */ yytestcase(yyruleno==95);
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::LINESTRINGM;
 }
         break;
-      case 72: /* linestring_zm ::= WKT_LINESTRING_ZM_TAGGED_TEXT WKT_EMPTY_SET */
-      case 73: /* linestring_zm ::= WKT_LINESTRING_ZM_TAGGED_TEXT WKT_LPAREN coord_xyzm linestring_text_zm WKT_RPAREN */ yytestcase(yyruleno==73);
+      case 96: /* linestring_zm ::= WKT_LINESTRING_ZM_TAGGED_TEXT WKT_EMPTY_SET */
+      case 97: /* linestring_zm ::= WKT_LINESTRING_ZM_TAGGED_TEXT linestring_text_zm */ yytestcase(yyruleno==97);
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::LINESTRINGZM;
+}
+        break;
+      case 102: /* multilinestring ::= WKT_MULTILINESTRING_TAGGED_TEXT WKT_EMPTY_SET */
+      case 103: /* multilinestring ::= WKT_MULTILINESTRING_TAGGED_TEXT multilinestring_text */ yytestcase(yyruleno==103);
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTILINESTRING;
+}
+        break;
+      case 104: /* multilinestring_z ::= WKT_MULTILINESTRING_Z_TAGGED_TEXT WKT_EMPTY_SET */
+      case 105: /* multilinestring_z ::= WKT_MULTILINESTRING_Z_TAGGED_TEXT multilinestring_text_z */ yytestcase(yyruleno==105);
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTILINESTRINGZ;
+}
+        break;
+      case 106: /* multilinestring_m ::= WKT_MULTILINESTRING_M_TAGGED_TEXT WKT_EMPTY_SET */
+      case 107: /* multilinestring_m ::= WKT_MULTILINESTRING_M_TAGGED_TEXT multilinestring_text_m */ yytestcase(yyruleno==107);
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTILINESTRINGM;
+}
+        break;
+      case 108: /* multilinestring_zm ::= WKT_MULTILINESTRING_ZM_TAGGED_TEXT WKT_EMPTY_SET */
+      case 109: /* multilinestring_zm ::= WKT_MULTILINESTRING_ZM_TAGGED_TEXT multilinestring_text_zm */ yytestcase(yyruleno==109);
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTILINESTRINGZM;
+}
+        break;
+      case 110: /* polygon ::= WKT_POLYGON_TAGGED_TEXT WKT_EMPTY_SET */
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGON;
+}
+        break;
+      case 111: /* polygon_z ::= WKT_POLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET */
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONZ;
+}
+        break;
+      case 112: /* polygon_m ::= WKT_POLYGON_M_TAGGED_TEXT WKT_EMPTY_SET */
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONM;
+}
+        break;
+      case 113: /* polygon_zm ::= WKT_POLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET */
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONZM;
+}
+        break;
+      case 114: /* multipolygon ::= WKT_MULTIPOLYGON_TAGGED_TEXT WKT_EMPTY_SET */
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGON;
+}
+        break;
+      case 115: /* multipolygon_z ::= WKT_MULTIPOLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET */
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONZ;
+}
+        break;
+      case 116: /* multipolygon_m ::= WKT_MULTIPOLYGON_M_TAGGED_TEXT WKT_EMPTY_SET */
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONM;
+}
+        break;
+      case 117: /* multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET */
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONZM;
 }
         break;
       default:
@@ -995,34 +1182,62 @@ static void yy_reduce(
       /* (10) wkt_text ::= linestring_z */ yytestcase(yyruleno==10);
       /* (11) wkt_text ::= linestring_m */ yytestcase(yyruleno==11);
       /* (12) wkt_text ::= linestring_zm */ yytestcase(yyruleno==12);
-      /* (26) point_text ::= WKT_LPAREN coord_xy WKT_RPAREN */ yytestcase(yyruleno==26);
-      /* (27) point_text_z ::= WKT_LPAREN coord_xyz WKT_RPAREN */ yytestcase(yyruleno==27);
-      /* (28) point_text_m ::= WKT_LPAREN coord_xym WKT_RPAREN */ yytestcase(yyruleno==28);
-      /* (29) point_text_zm ::= WKT_LPAREN coord_xyzm WKT_RPAREN */ yytestcase(yyruleno==29);
-      /* (30) multipoint_text ::= */ yytestcase(yyruleno==30);
-      /* (31) multipoint_text ::= WKT_COMMA point_text multipoint_text */ yytestcase(yyruleno==31);
-      /* (32) multipoint_text_2 ::= */ yytestcase(yyruleno==32);
-      /* (33) multipoint_text_2 ::= WKT_COMMA coord_xy multipoint_text_2 */ yytestcase(yyruleno==33);
-      /* (34) multipoint_text_z ::= */ yytestcase(yyruleno==34);
-      /* (35) multipoint_text_z ::= WKT_COMMA point_text_z multipoint_text_z */ yytestcase(yyruleno==35);
-      /* (36) multipoint_text_z_2 ::= */ yytestcase(yyruleno==36);
-      /* (37) multipoint_text_z_2 ::= WKT_COMMA coord_xyz multipoint_text_z_2 */ yytestcase(yyruleno==37);
-      /* (38) multipoint_text_m ::= */ yytestcase(yyruleno==38);
-      /* (39) multipoint_text_m ::= WKT_COMMA point_text_m multipoint_text_m */ yytestcase(yyruleno==39);
-      /* (40) multipoint_text_m_2 ::= */ yytestcase(yyruleno==40);
-      /* (41) multipoint_text_m_2 ::= WKT_COMMA coord_xym multipoint_text_m_2 */ yytestcase(yyruleno==41);
-      /* (42) multipoint_text_zm ::= */ yytestcase(yyruleno==42);
-      /* (43) multipoint_text_zm ::= WKT_COMMA point_text_zm multipoint_text_zm */ yytestcase(yyruleno==43);
-      /* (44) multipoint_text_zm_2 ::= */ yytestcase(yyruleno==44);
-      /* (45) multipoint_text_zm_2 ::= WKT_COMMA coord_xyzm multipoint_text_zm_2 */ yytestcase(yyruleno==45);
-      /* (58) linestring_text ::= */ yytestcase(yyruleno==58);
-      /* (59) linestring_text ::= WKT_COMMA coord_xy linestring_text */ yytestcase(yyruleno==59);
-      /* (60) linestring_text_z ::= */ yytestcase(yyruleno==60);
-      /* (61) linestring_text_z ::= WKT_COMMA coord_xyz linestring_text_z */ yytestcase(yyruleno==61);
-      /* (62) linestring_text_m ::= */ yytestcase(yyruleno==62);
-      /* (63) linestring_text_m ::= WKT_COMMA coord_xym linestring_text_m */ yytestcase(yyruleno==63);
-      /* (64) linestring_text_zm ::= */ yytestcase(yyruleno==64);
-      /* (65) linestring_text_zm ::= WKT_COMMA coord_xyzm linestring_text_zm */ yytestcase(yyruleno==65);
+      /* (13) wkt_text ::= multilinestring */ yytestcase(yyruleno==13);
+      /* (14) wkt_text ::= multilinestring_z */ yytestcase(yyruleno==14);
+      /* (15) wkt_text ::= multilinestring_m */ yytestcase(yyruleno==15);
+      /* (16) wkt_text ::= multilinestring_zm */ yytestcase(yyruleno==16);
+      /* (17) wkt_text ::= polygon */ yytestcase(yyruleno==17);
+      /* (18) wkt_text ::= polygon_z */ yytestcase(yyruleno==18);
+      /* (19) wkt_text ::= polygon_m */ yytestcase(yyruleno==19);
+      /* (20) wkt_text ::= polygon_zm */ yytestcase(yyruleno==20);
+      /* (21) wkt_text ::= multipolygon */ yytestcase(yyruleno==21);
+      /* (22) wkt_text ::= multipolygon_z */ yytestcase(yyruleno==22);
+      /* (23) wkt_text ::= multipolygon_m */ yytestcase(yyruleno==23);
+      /* (24) wkt_text ::= multipolygon_zm */ yytestcase(yyruleno==24);
+      /* (38) coord_xy_repeated ::= */ yytestcase(yyruleno==38);
+      /* (39) coord_xy_repeated ::= WKT_COMMA coord_xy coord_xy_repeated */ yytestcase(yyruleno==39);
+      /* (40) coord_xyz_repeated ::= */ yytestcase(yyruleno==40);
+      /* (41) coord_xyz_repeated ::= WKT_COMMA coord_xyz coord_xyz_repeated */ yytestcase(yyruleno==41);
+      /* (42) coord_xym_repeated ::= */ yytestcase(yyruleno==42);
+      /* (43) coord_xym_repeated ::= WKT_COMMA coord_xym coord_xym_repeated */ yytestcase(yyruleno==43);
+      /* (44) coord_xyzm_repeated ::= */ yytestcase(yyruleno==44);
+      /* (45) coord_xyzm_repeated ::= WKT_COMMA coord_xyzm coord_xyzm_repeated */ yytestcase(yyruleno==45);
+      /* (46) point_text ::= WKT_LPAREN coord_xy WKT_RPAREN */ yytestcase(yyruleno==46);
+      /* (47) point_text_z ::= WKT_LPAREN coord_xyz WKT_RPAREN */ yytestcase(yyruleno==47);
+      /* (48) point_text_m ::= WKT_LPAREN coord_xym WKT_RPAREN */ yytestcase(yyruleno==48);
+      /* (49) point_text_zm ::= WKT_LPAREN coord_xyzm WKT_RPAREN */ yytestcase(yyruleno==49);
+      /* (50) multipoint_text ::= */ yytestcase(yyruleno==50);
+      /* (51) multipoint_text ::= WKT_COMMA point_text multipoint_text */ yytestcase(yyruleno==51);
+      /* (52) multipoint_text_2 ::= */ yytestcase(yyruleno==52);
+      /* (53) multipoint_text_2 ::= WKT_COMMA coord_xy multipoint_text_2 */ yytestcase(yyruleno==53);
+      /* (54) multipoint_text_z ::= */ yytestcase(yyruleno==54);
+      /* (55) multipoint_text_z ::= WKT_COMMA point_text_z multipoint_text_z */ yytestcase(yyruleno==55);
+      /* (56) multipoint_text_z_2 ::= */ yytestcase(yyruleno==56);
+      /* (57) multipoint_text_z_2 ::= WKT_COMMA coord_xyz multipoint_text_z_2 */ yytestcase(yyruleno==57);
+      /* (58) multipoint_text_m ::= */ yytestcase(yyruleno==58);
+      /* (59) multipoint_text_m ::= WKT_COMMA point_text_m multipoint_text_m */ yytestcase(yyruleno==59);
+      /* (60) multipoint_text_m_2 ::= */ yytestcase(yyruleno==60);
+      /* (61) multipoint_text_m_2 ::= WKT_COMMA coord_xym multipoint_text_m_2 */ yytestcase(yyruleno==61);
+      /* (62) multipoint_text_zm ::= */ yytestcase(yyruleno==62);
+      /* (63) multipoint_text_zm ::= WKT_COMMA point_text_zm multipoint_text_zm */ yytestcase(yyruleno==63);
+      /* (64) multipoint_text_zm_2 ::= */ yytestcase(yyruleno==64);
+      /* (65) multipoint_text_zm_2 ::= WKT_COMMA coord_xyzm multipoint_text_zm_2 */ yytestcase(yyruleno==65);
+      /* (78) linestring_text ::= WKT_LPAREN coord_xy WKT_COMMA coord_xy coord_xy_repeated WKT_RPAREN */ yytestcase(yyruleno==78);
+      /* (79) linestring_text_z ::= WKT_LPAREN coord_xyz WKT_COMMA coord_xyz coord_xyz_repeated WKT_RPAREN */ yytestcase(yyruleno==79);
+      /* (80) linestring_text_m ::= WKT_LPAREN coord_xym WKT_COMMA coord_xym coord_xym_repeated WKT_RPAREN */ yytestcase(yyruleno==80);
+      /* (81) linestring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN */ yytestcase(yyruleno==81);
+      /* (82) linestring_text_repeated ::= */ yytestcase(yyruleno==82);
+      /* (83) linestring_text_repeated ::= WKT_COMMA linestring_text linestring_text_repeated */ yytestcase(yyruleno==83);
+      /* (84) linestring_text_z_repeated ::= */ yytestcase(yyruleno==84);
+      /* (85) linestring_text_z_repeated ::= WKT_COMMA linestring_text_z linestring_text_z_repeated */ yytestcase(yyruleno==85);
+      /* (86) linestring_text_m_repeated ::= */ yytestcase(yyruleno==86);
+      /* (87) linestring_text_m_repeated ::= WKT_COMMA linestring_text_m linestring_text_m_repeated */ yytestcase(yyruleno==87);
+      /* (88) linestring_text_zm_repeated ::= */ yytestcase(yyruleno==88);
+      /* (89) linestring_text_zm_repeated ::= WKT_COMMA linestring_text_zm linestring_text_zm_repeated */ yytestcase(yyruleno==89);
+      /* (98) multilinestring_text ::= WKT_LPAREN linestring_text linestring_text_repeated WKT_RPAREN */ yytestcase(yyruleno==98);
+      /* (99) multilinestring_text_z ::= WKT_LPAREN linestring_text_z linestring_text_z_repeated WKT_RPAREN */ yytestcase(yyruleno==99);
+      /* (100) multilinestring_text_m ::= WKT_LPAREN linestring_text_m linestring_text_m_repeated WKT_RPAREN */ yytestcase(yyruleno==100);
+      /* (101) multilinestring_text_zm ::= WKT_LPAREN linestring_text_zm linestring_text_zm_repeated WKT_RPAREN */ yytestcase(yyruleno==101);
         break;
   };
   yygoto = yyRuleInfo[yyruleno].lhs;

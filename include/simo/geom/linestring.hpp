@@ -101,9 +101,37 @@ class LineString : public BaseGeometry<LineString>, public GeometrySequence<Poin
      *
      * @since 0.0.1
      */
-    static LineString from_wkt(const std::string& /*wkt*/)
+    static LineString from_wkt(const std::string& wkt)
     {
-        throw exceptions::NotImplementedError();
+        WktReader reader{};
+        auto result      = reader.read(wkt.c_str());
+        const auto& data = result.data;
+        auto geom_type   = data.geom_type;
+        if (geom_type != GeometryDetailedType::LINESTRING and
+            geom_type != GeometryDetailedType::LINESTRINGZ and
+            geom_type != GeometryDetailedType::LINESTRINGM and
+            geom_type != GeometryDetailedType::LINESTRINGZM)
+        {
+            throw exceptions::ParseError("invalid WKT string");
+        }
+
+        std::vector<Point> points;
+        points.reserve(data.coords.size());
+        auto dim = get_dim(data.geom_type);
+        int ndim = get_ndim(dim);
+        Point p;
+        p.dim = dim;
+        for (size_t i = 0; i < result.data.coords.size(); i += ndim)
+        {
+            for (size_t j = 0; j < size_t(ndim); ++j)
+            {
+                p[j] = result.data.coords[i + j];
+            }
+            points.push_back(p);
+        }
+        LineString res(points);
+        res.dim = dim;
+        return res;
     }
 
     /*!

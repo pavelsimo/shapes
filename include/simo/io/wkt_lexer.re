@@ -79,7 +79,7 @@ class WktLexer
           right_paren     { return WKT_RPAREN; }
 
           // empty set
-          empty_set       = "EMPTY";
+          empty_set       = 'EMPTY';
           empty_set       { return WKT_EMPTY_SET; }
 
           // comma
@@ -87,24 +87,64 @@ class WktLexer
           comma           { return WKT_COMMA; }
 
           // point
-          point_tagged_text     = "POINT";
+          point_tagged_text     = 'POINT';
           point_tagged_text     { return WKT_POINT_TAGGED_TEXT; }
-          point_z_tagged_text   = "POINT" ws* "Z";
+          point_z_tagged_text   = 'POINT' ws* 'Z';
           point_z_tagged_text   { return WKT_POINT_Z_TAGGED_TEXT; }
-          point_m_tagged_text   = "POINT" ws* "M";
+          point_m_tagged_text   = 'POINT' ws* 'M';
           point_m_tagged_text   { return WKT_POINT_M_TAGGED_TEXT; }
-          point_zm_tagged_text  = "POINT" ws* "ZM";
+          point_zm_tagged_text  = 'POINT' ws* 'ZM';
           point_zm_tagged_text  { return WKT_POINT_ZM_TAGGED_TEXT; }
 
           // multipoint
-          multipoint_tagged_text     = "MULTIPOINT";
+          multipoint_tagged_text     = 'MULTIPOINT';
           multipoint_tagged_text     { return WKT_MULTIPOINT_TAGGED_TEXT; }
-          multipoint_z_tagged_text   = "MULTIPOINT" ws* "Z";
+          multipoint_z_tagged_text   = 'MULTIPOINT' ws* 'Z';
           multipoint_z_tagged_text   { return WKT_MULTIPOINT_Z_TAGGED_TEXT; }
-          multipoint_m_tagged_text   = "MULTIPOINT" ws* "M";
+          multipoint_m_tagged_text   = 'MULTIPOINT' ws* 'M';
           multipoint_m_tagged_text   { return WKT_MULTIPOINT_M_TAGGED_TEXT; }
-          multipoint_zm_tagged_text  = "MULTIPOINT" ws* "ZM";
+          multipoint_zm_tagged_text  = 'MULTIPOINT' ws* 'ZM';
           multipoint_zm_tagged_text  { return WKT_MULTIPOINT_ZM_TAGGED_TEXT; }
+
+          // linestring
+          linestring_tagged_text     = 'LINESTRING';
+          linestring_tagged_text     { return WKT_LINESTRING_TAGGED_TEXT; }
+          linestring_z_tagged_text   = 'LINESTRING' ws* 'Z';
+          linestring_z_tagged_text   { return WKT_LINESTRING_Z_TAGGED_TEXT; }
+          linestring_m_tagged_text   = 'LINESTRING' ws* 'M';
+          linestring_m_tagged_text   { return WKT_LINESTRING_M_TAGGED_TEXT; }
+          linestring_zm_tagged_text  = 'LINESTRING' ws* 'ZM';
+          linestring_zm_tagged_text  { return WKT_LINESTRING_ZM_TAGGED_TEXT; }
+
+          // multilinestring
+          multilinestring_tagged_text     = 'MULTILINESTRING';
+          multilinestring_tagged_text     { return WKT_MULTILINESTRING_TAGGED_TEXT; }
+          multilinestring_z_tagged_text   = 'MULTILINESTRING' ws* 'Z';
+          multilinestring_z_tagged_text   { return WKT_MULTILINESTRING_Z_TAGGED_TEXT; }
+          multilinestring_m_tagged_text   = 'MULTILINESTRING' ws* 'M';
+          multilinestring_m_tagged_text   { return WKT_MULTILINESTRING_M_TAGGED_TEXT; }
+          multilinestring_zm_tagged_text  = 'MULTILINESTRING' ws* 'ZM';
+          multilinestring_zm_tagged_text  { return WKT_MULTILINESTRING_ZM_TAGGED_TEXT; }
+
+          // polygon
+          polygon_tagged_text     = 'POLYGON';
+          polygon_tagged_text     { return WKT_POLYGON_TAGGED_TEXT; }
+          polygon_z_tagged_text   = 'POLYGON' ws* 'Z';
+          polygon_z_tagged_text   { return WKT_POLYGON_Z_TAGGED_TEXT; }
+          polygon_m_tagged_text   = 'POLYGON' ws* 'M';
+          polygon_m_tagged_text   { return WKT_POLYGON_M_TAGGED_TEXT; }
+          polygon_zm_tagged_text  = 'POLYGON' ws* 'ZM';
+          polygon_zm_tagged_text  { return WKT_POLYGON_ZM_TAGGED_TEXT; }
+
+          // multipolygon
+          multipolygon_tagged_text     = 'MULTIPOLYGON';
+          multipolygon_tagged_text     { return WKT_MULTIPOLYGON_TAGGED_TEXT; }
+          multipolygon_z_tagged_text   = 'MULTIPOLYGON' ws* 'Z';
+          multipolygon_z_tagged_text   { return WKT_MULTIPOLYGON_Z_TAGGED_TEXT; }
+          multipolygon_m_tagged_text   = 'MULTIPOLYGON' ws* 'M';
+          multipolygon_m_tagged_text   { return WKT_MULTIPOLYGON_M_TAGGED_TEXT; }
+          multipolygon_zm_tagged_text  = 'MULTIPOLYGON' ws* 'ZM';
+          multipolygon_zm_tagged_text  { return WKT_MULTIPOLYGON_ZM_TAGGED_TEXT; }
 
           end             { return WKT_END_OF_INPUT; }
           .               { return WKT_PARSE_ERROR; }

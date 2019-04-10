@@ -31,6 +31,7 @@ SOFTWARE.
 #ifndef SIMO_SHAPES_HPP
 #define SIMO_SHAPES_HPP
 
+#include <ciso646>
 #include <algorithm>
 #include <memory>
 #include <string>
@@ -48,33 +49,29 @@ namespace simo
 namespace shapes
 {
 
-class Geometry;
-
 class Point;
 
 class MultiPoint;
 
-class Bounds;
+class Polygon;
 
-//
-//class linestring_t;
-//
-//class multilinestring_t;
-//
-//class polygon_t;
-//
-//class multipolygon_t;
-//
-//class geometrycollection_t;
+class MultiPolygon;
+
+class LineString;
+
+class MultiLineString;
+
+class GeometryCollection;
+
+class Bounds;
 
 }  // namespace shapes
 }  // namespace simo
 
-//class bounds_t;
-
 // #include <simo/geom/geometry.hpp>
 
 
+#include <ciso646>
 #include <vector>
 #include <memory>
 // #include <simo/shapes_fwd.hpp>
@@ -82,6 +79,7 @@ class Bounds;
 // #include <simo/geom/bounds.hpp>
 
 
+#include <ciso646>
 #include <algorithm>
 #include <tuple>
 
@@ -98,9 +96,16 @@ namespace shapes
 class Bounds
 {
   public:
+    /// the minimum x-coordinate
     double minx;
+
+    /// the minimum y-coordinate
     double miny;
+
+    /// the maximum x-coordinate
     double maxx;
+
+    /// the maximum y-coordinate
     double maxy;
 
     /*!
@@ -118,7 +123,6 @@ class Bounds
 
     /*!
      * @brief creates a Bounds object from the given coordinates
-     *
      * @param minx the x-coordinate of the first corner
      * @param miny the y-coordinate of the first corner
      * @param maxx the x-coordinate of the second corner
@@ -133,7 +137,6 @@ class Bounds
 
     /*!
      * @brief extends the bounds to contain the given point
-     *
      * @param x the x-coordinate of the point
      * @param y the y-coordinate of the point
      * @return the Bounds object
@@ -151,7 +154,6 @@ class Bounds
 
     /*!
      * @brief returns a (x, y) tuple with the center of the bounds
-     *
      * @return a tuple
      *
      * @since 0.0.1
@@ -163,7 +165,6 @@ class Bounds
 
     /*!
      * @brief returns a (x, y) tuple with the bottom left bounds
-     *
      * @return a tuple
      *
      * @since 0.0.1
@@ -175,7 +176,6 @@ class Bounds
 
     /*!
      * @brief returns a (x, y) tuple with the top right bounds
-     *
      * @return a tuple
      *
      * @since 0.0.1
@@ -187,7 +187,6 @@ class Bounds
 
     /*!
      * @brief returns a (x, y) tuple with the top left bounds
-     *
      * @return a tuple
      *
      * @since 0.0.1
@@ -199,7 +198,6 @@ class Bounds
 
     /*!
      * @brief returns a (x, y) tuple with the bottom right bounds
-     *
      * @return a tuple
      *
      * @since 0.0.1
@@ -211,7 +209,6 @@ class Bounds
 
     /*!
      * @brief returns true if the bounds contains the given point
-     *
      * @param x the x-coordinate of the point
      * @param y the y-coordinate of the point
      * @return true if the Bounds contains the given point, otherwise false
@@ -225,7 +222,6 @@ class Bounds
 
     /*!
      * @brief returns true if the bounds contains the given one
-     *
      * @param other the bounds
      * @return true if the Bounds contain the given one, otherwise false
      *
@@ -238,7 +234,6 @@ class Bounds
 
     /*!
      * @brief returns true if the bounds intersect the given one
-     *
      * @param other the bounds
      * @return true if the Bounds intersect the given one, otherwise false
      *
@@ -251,7 +246,6 @@ class Bounds
 
     /*!
      * @brief returns true if the bounds overlaps the given one
-     *
      * @param other the bounds
      * @return true if the Bounds overlaps the given one, otherwise false
      *
@@ -265,127 +259,416 @@ class Bounds
 
 }  // namespace shapes
 }  // namespace simo
+// #include <simo/geom/types.hpp>
+
 
 namespace simo
 {
 namespace shapes
 {
 
-/// geometry dimension type is (x, y), (x, y, z), (x, y, m) or (x, y, z, m)
+/*!
+ * @brief geometry dimension type is (x, y), (x, y, z), (x, y, m) or (x, y, z, m)
+ *
+ * @since 0.0.1
+ */
 enum class DimensionType
 {
-    XY = 1,
-    XYZ = 2,
-    XYM = 3,
+    XY   = 1,
+    XYZ  = 2,
+    XYM  = 3,
     XYZM = 4
 };
 
-/// geometry types as defined by the OpenGIS "Consortium Simple Features for SQL" specification
+/*!
+ * @brief geometry types as defined by the OpenGIS "Consortium Simple Features for SQL" specification
+ *
+ * @since 0.0.1
+ */
 enum class GeometryType
 {
-    GEOMETRY = 0,
-    POINT = 1,
-    LINESTRING = 2,
-    POLYGON = 3,
-    MULTIPOINT = 4,
-    MULTILINESTRING = 5,
-    MULTIPOLYGON = 6,
+    GEOMETRY           = 0,
+    POINT              = 1,
+    LINESTRING         = 2,
+    POLYGON            = 3,
+    MULTIPOINT         = 4,
+    MULTILINESTRING    = 5,
+    MULTIPOLYGON       = 6,
     GEOMETRYCOLLECTION = 7,
-    CIRCULARSTRING = 8,
-    COMPOUNDCURVE = 9,
-    CURVEPOLYGON = 10,
-    MULTICURVE = 11,
-    MULTISURFACE = 12,
-    CURVE = 13,
-    SURFACE = 14,
-    POLYHEDRALSURFACE = 15,
-    TIN = 16
+    CIRCULARSTRING     = 8,
+    COMPOUNDCURVE      = 9,
+    CURVEPOLYGON       = 10,
+    MULTICURVE         = 11,
+    MULTISURFACE       = 12,
+    CURVE              = 13,
+    SURFACE            = 14,
+    POLYHEDRALSURFACE  = 15,
+    TIN                = 16
 };
 
-/// geometry detailed types as defined by the OpenGIS "Consortium Simple Features for SQL" specification
+/*!
+ * @brief element type for the geometry
+ *
+ * @since 0.0.1
+ */
+enum class ElementType
+{
+    POINT      = 1,
+    LINESTRING = 2,
+    POLYGON    = 3
+};
+
+/*!
+ * @brief geometry detailed types as defined by the OpenGIS "Consortium Simple Features for SQL" specification
+ *
+ * @since 0.0.1
+ */
 enum class GeometryDetailedType
 {
-    GEOMETRY = 0,
-    POINT = 1,
-    LINESTRING = 2,
-    POLYGON = 3,
-    MULTIPOINT = 4,
-    MULTILINESTRING = 5,
-    MULTIPOLYGON = 6,
-    GEOMETRYCOLLECTION = 7,
-    CIRCULARSTRING = 8,
-    COMPOUNDCURVE = 9,
-    CURVEPOLYGON = 10,
-    MULTICURVE = 11,
-    MULTISURFACE = 12,
-    CURVE = 13,
-    SURFACE = 14,
-    POLYHEDRALSURFACE = 15,
-    TIN = 16,
-    GEOMETRYZ = 1000,
-    POINTZ = 1001,
-    LINESTRINGZ = 1002,
-    POLYGONZ = 1003,
-    MULTIPOINTZ = 1004,
-    MULTILINESTRINGZ = 1005,
-    MULTIPOLYGONZ = 1006,
-    GEOMETRYCOLLECTIONZ = 1007,
-    CIRCULARSTRINGZ = 1008,
-    COMPOUNDCURVEZ = 1009,
-    CURVEPOLYGONZ = 1010,
-    MULTICURVEZ = 1011,
-    MULTISURFACEZ = 1012,
-    CURVEZ = 1013,
-    SURFACEZ = 1014,
-    POLYHEDRALSURFACEZ = 1015,
-    TINZ = 1016,
-    GEOMETRYM = 2000,
-    POINTM = 2001,
-    LINESTRINGM = 2002,
-    POLYGONM = 2003,
-    MULTIPOINTM = 2004,
-    MULTILINESTRINGM = 2005,
-    MULTIPOLYGONM = 2006,
-    GEOMETRYCOLLECTIONM = 2007,
-    CIRCULARSTRINGM = 2008,
-    COMPOUNDCURVEM = 2009,
-    CURVEPOLYGONM = 2010,
-    MULTICURVEM = 2011,
-    MULTISURFACEM = 2012,
-    CURVEM = 2013,
-    SURFACEM = 2014,
-    POLYHEDRALSURFACEM = 2015,
-    TINM = 2016,
-    GEOMETRYZM = 3000,
-    POINTZM = 3001,
-    LINESTRINGZM = 3002,
-    POLYGONZM = 3003,
-    MULTIPOINTZM = 3004,
-    MULTILINESTRINGZM = 3005,
-    MULTIPOLYGONZM = 3006,
+    GEOMETRY             = 0,
+    POINT                = 1,
+    LINESTRING           = 2,
+    POLYGON              = 3,
+    MULTIPOINT           = 4,
+    MULTILINESTRING      = 5,
+    MULTIPOLYGON         = 6,
+    GEOMETRYCOLLECTION   = 7,
+    CIRCULARSTRING       = 8,
+    COMPOUNDCURVE        = 9,
+    CURVEPOLYGON         = 10,
+    MULTICURVE           = 11,
+    MULTISURFACE         = 12,
+    CURVE                = 13,
+    SURFACE              = 14,
+    POLYHEDRALSURFACE    = 15,
+    TIN                  = 16,
+    GEOMETRYZ            = 1000,
+    POINTZ               = 1001,
+    LINESTRINGZ          = 1002,
+    POLYGONZ             = 1003,
+    MULTIPOINTZ          = 1004,
+    MULTILINESTRINGZ     = 1005,
+    MULTIPOLYGONZ        = 1006,
+    GEOMETRYCOLLECTIONZ  = 1007,
+    CIRCULARSTRINGZ      = 1008,
+    COMPOUNDCURVEZ       = 1009,
+    CURVEPOLYGONZ        = 1010,
+    MULTICURVEZ          = 1011,
+    MULTISURFACEZ        = 1012,
+    CURVEZ               = 1013,
+    SURFACEZ             = 1014,
+    POLYHEDRALSURFACEZ   = 1015,
+    TINZ                 = 1016,
+    GEOMETRYM            = 2000,
+    POINTM               = 2001,
+    LINESTRINGM          = 2002,
+    POLYGONM             = 2003,
+    MULTIPOINTM          = 2004,
+    MULTILINESTRINGM     = 2005,
+    MULTIPOLYGONM        = 2006,
+    GEOMETRYCOLLECTIONM  = 2007,
+    CIRCULARSTRINGM      = 2008,
+    COMPOUNDCURVEM       = 2009,
+    CURVEPOLYGONM        = 2010,
+    MULTICURVEM          = 2011,
+    MULTISURFACEM        = 2012,
+    CURVEM               = 2013,
+    SURFACEM             = 2014,
+    POLYHEDRALSURFACEM   = 2015,
+    TINM                 = 2016,
+    GEOMETRYZM           = 3000,
+    POINTZM              = 3001,
+    LINESTRINGZM         = 3002,
+    POLYGONZM            = 3003,
+    MULTIPOINTZM         = 3004,
+    MULTILINESTRINGZM    = 3005,
+    MULTIPOLYGONZM       = 3006,
     GEOMETRYCOLLECTIONZM = 3007,
-    CIRCULARSTRINGZM = 3008,
-    COMPOUNDCURVEZM = 3009,
-    CURVEPOLYGONZM = 3010,
-    MULTICURVEZM  = 3011,
-    MULTISURFACEZM = 3012,
-    CURVEZM = 3013,
-    SURFACEZM = 3014,
-    POLYHEDRALSURFACEZM = 3015,
-    TINZM = 3016
+    CIRCULARSTRINGZM     = 3008,
+    COMPOUNDCURVEZM      = 3009,
+    CURVEPOLYGONZM       = 3010,
+    MULTICURVEZM         = 3011,
+    MULTISURFACEZM       = 3012,
+    CURVEZM              = 3013,
+    SURFACEZM            = 3014,
+    POLYHEDRALSURFACEZM  = 3015,
+    TINZM                = 3016
 };
 
-/// geometry interface
-class Geometry
+/*!
+ * @brief returns the dimension type given a geometry detailed type
+ * @param detailed_type the detailed type
+ * @return the dimension type
+ *
+ * @since 0.0.1
+ */
+DimensionType get_dim(GeometryDetailedType detailed_type) noexcept
+{
+    int value = static_cast<int>(detailed_type);
+    if (value >= 1000 and value < 2000)
+    {
+        return DimensionType::XYZ;
+    }
+    if (value >= 2000 and value < 3000)
+    {
+        return DimensionType::XYM;
+    }
+    if (value >= 3000)
+    {
+        return DimensionType::XYZM;
+    }
+    return DimensionType::XY;
+}
+
+/*!
+ * @brief returns the number of dimensions given a dimension type
+ * @param dim_type the dimension type
+ * @return the number of dimensions
+ *
+ * @since 0.0.1
+ */
+int8_t get_ndim(DimensionType dim_type) noexcept
+{
+    switch (dim_type)
+    {
+        case DimensionType::XYZM:
+            return 4;
+        case DimensionType::XYZ:
+            // fall through
+        case DimensionType::XYM:
+            return 3;
+        case DimensionType::XY:
+            return 2;
+    }
+}
+
+/*!
+ * @brief returns the number of dimensions given a geometry detailed type
+ * @param detailed_type the geometry detailed type
+ * @return the number of dimensions
+ *
+ * @since 0.0.1
+ */
+int8_t get_ndim(GeometryDetailedType detailed_type) noexcept
+{
+    return get_ndim(get_dim(detailed_type));
+}
+
+/*!
+ * @brief returns a geometry detailed type given the geometry type and dimension type
+ * @param geom_type the geometry type
+ * @param dim_type the dimension type
+ * @return the geometry detailed type
+ *
+ * @since 0.0.1
+ */
+GeometryDetailedType get_geom_detailed_type(GeometryType geom_type, DimensionType dim_type) noexcept
+{
+    switch (dim_type)
+    {
+        case DimensionType::XY:
+        {
+            switch (geom_type)
+            {
+                case GeometryType::GEOMETRY:
+                    return GeometryDetailedType::GEOMETRY;
+                case GeometryType::POINT:
+                    return GeometryDetailedType::POINT;
+                case GeometryType::LINESTRING:
+                    return GeometryDetailedType::LINESTRING;
+                case GeometryType::POLYGON:
+                    return GeometryDetailedType::POLYGON;
+                case GeometryType::MULTIPOINT:
+                    return GeometryDetailedType::MULTIPOINT;
+                case GeometryType::MULTILINESTRING:
+                    return GeometryDetailedType::MULTILINESTRING;
+                case GeometryType::MULTIPOLYGON:
+                    return GeometryDetailedType::MULTIPOLYGON;
+                case GeometryType::GEOMETRYCOLLECTION:
+                    return GeometryDetailedType::GEOMETRYCOLLECTION;
+                case GeometryType::CIRCULARSTRING:
+                    return GeometryDetailedType::CIRCULARSTRING;
+                case GeometryType::COMPOUNDCURVE:
+                    return GeometryDetailedType::COMPOUNDCURVE;
+                case GeometryType::CURVEPOLYGON:
+                    return GeometryDetailedType::CURVEPOLYGON;
+                case GeometryType::MULTICURVE:
+                    return GeometryDetailedType::MULTICURVE;
+                case GeometryType::MULTISURFACE:
+                    return GeometryDetailedType::MULTISURFACE;
+                case GeometryType::CURVE:
+                    return GeometryDetailedType::CURVE;
+                case GeometryType::SURFACE:
+                    return GeometryDetailedType::SURFACE;
+                case GeometryType::POLYHEDRALSURFACE:
+                    return GeometryDetailedType::POLYHEDRALSURFACE;
+                case GeometryType::TIN:
+                    return GeometryDetailedType::TIN;
+            }
+        }
+        case DimensionType::XYZ:
+        {
+            switch (geom_type)
+            {
+                case GeometryType::GEOMETRY:
+                    return GeometryDetailedType::GEOMETRYZ;
+                case GeometryType::POINT:
+                    return GeometryDetailedType::POINTZ;
+                case GeometryType::LINESTRING:
+                    return GeometryDetailedType::LINESTRINGZ;
+                case GeometryType::POLYGON:
+                    return GeometryDetailedType::POLYGONZ;
+                case GeometryType::MULTIPOINT:
+                    return GeometryDetailedType::MULTIPOINTZ;
+                case GeometryType::MULTILINESTRING:
+                    return GeometryDetailedType::MULTILINESTRINGZ;
+                case GeometryType::MULTIPOLYGON:
+                    return GeometryDetailedType::MULTIPOLYGONZ;
+                case GeometryType::GEOMETRYCOLLECTION:
+                    return GeometryDetailedType::GEOMETRYCOLLECTIONZ;
+                case GeometryType::CIRCULARSTRING:
+                    return GeometryDetailedType::CIRCULARSTRINGZ;
+                case GeometryType::COMPOUNDCURVE:
+                    return GeometryDetailedType::COMPOUNDCURVEZ;
+                case GeometryType::CURVEPOLYGON:
+                    return GeometryDetailedType::CURVEPOLYGONZ;
+                case GeometryType::MULTICURVE:
+                    return GeometryDetailedType::MULTICURVEZ;
+                case GeometryType::MULTISURFACE:
+                    return GeometryDetailedType::MULTISURFACEZ;
+                case GeometryType::CURVE:
+                    return GeometryDetailedType::CURVEZ;
+                case GeometryType::SURFACE:
+                    return GeometryDetailedType::SURFACEZ;
+                case GeometryType::POLYHEDRALSURFACE:
+                    return GeometryDetailedType::POLYHEDRALSURFACEZ;
+                case GeometryType::TIN:
+                    return GeometryDetailedType::TINZ;
+            }
+        }
+        case DimensionType::XYM:
+        {
+            switch (geom_type)
+            {
+                case GeometryType::GEOMETRY:
+                    return GeometryDetailedType::GEOMETRYM;
+                case GeometryType::POINT:
+                    return GeometryDetailedType::POINTM;
+                case GeometryType::LINESTRING:
+                    return GeometryDetailedType::LINESTRINGM;
+                case GeometryType::POLYGON:
+                    return GeometryDetailedType::POLYGONM;
+                case GeometryType::MULTIPOINT:
+                    return GeometryDetailedType::MULTIPOINTM;
+                case GeometryType::MULTILINESTRING:
+                    return GeometryDetailedType::MULTILINESTRINGM;
+                case GeometryType::MULTIPOLYGON:
+                    return GeometryDetailedType::MULTIPOLYGONM;
+                case GeometryType::GEOMETRYCOLLECTION:
+                    return GeometryDetailedType::GEOMETRYCOLLECTIONM;
+                case GeometryType::CIRCULARSTRING:
+                    return GeometryDetailedType::CIRCULARSTRINGM;
+                case GeometryType::COMPOUNDCURVE:
+                    return GeometryDetailedType::COMPOUNDCURVEM;
+                case GeometryType::CURVEPOLYGON:
+                    return GeometryDetailedType::CURVEPOLYGONM;
+                case GeometryType::MULTICURVE:
+                    return GeometryDetailedType::MULTICURVEM;
+                case GeometryType::MULTISURFACE:
+                    return GeometryDetailedType::MULTISURFACEM;
+                case GeometryType::CURVE:
+                    return GeometryDetailedType::CURVEM;
+                case GeometryType::SURFACE:
+                    return GeometryDetailedType::SURFACEM;
+                case GeometryType::POLYHEDRALSURFACE:
+                    return GeometryDetailedType::POLYHEDRALSURFACEM;
+                case GeometryType::TIN:
+                    return GeometryDetailedType::TINM;
+            }
+        }
+        case DimensionType::XYZM:
+        {
+            switch (geom_type)
+            {
+                case GeometryType::GEOMETRY:
+                    return GeometryDetailedType::GEOMETRYZM;
+                case GeometryType::POINT:
+                    return GeometryDetailedType::POINTZM;
+                case GeometryType::LINESTRING:
+                    return GeometryDetailedType::LINESTRINGZM;
+                case GeometryType::POLYGON:
+                    return GeometryDetailedType::POLYGONZM;
+                case GeometryType::MULTIPOINT:
+                    return GeometryDetailedType::MULTIPOINTZM;
+                case GeometryType::MULTILINESTRING:
+                    return GeometryDetailedType::MULTILINESTRINGZM;
+                case GeometryType::MULTIPOLYGON:
+                    return GeometryDetailedType::MULTIPOLYGONZM;
+                case GeometryType::GEOMETRYCOLLECTION:
+                    return GeometryDetailedType::GEOMETRYCOLLECTIONZM;
+                case GeometryType::CIRCULARSTRING:
+                    return GeometryDetailedType::CIRCULARSTRINGZM;
+                case GeometryType::COMPOUNDCURVE:
+                    return GeometryDetailedType::COMPOUNDCURVEZM;
+                case GeometryType::CURVEPOLYGON:
+                    return GeometryDetailedType::CURVEPOLYGONZM;
+                case GeometryType::MULTICURVE:
+                    return GeometryDetailedType::MULTICURVEZM;
+                case GeometryType::MULTISURFACE:
+                    return GeometryDetailedType::MULTISURFACEZM;
+                case GeometryType::CURVE:
+                    return GeometryDetailedType::CURVEZM;
+                case GeometryType::SURFACE:
+                    return GeometryDetailedType::SURFACEZM;
+                case GeometryType::POLYHEDRALSURFACE:
+                    return GeometryDetailedType::POLYHEDRALSURFACEZM;
+                case GeometryType::TIN:
+                    return GeometryDetailedType::TINZM;
+            }
+        }
+    }
+}
+
+}  // namespace shapes
+}  // namespace simo
+
+namespace simo
+{
+namespace shapes
+{
+
+/*!
+ * @brief abstract class for all geometries
+ * @tparam T the geometry type (e.g. Point, Polygon, LineString)
+ *
+ * @since 0.0.1
+ */
+template <typename T>
+class BaseGeometry
 {
   public:
+    /// a spatial reference identifier (SRID) is a unique identifier associated with a specific coordinate system
+    int32_t srid = -1;
+
+    /// the geometry bounds
+    Bounds bounds{};
+
+    /// the dimension type is either 2D (x, y), 3D (x, y, z), 4D (x, y, z, m) or 2D with measure-coordinate (x, y, m)
+    DimensionType dim = DimensionType::XY;
+
+    /// serialization precision
+    int8_t precision = 1;
+
     /*!
      * @brief returns the geometry type (e.g. GeometryType::Point, GeometryType::MultiPoint)
      * @return the geometry type
      *
      * @since 0.0.1
      */
-    virtual GeometryType type() const = 0;
+    GeometryType type() const
+    {
+        return static_cast<const T*>(this)->type_();
+    }
 
     /*!
      * @brief returns the geometry detailed type (e.g. GeometryType::PointZ, GeometryType::MultiPointZM)
@@ -393,7 +676,11 @@ class Geometry
      *
      * @since 0.0.1
      */
-    virtual GeometryDetailedType detailed_type() const = 0;
+    GeometryDetailedType detailed_type() const
+    {
+        auto type = static_cast<const T*>(this)->type_();
+        return get_geom_detailed_type(type, dim);
+    }
 
     /*!
      * @brief returns the geometry type as a string (e.g. Point, LineString)
@@ -401,7 +688,10 @@ class Geometry
      *
      * @since 0.0.1
      */
-    virtual std::string type_str() const = 0;
+    std::string type_str() const
+    {
+        return static_cast<const T*>(this)->type_str_();
+    }
 
     /*!
      * @brief returns true if the geometry is empty
@@ -409,7 +699,10 @@ class Geometry
      *
      * @since 0.0.1
      */
-    virtual bool empty() const = 0;
+    bool empty() const
+    {
+        return static_cast<const T*>(this)->empty_();
+    }
 
     /*!
      * @brief returns the geometry size
@@ -417,43 +710,10 @@ class Geometry
      *
      * @since 0.0.1
      */
-    virtual size_t size() const = 0;
-
-    /*!
-     * @brief returns the dimension type of the geometry
-     * @return the dimension type
-     *
-     * @note the dimension type is (x, y), (x, y, z), (x, y, m) and (x, y, z, m)
-     *
-     * @since 0.0.1
-     */
-    virtual DimensionType get_dimension() const = 0;
-
-    /*!
-     * @brief returns the number of dimensions of the geometry
-     * @return the number of dimensions
-     *
-     * @note the number of dimensions is (x, y) = 2, (x, y, z) = 3, (x, y, m) = 3 and (x, y, z, m) = 4
-     *
-     * @since 0.0.1
-     */
-    virtual int8_t get_num_dimension() const = 0;
-
-    /*!
-     * @brief returns the geometry bounds
-     * @return the geometry bounds
-     *
-     * @since 0.0.1
-     */
-    virtual Bounds get_bounds() const = 0;
-
-    /*!
-     * @brief returns a clone of the given geometry
-     * @return a geometry clone
-     *
-     * @since 0.0.1
-     */
-    virtual std::unique_ptr<Geometry> clone() = 0;
+    size_t size() const
+    {
+        return static_cast<const T*>(this)->size_();
+    }
 
     /*!
      * @brief returns the geometry (x, y) coordinates as a tuple
@@ -461,7 +721,10 @@ class Geometry
      *
      * @since 0.0.1
      */
-    virtual std::vector<std::tuple<double, double>> xy() const = 0;
+    std::vector<std::tuple<double, double>> xy() const
+    {
+        return static_cast<const T*>(this)->xy_();
+    }
 
     /*!
      * @brief returns the geometry (x, y, z) coordinates as a tuple
@@ -469,7 +732,10 @@ class Geometry
      *
      * @since 0.0.1
      */
-    virtual std::vector<std::tuple<double, double, double>> xyz() const = 0;
+    std::vector<std::tuple<double, double, double>> xyz() const
+    {
+        return static_cast<const T*>(this)->xyz_();
+    }
 
     /*!
      * @brief returns the geometry (x, y, m) coordinates as a tuple
@@ -477,7 +743,10 @@ class Geometry
      *
      * @since 0.0.1
      */
-    virtual std::vector<std::tuple<double, double, double>> xym() const = 0;
+    std::vector<std::tuple<double, double, double>> xym() const
+    {
+        return static_cast<const T*>(this)->xym_();
+    }
 
     /*!
      * @brief returns the geometry (x, y, z, m) coordinates as a tuple
@@ -485,7 +754,10 @@ class Geometry
      *
      * @since 0.0.1
      */
-    virtual std::vector<std::tuple<double, double, double, double>> xyzm() const = 0;
+    std::vector<std::tuple<double, double, double, double>> xyzm() const
+    {
+        return static_cast<const T*>(this)->xyzm_();
+    }
 
     /*!
      * @brief whether the geometry has z-coordinate
@@ -493,7 +765,10 @@ class Geometry
      *
      * @since 0.0.1
      */
-    virtual bool has_z() const = 0;
+    bool has_z() const
+    {
+        return dim == DimensionType::XYZ or dim == DimensionType::XYZM;
+    }
 
     /*!
      * @brief whether the geometry has m-coordinate
@@ -501,280 +776,59 @@ class Geometry
      *
      * @since 0.0.1
      */
-    virtual bool has_m() const = 0;
+    bool has_m() const
+    {
+        return dim == DimensionType::XYM or dim == DimensionType::XYZM;
+    }
+
+    /*!
+     * @brief whether the geometry is closed
+     * @return true if the geometry is closed, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool is_closed() const
+    {
+        return static_cast<const T*>(this)->is_closed_();
+    }
+
+    /*!
+     * @brief returns the number of dimensions of the geometry
+     * @return the number of dimensions
+     * @note the number of dimensions is (x, y) = 2, (x, y, z) = 3, (x, y, m) = 3 and (x, y, z, m) = 4
+     *
+     * @since 0.0.1
+     */
+    int8_t ndim() const
+    {
+        return get_ndim(dim);
+    }
 };
 
-/// basic geometry type
-template <typename Derived>
-class BasicGeometry : public Geometry
+/*!
+ * @brief the geometry type
+ *
+ * @since 0.0.1
+ */
+typedef union Geometry
 {
-  public:
-    /// serialization precision
-    int8_t precision = 1;
-
-    /// a spatial reference identifier (SRID) is a unique identifier associated with a specific coordinate system
-    int32_t srid = -1;
-
-    /// geometry bounds
-    Bounds bounds;
-
-    /// the dimension type (x, y), (x, y, z), (x, y, m) or (x, y, z, m)
-    DimensionType dimension;
-
-    GeometryType type() const override
-    {
-        return static_cast<const Derived*>(this)->type_();
-    }
-
-    GeometryDetailedType detailed_type() const override
-    {
-        auto type = static_cast<const Derived*>(this)->type_();
-        switch (dimension)
-        {
-            case DimensionType::XY:
-            {
-                switch (type)
-                {
-                    case GeometryType::GEOMETRY:
-                        return GeometryDetailedType::GEOMETRY;
-                    case GeometryType::POINT:
-                        return GeometryDetailedType::POINT;
-                    case GeometryType::LINESTRING:
-                        return GeometryDetailedType::LINESTRING;
-                    case GeometryType::POLYGON:
-                        return GeometryDetailedType::POLYGON;
-                    case GeometryType::MULTIPOINT:
-                        return GeometryDetailedType::MULTIPOINT;
-                    case GeometryType::MULTILINESTRING:
-                        return GeometryDetailedType::MULTILINESTRING;
-                    case GeometryType::MULTIPOLYGON:
-                        return GeometryDetailedType::MULTIPOLYGON;
-                    case GeometryType::GEOMETRYCOLLECTION:
-                        return GeometryDetailedType::GEOMETRYCOLLECTION;
-                    case GeometryType::CIRCULARSTRING:
-                        return GeometryDetailedType::CIRCULARSTRING;
-                    case GeometryType::COMPOUNDCURVE:
-                        return GeometryDetailedType::COMPOUNDCURVE;
-                    case GeometryType::CURVEPOLYGON:
-                        return GeometryDetailedType::CURVEPOLYGON;
-                    case GeometryType::MULTICURVE:
-                        return GeometryDetailedType::MULTICURVE;
-                    case GeometryType::MULTISURFACE:
-                        return GeometryDetailedType::MULTISURFACE;
-                    case GeometryType::CURVE:
-                        return GeometryDetailedType::CURVE;
-                    case GeometryType::SURFACE:
-                        return GeometryDetailedType::SURFACE;
-                    case GeometryType::POLYHEDRALSURFACE:
-                        return GeometryDetailedType::POLYHEDRALSURFACE;
-                    case GeometryType::TIN:
-                        return GeometryDetailedType::TIN;
-                }
-            }
-            case DimensionType::XYZ:
-            {
-                switch (type)
-                {
-                    case GeometryType::GEOMETRY:
-                        return GeometryDetailedType::GEOMETRYZ;
-                    case GeometryType::POINT:
-                        return GeometryDetailedType::POINTZ;
-                    case GeometryType::LINESTRING:
-                        return GeometryDetailedType::LINESTRINGZ;
-                    case GeometryType::POLYGON:
-                        return GeometryDetailedType::POLYGONZ;
-                    case GeometryType::MULTIPOINT:
-                        return GeometryDetailedType::MULTIPOINTZ;
-                    case GeometryType::MULTILINESTRING:
-                        return GeometryDetailedType::MULTILINESTRINGZ;
-                    case GeometryType::MULTIPOLYGON:
-                        return GeometryDetailedType::MULTIPOLYGONZ;
-                    case GeometryType::GEOMETRYCOLLECTION:
-                        return GeometryDetailedType::GEOMETRYCOLLECTIONZ;
-                    case GeometryType::CIRCULARSTRING:
-                        return GeometryDetailedType::CIRCULARSTRINGZ;
-                    case GeometryType::COMPOUNDCURVE:
-                        return GeometryDetailedType::COMPOUNDCURVEZ;
-                    case GeometryType::CURVEPOLYGON:
-                        return GeometryDetailedType::CURVEPOLYGONZ;
-                    case GeometryType::MULTICURVE:
-                        return GeometryDetailedType::MULTICURVEZ;
-                    case GeometryType::MULTISURFACE:
-                        return GeometryDetailedType::MULTISURFACEZ;
-                    case GeometryType::CURVE:
-                        return GeometryDetailedType::CURVEZ;
-                    case GeometryType::SURFACE:
-                        return GeometryDetailedType::SURFACEZ;
-                    case GeometryType::POLYHEDRALSURFACE:
-                        return GeometryDetailedType::POLYHEDRALSURFACEZ;
-                    case GeometryType::TIN:
-                        return GeometryDetailedType::TINZ;
-                }
-            }
-            case DimensionType::XYM:
-            {
-                switch (type)
-                {
-                    case GeometryType::GEOMETRY:
-                        return GeometryDetailedType::GEOMETRYM;
-                    case GeometryType::POINT:
-                        return GeometryDetailedType::POINTM;
-                    case GeometryType::LINESTRING:
-                        return GeometryDetailedType::LINESTRINGM;
-                    case GeometryType::POLYGON:
-                        return GeometryDetailedType::POLYGONM;
-                    case GeometryType::MULTIPOINT:
-                        return GeometryDetailedType::MULTIPOINTM;
-                    case GeometryType::MULTILINESTRING:
-                        return GeometryDetailedType::MULTILINESTRINGM;
-                    case GeometryType::MULTIPOLYGON:
-                        return GeometryDetailedType::MULTIPOLYGONM;
-                    case GeometryType::GEOMETRYCOLLECTION:
-                        return GeometryDetailedType::GEOMETRYCOLLECTIONM;
-                    case GeometryType::CIRCULARSTRING:
-                        return GeometryDetailedType::CIRCULARSTRINGM;
-                    case GeometryType::COMPOUNDCURVE:
-                        return GeometryDetailedType::COMPOUNDCURVEM;
-                    case GeometryType::CURVEPOLYGON:
-                        return GeometryDetailedType::CURVEPOLYGONM;
-                    case GeometryType::MULTICURVE:
-                        return GeometryDetailedType::MULTICURVEM;
-                    case GeometryType::MULTISURFACE:
-                        return GeometryDetailedType::MULTISURFACEM;
-                    case GeometryType::CURVE:
-                        return GeometryDetailedType::CURVEM;
-                    case GeometryType::SURFACE:
-                        return GeometryDetailedType::SURFACEM;
-                    case GeometryType::POLYHEDRALSURFACE:
-                        return GeometryDetailedType::POLYHEDRALSURFACEM;
-                    case GeometryType::TIN:
-                        return GeometryDetailedType::TINM;
-                }
-            }
-            case DimensionType::XYZM:
-            {
-                switch (type)
-                {
-                    case GeometryType::GEOMETRY:
-                        return GeometryDetailedType::GEOMETRYZM;
-                    case GeometryType::POINT:
-                        return GeometryDetailedType::POINTZM;
-                    case GeometryType::LINESTRING:
-                        return GeometryDetailedType::LINESTRINGZM;
-                    case GeometryType::POLYGON:
-                        return GeometryDetailedType::POLYGONZM;
-                    case GeometryType::MULTIPOINT:
-                        return GeometryDetailedType::MULTIPOINTZM;
-                    case GeometryType::MULTILINESTRING:
-                        return GeometryDetailedType::MULTILINESTRINGZM;
-                    case GeometryType::MULTIPOLYGON:
-                        return GeometryDetailedType::MULTIPOLYGONZM;
-                    case GeometryType::GEOMETRYCOLLECTION:
-                        return GeometryDetailedType::GEOMETRYCOLLECTIONZM;
-                    case GeometryType::CIRCULARSTRING:
-                        return GeometryDetailedType::CIRCULARSTRINGZM;
-                    case GeometryType::COMPOUNDCURVE:
-                        return GeometryDetailedType::COMPOUNDCURVEZM;
-                    case GeometryType::CURVEPOLYGON:
-                        return GeometryDetailedType::CURVEPOLYGONZM;
-                    case GeometryType::MULTICURVE:
-                        return GeometryDetailedType::MULTICURVEZM;
-                    case GeometryType::MULTISURFACE:
-                        return GeometryDetailedType::MULTISURFACEZM;
-                    case GeometryType::CURVE:
-                        return GeometryDetailedType::CURVEZM;
-                    case GeometryType::SURFACE:
-                        return GeometryDetailedType::SURFACEZM;
-                    case GeometryType::POLYHEDRALSURFACE:
-                        return GeometryDetailedType::POLYHEDRALSURFACEZM;
-                    case GeometryType::TIN:
-                        return GeometryDetailedType::TINZM;
-                }
-            }
-        }
-        return GeometryDetailedType::GEOMETRY;
-    }
-
-    std::string type_str() const override
-    {
-        return static_cast<const Derived*>(this)->type_str_();
-    }
-
-    bool empty() const override
-    {
-        return static_cast<const Derived*>(this)->empty_();
-    }
-
-    size_t size() const override
-    {
-        return static_cast<const Derived*>(this)->size_();
-    }
-
-    std::unique_ptr<Geometry> clone() override
-    {
-        return std::unique_ptr<Derived>(new Derived(*static_cast<Derived*>(this)));
-    };
-
-    std::vector<std::tuple<double, double>> xy() const override
-    {
-        return static_cast<const Derived*>(this)->xy_();
-    }
-
-    std::vector<std::tuple<double, double, double>> xyz() const override
-    {
-        return static_cast<const Derived*>(this)->xyz_();
-    }
-
-    std::vector<std::tuple<double, double, double>> xym() const override
-    {
-        return static_cast<const Derived*>(this)->xym_();
-    }
-
-    std::vector<std::tuple<double, double, double, double>> xyzm() const override
-    {
-        return static_cast<const Derived*>(this)->xyzm_();
-    }
-
-    DimensionType get_dimension() const override
-    {
-        return dimension;
-    }
-
-    Bounds get_bounds() const override
-    {
-        return bounds;
-    }
-
-    bool has_z() const override
-    {
-        return dimension == DimensionType::XYZ or dimension == DimensionType::XYZM;
-    }
-
-    bool has_m() const override
-    {
-        return dimension == DimensionType::XYM or dimension == DimensionType::XYZM;
-    }
-
-    int8_t get_num_dimension() const override
-    {
-        switch (dimension)
-        {
-            case DimensionType::XY:
-                return 2;
-            case DimensionType::XYZ:
-            case DimensionType::XYM:
-                return 3;
-            default:
-                return 4;
-        }
-    }
-};
+    Point* point;                            ///< Point value
+    MultiPoint* multipoint;                  ///< MultiPoint value
+    LineString* linestring;                  ///< LineString value
+    MultiLineString* multilinestring;        ///< MultiLineString value
+    Polygon* polygon;                        ///< Polygon value
+    MultiPolygon* multipolygon;              ///< MultiPolygon value
+    GeometryCollection* geometrycollection;  ///< GeometryCollection value
+} Geometry;
 
 }  // namespace shapes
 }  // namespace simo
+// #include <simo/geom/bounds.hpp>
+
 // #include <simo/geom/point.hpp>
 
 
+#include <ciso646>
 #include <iostream>
 #include <initializer_list>
 #include <stdexcept>
@@ -791,6 +845,7 @@ class BasicGeometry : public Geometry
 // #include <simo/exceptions.hpp>
 
 
+#include <ciso646>
 #include <string>
 #include <exception>
 
@@ -803,35 +858,139 @@ namespace exceptions
 
 /*!
  * @brief base shapes exception
+ *
+ * @since 0.0.1
  */
-class shapes_exception : public std::exception
+class ShapesException : public std::exception
 {
   public:
-    explicit shapes_exception(const char* what)
-            : m_what(what) {}
+    /*!
+     * @brief creates a shapes exception
+     * @param reason the exception reason
+     *
+     * @since 0.0.1
+     */
+    explicit ShapesException(const char* reason)
+        : m_reason(reason) {}
 
+    /*!
+     * @brief returns the exception reason
+     * @return a string with the exception reason
+     *
+     * @since 0.0.1
+     */
     const char* what() const noexcept override
     {
-        return m_what.c_str();
+        return m_reason.c_str();
     }
 
   protected:
-
+    /*!
+     * @brief set the exception reason
+     * @param reason the exception reason
+     *
+     * @since 0.0.1
+     */
     void set_reason(const std::string& reason)
     {
-        m_what.append(": ");
-        m_what.append(reason);
+        m_reason.append(": ");
+        m_reason.append(reason);
     }
 
   private:
-    std::string m_what{};
+    std::string m_reason{};
 };
 
-class parse_error : public shapes_exception
+/*!
+ * @brief exception thrown when an error has been found while parsing
+ *
+ * @since 0.0.1
+ */
+class ParseError : public ShapesException
 {
   public:
-    explicit parse_error(const std::string& reason)
-        : shapes_exception("parse error")
+    /*!
+     * @brief creates a parse error with the given reason
+     * @param reason the reason message
+     *
+     * @since 0.0.1
+     */
+    explicit ParseError(const std::string& reason)
+        : ShapesException("parse error")
+    {
+        set_reason(reason);
+    }
+};
+
+/*!
+ * @brief exception thrown when method or routine is not implemented
+ *
+ * @since 0.0.1
+ */
+class NotImplementedError : public ShapesException
+{
+  public:
+    /*!
+     * @brief creates a not implemented error exception
+     *
+     * @since 0.0.1
+     */
+    NotImplementedError()
+        : ShapesException("not implemented error")
+    {
+    }
+
+    /*!
+     * @brief creates a not implemented error exception
+     *
+     * @param reason the reason message
+     *
+     * @since 0.0.1
+     */
+    explicit NotImplementedError(const std::string& reason)
+        : ShapesException("not implemented error")
+    {
+        set_reason(reason);
+    }
+};
+
+/*!
+ * @brief exception thrown when a geometry error is found
+ *
+ * @since 0.0.1
+ */
+class GeometryError : public ShapesException
+{
+  public:
+    /*!
+     * @brief creates a geometry error exception
+     * @param reason the exception reason
+     *
+     * @since 0.0.1
+     */
+    explicit GeometryError(const std::string& reason)
+        : ShapesException("value error")
+    {
+        set_reason(reason);
+    }
+};
+
+/*!
+ * @brief exception thrown when a sequence index is out of range
+ *
+ * @since 0.0.1
+ */
+class IndexError : public ShapesException
+{
+  public:
+    /*!
+     * @brief creates a index error exception
+     * @param reason the exception reason
+     *
+     * @since 0.0.1
+     */
+    explicit IndexError(const std::string& reason)
+        : ShapesException("index error")
     {
         set_reason(reason);
     }
@@ -841,57 +1000,2130 @@ class parse_error : public shapes_exception
 }  // namespace shapes
 }  // namespace simo
 
+// #include <simo/io/wkt_reader.hpp>
+
+
+#include <ciso646>
+// #include <simo/geom/geometry.hpp>
+
+// #include <simo/exceptions.hpp>
+
+// #include <simo/io/wkt_parser.hpp>
+
+
+// #include <simo/geom/types.hpp>
+
 
 namespace simo
 {
 namespace shapes
 {
 
-class Point : public BasicGeometry<Point>
+/*!
+ * @brief a Well-known text (WKT) markup language parser result data
+ *
+ * @since 0.0.1
+ */
+struct WktData
+{
+    /// the dimension type of the geometry
+    GeometryDetailedType geom_type;
+
+    /// the number of dimensions
+    int ndim;
+
+    /// the coordinates as a sequence of numbers
+    std::vector<double> coords;
+
+    /// the offsets in the coordinates sequence
+    std::vector<std::size_t> offsets;
+};
+
+/*!
+ * @brief a Well-known text (WKT) markup language parser result
+ *
+ * @since 0.0.1
+ */
+struct WktResult
+{
+    /// whether there is a parser error
+    int parser_error;
+
+    /// the parser result data
+    WktData data;
+};
+
+}  // namespace shapes
+}  // namespace simo
+
+// #include <simo/io/wkt_parser.h>
+#define WKT_NUM                         1
+#define WKT_POINT_TAGGED_TEXT           2
+#define WKT_EMPTY_SET                   3
+#define WKT_POINT_Z_TAGGED_TEXT         4
+#define WKT_POINT_M_TAGGED_TEXT         5
+#define WKT_POINT_ZM_TAGGED_TEXT        6
+#define WKT_LPAREN                      7
+#define WKT_RPAREN                      8
+#define WKT_COMMA                       9
+#define WKT_MULTIPOINT_TAGGED_TEXT     10
+#define WKT_MULTIPOINT_Z_TAGGED_TEXT   11
+#define WKT_MULTIPOINT_M_TAGGED_TEXT   12
+#define WKT_MULTIPOINT_ZM_TAGGED_TEXT  13
+#define WKT_END_OF_INPUT               99
+#define WKT_PARSE_ERROR                100
+
+// #include <simo/io/wkt_parser.c>
+/* Driver template for the LEMON parser generator.
+** The author disclaims copyright to this source code.
+*/
+/* First off, code is included that follows the "include" declaration
+** in the input grammar file. */
+#include <stdio.h>
+
+
+
+#include <ciso646>
+#include <iostream>
+#include <cassert>
+/* Next is all token values, in a form suitable for use by makeheaders.
+** This section will be null unless lemon is run with the -m switch.
+*/
+/* 
+** These constants (all generated automatically by the parser generator)
+** specify the various kinds of tokens (terminals) that the parser
+** understands. 
+**
+** Each symbol here is a terminal symbol in the grammar.
+*/
+/* Make sure the INTERFACE macro is defined.
+*/
+#ifndef INTERFACE
+# define INTERFACE 1
+#endif
+/* The next thing included is series of defines which control
+** various aspects of the generated parser.
+**    YYCODETYPE         is the data type used for storing terminal
+**                       and nonterminal numbers.  "unsigned char" is
+**                       used if there are fewer than 250 terminals
+**                       and nonterminals.  "int" is used otherwise.
+**    YYNOCODE           is a number of type YYCODETYPE which corresponds
+**                       to no legal terminal or nonterminal number.  This
+**                       number is used to fill in empty slots of the hash 
+**                       table.
+**    YYFALLBACK         If defined, this indicates that one or more tokens
+**                       have fall-back values which should be used if the
+**                       original value of the token will not parse.
+**    YYACTIONTYPE       is the data type used for storing terminal
+**                       and nonterminal numbers.  "unsigned char" is
+**                       used if there are fewer than 250 rules and
+**                       states combined.  "int" is used otherwise.
+**    ParseTOKENTYPE     is the data type used for minor tokens given 
+**                       directly to the parser from the tokenizer.
+**    YYMINORTYPE        is the data type used for all minor tokens.
+**                       This is typically a union of many types, one of
+**                       which is ParseTOKENTYPE.  The entry in the union
+**                       for base tokens is called "yy0".
+**    YYSTACKDEPTH       is the maximum depth of the parser's stack.  If
+**                       zero the stack is dynamically sized using realloc()
+**    ParseARG_SDECL     A static variable declaration for the %extra_argument
+**    ParseARG_PDECL     A parameter declaration for the %extra_argument
+**    ParseARG_STORE     Code to store %extra_argument into yypParser
+**    ParseARG_FETCH     Code to extract %extra_argument from yypParser
+**    YYNSTATE           the combined number of states.
+**    YYNRULE            the number of rules in the grammar
+**    YYERRORSYMBOL      is the code number of the error symbol.  If not
+**                       defined, then do no error processing.
+*/
+#define YYCODETYPE unsigned char
+#define YYNOCODE 35
+#define YYACTIONTYPE unsigned char
+#define ParseTOKENTYPE double
+typedef union {
+  int yyinit;
+  ParseTOKENTYPE yy0;
+} YYMINORTYPE;
+#ifndef YYSTACKDEPTH
+#define YYSTACKDEPTH 1048576
+#endif
+#define ParseARG_SDECL  struct simo::shapes::WktResult *result ;
+#define ParseARG_PDECL , struct simo::shapes::WktResult *result 
+#define ParseARG_FETCH  struct simo::shapes::WktResult *result  = yypParser->result 
+#define ParseARG_STORE yypParser->result  = result 
+#define YYNSTATE 79
+#define YYNRULE 38
+#define YY_NO_ACTION      (YYNSTATE+YYNRULE+2)
+#define YY_ACCEPT_ACTION  (YYNSTATE+YYNRULE+1)
+#define YY_ERROR_ACTION   (YYNSTATE+YYNRULE)
+
+/* The yyzerominor constant is used to initialize instances of
+** YYMINORTYPE objects to zero. */
+static const YYMINORTYPE yyzerominor = { 0 };
+
+/* Define the yytestcase() macro to be a no-op if is not already defined
+** otherwise.
+**
+** Applications can choose to define yytestcase() in the %include section
+** to a macro that can assist in verifying code coverage.  For production
+** code the yytestcase() macro should be turned off.  But it is useful
+** for testing.
+*/
+#ifndef yytestcase
+# define yytestcase(X)
+#endif
+
+
+/* Next are the tables used to determine what action to take based on the
+** current state and lookahead token.  These tables are used to implement
+** functions that take a state number and lookahead value and return an
+** action integer.  
+**
+** Suppose the action integer is N.  Then the action is determined as
+** follows
+**
+**   0 <= N < YYNSTATE                  Shift N.  That is, push the lookahead
+**                                      token onto the stack and goto state N.
+**
+**   YYNSTATE <= N < YYNSTATE+YYNRULE   Reduce by rule N-YYNSTATE.
+**
+**   N == YYNSTATE+YYNRULE              A syntax error has occurred.
+**
+**   N == YYNSTATE+YYNRULE+1            The parser accepts its input.
+**
+**   N == YYNSTATE+YYNRULE+2            No such action.  Denotes unused
+**                                      slots in the yy_action[] table.
+**
+** The action table is constructed as a single large table named yy_action[].
+** Given state S and lookahead X, the action is computed as
+**
+**      yy_action[ yy_shift_ofst[S] + X ]
+**
+** If the index value yy_shift_ofst[S]+X is out of range or if the value
+** yy_lookahead[yy_shift_ofst[S]+X] is not equal to X or if yy_shift_ofst[S]
+** is equal to YY_SHIFT_USE_DFLT, it means that the action is not in the table
+** and that yy_default[S] should be used instead.  
+**
+** The formula above is for computing the action when the lookahead is
+** a terminal symbol.  If the lookahead is a non-terminal (as occurs after
+** a reduce action) then the yy_reduce_ofst[] array is used in place of
+** the yy_shift_ofst[] array and YY_REDUCE_USE_DFLT is used in place of
+** YY_SHIFT_USE_DFLT.
+**
+** The following are the tables generated in this section:
+**
+**  yy_action[]        A single table containing all actions.
+**  yy_lookahead[]     A table containing the lookahead for each entry in
+**                     yy_action.  Used to detect hash collisions.
+**  yy_shift_ofst[]    For each state, the offset into yy_action for
+**                     shifting terminals.
+**  yy_reduce_ofst[]   For each state, the offset into yy_action for
+**                     shifting non-terminals after a reduce.
+**  yy_default[]       Default action for each state.
+*/
+static const YYACTIONTYPE yy_action[] = {
+ /*     0 */   118,   37,   50,   74,   73,   72,   70,   66,   65,   64,
+ /*    10 */     4,   68,    2,    3,    1,   67,   31,    6,   35,   33,
+ /*    20 */    34,   36,   77,   55,   53,   63,   28,   17,   16,   10,
+ /*    30 */    62,   48,   46,   71,    9,   31,   21,    5,   44,    8,
+ /*    40 */     7,   57,   12,   14,   58,   20,   17,   59,   38,   43,
+ /*    50 */    21,   11,   15,  119,  119,   13,   30,   18,   19,   10,
+ /*    60 */    39,   79,   22,   23,  119,  119,   24,   56,   52,   40,
+ /*    70 */    47,   78,   75,  119,   27,   32,   42,   29,   45,   49,
+ /*    80 */    51,   25,   76,   41,   54,   60,   69,  119,   61,  119,
+ /*    90 */   119,  119,  119,  119,  119,  119,   26,
+};
+static const YYCODETYPE yy_lookahead[] = {
+ /*     0 */    15,   16,   17,   18,   19,   20,   21,   22,   23,   24,
+ /*    10 */     2,    8,    4,    5,    6,   32,    7,   28,   10,   11,
+ /*    20 */    12,   13,    3,    3,    3,    3,    7,    7,    7,    7,
+ /*    30 */     3,    3,    3,    3,    7,    7,    7,    7,   32,   28,
+ /*    40 */     9,    1,   25,    9,   31,    9,    7,   33,   25,   31,
+ /*    50 */     7,   27,   27,   34,   34,   29,    9,   25,   25,    7,
+ /*    60 */    25,    0,   25,   25,   34,   34,   25,    8,    8,   25,
+ /*    70 */    28,    8,    8,   34,   26,   25,   30,   26,   33,   30,
+ /*    80 */     8,   25,   29,   25,   27,    8,    8,   34,   26,   34,
+ /*    90 */    34,   34,   34,   34,   34,   34,   29,
+};
+#define YY_SHIFT_USE_DFLT (-1)
+#define YY_SHIFT_MAX 45
+static const signed char yy_shift_ofst[] = {
+ /*     0 */     8,   29,   20,   28,   22,   43,   31,    9,   31,    9,
+ /*    10 */    40,   34,   40,   36,   39,   34,   39,   40,   40,   40,
+ /*    20 */    43,   40,   40,   40,   40,   40,   36,   47,   52,   47,
+ /*    30 */    52,   40,   40,   21,   27,   19,   30,   61,   59,   60,
+ /*    40 */    63,   64,   72,   77,   78,    3,
+};
+#define YY_REDUCE_USE_DFLT (-18)
+#define YY_REDUCE_MAX 32
+static const signed char yy_reduce_ofst[] = {
+ /*     0 */   -15,   53,   57,   42,   62,   67,  -17,  -11,    6,   11,
+ /*    10 */    17,   13,   23,   14,   24,   18,   25,   32,   33,   35,
+ /*    20 */    26,   37,   38,   41,   58,   44,   45,   46,   48,   49,
+ /*    30 */    51,   50,   56,
+};
+static const YYACTIONTYPE yy_default[] = {
+ /*     0 */   117,  117,  117,  117,  117,  117,  105,  117,  105,  117,
+ /*    10 */   117,  103,  117,  107,  117,  103,  117,  117,  117,  117,
+ /*    20 */   117,  117,  117,  117,  117,  117,  107,  101,  117,  101,
+ /*    30 */   117,  117,  117,  117,  117,  117,  117,  117,  117,  117,
+ /*    40 */   117,  117,  117,  117,  117,  117,   95,   94,   93,  102,
+ /*    50 */    80,  110,   98,  111,   92,   91,   97,   88,  104,  108,
+ /*    60 */   112,   90,  113,   89,   87,   86,   85,  106,  116,  114,
+ /*    70 */    84,  115,   83,   82,   81,  100,   96,  109,   99,
+};
+#define YY_SZ_ACTTAB (int)(sizeof(yy_action)/sizeof(yy_action[0]))
+
+/* The next table maps tokens into fallback tokens.  If a construct
+** like the following:
+** 
+**      %fallback ID X Y Z.
+**
+** appears in the grammar, then ID becomes a fallback token for X, Y,
+** and Z.  Whenever one of the tokens X, Y, or Z is input to the parser
+** but it does not parse, the type of the token is changed to ID and
+** the parse is retried before an error is thrown.
+*/
+#ifdef YYFALLBACK
+static const YYCODETYPE yyFallback[] = {
+};
+#endif /* YYFALLBACK */
+
+/* The following structure represents a single element of the
+** parser's stack.  Information stored includes:
+**
+**   +  The state number for the parser at this level of the stack.
+**
+**   +  The value of the token stored at this level of the stack.
+**      (In other words, the "major" token.)
+**
+**   +  The semantic value stored at this level of the stack.  This is
+**      the information used by the action routines in the grammar.
+**      It is sometimes called the "minor" token.
+*/
+struct yyStackEntry {
+  YYACTIONTYPE stateno;  /* The state-number */
+  YYCODETYPE major;      /* The major token value.  This is the code
+                         ** number for the token at this stack level */
+  YYMINORTYPE minor;     /* The user-supplied minor token value.  This
+                         ** is the value of the token  */
+};
+typedef struct yyStackEntry yyStackEntry;
+
+/* The state of the parser is completely contained in an instance of
+** the following structure */
+struct yyParser {
+  int yyidx;                    /* Index of top element in stack */
+#ifdef YYTRACKMAXSTACKDEPTH
+  int yyidxMax;                 /* Maximum value of yyidx */
+#endif
+  int yyerrcnt;                 /* Shifts left before out of the error */
+  ParseARG_SDECL                /* A place to hold %extra_argument */
+#if YYSTACKDEPTH<=0
+  int yystksz;                  /* Current side of the stack */
+  yyStackEntry *yystack;        /* The parser's stack */
+#else
+  yyStackEntry yystack[YYSTACKDEPTH];  /* The parser's stack */
+#endif
+};
+typedef struct yyParser yyParser;
+
+#ifndef NDEBUG
+#include <stdio.h>
+static FILE *yyTraceFILE = 0;
+static char *yyTracePrompt = 0;
+#endif /* NDEBUG */
+
+#ifndef NDEBUG
+/* 
+** Turn parser tracing on by giving a stream to which to write the trace
+** and a prompt to preface each trace message.  Tracing is turned off
+** by making either argument NULL 
+**
+** Inputs:
+** <ul>
+** <li> A FILE* to which trace output should be written.
+**      If NULL, then tracing is turned off.
+** <li> A prefix string written at the beginning of every
+**      line of trace output.  If NULL, then tracing is
+**      turned off.
+** </ul>
+**
+** Outputs:
+** None.
+*/
+void ParseTrace(FILE *TraceFILE, char *zTracePrompt){
+  yyTraceFILE = TraceFILE;
+  yyTracePrompt = zTracePrompt;
+  if( yyTraceFILE==0 ) yyTracePrompt = 0;
+  else if( yyTracePrompt==0 ) yyTraceFILE = 0;
+}
+#endif /* NDEBUG */
+
+#ifndef NDEBUG
+/* For tracing shifts, the names of all terminals and nonterminals
+** are required.  The following table supplies these names */
+static const char *const yyTokenName[] = { 
+  "$",             "WKT_NUM",       "WKT_POINT_TAGGED_TEXT",  "WKT_EMPTY_SET",
+  "WKT_POINT_Z_TAGGED_TEXT",  "WKT_POINT_M_TAGGED_TEXT",  "WKT_POINT_ZM_TAGGED_TEXT",  "WKT_LPAREN",  
+  "WKT_RPAREN",    "WKT_COMMA",     "WKT_MULTIPOINT_TAGGED_TEXT",  "WKT_MULTIPOINT_Z_TAGGED_TEXT",
+  "WKT_MULTIPOINT_M_TAGGED_TEXT",  "WKT_MULTIPOINT_ZM_TAGGED_TEXT",  "error",         "program",     
+  "wkt_text",      "point",         "point_z",       "point_m",     
+  "point_zm",      "multipoint",    "multipoint_z",  "multipoint_m",
+  "multipoint_zm",  "coord",         "point_text",    "point_text_z",
+  "point_text_m",  "point_text_zm",  "multipoint_text",  "multipoint_text_z",
+  "multipoint_text_m",  "multipoint_text_zm",
+};
+#endif /* NDEBUG */
+
+#ifndef NDEBUG
+/* For tracing reduce actions, the names of all rules are required.
+*/
+static const char *const yyRuleName[] = {
+ /*   0 */ "program ::= wkt_text",
+ /*   1 */ "wkt_text ::= point",
+ /*   2 */ "wkt_text ::= point_z",
+ /*   3 */ "wkt_text ::= point_m",
+ /*   4 */ "wkt_text ::= point_zm",
+ /*   5 */ "wkt_text ::= multipoint",
+ /*   6 */ "wkt_text ::= multipoint_z",
+ /*   7 */ "wkt_text ::= multipoint_m",
+ /*   8 */ "wkt_text ::= multipoint_zm",
+ /*   9 */ "coord ::= WKT_NUM",
+ /*  10 */ "point ::= WKT_POINT_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  11 */ "point ::= WKT_POINT_TAGGED_TEXT point_text",
+ /*  12 */ "point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  13 */ "point_z ::= WKT_POINT_Z_TAGGED_TEXT point_text_z",
+ /*  14 */ "point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  15 */ "point_m ::= WKT_POINT_M_TAGGED_TEXT point_text_m",
+ /*  16 */ "point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  17 */ "point_zm ::= WKT_POINT_ZM_TAGGED_TEXT point_text_zm",
+ /*  18 */ "point_text ::= WKT_LPAREN coord coord WKT_RPAREN",
+ /*  19 */ "point_text_z ::= WKT_LPAREN coord coord coord WKT_RPAREN",
+ /*  20 */ "point_text_m ::= WKT_LPAREN coord coord coord WKT_RPAREN",
+ /*  21 */ "point_text_zm ::= WKT_LPAREN coord coord coord coord WKT_RPAREN",
+ /*  22 */ "multipoint_text ::=",
+ /*  23 */ "multipoint_text ::= WKT_COMMA point_text multipoint_text",
+ /*  24 */ "multipoint_text_z ::=",
+ /*  25 */ "multipoint_text_z ::= WKT_COMMA point_text_z multipoint_text_z",
+ /*  26 */ "multipoint_text_m ::=",
+ /*  27 */ "multipoint_text_m ::= WKT_COMMA point_text_m multipoint_text_m",
+ /*  28 */ "multipoint_text_zm ::=",
+ /*  29 */ "multipoint_text_zm ::= WKT_COMMA point_text_zm multipoint_text_zm",
+ /*  30 */ "multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  31 */ "multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN point_text multipoint_text WKT_RPAREN",
+ /*  32 */ "multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  33 */ "multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_LPAREN point_text_z multipoint_text_z WKT_RPAREN",
+ /*  34 */ "multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  35 */ "multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_LPAREN point_text_m multipoint_text_m WKT_RPAREN",
+ /*  36 */ "multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_EMPTY_SET",
+ /*  37 */ "multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN point_text_zm multipoint_text_zm WKT_RPAREN",
+};
+#endif /* NDEBUG */
+
+
+#if YYSTACKDEPTH<=0
+/*
+** Try to increase the size of the parser stack.
+*/
+static void yyGrowStack(yyParser *p){
+  int newSize;
+  yyStackEntry *pNew;
+
+  newSize = p->yystksz*2 + 100;
+  pNew = realloc(p->yystack, newSize*sizeof(pNew[0]));
+  if( pNew ){
+    p->yystack = pNew;
+    p->yystksz = newSize;
+#ifndef NDEBUG
+    if( yyTraceFILE ){
+      fprintf(yyTraceFILE,"%sStack grows to %d entries!\n",
+              yyTracePrompt, p->yystksz);
+    }
+#endif
+  }
+}
+#endif
+
+/* 
+** This function allocates a new parser.
+** The only argument is a pointer to a function which works like
+** malloc.
+**
+** Inputs:
+** A pointer to the function used to allocate memory.
+**
+** Outputs:
+** A pointer to a parser.  This pointer is used in subsequent calls
+** to Parse and ParseFree.
+*/
+void *ParseAlloc(void *(*mallocProc)(size_t)){
+  yyParser *pParser;
+  pParser = (yyParser*)(*mallocProc)( (size_t)sizeof(yyParser) );
+  if( pParser ){
+    pParser->yyidx = -1;
+#ifdef YYTRACKMAXSTACKDEPTH
+    pParser->yyidxMax = 0;
+#endif
+#if YYSTACKDEPTH<=0
+    pParser->yystack = NULL;
+    pParser->yystksz = 0;
+    yyGrowStack(pParser);
+#endif
+  }
+  return pParser;
+}
+
+/* The following function deletes the value associated with a
+** symbol.  The symbol can be either a terminal or nonterminal.
+** "yymajor" is the symbol code, and "yypminor" is a pointer to
+** the value.
+*/
+static void yy_destructor(
+  yyParser *yypParser,    /* The parser */
+  YYCODETYPE yymajor,     /* Type code for object to destroy */
+  YYMINORTYPE *yypminor   /* The object to be destroyed */
+){
+  ParseARG_FETCH;
+  switch( yymajor ){
+    /* Here is inserted the actions which take place when a
+    ** terminal or non-terminal is destroyed.  This can happen
+    ** when the symbol is popped from the stack during a
+    ** reduce or during error processing or when a parser is 
+    ** being destroyed before it is finished parsing.
+    **
+    ** Note: during a reduce, the only symbols destroyed are those
+    ** which appear on the RHS of the rule, but which are not used
+    ** inside the C code.
+    */
+    default:  break;   /* If no destructor action specified: do nothing */
+  }
+}
+
+/*
+** Pop the parser's stack once.
+**
+** If there is a destructor routine associated with the token which
+** is popped from the stack, then call it.
+**
+** Return the major token number for the symbol popped.
+*/
+static int yy_pop_parser_stack(yyParser *pParser){
+  YYCODETYPE yymajor;
+  yyStackEntry *yytos = &pParser->yystack[pParser->yyidx];
+
+  if( pParser->yyidx<0 ) return 0;
+#ifndef NDEBUG
+  if( yyTraceFILE && pParser->yyidx>=0 ){
+    fprintf(yyTraceFILE,"%sPopping %s\n",
+      yyTracePrompt,
+      yyTokenName[yytos->major]);
+  }
+#endif
+  yymajor = yytos->major;
+  yy_destructor(pParser, yymajor, &yytos->minor);
+  pParser->yyidx--;
+  return yymajor;
+}
+
+/* 
+** Deallocate and destroy a parser.  Destructors are all called for
+** all stack elements before shutting the parser down.
+**
+** Inputs:
+** <ul>
+** <li>  A pointer to the parser.  This should be a pointer
+**       obtained from ParseAlloc.
+** <li>  A pointer to a function used to reclaim memory obtained
+**       from malloc.
+** </ul>
+*/
+void ParseFree(
+  void *p,                    /* The parser to be deleted */
+  void (*freeProc)(void*)     /* Function used to reclaim memory */
+){
+  yyParser *pParser = (yyParser*)p;
+  if( pParser==0 ) return;
+  while( pParser->yyidx>=0 ) yy_pop_parser_stack(pParser);
+#if YYSTACKDEPTH<=0
+  free(pParser->yystack);
+#endif
+  (*freeProc)((void*)pParser);
+}
+
+/*
+** Return the peak depth of the stack for a parser.
+*/
+#ifdef YYTRACKMAXSTACKDEPTH
+int ParseStackPeak(void *p){
+  yyParser *pParser = (yyParser*)p;
+  return pParser->yyidxMax;
+}
+#endif
+
+/*
+** Find the appropriate action for a parser given the terminal
+** look-ahead token iLookAhead.
+**
+** If the look-ahead token is YYNOCODE, then check to see if the action is
+** independent of the look-ahead.  If it is, return the action, otherwise
+** return YY_NO_ACTION.
+*/
+static int yy_find_shift_action(
+  yyParser *pParser,        /* The parser */
+  YYCODETYPE iLookAhead     /* The look-ahead token */
+){
+  int i;
+  int stateno = pParser->yystack[pParser->yyidx].stateno;
+ 
+  if( stateno>YY_SHIFT_MAX || (i = yy_shift_ofst[stateno])==YY_SHIFT_USE_DFLT ){
+    return yy_default[stateno];
+  }
+  assert( iLookAhead!=YYNOCODE );
+  i += iLookAhead;
+  if( i<0 || i>=YY_SZ_ACTTAB || yy_lookahead[i]!=iLookAhead ){
+    if( iLookAhead>0 ){
+#ifdef YYFALLBACK
+      YYCODETYPE iFallback;            /* Fallback token */
+      if( iLookAhead<sizeof(yyFallback)/sizeof(yyFallback[0])
+             && (iFallback = yyFallback[iLookAhead])!=0 ){
+#ifndef NDEBUG
+        if( yyTraceFILE ){
+          fprintf(yyTraceFILE, "%sFALLBACK %s => %s\n",
+             yyTracePrompt, yyTokenName[iLookAhead], yyTokenName[iFallback]);
+        }
+#endif
+        return yy_find_shift_action(pParser, iFallback);
+      }
+#endif
+#ifdef YYWILDCARD
+      {
+        int j = i - iLookAhead + YYWILDCARD;
+        if( j>=0 && j<YY_SZ_ACTTAB && yy_lookahead[j]==YYWILDCARD ){
+#ifndef NDEBUG
+          if( yyTraceFILE ){
+            fprintf(yyTraceFILE, "%sWILDCARD %s => %s\n",
+               yyTracePrompt, yyTokenName[iLookAhead], yyTokenName[YYWILDCARD]);
+          }
+#endif /* NDEBUG */
+          return yy_action[j];
+        }
+      }
+#endif /* YYWILDCARD */
+    }
+    return yy_default[stateno];
+  }else{
+    return yy_action[i];
+  }
+}
+
+/*
+** Find the appropriate action for a parser given the non-terminal
+** look-ahead token iLookAhead.
+**
+** If the look-ahead token is YYNOCODE, then check to see if the action is
+** independent of the look-ahead.  If it is, return the action, otherwise
+** return YY_NO_ACTION.
+*/
+static int yy_find_reduce_action(
+  int stateno,              /* Current state number */
+  YYCODETYPE iLookAhead     /* The look-ahead token */
+){
+  int i;
+#ifdef YYERRORSYMBOL
+  if( stateno>YY_REDUCE_MAX ){
+    return yy_default[stateno];
+  }
+#else
+  assert( stateno<=YY_REDUCE_MAX );
+#endif
+  i = yy_reduce_ofst[stateno];
+  assert( i!=YY_REDUCE_USE_DFLT );
+  assert( iLookAhead!=YYNOCODE );
+  i += iLookAhead;
+#ifdef YYERRORSYMBOL
+  if( i<0 || i>=YY_SZ_ACTTAB || yy_lookahead[i]!=iLookAhead ){
+    return yy_default[stateno];
+  }
+#else
+  assert( i>=0 && i<YY_SZ_ACTTAB );
+  assert( yy_lookahead[i]==iLookAhead );
+#endif
+  return yy_action[i];
+}
+
+/*
+** The following routine is called if the stack overflows.
+*/
+static void yyStackOverflow(yyParser *yypParser, YYMINORTYPE *yypMinor){
+   ParseARG_FETCH;
+   yypParser->yyidx--;
+#ifndef NDEBUG
+   if( yyTraceFILE ){
+     fprintf(yyTraceFILE,"%sStack Overflow!\n",yyTracePrompt);
+   }
+#endif
+   while( yypParser->yyidx>=0 ) yy_pop_parser_stack(yypParser);
+   /* Here code is inserted which will execute if the parser
+   ** stack every overflows */
+
+    result->parser_error = 1;
+   ParseARG_STORE; /* Suppress warning about unused %extra_argument var */
+}
+
+/*
+** Perform a shift action.
+*/
+static void yy_shift(
+  yyParser *yypParser,          /* The parser to be shifted */
+  int yyNewState,               /* The new state to shift in */
+  int yyMajor,                  /* The major token to shift in */
+  YYMINORTYPE *yypMinor         /* Pointer to the minor token to shift in */
+){
+  yyStackEntry *yytos;
+  yypParser->yyidx++;
+#ifdef YYTRACKMAXSTACKDEPTH
+  if( yypParser->yyidx>yypParser->yyidxMax ){
+    yypParser->yyidxMax = yypParser->yyidx;
+  }
+#endif
+#if YYSTACKDEPTH>0 
+  if( yypParser->yyidx>=YYSTACKDEPTH ){
+    yyStackOverflow(yypParser, yypMinor);
+    return;
+  }
+#else
+  if( yypParser->yyidx>=yypParser->yystksz ){
+    yyGrowStack(yypParser);
+    if( yypParser->yyidx>=yypParser->yystksz ){
+      yyStackOverflow(yypParser, yypMinor);
+      return;
+    }
+  }
+#endif
+  yytos = &yypParser->yystack[yypParser->yyidx];
+  yytos->stateno = (YYACTIONTYPE)yyNewState;
+  yytos->major = (YYCODETYPE)yyMajor;
+  yytos->minor = *yypMinor;
+#ifndef NDEBUG
+  if( yyTraceFILE && yypParser->yyidx>0 ){
+    int i;
+    fprintf(yyTraceFILE,"%sShift %d\n",yyTracePrompt,yyNewState);
+    fprintf(yyTraceFILE,"%sStack:",yyTracePrompt);
+    for(i=1; i<=yypParser->yyidx; i++)
+      fprintf(yyTraceFILE," %s",yyTokenName[yypParser->yystack[i].major]);
+    fprintf(yyTraceFILE,"\n");
+  }
+#endif
+}
+
+/* The following table contains information about every rule that
+** is used during the reduce.
+*/
+static const struct {
+  YYCODETYPE lhs;         /* Symbol on the left-hand side of the rule */
+  unsigned char nrhs;     /* Number of right-hand side symbols in the rule */
+} yyRuleInfo[] = {
+  { 15, 1 },
+  { 16, 1 },
+  { 16, 1 },
+  { 16, 1 },
+  { 16, 1 },
+  { 16, 1 },
+  { 16, 1 },
+  { 16, 1 },
+  { 16, 1 },
+  { 25, 1 },
+  { 17, 2 },
+  { 17, 2 },
+  { 18, 2 },
+  { 18, 2 },
+  { 19, 2 },
+  { 19, 2 },
+  { 20, 2 },
+  { 20, 2 },
+  { 26, 4 },
+  { 27, 5 },
+  { 28, 5 },
+  { 29, 6 },
+  { 30, 0 },
+  { 30, 3 },
+  { 31, 0 },
+  { 31, 3 },
+  { 32, 0 },
+  { 32, 3 },
+  { 33, 0 },
+  { 33, 3 },
+  { 21, 2 },
+  { 21, 5 },
+  { 22, 2 },
+  { 22, 5 },
+  { 23, 2 },
+  { 23, 5 },
+  { 24, 2 },
+  { 24, 5 },
+};
+
+static void yy_accept(yyParser*);  /* Forward Declaration */
+
+/*
+** Perform a reduce action and the shift that must immediately
+** follow the reduce.
+*/
+static void yy_reduce(
+  yyParser *yypParser,         /* The parser */
+  int yyruleno                 /* Number of the rule by which to reduce */
+){
+  int yygoto;                     /* The next state */
+  int yyact;                      /* The next action */
+  YYMINORTYPE yygotominor;        /* The LHS of the rule reduced */
+  yyStackEntry *yymsp;            /* The top of the parser's stack */
+  int yysize;                     /* Amount to pop the stack */
+  ParseARG_FETCH;
+  yymsp = &yypParser->yystack[yypParser->yyidx];
+#ifndef NDEBUG
+  if( yyTraceFILE && yyruleno>=0 
+        && yyruleno<(int)(sizeof(yyRuleName)/sizeof(yyRuleName[0])) ){
+    fprintf(yyTraceFILE, "%sReduce [%s].\n", yyTracePrompt,
+      yyRuleName[yyruleno]);
+  }
+#endif /* NDEBUG */
+
+  /* Silence complaints from purify about yygotominor being uninitialized
+  ** in some cases when it is copied into the stack after the following
+  ** switch.  yygotominor is uninitialized when a rule reduces that does
+  ** not set the value of its left-hand side nonterminal.  Leaving the
+  ** value of the nonterminal uninitialized is utterly harmless as long
+  ** as the value is never used.  So really the only thing this code
+  ** accomplishes is to quieten purify.  
+  **
+  ** 2007-01-16:  The wireshark project (www.wireshark.org) reports that
+  ** without this code, their parser segfaults.  I'm not sure what there
+  ** parser is doing to make this happen.  This is the second bug report
+  ** from wireshark this week.  Clearly they are stressing Lemon in ways
+  ** that it has not been previously stressed...  (SQLite ticket #2172)
+  */
+  /*memset(&yygotominor, 0, sizeof(yygotominor));*/
+  yygotominor = yyzerominor;
+
+
+  switch( yyruleno ){
+  /* Beginning here are the reduction cases.  A typical example
+  ** follows:
+  **   case 0:
+  **  #line <lineno> <grammarfile>
+  **     { ... }           // User supplied code
+  **  #line <lineno> <thisfile>
+  **     break;
+  */
+      case 9: /* coord ::= WKT_NUM */
+{ yygotominor.yy0 = yymsp[0].minor.yy0; }
+        break;
+      case 10: /* point ::= WKT_POINT_TAGGED_TEXT WKT_EMPTY_SET */
+{
+    result->data.coords.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POINT;
+}
+        break;
+      case 11: /* point ::= WKT_POINT_TAGGED_TEXT point_text */
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POINT;
+}
+        break;
+      case 12: /* point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_EMPTY_SET */
+{
+    result->data.coords.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZ;
+}
+        break;
+      case 13: /* point_z ::= WKT_POINT_Z_TAGGED_TEXT point_text_z */
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZ;
+}
+        break;
+      case 14: /* point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_EMPTY_SET */
+{
+    result->data.coords.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTM;
+}
+        break;
+      case 15: /* point_m ::= WKT_POINT_M_TAGGED_TEXT point_text_m */
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTM;
+}
+        break;
+      case 16: /* point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_EMPTY_SET */
+{
+    result->data.coords.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.coords.push_back(0);
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZM;
+}
+        break;
+      case 17: /* point_zm ::= WKT_POINT_ZM_TAGGED_TEXT point_text_zm */
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZM;
+}
+        break;
+      case 18: /* point_text ::= WKT_LPAREN coord coord WKT_RPAREN */
+{
+    result->data.coords.push_back(yymsp[-2].minor.yy0);
+    result->data.coords.push_back(yymsp[-1].minor.yy0);
+}
+        break;
+      case 19: /* point_text_z ::= WKT_LPAREN coord coord coord WKT_RPAREN */
+      case 20: /* point_text_m ::= WKT_LPAREN coord coord coord WKT_RPAREN */ yytestcase(yyruleno==20);
+{
+    result->data.coords.push_back(yymsp[-3].minor.yy0);
+    result->data.coords.push_back(yymsp[-2].minor.yy0);
+    result->data.coords.push_back(yymsp[-1].minor.yy0);
+}
+        break;
+      case 21: /* point_text_zm ::= WKT_LPAREN coord coord coord coord WKT_RPAREN */
+{
+    result->data.coords.push_back(yymsp[-4].minor.yy0);
+    result->data.coords.push_back(yymsp[-3].minor.yy0);
+    result->data.coords.push_back(yymsp[-2].minor.yy0);
+    result->data.coords.push_back(yymsp[-1].minor.yy0);
+}
+        break;
+      case 30: /* multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_EMPTY_SET */
+      case 31: /* multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN point_text multipoint_text WKT_RPAREN */ yytestcase(yyruleno==31);
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINT;
+}
+        break;
+      case 32: /* multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_EMPTY_SET */
+      case 33: /* multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_LPAREN point_text_z multipoint_text_z WKT_RPAREN */ yytestcase(yyruleno==33);
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTZ;
+}
+        break;
+      case 34: /* multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_EMPTY_SET */
+      case 35: /* multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_LPAREN point_text_m multipoint_text_m WKT_RPAREN */ yytestcase(yyruleno==35);
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTM;
+}
+        break;
+      case 36: /* multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_EMPTY_SET */
+      case 37: /* multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN point_text_zm multipoint_text_zm WKT_RPAREN */ yytestcase(yyruleno==37);
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTZM;
+}
+        break;
+      default:
+      /* (0) program ::= wkt_text */ yytestcase(yyruleno==0);
+      /* (1) wkt_text ::= point */ yytestcase(yyruleno==1);
+      /* (2) wkt_text ::= point_z */ yytestcase(yyruleno==2);
+      /* (3) wkt_text ::= point_m */ yytestcase(yyruleno==3);
+      /* (4) wkt_text ::= point_zm */ yytestcase(yyruleno==4);
+      /* (5) wkt_text ::= multipoint */ yytestcase(yyruleno==5);
+      /* (6) wkt_text ::= multipoint_z */ yytestcase(yyruleno==6);
+      /* (7) wkt_text ::= multipoint_m */ yytestcase(yyruleno==7);
+      /* (8) wkt_text ::= multipoint_zm */ yytestcase(yyruleno==8);
+      /* (22) multipoint_text ::= */ yytestcase(yyruleno==22);
+      /* (23) multipoint_text ::= WKT_COMMA point_text multipoint_text */ yytestcase(yyruleno==23);
+      /* (24) multipoint_text_z ::= */ yytestcase(yyruleno==24);
+      /* (25) multipoint_text_z ::= WKT_COMMA point_text_z multipoint_text_z */ yytestcase(yyruleno==25);
+      /* (26) multipoint_text_m ::= */ yytestcase(yyruleno==26);
+      /* (27) multipoint_text_m ::= WKT_COMMA point_text_m multipoint_text_m */ yytestcase(yyruleno==27);
+      /* (28) multipoint_text_zm ::= */ yytestcase(yyruleno==28);
+      /* (29) multipoint_text_zm ::= WKT_COMMA point_text_zm multipoint_text_zm */ yytestcase(yyruleno==29);
+        break;
+  };
+  yygoto = yyRuleInfo[yyruleno].lhs;
+  yysize = yyRuleInfo[yyruleno].nrhs;
+  yypParser->yyidx -= yysize;
+  yyact = yy_find_reduce_action(yymsp[-yysize].stateno,(YYCODETYPE)yygoto);
+  if( yyact < YYNSTATE ){
+#ifdef NDEBUG
+    /* If we are not debugging and the reduce action popped at least
+    ** one element off the stack, then we can push the new element back
+    ** onto the stack here, and skip the stack overflow test in yy_shift().
+    ** That gives a significant speed improvement. */
+    if( yysize ){
+      yypParser->yyidx++;
+      yymsp -= yysize-1;
+      yymsp->stateno = (YYACTIONTYPE)yyact;
+      yymsp->major = (YYCODETYPE)yygoto;
+      yymsp->minor = yygotominor;
+    }else
+#endif
+    {
+      yy_shift(yypParser,yyact,yygoto,&yygotominor);
+    }
+  }else{
+    assert( yyact == YYNSTATE + YYNRULE + 1 );
+    yy_accept(yypParser);
+  }
+}
+
+/*
+** The following code executes when the parse fails
+*/
+#ifndef YYNOERRORRECOVERY
+static void yy_parse_failed(
+  yyParser *yypParser           /* The parser */
+){
+  ParseARG_FETCH;
+#ifndef NDEBUG
+  if( yyTraceFILE ){
+    fprintf(yyTraceFILE,"%sFail!\n",yyTracePrompt);
+  }
+#endif
+  while( yypParser->yyidx>=0 ) yy_pop_parser_stack(yypParser);
+  /* Here code is inserted which will be executed whenever the
+  ** parser fails */
+  ParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
+}
+#endif /* YYNOERRORRECOVERY */
+
+/*
+** The following code executes when a syntax error first occurs.
+*/
+static void yy_syntax_error(
+  yyParser *yypParser,           /* The parser */
+  int yymajor,                   /* The major type of the error token */
+  YYMINORTYPE yyminor            /* The minor type of the error token */
+){
+  ParseARG_FETCH;
+#define TOKEN (yyminor.yy0)
+
+    result->parser_error = 1;
+#ifdef SHAPES_VERBOSE
+    int n = sizeof(yyTokenName) / sizeof(yyTokenName[0]);
+    for (int i = 0; i < n; ++i) {
+        int a = yy_find_shift_action(yypParser, (YYCODETYPE)i);
+        if (a < YYNSTATE + YYNRULE) {
+            printf("possible token: %s\n", yyTokenName[i]);
+        }
+    }
+#endif
+  ParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
+}
+
+/*
+** The following is executed when the parser accepts
+*/
+static void yy_accept(
+  yyParser *yypParser           /* The parser */
+){
+  ParseARG_FETCH;
+#ifndef NDEBUG
+  if( yyTraceFILE ){
+    fprintf(yyTraceFILE,"%sAccept!\n",yyTracePrompt);
+  }
+#endif
+  while( yypParser->yyidx>=0 ) yy_pop_parser_stack(yypParser);
+  /* Here code is inserted which will be executed whenever the
+  ** parser accepts */
+  ParseARG_STORE; /* Suppress warning about unused %extra_argument variable */
+}
+
+/* The main parser program.
+** The first argument is a pointer to a structure obtained from
+** "ParseAlloc" which describes the current state of the parser.
+** The second argument is the major token number.  The third is
+** the minor token.  The fourth optional argument is whatever the
+** user wants (and specified in the grammar) and is available for
+** use by the action routines.
+**
+** Inputs:
+** <ul>
+** <li> A pointer to the parser (an opaque structure.)
+** <li> The major token number.
+** <li> The minor token number.
+** <li> An option argument of a grammar-specified type.
+** </ul>
+**
+** Outputs:
+** None.
+*/
+void Parse(
+  void *yyp,                   /* The parser */
+  int yymajor,                 /* The major token code number */
+  ParseTOKENTYPE yyminor       /* The value for the token */
+  ParseARG_PDECL               /* Optional %extra_argument parameter */
+){
+  YYMINORTYPE yyminorunion;
+  int yyact;            /* The parser action. */
+  int yyendofinput;     /* True if we are at the end of input */
+#ifdef YYERRORSYMBOL
+  int yyerrorhit = 0;   /* True if yymajor has invoked an error */
+#endif
+  yyParser *yypParser;  /* The parser */
+
+  /* (re)initialize the parser, if necessary */
+  yypParser = (yyParser*)yyp;
+  if( yypParser->yyidx<0 ){
+#if YYSTACKDEPTH<=0
+    if( yypParser->yystksz <=0 ){
+      /*memset(&yyminorunion, 0, sizeof(yyminorunion));*/
+      yyminorunion = yyzerominor;
+      yyStackOverflow(yypParser, &yyminorunion);
+      return;
+    }
+#endif
+    yypParser->yyidx = 0;
+    yypParser->yyerrcnt = -1;
+    yypParser->yystack[0].stateno = 0;
+    yypParser->yystack[0].major = 0;
+  }
+  yyminorunion.yy0 = yyminor;
+  yyendofinput = (yymajor==0);
+  ParseARG_STORE;
+
+#ifndef NDEBUG
+  if( yyTraceFILE ){
+    fprintf(yyTraceFILE,"%sInput %s\n",yyTracePrompt,yyTokenName[yymajor]);
+  }
+#endif
+
+  do{
+    yyact = yy_find_shift_action(yypParser,(YYCODETYPE)yymajor);
+    if( yyact<YYNSTATE ){
+      assert( !yyendofinput );  /* Impossible to shift the $ token */
+      yy_shift(yypParser,yyact,yymajor,&yyminorunion);
+      yypParser->yyerrcnt--;
+      yymajor = YYNOCODE;
+    }else if( yyact < YYNSTATE + YYNRULE ){
+      yy_reduce(yypParser,yyact-YYNSTATE);
+    }else{
+      assert( yyact == YY_ERROR_ACTION );
+#ifdef YYERRORSYMBOL
+      int yymx;
+#endif
+#ifndef NDEBUG
+      if( yyTraceFILE ){
+        fprintf(yyTraceFILE,"%sSyntax Error!\n",yyTracePrompt);
+      }
+#endif
+#ifdef YYERRORSYMBOL
+      /* A syntax error has occurred.
+      ** The response to an error depends upon whether or not the
+      ** grammar defines an error token "ERROR".  
+      **
+      ** This is what we do if the grammar does define ERROR:
+      **
+      **  * Call the %syntax_error function.
+      **
+      **  * Begin popping the stack until we enter a state where
+      **    it is legal to shift the error symbol, then shift
+      **    the error symbol.
+      **
+      **  * Set the error count to three.
+      **
+      **  * Begin accepting and shifting new tokens.  No new error
+      **    processing will occur until three tokens have been
+      **    shifted successfully.
+      **
+      */
+      if( yypParser->yyerrcnt<0 ){
+        yy_syntax_error(yypParser,yymajor,yyminorunion);
+      }
+      yymx = yypParser->yystack[yypParser->yyidx].major;
+      if( yymx==YYERRORSYMBOL || yyerrorhit ){
+#ifndef NDEBUG
+        if( yyTraceFILE ){
+          fprintf(yyTraceFILE,"%sDiscard input token %s\n",
+             yyTracePrompt,yyTokenName[yymajor]);
+        }
+#endif
+        yy_destructor(yypParser, (YYCODETYPE)yymajor,&yyminorunion);
+        yymajor = YYNOCODE;
+      }else{
+         while(
+          yypParser->yyidx >= 0 &&
+          yymx != YYERRORSYMBOL &&
+          (yyact = yy_find_reduce_action(
+                        yypParser->yystack[yypParser->yyidx].stateno,
+                        YYERRORSYMBOL)) >= YYNSTATE
+        ){
+          yy_pop_parser_stack(yypParser);
+        }
+        if( yypParser->yyidx < 0 || yymajor==0 ){
+          yy_destructor(yypParser,(YYCODETYPE)yymajor,&yyminorunion);
+          yy_parse_failed(yypParser);
+          yymajor = YYNOCODE;
+        }else if( yymx!=YYERRORSYMBOL ){
+          YYMINORTYPE u2;
+          u2.YYERRSYMDT = 0;
+          yy_shift(yypParser,yyact,YYERRORSYMBOL,&u2);
+        }
+      }
+      yypParser->yyerrcnt = 3;
+      yyerrorhit = 1;
+#elif defined(YYNOERRORRECOVERY)
+      /* If the YYNOERRORRECOVERY macro is defined, then do not attempt to
+      ** do any kind of error recovery.  Instead, simply invoke the syntax
+      ** error routine and continue going as if nothing had happened.
+      **
+      ** Applications can set this macro (for example inside %include) if
+      ** they intend to abandon the parse upon the first syntax error seen.
+      */
+      yy_syntax_error(yypParser,yymajor,yyminorunion);
+      yy_destructor(yypParser,(YYCODETYPE)yymajor,&yyminorunion);
+      yymajor = YYNOCODE;
+      
+#else  /* YYERRORSYMBOL is not defined */
+      /* This is what we do if the grammar does not define ERROR:
+      **
+      **  * Report an error message, and throw away the input token.
+      **
+      **  * If the input token is $, then fail the parse.
+      **
+      ** As before, subsequent error messages are suppressed until
+      ** three input tokens have been successfully shifted.
+      */
+      if( yypParser->yyerrcnt<=0 ){
+        yy_syntax_error(yypParser,yymajor,yyminorunion);
+      }
+      yypParser->yyerrcnt = 3;
+      yy_destructor(yypParser,(YYCODETYPE)yymajor,&yyminorunion);
+      if( yyendofinput ){
+        yy_parse_failed(yypParser);
+      }
+      yymajor = YYNOCODE;
+#endif
+    }
+  }while( yymajor!=YYNOCODE && yypParser->yyidx>=0 );
+  return;
+}
+
+
+// #include <simo/io/wkt_lexer.hpp>
+/* Generated by re2c 1.1.1 on Sat Mar 30 02:03:47 2019 */
+
+
+#include <ciso646>
+#include <iostream>
+
+namespace simo
+{
+
+namespace shapes
+{
+
+/*!
+ * @brief a Well-known text (WKT) markup language lexer
+ *
+ * @since 0.0.1
+ */
+class WktLexer
+{
+  public:
+    /*!
+     * @brief creates a wkt lexer from the given source
+     * @param source the source string
+     *
+     * @since 0.0.1
+     */
+    WktLexer(const char* source)
+        : content(source)
+    {
+        start = cursor = source;
+        limit          = content + strlen(source);
+    }
+
+    /*!
+     * @brief scan the next token
+     * @return the numeric token identifier
+     *
+     * @since 0.0.1
+     */
+    int scan()
+    {
+
+        /// pointer for backtracking information
+        const char* marker = nullptr;
+
+        start = cursor;
+
+        {
+            char yych;
+            unsigned int yyaccept             = 0;
+            static const unsigned char yybm[] = {
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                128,
+                128,
+                0,
+                0,
+                128,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                128,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+            };
+            yych = *cursor;
+            if (yych <= '+')
+            {
+                if (yych <= '\r')
+                {
+                    if (yych <= 0x08)
+                    {
+                        if (yych >= 0x01)
+                            goto shapes_wkt_lexer_4;
+                    }
+                    else
+                    {
+                        if (yych <= '\n')
+                            goto shapes_wkt_lexer_6;
+                        if (yych <= '\f')
+                            goto shapes_wkt_lexer_4;
+                        goto shapes_wkt_lexer_6;
+                    }
+                }
+                else
+                {
+                    if (yych <= '\'')
+                    {
+                        if (yych == ' ')
+                            goto shapes_wkt_lexer_6;
+                        goto shapes_wkt_lexer_4;
+                    }
+                    else
+                    {
+                        if (yych <= '(')
+                            goto shapes_wkt_lexer_8;
+                        if (yych <= ')')
+                            goto shapes_wkt_lexer_10;
+                        goto shapes_wkt_lexer_4;
+                    }
+                }
+            }
+            else
+            {
+                if (yych <= 'D')
+                {
+                    if (yych <= '/')
+                    {
+                        if (yych <= ',')
+                            goto shapes_wkt_lexer_12;
+                        if (yych <= '-')
+                            goto shapes_wkt_lexer_14;
+                        goto shapes_wkt_lexer_4;
+                    }
+                    else
+                    {
+                        if (yych <= '0')
+                            goto shapes_wkt_lexer_15;
+                        if (yych <= '9')
+                            goto shapes_wkt_lexer_17;
+                        goto shapes_wkt_lexer_4;
+                    }
+                }
+                else
+                {
+                    if (yych <= 'M')
+                    {
+                        if (yych <= 'E')
+                            goto shapes_wkt_lexer_19;
+                        if (yych <= 'L')
+                            goto shapes_wkt_lexer_4;
+                        goto shapes_wkt_lexer_20;
+                    }
+                    else
+                    {
+                        if (yych == 'P')
+                            goto shapes_wkt_lexer_21;
+                        goto shapes_wkt_lexer_4;
+                    }
+                }
+            }
+            ++cursor;
+            {
+                return WKT_END_OF_INPUT;
+            }
+        shapes_wkt_lexer_4:
+            ++cursor;
+        shapes_wkt_lexer_5:
+        {
+            return WKT_PARSE_ERROR;
+        }
+        shapes_wkt_lexer_6:
+            ++cursor;
+            {
+                return scan();
+            }
+        shapes_wkt_lexer_8:
+            ++cursor;
+            {
+                return WKT_LPAREN;
+            }
+        shapes_wkt_lexer_10:
+            ++cursor;
+            {
+                return WKT_RPAREN;
+            }
+        shapes_wkt_lexer_12:
+            ++cursor;
+            {
+                return WKT_COMMA;
+            }
+        shapes_wkt_lexer_14:
+            yych = *++cursor;
+            if (yych <= '/')
+                goto shapes_wkt_lexer_5;
+            if (yych <= '0')
+                goto shapes_wkt_lexer_15;
+            if (yych <= '9')
+                goto shapes_wkt_lexer_17;
+            goto shapes_wkt_lexer_5;
+        shapes_wkt_lexer_15:
+            yyaccept = 0;
+            yych     = *(marker = ++cursor);
+            if (yych <= 'D')
+            {
+                if (yych == '.')
+                    goto shapes_wkt_lexer_22;
+            }
+            else
+            {
+                if (yych <= 'E')
+                    goto shapes_wkt_lexer_24;
+                if (yych == 'e')
+                    goto shapes_wkt_lexer_24;
+            }
+        shapes_wkt_lexer_16:
+        {
+            return WKT_NUM;
+        }
+        shapes_wkt_lexer_17:
+            yyaccept = 0;
+            yych     = *(marker = ++cursor);
+            if (yybm[0 + yych] & 64)
+            {
+                goto shapes_wkt_lexer_17;
+            }
+            if (yych <= 'D')
+            {
+                if (yych == '.')
+                    goto shapes_wkt_lexer_22;
+                goto shapes_wkt_lexer_16;
+            }
+            else
+            {
+                if (yych <= 'E')
+                    goto shapes_wkt_lexer_24;
+                if (yych == 'e')
+                    goto shapes_wkt_lexer_24;
+                goto shapes_wkt_lexer_16;
+            }
+        shapes_wkt_lexer_19:
+            yyaccept = 1;
+            yych     = *(marker = ++cursor);
+            if (yych == 'M')
+                goto shapes_wkt_lexer_25;
+            goto shapes_wkt_lexer_5;
+        shapes_wkt_lexer_20:
+            yyaccept = 1;
+            yych     = *(marker = ++cursor);
+            if (yych == 'U')
+                goto shapes_wkt_lexer_26;
+            goto shapes_wkt_lexer_5;
+        shapes_wkt_lexer_21:
+            yyaccept = 1;
+            yych     = *(marker = ++cursor);
+            if (yych == 'O')
+                goto shapes_wkt_lexer_27;
+            goto shapes_wkt_lexer_5;
+        shapes_wkt_lexer_22:
+            yych = *++cursor;
+            if (yych <= '/')
+                goto shapes_wkt_lexer_23;
+            if (yych <= '9')
+                goto shapes_wkt_lexer_28;
+        shapes_wkt_lexer_23:
+            cursor = marker;
+            if (yyaccept <= 1)
+            {
+                if (yyaccept == 0)
+                {
+                    goto shapes_wkt_lexer_16;
+                }
+                else
+                {
+                    goto shapes_wkt_lexer_5;
+                }
+            }
+            else
+            {
+                if (yyaccept == 2)
+                {
+                    goto shapes_wkt_lexer_43;
+                }
+                else
+                {
+                    goto shapes_wkt_lexer_57;
+                }
+            }
+        shapes_wkt_lexer_24:
+            yych = *++cursor;
+            if (yych <= ',')
+            {
+                if (yych == '+')
+                    goto shapes_wkt_lexer_30;
+                goto shapes_wkt_lexer_23;
+            }
+            else
+            {
+                if (yych <= '-')
+                    goto shapes_wkt_lexer_30;
+                if (yych <= '/')
+                    goto shapes_wkt_lexer_23;
+                if (yych <= '9')
+                    goto shapes_wkt_lexer_31;
+                goto shapes_wkt_lexer_23;
+            }
+        shapes_wkt_lexer_25:
+            yych = *++cursor;
+            if (yych == 'P')
+                goto shapes_wkt_lexer_33;
+            goto shapes_wkt_lexer_23;
+        shapes_wkt_lexer_26:
+            yych = *++cursor;
+            if (yych == 'L')
+                goto shapes_wkt_lexer_34;
+            goto shapes_wkt_lexer_23;
+        shapes_wkt_lexer_27:
+            yych = *++cursor;
+            if (yych == 'I')
+                goto shapes_wkt_lexer_35;
+            goto shapes_wkt_lexer_23;
+        shapes_wkt_lexer_28:
+            yyaccept = 0;
+            yych     = *(marker = ++cursor);
+            if (yych <= 'D')
+            {
+                if (yych <= '/')
+                    goto shapes_wkt_lexer_16;
+                if (yych <= '9')
+                    goto shapes_wkt_lexer_28;
+                goto shapes_wkt_lexer_16;
+            }
+            else
+            {
+                if (yych <= 'E')
+                    goto shapes_wkt_lexer_24;
+                if (yych == 'e')
+                    goto shapes_wkt_lexer_24;
+                goto shapes_wkt_lexer_16;
+            }
+        shapes_wkt_lexer_30:
+            yych = *++cursor;
+            if (yych <= '/')
+                goto shapes_wkt_lexer_23;
+            if (yych >= ':')
+                goto shapes_wkt_lexer_23;
+        shapes_wkt_lexer_31:
+            yych = *++cursor;
+            if (yych <= '/')
+                goto shapes_wkt_lexer_16;
+            if (yych <= '9')
+                goto shapes_wkt_lexer_31;
+            goto shapes_wkt_lexer_16;
+        shapes_wkt_lexer_33:
+            yych = *++cursor;
+            if (yych == 'T')
+                goto shapes_wkt_lexer_36;
+            goto shapes_wkt_lexer_23;
+        shapes_wkt_lexer_34:
+            yych = *++cursor;
+            if (yych == 'T')
+                goto shapes_wkt_lexer_37;
+            goto shapes_wkt_lexer_23;
+        shapes_wkt_lexer_35:
+            yych = *++cursor;
+            if (yych == 'N')
+                goto shapes_wkt_lexer_38;
+            goto shapes_wkt_lexer_23;
+        shapes_wkt_lexer_36:
+            yych = *++cursor;
+            if (yych == 'Y')
+                goto shapes_wkt_lexer_39;
+            goto shapes_wkt_lexer_23;
+        shapes_wkt_lexer_37:
+            yych = *++cursor;
+            if (yych == 'I')
+                goto shapes_wkt_lexer_41;
+            goto shapes_wkt_lexer_23;
+        shapes_wkt_lexer_38:
+            yych = *++cursor;
+            if (yych == 'T')
+                goto shapes_wkt_lexer_42;
+            goto shapes_wkt_lexer_23;
+        shapes_wkt_lexer_39:
+            ++cursor;
+            {
+                return WKT_EMPTY_SET;
+            }
+        shapes_wkt_lexer_41:
+            yych = *++cursor;
+            if (yych == 'P')
+                goto shapes_wkt_lexer_44;
+            goto shapes_wkt_lexer_23;
+        shapes_wkt_lexer_42:
+            yyaccept = 2;
+            yych     = *(marker = ++cursor);
+            if (yybm[0 + yych] & 128)
+            {
+                goto shapes_wkt_lexer_45;
+            }
+            if (yych == 'M')
+                goto shapes_wkt_lexer_47;
+            if (yych == 'Z')
+                goto shapes_wkt_lexer_49;
+        shapes_wkt_lexer_43:
+        {
+            return WKT_POINT_TAGGED_TEXT;
+        }
+        shapes_wkt_lexer_44:
+            yych = *++cursor;
+            if (yych == 'O')
+                goto shapes_wkt_lexer_51;
+            goto shapes_wkt_lexer_23;
+        shapes_wkt_lexer_45:
+            yych = *++cursor;
+            if (yybm[0 + yych] & 128)
+            {
+                goto shapes_wkt_lexer_45;
+            }
+            if (yych == 'M')
+                goto shapes_wkt_lexer_47;
+            if (yych == 'Z')
+                goto shapes_wkt_lexer_49;
+            goto shapes_wkt_lexer_23;
+        shapes_wkt_lexer_47:
+            ++cursor;
+            {
+                return WKT_POINT_M_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_49:
+            yych = *++cursor;
+            if (yych == 'M')
+                goto shapes_wkt_lexer_52;
+            {
+                return WKT_POINT_Z_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_51:
+            yych = *++cursor;
+            if (yych == 'I')
+                goto shapes_wkt_lexer_54;
+            goto shapes_wkt_lexer_23;
+        shapes_wkt_lexer_52:
+            ++cursor;
+            {
+                return WKT_POINT_ZM_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_54:
+            yych = *++cursor;
+            if (yych != 'N')
+                goto shapes_wkt_lexer_23;
+            yych = *++cursor;
+            if (yych != 'T')
+                goto shapes_wkt_lexer_23;
+            yyaccept = 3;
+            yych     = *(marker = ++cursor);
+            if (yych <= 0x1F)
+            {
+                if (yych <= '\n')
+                {
+                    if (yych >= '\t')
+                        goto shapes_wkt_lexer_58;
+                }
+                else
+                {
+                    if (yych == '\r')
+                        goto shapes_wkt_lexer_58;
+                }
+            }
+            else
+            {
+                if (yych <= 'M')
+                {
+                    if (yych <= ' ')
+                        goto shapes_wkt_lexer_58;
+                    if (yych >= 'M')
+                        goto shapes_wkt_lexer_60;
+                }
+                else
+                {
+                    if (yych == 'Z')
+                        goto shapes_wkt_lexer_62;
+                }
+            }
+        shapes_wkt_lexer_57:
+        {
+            return WKT_MULTIPOINT_TAGGED_TEXT;
+        }
+        shapes_wkt_lexer_58:
+            yych = *++cursor;
+            if (yych <= 0x1F)
+            {
+                if (yych <= '\n')
+                {
+                    if (yych <= 0x08)
+                        goto shapes_wkt_lexer_23;
+                    goto shapes_wkt_lexer_58;
+                }
+                else
+                {
+                    if (yych == '\r')
+                        goto shapes_wkt_lexer_58;
+                    goto shapes_wkt_lexer_23;
+                }
+            }
+            else
+            {
+                if (yych <= 'M')
+                {
+                    if (yych <= ' ')
+                        goto shapes_wkt_lexer_58;
+                    if (yych <= 'L')
+                        goto shapes_wkt_lexer_23;
+                }
+                else
+                {
+                    if (yych == 'Z')
+                        goto shapes_wkt_lexer_62;
+                    goto shapes_wkt_lexer_23;
+                }
+            }
+        shapes_wkt_lexer_60:
+            ++cursor;
+            {
+                return WKT_MULTIPOINT_M_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_62:
+            yych = *++cursor;
+            if (yych == 'M')
+                goto shapes_wkt_lexer_64;
+            {
+                return WKT_MULTIPOINT_Z_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_64:
+            ++cursor;
+            {
+                return WKT_MULTIPOINT_ZM_TAGGED_TEXT;
+            }
+        }
+    }
+
+    /*!
+     * @brief returns the current token string
+     * @return the token string
+     *
+     * @since 0.0.1
+     */
+    std::string get_token() const
+    {
+        return std::string(reinterpret_cast<const char*>(start), static_cast<size_t>(cursor - start));
+    }
+
+  private:
+    /// pointer to the buffer
+    const char* content = nullptr;
+
+    /// pointer to the beginning of the current token
+    const char* start = nullptr;
+
+    /// pointer to the current token
+    const char* cursor = nullptr;
+
+    /// pointer to the end of the buffer
+    const char* limit = nullptr;
+};
+
+}  // namespace shapes
+}  // namespace simo
+
+namespace simo
+{
+namespace shapes
+{
+
+/*!
+ * @brief a Well-known text (WKT) markup language reader
+ *
+ * @since 0.0.1
+ */
+class WktReader
+{
+  public:
+    /*!
+     * @brief creates a WKT reader
+     *
+     * @since 0.0.1
+     */
+    WktReader()
+        : m_parser(ParseAlloc(malloc))
+    {
+    }
+
+    /// destructor
+    ~WktReader()
+    {
+        ParseFree(m_parser, free);
+    }
+
+    /*!
+     * @brief parse the given wkt string
+     *
+     * @param wkt the wkt string
+     * @return a wkt result object
+     *
+     * @since 0.0.1
+     */
+    WktResult read(const char* wkt)
+    {
+        WktLexer lexer(wkt);
+        WktResult result{};
+#ifdef SHAPES_VERBOSE
+        ParseTrace(stdout, "[shapes] ");
+#endif
+        while (true)
+        {
+            int token = lexer.scan();
+#ifdef SHAPES_VERBOSE
+            std::cout << "--> " << lexer.get_token() << '\n';
+#endif
+            if (token == WKT_END_OF_INPUT)
+            {
+                break;
+            }
+
+            if (token == WKT_PARSE_ERROR)
+            {
+                /// @todo (pavel) add position to the error message
+                throw exceptions::ParseError("wkt lexer error");
+            }
+
+            if (token == WKT_NUM)
+            {
+                Parse(m_parser, token, std::stod(lexer.get_token()), &result);
+            }
+            else
+            {
+                Parse(m_parser, token, 0, &result);
+            }
+
+            if (result.parser_error == 1)
+            {
+                /// @todo (pavel) add position to the error message
+                throw exceptions::ParseError("wkt parser error");
+            }
+        }
+        Parse(m_parser, 0, 0, &result);
+        return result;
+    }
+
+  private:
+    /// pointer to the parser
+    void* m_parser = nullptr;
+};
+
+}  // namespace shapes
+}  // namespace simo
+
+namespace simo
+{
+namespace shapes
+{
+
+/*!
+ * @brief represents a point
+ *
+ * @since 0.0.1
+ */
+class Point : public BaseGeometry<Point>
 {
   public:
     /// the x-coordinate value for this Point
-    double x;
+    double x = 0;
 
     /// the y-coordinate value for this Point
-    double y;
+    double y = 0;
 
     /// the z-coordinate value for this Point, if it has one.
-    double z;
+    double z = 0;
 
     /// the m-coordinate value for this Point, if it has one.
-    double m;
+    double m = 0;
 
     /*!
      * @brief creates a Point
-     *
      * @note the default behaviour is to create a 2-dimensional point with coordinates (0, 0)
      *
      * @since 0.0.1
      */
-    Point()
-        : x(0), y(0), z(0)
-    {
-        dimension = DimensionType::XY;
-    }
+    Point() = default;
 
     /*!
      * @brief creates a Point from coordinates (x, y)
-     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      *
      * @since 0.0.1
      */
     Point(double x, double y)
-        : x(x), y(y), z(0)
+        : x(x), y(y)
     {
-        dimension = DimensionType::XY;
+        dim = DimensionType::XY;
     }
 
     /*!
      * @brief creates a Point from coordinates (x, y, z)
-     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      * @param z the z-coordinate value
@@ -901,12 +3133,11 @@ class Point : public BasicGeometry<Point>
     Point(double x, double y, double z)
         : x(x), y(y), z(z)
     {
-        dimension = DimensionType::XYZ;
+        dim = DimensionType::XYZ;
     }
 
     /*!
      * @brief creates a Point from coordinates (x, y, z, m)
-     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      * @param z the z-coordinate value
@@ -917,14 +3148,70 @@ class Point : public BasicGeometry<Point>
     Point(double x, double y, double z, double m)
         : x(x), y(y), z(z), m(m)
     {
-        dimension = DimensionType::XYZM;
+        dim = DimensionType::XYZM;
+    }
+
+    /*!
+     * @brief creates a Point from coordinates (x, y)
+     * @param x the x-coordinate value
+     * @param y the y-coordinate value
+     *
+     * @since 0.0.1
+     */
+    static Point from_xy(double x, double y)
+    {
+        return {x, y};
+    }
+
+    /*!
+     * @brief creates a Point from coordinates (x, y, z)
+     * @param x the x-coordinate value
+     * @param y the y-coordinate value
+     * @param z the z-coordinate value
+     *
+     * @since 0.0.1
+     */
+    static Point from_xyz(double x, double y, double z)
+    {
+        return {x, y, z};
+    }
+
+    /*!
+     * @brief creates a Point from coordinates (x, y, m)
+     * @param x the x-coordinate value
+     * @param y the y-coordinate value
+     * @param m the m-coordinate value
+     *
+     * @since 0.0.1
+     */
+    static Point from_xym(double x, double y, double m)
+    {
+        Point p;
+        p.x   = x;
+        p.y   = y;
+        p.m   = m;
+        p.dim = DimensionType::XYM;
+        return p;
+    }
+
+    /*!
+     * @brief creates a Point from coordinates (x, y, z, m)
+     * @param x the x-coordinate value
+     * @param y the y-coordinate value
+     * @param z the z-coordinate value
+     * @param m the m-coordinate value
+     *
+     * @since 0.0.1
+     */
+    static Point from_xyzm(double x, double y, double z, double m)
+    {
+        return {x, y, z, m};
     }
 
     /*!
      * @brief creates a Point
-     *
+     * @tparam T an arithmetic value (e.g. int, float, double)
      * @param init the coordinates list
-     *
      * @throw exception if the given number of coordinates is either less than two or greater than four
      *
      * @since 0.0.1
@@ -934,146 +3221,111 @@ class Point : public BasicGeometry<Point>
     {
         if (init.size() == 2)
         {
-            x      = *init.begin();
-            y      = *(init.begin() + 1);
-            z      = 0;
-            dimension = DimensionType::XY;
+            x   = *init.begin();
+            y   = *(init.begin() + 1);
+            dim = DimensionType::XY;
         }
         else if (init.size() == 3)
         {
-            x      = *init.begin();
-            y      = *(init.begin() + 1);
-            z      = *(init.begin() + 2);
-            dimension = DimensionType::XYZ;
+            x   = *init.begin();
+            y   = *(init.begin() + 1);
+            z   = *(init.begin() + 2);
+            dim = DimensionType::XYZ;
         }
         else if (init.size() == 4)
         {
-            x      = *init.begin();
-            y      = *(init.begin() + 1);
-            z      = *(init.begin() + 2);
-            m      = *(init.begin() + 3);
-            dimension = DimensionType::XYZM;
+            x   = *init.begin();
+            y   = *(init.begin() + 1);
+            z   = *(init.begin() + 2);
+            m   = *(init.begin() + 3);
+            dim = DimensionType::XYZM;
         }
         else
         {
-            throw exceptions::shapes_exception("invalid dimensions");
+            throw exceptions::GeometryError("invalid number of dimensions " + std::to_string(init.size()));
         }
-    }
-
-    /*!
-     * @copydoc Geometry::type()
-     */
-    GeometryType type_() const
-    {
-        return GeometryType::POINT;
-    }
-
-    /*!
-     * @copydoc Geometry::type_str()
-     */
-    std::string type_str_() const
-    {
-        return "Point";
-    }
-
-    /*!
-     * @copydoc Geometry::empty()
-     */
-    bool empty_() const
-    {
-        return false;
-    }
-
-    /*!
-     * @copydoc Geometry::size()
-     */
-    size_t size_() const
-    {
-        return static_cast<size_t>(get_num_dimension());
-    }
-
-    /*!
-     * @copydoc Geometry::xy()
-     */
-    std::vector<std::tuple<double, double>> xy_() const
-    {
-        return {std::make_tuple(x, y)};
-    }
-
-    /*!
-    * @copydoc Geometry::xyz()
-    */
-    std::vector<std::tuple<double, double, double>> xyz_() const
-    {
-        return {std::make_tuple(x, y, z)};
-    }
-
-    /*!
-    * @copydoc Geometry::xym()
-    */
-    std::vector<std::tuple<double, double, double>> xym_() const
-    {
-        return {std::make_tuple(x, y, m)};
-    }
-
-    /*!
-    * @copydoc Geometry::xyzm()
-    */
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
-    {
-        return {std::make_tuple(x, y, z, m)};
     }
 
     /*!
      * @brief returns the coordinate at the given index
-     *
      * @param pos the coordinate position
      * @return a double with the coordinate value
      *
-     * @throw exception if the position is not found
+     * @throw IndexError if the index at pos is out of range
      *
      * @since 0.0.1
      */
-    double at(size_t pos)
+    double& at(size_t pos)
     {
         if (pos >= size_())
         {
-            throw exceptions::shapes_exception("index out of bounds");
+            throw exceptions::IndexError("index at " + std::to_string(pos) + " is out of range");
         }
+
         if (pos == 0)
+        {
             return x;
+        }
+
         if (pos == 1)
+        {
             return y;
+        }
+
         if (pos == 2)
-            return z;
+        {
+            return dim == DimensionType::XYM ? m : z;
+        }
+
         return m;
     }
 
-    /*!
-     * @copydoc Point::at()
-     */
-    double operator[](size_t pos)
+    /// @copydoc Point::at()
+    double& operator[](size_t pos)
     {
         return at(pos);
     }
 
     /*!
-     * @brief creates a Point from a geojson string
+     * @brief returns true if all coordinates are equal, otherwise false
+     * @param other the point to compare
+     * @return true if all coordinates are equal, otherwise false
      *
+     * @since 0.0.1
+     */
+    bool operator==(const Point& other) const
+    {
+        return x == other.x and y == other.y and z == other.z and m == other.m;
+    }
+
+    /*!
+     * @brief returns true if at least one coordinate is different, otherwise false
+     * @param other the point to compare
+     * @return true if at least one coordinate is different, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool operator!=(const Point& other) const
+    {
+        return not(*this == other);
+    }
+
+    /*!
+     * @brief creates a Point from a geojson string
      * @param json the geojson string
      * @return a Point object
-     *
-     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
+     * @sa https://tools.ietf.org/html/rfc7946
      *
      * @since 0.0.1
      */
     static Point from_json(const std::string& json)
     {
+        /// @todo (pavel) read properties to specify z, m and zm
         nlohmann::json j = nlohmann::json::parse(json);
         std::string type = j.at("type").get<std::string>();
         if (type != "Point")
         {
-            throw exceptions::parse_error("invalid geometry type");
+            throw exceptions::ParseError("invalid geometry type");
         }
 
         std::vector<double> coords = j.at("coordinates");
@@ -1089,20 +3341,19 @@ class Point : public BasicGeometry<Point>
         {
             return {coords[0], coords[1], coords[2], coords[3]};
         }
-        throw exceptions::parse_error("invalid dimensions");
+        throw exceptions::ParseError("");
     }
 
     /*!
      * @brief dumps the geojson representation of the Point
-     *
-     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
-     *
      * @return a geojson string
+     * @sa https://tools.ietf.org/html/rfc7946
      *
      * @since 0.0.1
      */
     std::string json()
     {
+        /// @todo (pavel) add properties to specify z, m and zm
         std::stringstream ss;
         ss << std::fixed << std::setprecision(precision);
         ss << "{\"type\":\"Point\",\"coordinates\":";
@@ -1121,60 +3372,38 @@ class Point : public BasicGeometry<Point>
 
     /*!
      * @brief creates a Point from a WKT string
-     *
      * @param wkt the WKT string
      * @return a Point object
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
-     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
+     * @throw ParseError if a parser error occurs
      *
      * @since 0.0.1
      */
     static Point from_wkt(const std::string& wkt)
     {
-        /// @todo (pavel) ensure the number of coordinates for POINT, POINTZ, POINTM, POINTZM
-        /// @todo (pavel) empty spaces
-        std::regex tagged_text_regex("(?:POINT|Point){1}[Z]?[M]?\\((.*)\\)");
-        std::smatch tagged_text_match;
-        std::string tagged_text;
-        if (std::regex_search(wkt, tagged_text_match, tagged_text_regex) && tagged_text_match.size() > 1)
+        WktReader reader{};
+        auto result = reader.read(wkt.c_str());
+        auto data   = result.data;
+        switch (data.geom_type)
         {
-            tagged_text = tagged_text_match.str(1);
-            std::regex coords_regex("\\s+");
-            std::sregex_token_iterator iter(tagged_text.begin(), tagged_text.end(), coords_regex, -1);
-            std::sregex_token_iterator end;
-
-            /// @todo (pavel) add another point constructor Point(const std::vector<double> coords) ...
-            std::vector<double> coords;
-            for (; iter != end; ++iter)
-            {
-                coords.push_back(std::stod(*iter));
-            }
-            if (coords.size() == 2)
-            {
-                return {coords[0], coords[1]};
-            }
-            else if (coords.size() == 3)
-            {
-                return {coords[0], coords[1], coords[2]};
-            }
-            else if (coords.size() == 4)
-            {
-                return {coords[0], coords[1], coords[2], coords[3]};
-            }
-            else
-            {
-                throw exceptions::parse_error("invalid dimensions");
-            }
+            case GeometryDetailedType::POINT:
+                return {data.coords[0], data.coords[1]};
+            case GeometryDetailedType::POINTZ:
+                return {data.coords[0], data.coords[1], data.coords[2]};
+            case GeometryDetailedType::POINTM:
+                return Point::from_xym(data.coords[0], data.coords[1], data.coords[2]);
+            case GeometryDetailedType::POINTZM:
+                return {data.coords[0], data.coords[1], data.coords[2], data.coords[3]};
+            default:
+                throw exceptions::ParseError("invalid WKT string");
         }
-        throw exceptions::parse_error("invalid tagged text");
     }
 
     /*!
      * @brief dumps the WKT representation of the point
-     *
-     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
-     *
      * @return a WKT string
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
      * @since 0.0.1
      */
@@ -1182,7 +3411,7 @@ class Point : public BasicGeometry<Point>
     {
         std::stringstream ss;
         ss << std::fixed << std::setprecision(precision);
-        ss << "POINT";
+        ss << "POINT ";
         if (has_z())
         {
             ss << "Z";
@@ -1190,6 +3419,10 @@ class Point : public BasicGeometry<Point>
         if (has_m())
         {
             ss << "M";
+        }
+        if (has_z() or has_m())
+        {
+            ss << " ";
         }
         ss << "(";
         ss << x << " " << y;
@@ -1204,64 +3437,186 @@ class Point : public BasicGeometry<Point>
         ss << ")";
         return ss.str();
     }
-};
 
-template <typename Derived>
-class PointCollection
-{
-  public:
-    typedef std::vector<Point>::iterator iterator;
-    typedef std::vector<Point>::const_iterator const_iterator;
+  private:
+    /// for allow BaseGeometry to access Point private members
+    friend class BaseGeometry<Point>;
 
-    iterator begin()
+    /// @private
+    GeometryType type_() const
     {
-        return m_points.begin();
+        return GeometryType::POINT;
     }
 
-    const_iterator begin() const
+    /// @private
+    std::string type_str_() const
     {
-        return m_points.begin();
+        return "Point";
     }
 
-    iterator end()
+    /// @private
+    bool empty_() const
     {
-        return m_points.end();
+        return false;
     }
 
-    const_iterator end() const
+    /// @private
+    size_t size_() const
     {
-        return m_points.end();
+        return static_cast<size_t>(ndim());
     }
 
-    Point at(size_t pos)
+    /// @private
+    bool is_closed_() const
     {
-        return m_points.at(pos);
+        return false;
     }
 
-    Point operator[](size_t pos)
+    /*!
+     * @private
+     */
+    std::vector<std::tuple<double, double>> xy_() const
     {
-        return m_points.at(pos);
+        return {std::make_tuple(x, y)};
     }
 
-  protected:
-    std::vector<Point> m_points;
+    /// @private
+    std::vector<std::tuple<double, double, double>> xyz_() const
+    {
+        return {std::make_tuple(x, y, z)};
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xym_() const
+    {
+        return {std::make_tuple(x, y, m)};
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double, double>> xyzm_() const
+    {
+        return {std::make_tuple(x, y, z, m)};
+    }
 };
 
 }  // namespace shapes
 }  // namespace simo
-// #include <simo/geom/bounds.hpp>
-
 // #include <simo/geom/multipoint.hpp>
 
 
+#include <ciso646>
 #include <vector>
 #include <set>
 #include <sstream>
 #include <iomanip>
 // #include <simo/geom/geometry.hpp>
 
+// #include <simo/geom/detail/geometry_sequence.hpp>
+
+
+#include <ciso646>
 // #include <simo/geom/point.hpp>
 
+
+namespace simo
+{
+namespace shapes
+{
+
+/*!
+ * @brief represents a geometry sequence
+ * @tparam T the geometry type (e.g. Point, LineString, Polygon)
+ *
+ * @since 0.0.1
+ */
+template <typename T>
+class GeometrySequence
+{
+  public:
+    /// iterator type
+    typedef typename std::vector<T>::iterator iterator;
+
+    /// const iterator type
+    typedef typename std::vector<T>::const_iterator const_iterator;
+
+    /*!
+     * @return returns an iterator pointing to the first element in T
+     *
+     * @since 0.0.1
+     */
+    iterator begin()
+    {
+        return seq.begin();
+    }
+
+    /*!
+     * @return returns a constant iterator pointing to the first element in T
+     *
+     * @since 0.0.1
+     */
+    const_iterator begin() const
+    {
+        return seq.begin();
+    }
+
+    /*!
+     * @return returns an iterator pointing to the past-the-end element in T
+     *
+     * @since 0.0.1
+     */
+    iterator end()
+    {
+        return seq.end();
+    }
+
+    /*!
+     * @return returns a const iterator pointing to the past-the-end element in T
+     *
+     * @since 0.0.1
+     */
+    const_iterator end() const
+    {
+        return seq.end();
+    }
+
+    /*!
+     * @param pos the element position
+     * @return returns a reference to the element at position n in T
+     *
+     * @throw IndexError if the index at pos is out of range
+     *
+     * @since 0.0.1
+     */
+    T& at(size_t pos)
+    {
+        try
+        {
+            return seq.at(pos);
+        }
+        catch (std::out_of_range&)
+        {
+            throw exceptions::IndexError("index at " + std::to_string(pos) + " is out of range");
+        }
+    }
+
+    /*!
+     * @param pos the element position
+     * @return returns a reference to the element at position n in T
+     *
+     * @since 0.0.1
+     */
+    T& operator[](size_t pos)
+    {
+        return at(pos);
+    }
+
+  protected:
+    /// the geometry sequence
+    std::vector<T> seq;
+};
+
+}  // namespace shapes
+}  // namespace simo
 // #include <simo/geom/bounds.hpp>
 
 
@@ -1270,7 +3625,12 @@ namespace simo
 namespace shapes
 {
 
-class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<MultiPoint>
+/*!
+ * @brief Point collection
+ *
+ * @since 0.0.1
+ */
+class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Point>
 {
   public:
     /*!
@@ -1280,9 +3640,9 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
      */
     MultiPoint() = default;
 
-     /*!
+    /*!
       * @brief creates a MultiPoint from a given initializer list
-      *
+      * @tparam T an arithmetic value (e.g. int, float, double)
       * @param init the initializer list
       *
       * @since 0.0.1
@@ -1290,128 +3650,46 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
     template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     MultiPoint(std::initializer_list<std::initializer_list<T>> init)
     {
-        m_points.reserve(init.size());
+        seq.reserve(init.size());
         for (const auto& coords : init)
         {
             Point p(coords);
             bounds.extend(p.x, p.y);
-            m_points.push_back(std::move(p));
+            seq.emplace_back(p);
         }
     }
 
     /*!
      * @brief creates a MultiPoint from a given point vector
-     *
      * @param points the point list
      *
      * @since 0.0.1
      */
     explicit MultiPoint(const std::vector<Point>& points)
     {
-        m_points = points;
-    }
-
-    /*!
-    * @copydoc Geometry::type()
-    */
-    GeometryType type_() const
-    {
-        return GeometryType::MULTIPOINT;
-    }
-
-    /*!
-    * @copydoc Geometry::type_str()
-    */
-    std::string type_str_() const
-    {
-        return "MultiPoint";
-    }
-
-    /*!
-    * @copydoc Geometry::empty()
-    */
-    bool empty_() const
-    {
-        return m_points.empty();
-    }
-
-    /*!
-    * @copydoc Geometry::size()
-    */
-    size_t size_() const
-    {
-        return m_points.size();
-    }
-
-    /*!
-    * @copydoc Geometry::xy()
-    */
-    std::vector<std::tuple<double, double>> xy_() const
-    {
-        std::vector<std::tuple<double, double>> res;
-        for (const auto& point : m_points)
+        seq = points;
+        for (const auto& p : seq)
         {
-            res.emplace_back(point.x, point.y);
+            bounds.extend(p.x, p.y);
         }
-        return res;
     }
 
     /*!
-    * @copydoc Geometry::xyz()
-    */
-    std::vector<std::tuple<double, double, double>> xyz_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        for (const auto& point : m_points)
-        {
-            res.emplace_back(point.x, point.y, point.z);
-        }
-        return res;
-    }
-
-    /*!
-    * @copydoc Geometry::xym()
-    */
-    std::vector<std::tuple<double, double, double>> xym_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        for (const auto& point : m_points)
-        {
-            res.emplace_back(point.x, point.y, point.m);
-        }
-        return res;
-    }
-
-    /*!
-    * @copydoc Geometry::xyzm()
-    */
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
-    {
-        std::vector<std::tuple<double, double, double, double>> res;
-        for (const auto& point : m_points)
-        {
-            res.emplace_back(point.x, point.y, point.z, point.m);
-        }
-        return res;
-    }
-
-    /*!
-      * @brief creates a MultiPoint from a geojson string
-      *
-      * @param json the geojson string
-      * @return a MultiPoint object
-      *
-      * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
-      *
-      * @since 0.0.1
-      */
+     * @brief creates a MultiPoint from a geojson string
+     * @param json the geojson string
+     * @return a MultiPoint object
+     * @sa https://tools.ietf.org/html/rfc7946
+     *
+     * @since 0.0.1
+     */
     static MultiPoint from_json(const std::string& json)
     {
+        /// @todo (pavel) read properties to specify z, m and zm
         nlohmann::json j = nlohmann::json::parse(json);
         std::string type = j.at("type").get<std::string>();
         if (type != "MultiPoint")
         {
-            throw exceptions::parse_error("invalid geometry type");
+            throw exceptions::ParseError("invalid geometry type");
         }
 
         auto coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
@@ -1428,7 +3706,7 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
             }
             else
             {
-                throw exceptions::parse_error("invalid dimensions");
+                throw exceptions::ParseError("invalid dimensions");
             }
         }
         return MultiPoint(res);
@@ -1436,26 +3714,25 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
 
     /*!
      * @brief dumps the geojson representation of the MultiPoint
-     *
-     * @note RFC7946 <https://tools.ietf.org/html/rfc7946>
-     *
      * @return a geojson string
+     * @sa https://tools.ietf.org/html/rfc7946
      *
      * @since 0.0.1
      */
     std::string json()
     {
+        /// @todo (pavel) add properties to specify z, m and zm
         std::stringstream ss;
         ss << std::fixed << std::setprecision(precision);
         ss << "{\"type\":\"MultiPoint\",\"coordinates\":[";
-        for(size_t i = 0; i < m_points.size(); ++i)
+        for (size_t i = 0; i < seq.size(); ++i)
         {
             if (i > 0)
             {
                 ss << ",";
             }
-            const auto& p = m_points[i];
-            switch (p.dimension)
+            const auto& p = seq[i];
+            switch (p.dim)
             {
                 case DimensionType::XY:
                 {
@@ -1485,11 +3762,52 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
 
     /*!
      * @brief creates a MultiPoint from a WKT string
-     *
      * @param wkt the WKT string
      * @return a MultiPoint object
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
-     * @note WKT <https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry>
+     * @throw ParseError if a parser error occurs
+     *
+     * @since 0.0.1
+     */
+    static MultiPoint from_wkt(const std::string& wkt)
+    {
+        WktReader reader{};
+        auto result      = reader.read(wkt.c_str());
+        const auto& data = result.data;
+        auto geom_type   = data.geom_type;
+        if (geom_type != GeometryDetailedType::MULTIPOINT and
+            geom_type != GeometryDetailedType::MULTIPOINTZ and
+            geom_type != GeometryDetailedType::MULTIPOINTM and
+            geom_type != GeometryDetailedType::MULTIPOINTZM)
+        {
+            throw exceptions::ParseError("invalid WKT string");
+        }
+
+        std::vector<Point> points;
+        points.reserve(data.coords.size());
+        auto dim = get_dim(data.geom_type);
+        int ndim = get_ndim(dim);
+        Point p;
+        p.dim = dim;
+        for (size_t i = 0; i < result.data.coords.size(); i += ndim)
+        {
+            for (size_t j = 0; j < size_t(ndim); ++j)
+            {
+                p[j] = result.data.coords[i + j];
+            }
+            points.push_back(p);
+        }
+        MultiPoint res(points);
+        res.dim = dim;
+        return res;
+    }
+
+    /*!
+     * @brief creates a MultiPoint from a WKT string
+     * @param wkt the WKT string
+     * @return a MultiPoint object
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
      * @since 0.0.1
      */
@@ -1509,9 +3827,9 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         }
 
         ss << "(";
-        for (size_t i = 0; i < m_points.size(); ++i)
+        for (size_t i = 0; i < seq.size(); ++i)
         {
-            const Point& p = m_points[i];
+            const Point& p = seq[i];
             if (i > 0)
             {
                 ss << ",";
@@ -1530,10 +3848,889 @@ class MultiPoint : public BasicGeometry<MultiPoint>, public PointCollection<Mult
         ss << ")";
         return ss.str();
     }
+
+  private:
+    /// for allow BaseGeometry to access MultiPoint private members
+    friend class BaseGeometry<MultiPoint>;
+
+    /// @private
+    GeometryType type_() const
+    {
+        return GeometryType::MULTIPOINT;
+    }
+
+    /// @private
+    std::string type_str_() const
+    {
+        return "MultiPoint";
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double>> xy_() const
+    {
+        std::vector<std::tuple<double, double>> res;
+        for (const auto& point : seq)
+        {
+            res.emplace_back(point.x, point.y);
+        }
+        return res;
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xyz_() const
+    {
+        std::vector<std::tuple<double, double, double>> res;
+        for (const auto& point : seq)
+        {
+            res.emplace_back(point.x, point.y, point.z);
+        }
+        return res;
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xym_() const
+    {
+        std::vector<std::tuple<double, double, double>> res;
+        for (const auto& point : seq)
+        {
+            res.emplace_back(point.x, point.y, point.m);
+        }
+        return res;
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double, double>> xyzm_() const
+    {
+        std::vector<std::tuple<double, double, double, double>> res;
+        for (const auto& point : seq)
+        {
+            res.emplace_back(point.x, point.y, point.z, point.m);
+        }
+        return res;
+    }
+
+    /// @private
+    bool empty_() const
+    {
+        return seq.empty();
+    }
+
+    /// @private
+    size_t size_() const
+    {
+        return seq.size();
+    }
+
+    /// @private
+    bool is_closed_() const
+    {
+        if (seq.size() < 2)
+        {
+            return false;
+        }
+        size_t last_index = seq.size() - 1;
+        return seq[0] == seq[last_index];
+    }
 };
 
 }  // namespace shapes
 }  // namespace simo
+// #include <simo/geom/linestring.hpp>
+
+
+#include <ciso646>
+#include <vector>
+#include <set>
+#include <sstream>
+#include <iomanip>
+// #include <simo/geom/geometry.hpp>
+
+// #include <simo/geom/detail/geometry_sequence.hpp>
+
+// #include <simo/geom/bounds.hpp>
+
+
+namespace simo
+{
+namespace shapes
+{
+
+/*!
+ * @brief a curve where each consecutive pair of points defines a line segment.
+ *
+ * @since 0.0.1
+ */
+class LineString : public BaseGeometry<LineString>, public GeometrySequence<Point>
+{
+  public:
+    /*!
+     * @brief creates an empty LineString
+     *
+     * @since 0.0.1
+     */
+    LineString() = default;
+
+    /*!
+     * @brief creates a LineString from a given initializer list
+     * @tparam T an arithmetic value (e.g. int, float, double)
+     * @param init the initializer list
+     *
+     * @throw GeometryError DOCUMENT ME!
+     *
+     * @since 0.0.1
+     */
+    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    LineString(std::initializer_list<std::initializer_list<T>> init)
+    {
+        seq.reserve(init.size());
+        for (const auto& coords : init)
+        {
+            Point p(coords);
+            bounds.extend(p.x, p.y);
+            seq.emplace_back(p);
+        }
+        throw_for_invalid();
+    }
+
+    /*!
+     * @brief creates a LineString from a given point vector
+     * @param points the point list
+     *
+     * @throw GeometryError DOCUMENT ME!
+     *
+     * @since 0.0.1
+     */
+    explicit LineString(const std::vector<Point>& points)
+    {
+        seq = points;
+        for (const auto& p : seq)
+        {
+            bounds.extend(p.x, p.y);
+        }
+    }
+
+    /*!
+     * @brief creates a LineString from a geojson string
+     * @param json the geojson string
+     * @return a LineString object
+     * @sa https://tools.ietf.org/html/rfc7946
+     *
+     * @since 0.0.1
+     */
+    static LineString from_json(const std::string& /*json*/)
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /*!
+     * @brief dumps the geojson representation of the LineString
+     * @return a geojson string
+     * @sa https://tools.ietf.org/html/rfc7946
+     *
+     * @since 0.0.1
+     */
+    std::string json()
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /*!
+     * @brief creates a LineString from a WKT string
+     * @param wkt the WKT string
+     * @return a LineString object
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
+     *
+     * @since 0.0.1
+     */
+    static LineString from_wkt(const std::string& /*wkt*/)
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /*!
+     * @brief creates a LineString from a WKT string
+     * @param wkt the WKT string
+     * @return a LineString object
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
+     *
+     * @since 0.0.1
+     */
+    std::string wkt()
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+  private:
+    /// for allow BaseGeometry to access LineString private members
+    friend class BaseGeometry<LineString>;
+
+    /// @private
+    void throw_for_invalid()
+    {
+        if (empty())
+        {
+            return;
+        }
+
+        if (seq.size() < 2)
+        {
+            throw exceptions::GeometryError("LineString should be either empty or with 2 or more points");
+        }
+
+        if (seq.size() == 2)
+        {
+            if (seq[0] == seq[1])
+            {
+                throw exceptions::GeometryError("LineString with exactly two equal points");
+            }
+        }
+    }
+
+    /// @private
+    GeometryType type_() const
+    {
+        return GeometryType::LINESTRING;
+    }
+
+    /// @private
+    std::string type_str_() const
+    {
+        return "LineString";
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double>> xy_() const
+    {
+        std::vector<std::tuple<double, double>> res;
+        for (const auto& point : seq)
+        {
+            res.emplace_back(point.x, point.y);
+        }
+        return res;
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xyz_() const
+    {
+        std::vector<std::tuple<double, double, double>> res;
+        for (const auto& point : seq)
+        {
+            res.emplace_back(point.x, point.y, point.z);
+        }
+        return res;
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xym_() const
+    {
+        std::vector<std::tuple<double, double, double>> res;
+        for (const auto& point : seq)
+        {
+            res.emplace_back(point.x, point.y, point.m);
+        }
+        return res;
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double, double>> xyzm_() const
+    {
+        std::vector<std::tuple<double, double, double, double>> res;
+        for (const auto& point : seq)
+        {
+            res.emplace_back(point.x, point.y, point.z, point.m);
+        }
+        return res;
+    }
+
+    /// @private
+    bool empty_() const
+    {
+        return seq.empty();
+    }
+
+    /// @private
+    size_t size_() const
+    {
+        return seq.size();
+    }
+
+    /// @private
+    bool is_closed_() const
+    {
+        if (seq.size() < 2)
+        {
+            return false;
+        }
+        size_t last_index = seq.size() - 1;
+        return seq[0] == seq[last_index];
+    }
+};
+
+}  // namespace shapes
+}  // namespace simo
+// #include <simo/geom/multilinestring.hpp>
+
+
+#include <ciso646>
+#include <vector>
+#include <set>
+#include <sstream>
+#include <iomanip>
+// #include <simo/geom/geometry.hpp>
+
+// #include <simo/geom/detail/geometry_sequence.hpp>
+
+// #include <simo/geom/bounds.hpp>
+
+
+namespace simo
+{
+namespace shapes
+{
+
+/*!
+ * @brief LineString collection
+ *
+ * @since 0.0.1
+ */
+class MultiLineString : public BaseGeometry<MultiLineString>, public GeometrySequence<LineString>
+{
+  public:
+    /*!
+     * @brief creates an empty MultiLineString
+     *
+     * @since 0.0.1
+     */
+    MultiLineString() = default;
+
+    /*!
+     * @brief creates a MultiLineString from a geojson string
+     * @param json the geojson string
+     * @return a MultiLineString object
+     * @sa https://tools.ietf.org/html/rfc7946
+     *
+     * @since 0.0.1
+     */
+    static MultiLineString from_json(const std::string& /*json*/)
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /*!
+     * @brief dumps the geojson representation of the MultiLineString
+     * @return a geojson string
+     * @sa https://tools.ietf.org/html/rfc7946
+     *
+     * @since 0.0.1
+     */
+    std::string json()
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /*!
+     * @brief creates a MultiLineString from a WKT string
+     * @param wkt the WKT string
+     * @return a MultiLineString object
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
+     *
+     * @since 0.0.1
+     */
+    static MultiLineString from_wkt(const std::string& /*wkt*/)
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /*!
+     * @brief creates a MultiLineString from a WKT string
+     * @param wkt the WKT string
+     * @return a MultiLineString object
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
+     *
+     * @since 0.0.1
+     */
+    std::string wkt()
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+  private:
+    /// for allow BaseGeometry to access MultiLineString private members
+    friend class BaseGeometry<MultiLineString>;
+
+    /// @private
+    GeometryType type_() const
+    {
+        return GeometryType::MULTILINESTRING;
+    }
+
+    /// @private
+    std::string type_str_() const
+    {
+        return "MultiLineString";
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double>> xy_() const
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xyz_() const
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xym_() const
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double, double>> xyzm_() const
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /// @private
+    bool empty_() const
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /// @private
+    size_t size_() const
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /// @private
+    bool is_closed_() const
+    {
+        throw exceptions::NotImplementedError();
+    }
+};
+
+}  // namespace shapes
+}  // namespace simo
+// #include <simo/geom/polygon.hpp>
+
+
+#include <ciso646>
+#include <vector>
+#include <set>
+#include <sstream>
+#include <iomanip>
+#include <utility>
+// #include <simo/geom/geometry.hpp>
+
+// #include <simo/geom/linearring.hpp>
+
+
+#include <ciso646>
+#include <vector>
+#include <set>
+#include <sstream>
+#include <iomanip>
+// #include <simo/geom/geometry.hpp>
+
+// #include <simo/geom/detail/geometry_sequence.hpp>
+
+// #include <simo/geom/bounds.hpp>
+
+
+namespace simo
+{
+namespace shapes
+{
+
+/*!
+ * @brief a LineString that is both closed and simple, in shapes this feature is implicitly closed,
+ * there is no need to specify the last coordinate, it will always be identical to the first.
+ *
+ * @since 0.0.1
+ */
+class LinearRing : public BaseGeometry<LinearRing>, public GeometrySequence<Point>
+{
+  public:
+
+    /// two-dimensional rotation direction, clockwise=true, counterclockwise=false
+    bool clockwise = true;
+
+    /*!
+     * @brief creates an empty LinearRing
+     *
+     * @since 0.0.1
+     */
+    LinearRing() = default;
+
+    /*!
+      * @brief creates a LinearRing from a given initializer list
+      * @tparam T an arithmetic value (e.g. int, float, double)
+      * @param init the initializer list
+      *
+      * @throw GeometryError DOCUMENT ME!
+      *
+      * @since 0.0.1
+      */
+    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    LinearRing(std::initializer_list<std::initializer_list<T>> init)
+    {
+        /// @todo (pavel) make LinearRing implicitly closed
+        seq.reserve(init.size());
+        for (const auto& coords : init)
+        {
+            Point p(coords);
+            bounds.extend(p.x, p.y);
+            seq.emplace_back(p);
+        }
+        throw_for_invalid();
+    }
+
+    /*!
+     * @brief creates a LinearRing from a given point vector
+     * @param points the point list
+     *
+     * @throw GeometryError DOCUMENT ME!
+     *
+     * @since 0.0.1
+     */
+    explicit LinearRing(const std::vector<Point>& points)
+    {
+        /// @todo (pavel) make LinearRing implicitly closed
+        seq = points;
+        for (const auto& p : seq)
+        {
+            bounds.extend(p.x, p.y);
+        }
+        throw_for_invalid();
+    }
+
+  private:
+    /// for allow BaseGeometry to access LinearRing private members
+    friend class BaseGeometry<LinearRing>;
+
+    /// @private
+    void throw_for_invalid() const
+    {
+        if (empty())
+        {
+            return;
+        }
+
+        if (seq.size() < 4)
+        {
+            throw exceptions::GeometryError("LinearRing should be either empty or with 4 or more points");
+        }
+
+        if (not is_closed())
+        {
+            throw exceptions::GeometryError("LinearRing is not closed, first and last point are different");
+        }
+
+        /// @todo (pavel) check for self-intersections
+    }
+
+    /// @private
+    GeometryType type_() const
+    {
+        return GeometryType::LINESTRING;
+    }
+
+    /// @private
+    std::string type_str_() const
+    {
+        return "LineString";
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double>> xy_() const
+    {
+        std::vector<std::tuple<double, double>> res;
+        for (const auto& point : seq)
+        {
+            res.emplace_back(point.x, point.y);
+        }
+        return res;
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xyz_() const
+    {
+        std::vector<std::tuple<double, double, double>> res;
+        for (const auto& point : seq)
+        {
+            res.emplace_back(point.x, point.y, point.z);
+        }
+        return res;
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xym_() const
+    {
+        std::vector<std::tuple<double, double, double>> res;
+        for (const auto& point : seq)
+        {
+            res.emplace_back(point.x, point.y, point.m);
+        }
+        return res;
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double, double>> xyzm_() const
+    {
+        std::vector<std::tuple<double, double, double, double>> res;
+        for (const auto& point : seq)
+        {
+            res.emplace_back(point.x, point.y, point.z, point.m);
+        }
+        return res;
+    }
+
+    /// @private
+    bool empty_() const
+    {
+        return seq.empty();
+    }
+
+    /// @private
+    size_t size_() const
+    {
+        return seq.size();
+    }
+
+    /// @private
+    bool is_closed_() const
+    {
+        if (seq.size() < 2)
+        {
+            return false;
+        }
+        size_t last_index = seq.size() - 1;
+        return seq[0] == seq[last_index];
+    }
+};
+
+}  // namespace shapes
+}  // namespace simo
+// #include <simo/geom/bounds.hpp>
+
+
+namespace simo
+{
+namespace shapes
+{
+
+/*!
+ * @brief represents a polygon
+ *
+ * @since 0.0.1
+ */
+class Polygon : public BaseGeometry<Polygon>
+{
+  public:
+    /// linear ring that represents the shell of the polygon
+    LinearRing exterior;
+
+    /// collection of linear rings that represent the holes of the polygon
+    std::vector<LinearRing> interiors;
+
+    /*!
+     * @brief creates an empty Polygon
+     *
+     * @since 0.0.1
+     */
+    Polygon() = default;
+
+    /*!
+     * @brief creates a Polygon
+     * @param rings a LinearRing sequence with the shell and holes of the polygon
+     *
+     * @since 0.0.1
+     */
+    Polygon(std::initializer_list<LinearRing> rings)
+    {
+        if (rings.size() >= 1)
+        {
+            auto ring     = rings.begin();
+            Bounds& b     = bounds;
+            exterior      = LinearRing(*ring);
+            Bounds& b_ext = exterior.bounds;
+            b.extend(b_ext.minx, b_ext.miny);
+            b.extend(b_ext.maxx, b_ext.maxy);
+            ring++;
+            for (; ring != rings.end(); ++ring)
+            {
+                interiors.emplace_back(*ring);
+                Bounds& b_int = interiors[interiors.size() - 1].bounds;
+                b.extend(b_int.minx, b_int.miny);
+                b.extend(b_int.maxx, b_int.maxy);
+            }
+        }
+    }
+
+    /*!
+     * @brief creates a Polygon
+     * @param shell the shell of the polygon as a Point sequence
+     *
+     * @since 0.0.1
+     */
+    explicit Polygon(const std::vector<Point>& shell)
+        : exterior(shell)
+    {
+        Bounds& b     = bounds;
+        Bounds& b_ext = exterior.bounds;
+        b.extend(b_ext.minx, b_ext.miny);
+        b.extend(b_ext.maxx, b_ext.maxy);
+    }
+
+    /*!
+     * @brief creates a Polygon
+     * @param shell the shell of the polygon as a Point sequence
+     * @param holes one or more collection of points, each representing a hole in the polygon
+     *
+     * @since 0.0.1
+     */
+    Polygon(const std::vector<Point>& shell, const std::vector<std::vector<Point>>& holes)
+        : exterior(shell)
+    {
+        Bounds& b     = bounds;
+        Bounds& b_ext = exterior.bounds;
+        b.extend(b_ext.minx, b_ext.miny);
+        b.extend(b_ext.maxx, b_ext.maxy);
+        interiors.reserve(holes.size());
+        for (const auto& hole : holes)
+        {
+            interiors.emplace_back(hole);
+            Bounds& b_int = interiors[interiors.size() - 1].bounds;
+            b.extend(b_int.minx, b_int.miny);
+            b.extend(b_int.maxx, b_int.maxy);
+        }
+    }
+
+    /*!
+     * @brief creates a Polygon from a geojson string
+     * @param json the geojson string
+     * @return a Polygon object
+     * @sa https://tools.ietf.org/html/rfc7946
+     *
+     * @since 0.0.1
+     */
+    static Polygon from_json(const std::string& /*json*/)
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /*!
+     * @brief dumps the geojson representation of the Polygon
+     * @return a geojson string
+     * @sa https://tools.ietf.org/html/rfc7946
+     *
+     * @since 0.0.1
+     */
+    std::string json()
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /*!
+     * @brief creates a Polygon from a WKT string
+     * @param wkt the WKT string
+     * @return a Polygon object
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
+     *
+     * @since 0.0.1
+     */
+    static Polygon from_wkt(const std::string& /*wkt*/)
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /*!
+     * @brief creates a Polygon from a WKT string
+     * @param wkt the WKT string
+     * @return a Polygon object
+     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
+     *
+     * @since 0.0.1
+     */
+    std::string wkt()
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /// @todo (pavel) add from_bounds method
+
+  private:
+    /// for allow BaseGeometry to access Polygon private members
+    friend class BaseGeometry<Polygon>;
+
+    /// @private
+    GeometryType type_() const
+    {
+        return GeometryType::POLYGON;
+    }
+
+    /// @private
+    std::string type_str_() const
+    {
+        return "Polygon";
+    }
+
+    /// @private
+    bool empty_() const
+    {
+        return size_() == 0;
+    }
+
+    /// @private
+    size_t size_() const
+    {
+        size_t size = exterior.size();
+        for (const auto& interior : interiors)
+        {
+            size += interior.size();
+        }
+        return size;
+    }
+
+    /// @private
+    bool is_closed_() const
+    {
+        return true;
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double>> xy_() const
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xyz_() const
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double>> xym_() const
+    {
+        throw exceptions::NotImplementedError();
+    }
+
+    /// @private
+    std::vector<std::tuple<double, double, double, double>> xyzm_() const
+    {
+        throw exceptions::NotImplementedError();
+    }
+};
+
+}  // namespace shapes
+}  // namespace simo
+// #include <simo/geom/linearring.hpp>
+
 
 #endif  // SIMO_SHAPES_HPP
 /*
