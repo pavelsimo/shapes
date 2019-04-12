@@ -60,7 +60,7 @@
 **                       defined, then do no error processing.
 */
 #define YYCODETYPE unsigned char
-#define YYNOCODE 91
+#define YYNOCODE 111
 #define YYACTIONTYPE unsigned short int
 #define ParseTOKENTYPE double
 typedef union {
@@ -74,8 +74,8 @@ typedef union {
 #define ParseARG_PDECL , struct simo::shapes::WktResult *result 
 #define ParseARG_FETCH  struct simo::shapes::WktResult *result  = yypParser->result 
 #define ParseARG_STORE yypParser->result  = result 
-#define YYNSTATE 227
-#define YYNRULE 118
+#define YYNSTATE 331
+#define YYNRULE 154
 #define YY_NO_ACTION      (YYNSTATE+YYNRULE+2)
 #define YY_ACCEPT_ACTION  (YYNSTATE+YYNRULE+1)
 #define YY_ERROR_ACTION   (YYNSTATE+YYNRULE)
@@ -145,117 +145,168 @@ static const YYMINORTYPE yyzerominor = { 0 };
 **  yy_default[]       Default action for each state.
 */
 static const YYACTIONTYPE yy_action[] = {
- /*     0 */   346,  101,  127,  128,  129,  130,  131,  132,  133,  134,
- /*    10 */   135,  136,  137,  138,  139,  140,  141,  142,  143,  144,
- /*    20 */   145,  146,  147,  148,  149,  150,   36,   37,   29,   28,
- /*    30 */    25,  196,   17,  124,   89,   90,   92,   91,   26,   35,
- /*    40 */    32,   31,   27,   33,   34,   30,  119,  122,  123,  125,
- /*    50 */    94,   96,   98,  100,   37,   81,   57,   51,   40,   83,
- /*    60 */    69,   56,   47,   87,   75,   81,  218,   51,   79,  202,
- /*    70 */    81,   71,   38,   88,   23,   56,  198,   21,  120,   51,
- /*    80 */   210,   13,  111,   81,   39,   59,   37,  117,  214,  164,
- /*    90 */   171,   49,   70,   65,   12,   37,  118,  194,   37,   81,
- /*   100 */    10,   41,   20,  173,  110,  168,  153,   50,    2,   51,
- /*   110 */     3,  183,  178,    7,  112,   81,    4,    1,  153,  151,
- /*   120 */   200,   56,  190,  114,   18,    6,  153,   11,  105,  206,
- /*   130 */   153,   56,   51,   18,   52,  153,   56,  104,   80,   51,
- /*   140 */   160,   56,   12,   45,   48,    7,   37,  154,   46,  156,
- /*   150 */    11,   54,   42,  109,    6,   64,   53,   58,   55,  102,
- /*   160 */     6,   20,   63,  204,   61,   67,  103,   60,  174,  162,
- /*   170 */    62,   13,   24,  189,   23,  208,   73,   66,   76,  108,
- /*   180 */   115,   68,   77,  212,  176,   72,    7,  158,   97,  179,
- /*   190 */    14,  116,   82,  107,   74,  216,  181,   86,   84,   99,
- /*   200 */    12,   22,   85,  184,  166,  121,  224,  197,  186,  225,
- /*   210 */   180,  226,  126,  185,  227,  165,  175,  191,  207,  209,
- /*   220 */   155,  170,   15,   16,  203,  219,  182,  161,  199,  213,
- /*   230 */   205,  163,  193,  157,    9,  195,  211,   19,  152,  215,
- /*   240 */   167,  177,  217,   78,  172,  220,   43,  201,    8,  221,
- /*   250 */    93,  222,  187,  223,  159,  188,    5,  106,   44,   18,
- /*   260 */   113,  347,  192,  347,  347,   95,  169,
+ /*     0 */   486,  155,  281,  278,  276,  274,  267,  241,  238,  236,
+ /*    10 */   234,  227,  326,  316,  306,  302,  301,  295,  294,  293,
+ /*    20 */   292,  291,  285,  284,  283,  280,   50,  108,   44,   42,
+ /*    30 */    55,  321,  329,  128,  149,  150,  152,  151,   52,   57,
+ /*    40 */    51,   53,   60,   41,   58,   56,   47,   48,   43,   45,
+ /*    50 */    59,   54,   49,   46,  104,  124,  108,  118,  132,  129,
+ /*    60 */   114,   64,  137,   87,  279,   69,  313,   62,  118,   30,
+ /*    70 */   330,    5,  104,  304,  114,   14,   94,   75,   38,  218,
+ /*    80 */   108,   63,  244,  235,   77,  275,  184,    4,    3,  215,
+ /*    90 */   224,  275,    6,  114,    1,    2,  253,  275,   27,  108,
+ /*   100 */   142,    6,  209,  275,   39,   81,  322,   79,  104,  328,
+ /*   110 */    30,   23,  108,   61,   86,  114,  299,  309,  185,  104,
+ /*   120 */   308,   92,  170,  118,  180,   98,  300,   17,  104,  104,
+ /*   130 */   104,  157,  118,  130,  179,  166,  318,   33,  118,  108,
+ /*   140 */   193,   95,  114,  181,  163,  153,  172,   65,  114,  113,
+ /*   150 */   164,  108,  108,  219,  104,  190,    6,  168,  138,  178,
+ /*   160 */    71,  114,  260,  207,  118,  269,  114,   27,  156,  118,
+ /*   170 */   117,  271,  103,  189,  213,  289,   39,  195,  114,  114,
+ /*   180 */   106,  108,  118,  254,   66,  188,  148,  183,  121,  104,
+ /*   190 */    70,  229,  118,  104,   74,   40,   68,  249,  154,  108,
+ /*   200 */    93,  258,  136,  118,  145,   80,  146,   12,  165,  136,
+ /*   210 */    67,  194,   76,  206,  211,  167,  204,   38,  199,   72,
+ /*   220 */    25,  169,   78,  324,  177,   73,   84,  325,  147,  296,
+ /*   230 */     5,   82,  143,   90,  162,   85,  176,   23,   68,   32,
+ /*   240 */   315,  175,   89,   88,  173,  311,  198,   97,   91,  305,
+ /*   250 */    14,   96,   99,  174,  101,  196,    7,  100,  286,  275,
+ /*   260 */   273,  111,  197,  102,  110,  109,   34,  264,   11,  106,
+ /*   270 */   107,  287,  191,  266,  115,  257,  112,  192,  123,  125,
+ /*   280 */   105,  119,   29,  122,  120,  251,  116,  201,  246,   30,
+ /*   290 */   158,  126,  187,  243,   15,  135,  133,  134,  186,  247,
+ /*   300 */    39,  117,  131,  127,    9,  159,  239,  141,  160,  233,
+ /*   310 */   200,   27,  161,  320,  231,  144,  139,  263,  272,  171,
+ /*   320 */   223,  331,  255,  245,  240,  237,  232,  225,  220,  217,
+ /*   330 */   259,  212,  205,   16,  140,   24,  203,  226,  323,   21,
+ /*   340 */   319,   13,  314,  182,  310,  307,  317,  327,   83,  208,
+ /*   350 */    37,   36,   35,  265,  230,  222,  228,   22,   20,   18,
+ /*   360 */   277,  297,  242,  270,   10,  248,    8,   26,  290,  210,
+ /*   370 */   261,  312,  262,   31,  268,   28,  282,  250,  487,  202,
+ /*   380 */    19,  487,  221,  288,  298,  216,  256,  303,  487,  487,
+ /*   390 */   214,  252,
 };
 static const YYCODETYPE yy_lookahead[] = {
  /*     0 */    31,   32,   33,   34,   35,   36,   37,   38,   39,   40,
  /*    10 */    41,   42,   43,   44,   45,   46,   47,   48,   49,   50,
  /*    20 */    51,   52,   53,   54,   55,   56,    2,   57,    4,    5,
- /*    30 */     6,   68,    7,   63,   10,   11,   12,   13,   14,   15,
+ /*    30 */     6,   79,   88,   63,   10,   11,   12,   13,   14,   15,
  /*    40 */    16,   17,   18,   19,   20,   21,   22,   23,   24,   25,
- /*    50 */    26,   27,   28,   29,   57,   57,   59,   57,   58,   61,
- /*    60 */    63,   57,   62,   65,   60,   57,    3,   57,   64,    3,
- /*    70 */    57,    8,   62,   65,    8,   57,    3,    7,   65,   57,
- /*    80 */     3,    8,   64,   57,   62,    8,   57,   71,    3,    3,
- /*    90 */    71,   65,   63,    8,    8,   57,   69,    3,   57,   57,
- /*   100 */     7,   63,    8,    3,   63,    3,    1,   65,    8,   57,
- /*   110 */     8,    3,    3,    8,   62,   57,    8,    8,    1,    3,
- /*   120 */    69,   57,    3,   65,    8,    8,    1,    8,   64,    3,
- /*   130 */     1,   57,   57,    8,    8,    1,   57,   62,   64,   57,
- /*   140 */     3,   57,    8,   64,   62,    8,   57,   57,   64,    3,
- /*   150 */     8,    7,   63,   82,    8,   57,   78,    7,   78,   72,
- /*   160 */     8,    8,   59,   82,    7,    7,   83,   79,   72,   57,
- /*   170 */    79,    8,    7,    9,    8,   83,    7,   80,    7,   84,
- /*   180 */    73,   80,   60,   84,   73,   81,    8,   57,   74,   74,
- /*   190 */     7,   85,   57,   75,   81,   85,   75,   57,    7,   76,
- /*   200 */     8,    7,   61,   76,   57,   77,    3,    9,   77,    3,
- /*   210 */     9,    3,    3,    9,    0,   61,    9,   78,   86,    9,
- /*   220 */     9,    9,    7,    7,   81,   89,    9,   60,   80,    9,
- /*   230 */     9,    9,    9,   59,    7,   79,   87,    7,   58,   88,
- /*   240 */     9,    9,    9,   57,    9,    3,    7,    9,    7,    3,
- /*   250 */    66,    3,    9,    3,    9,   66,    7,   70,   58,    8,
- /*   260 */    67,   90,   67,   90,   90,   68,   70,
+ /*    50 */    26,   27,   28,   29,   57,   58,   57,   57,   59,   62,
+ /*    60 */    57,   61,   63,   60,    3,   65,    3,   64,   57,    8,
+ /*    70 */     3,    8,   57,    3,   57,    8,   65,   62,    8,    3,
+ /*    80 */    57,   64,    3,    3,    8,    1,   63,    8,    8,    3,
+ /*    90 */     3,    1,    8,   57,    8,    8,    3,    1,    8,   57,
+ /*   100 */    64,    8,    3,    1,    8,   63,    3,    8,   57,    3,
+ /*   110 */     8,    8,   57,   62,    8,   57,    3,   86,   63,   57,
+ /*   120 */     3,    8,   64,   57,   62,    8,  106,    7,   57,   57,
+ /*   130 */    57,   65,   57,   62,   62,   62,    3,    7,   57,   57,
+ /*   140 */    65,    8,   57,   66,   75,   63,   65,    7,   57,   64,
+ /*   150 */    76,   57,   57,   75,   57,   64,    8,   63,   63,   62,
+ /*   160 */     7,   57,    3,  103,   57,    3,   57,    8,   64,   57,
+ /*   170 */     8,    3,   65,   64,   76,    3,    8,   65,   57,   57,
+ /*   180 */     8,   57,   57,    3,   61,   64,   64,   63,    8,   57,
+ /*   190 */    65,    3,   57,   57,   62,    8,    8,    3,   62,   57,
+ /*   200 */    65,    3,    8,   57,   90,   63,    8,    7,   77,    8,
+ /*   210 */    99,   65,    7,   85,   77,   66,   66,    8,  103,   81,
+ /*   220 */     7,   67,   81,   67,   85,   99,    7,   84,    7,  102,
+ /*   230 */     8,   80,    7,    7,   74,   80,   84,    8,    8,    7,
+ /*   240 */    83,   83,   79,   98,   69,   69,  102,    7,   79,   82,
+ /*   250 */     8,   78,   78,   82,    7,   69,    8,   93,   97,    1,
+ /*   260 */    57,    7,   97,   93,    7,   57,    7,   57,    8,    8,
+ /*   270 */    92,  105,   68,   96,   57,   57,   92,   96,    7,    7,
+ /*   280 */   101,   57,    8,   91,   57,   57,  101,  105,   95,    8,
+ /*   290 */    70,   58,   95,   70,    7,    7,    7,   59,   67,  104,
+ /*   300 */     8,    8,  100,   91,    7,   71,   71,    7,   72,   72,
+ /*   310 */   104,    8,   73,   68,   73,   60,  100,    9,    9,   68,
+ /*   320 */    74,    0,    9,    9,    9,    9,    9,    9,    9,    9,
+ /*   330 */    60,    9,    9,    7,   90,    7,    9,   94,    9,    7,
+ /*   340 */    87,    7,    9,   94,    9,    9,    9,    9,   98,    9,
+ /*   350 */     7,    7,    7,   59,   98,    9,    9,    7,    7,    7,
+ /*   360 */    58,  109,    9,  100,    7,    9,    7,    7,  101,   89,
+ /*   370 */   108,   80,    9,    7,    9,    7,    9,   99,  110,   78,
+ /*   380 */     7,  110,  107,    9,    9,    9,    9,   81,  110,  110,
+ /*   390 */     9,   61,
 };
 #define YY_SHIFT_USE_DFLT (-1)
-#define YY_SHIFT_MAX 125
+#define YY_SHIFT_MAX 201
 static const short yy_shift_ofst[] = {
- /*     0 */    24,  105,  117,  125,  134,  129,  129,  129,  129,  129,
- /*    10 */   129,  129,  129,  129,  129,  129,  129,  129,  129,  129,
- /*    20 */   129,  129,  129,  129,  129,   86,  119,  126,  137,  146,
- /*    30 */    63,   66,   73,   77,   85,   94,  116,  129,  216,  216,
- /*    40 */   239,  249,  249,  251,  239,   25,   25,   70,   70,   93,
- /*    50 */    93,  129,  142,  144,  142,  144,  129,  150,  152,  153,
- /*    60 */   157,  153,  157,  150,  129,  163,  158,  163,  158,  165,
- /*    70 */   165,  166,  169,  166,  169,  171,  178,  171,  129,  183,
- /*    80 */   183,  129,  129,  191,  192,  191,  129,  194,  194,  102,
- /*    90 */   100,  108,  109,  164,  203,  198,  206,  201,  208,  204,
- /*   100 */   209,  214,  207,  210,  211,  215,  212,  217,  220,  221,
- /*   110 */   227,  222,  230,  223,  231,  232,  233,  235,  238,  242,
- /*   120 */   241,  243,  246,  248,  245,  250,
+ /*     0 */    24,   84,   90,   96,  102,  258,  258,  258,  258,  258,
+ /*    10 */   258,  258,  258,  258,  258,  258,  258,  258,  258,  258,
+ /*    20 */   258,  258,  258,  258,  258,  258,  258,  258,  258,  258,
+ /*    30 */   258,  258,  258,  258,  258,  258,  258,  258,  258,  258,
+ /*    40 */   258,  133,  159,  162,  168,  172,  180,  188,  194,  198,
+ /*    50 */    61,   63,   67,   70,   76,   93,   99,  103,  106,  113,
+ /*    60 */   117,  120,  130,  130,  140,  148,  140,  153,  187,  200,
+ /*    70 */   200,  201,  205,  153,  120,  120,  209,  201,  205,  209,
+ /*    80 */   213,  213,  219,  221,  222,  219,  222,  225,  221,  226,
+ /*    90 */   229,  226,  230,  232,  232,  229,  240,  242,  242,  240,
+ /*   100 */   247,  248,  247,  232,  258,  254,  248,  257,  258,  258,
+ /*   110 */   260,  261,  257,  259,  258,  258,  254,  260,  258,  258,
+ /*   120 */   258,  261,  271,  274,  272,  281,  272,  271,  213,  287,
+ /*   130 */   287,  288,  289,  292,  289,  293,  274,  297,  297,  288,
+ /*   140 */   300,  187,  259,  303,  225,  300,  293,  230,  259,   79,
+ /*   150 */    80,   86,   87,  308,  309,  321,  313,  314,  315,  316,
+ /*   160 */   317,  318,  319,  320,  322,  323,  326,  327,  328,  329,
+ /*   170 */   332,  333,  334,  335,  336,  337,  338,  340,  343,  344,
+ /*   180 */   345,  346,  347,  350,  351,  352,  353,  356,  357,  359,
+ /*   190 */   360,  363,  365,  366,  368,  373,  367,  374,  375,  376,
+ /*   200 */   377,  381,
 };
-#define YY_REDUCE_USE_DFLT (-38)
-#define YY_REDUCE_MAX 88
+#define YY_REDUCE_USE_DFLT (-57)
+#define YY_REDUCE_MAX 148
 static const short yy_reduce_ofst[] = {
- /*     0 */   -31,    4,   -3,    0,   -2,   89,  -30,   18,   26,   38,
- /*    10 */    42,   52,   58,   64,   74,   79,   22,   84,   75,   10,
- /*    20 */    41,   82,    8,   13,   29,  154,  139,  132,  167,  174,
- /*    30 */   136,  143,  148,  149,  151,  156,  180,  186,  184,  189,
- /*    40 */   187,  193,  195,  200,  196,  197,  -37,   16,   19,   27,
- /*    50 */    51,   90,   78,   71,   80,   81,   98,   87,  103,   88,
- /*    60 */    83,   91,   92,   96,  112,   97,   95,  101,   99,  107,
- /*    70 */   111,  104,  106,  113,  110,  114,  122,  115,  130,  118,
- /*    80 */   121,  135,  140,  123,  141,  127,  147,  128,  131,
+ /*     0 */   -31,    0,    3,   -1,   -3,   58,   66,   75,   91,   95,
+ /*    10 */   109,  121,  125,  135,   73,   71,  132,   15,  -30,  107,
+ /*    20 */    55,  122,   23,   94,  142,   42,   85,  104,  112,  124,
+ /*    30 */   136,  146,   11,   17,   36,   51,   62,   72,   81,   82,
+ /*    40 */    97,  253,  270,  263,  294,  267,  252,  256,  278,  262,
+ /*    50 */   302,  291,  301,  306,  275,  330,  280,  -48,  -56,   20,
+ /*    60 */    31,   77,   69,   78,   74,  123,   98,   60,  114,  131,
+ /*    70 */   137,  111,  128,  115,  149,  150,  138,  126,  139,  141,
+ /*    80 */   154,  156,  143,  127,  151,  152,  155,  160,  144,  157,
+ /*    90 */   163,  158,  145,  175,  176,  169,  167,  173,  174,  171,
+ /*   100 */   161,  164,  165,  186,  203,  166,  170,  177,  208,  210,
+ /*   110 */   178,  179,  181,  204,  217,  218,  182,  184,  224,  227,
+ /*   120 */   228,  185,  193,  192,  220,  233,  223,  197,  231,  234,
+ /*   130 */   235,  195,  236,  238,  237,  202,  212,  239,  241,  206,
+ /*   140 */   243,  244,  245,  255,  246,  249,  216,  250,  251,
 };
 static const YYACTIONTYPE yy_default[] = {
- /*     0 */   345,  345,  345,  345,  345,  345,  345,  345,  345,  345,
- /*    10 */   345,  345,  345,  345,  345,  345,  345,  345,  345,  345,
- /*    20 */   345,  345,  345,  345,  345,  345,  345,  345,  345,  345,
- /*    30 */   345,  345,  345,  345,  345,  345,  345,  345,  265,  265,
- /*    40 */   277,  267,  267,  345,  277,  269,  269,  279,  279,  271,
- /*    50 */   271,  345,  345,  309,  345,  309,  345,  281,  345,  345,
- /*    60 */   311,  345,  311,  281,  345,  345,  313,  345,  313,  283,
- /*    70 */   283,  345,  315,  345,  315,  285,  345,  285,  345,  287,
- /*    80 */   287,  345,  345,  289,  345,  289,  345,  291,  291,  345,
- /*    90 */   345,  345,  345,  345,  345,  345,  345,  345,  345,  345,
- /*   100 */   345,  345,  345,  345,  345,  345,  345,  345,  345,  345,
- /*   110 */   345,  345,  345,  345,  345,  345,  345,  345,  345,  345,
- /*   120 */   345,  345,  345,  345,  345,  345,  344,  228,  229,  230,
- /*   130 */   231,  232,  233,  234,  235,  236,  237,  238,  239,  240,
- /*   140 */   241,  242,  243,  244,  245,  246,  247,  248,  249,  250,
- /*   150 */   251,  253,  254,  252,  261,  273,  255,  256,  262,  274,
- /*   160 */   257,  258,  263,  275,  259,  260,  264,  276,  293,  278,
- /*   170 */   294,  280,  295,  296,  282,  297,  284,  298,  299,  286,
- /*   180 */   300,  288,  301,  302,  290,  303,  292,  304,  266,  305,
- /*   190 */   317,  318,  268,  306,  319,  320,  270,  307,  321,  322,
- /*   200 */   272,  308,  323,  324,  310,  325,  329,  330,  312,  326,
- /*   210 */   331,  332,  314,  327,  333,  334,  316,  328,  335,  336,
- /*   220 */   337,  338,  339,  340,  341,  342,  343,
+ /*     0 */   485,  485,  485,  485,  485,  485,  485,  485,  485,  485,
+ /*    10 */   485,  485,  485,  485,  485,  485,  485,  485,  485,  485,
+ /*    20 */   485,  485,  485,  485,  485,  485,  485,  485,  485,  485,
+ /*    30 */   485,  485,  485,  485,  485,  485,  485,  485,  485,  485,
+ /*    40 */   485,  485,  485,  485,  485,  485,  485,  485,  485,  485,
+ /*    50 */   485,  485,  485,  485,  485,  485,  485,  485,  485,  485,
+ /*    60 */   485,  369,  391,  391,  393,  485,  393,  459,  485,  395,
+ /*    70 */   395,  485,  419,  459,  369,  369,  485,  485,  419,  485,
+ /*    80 */   371,  371,  417,  457,  485,  417,  485,  389,  457,  415,
+ /*    90 */   485,  415,  485,  375,  375,  485,  413,  485,  485,  413,
+ /*   100 */   451,  485,  451,  375,  485,  463,  485,  449,  485,  485,
+ /*   110 */   485,  485,  449,  373,  485,  485,  463,  485,  485,  485,
+ /*   120 */   485,  485,  447,  485,  381,  485,  381,  447,  371,  383,
+ /*   130 */   383,  461,  385,  485,  385,  485,  485,  387,  387,  461,
+ /*   140 */   445,  485,  373,  485,  389,  445,  485,  485,  373,  485,
+ /*   150 */   485,  485,  485,  485,  485,  485,  485,  485,  485,  485,
+ /*   160 */   485,  485,  485,  485,  485,  485,  485,  485,  485,  485,
+ /*   170 */   485,  485,  485,  485,  485,  485,  485,  485,  485,  485,
+ /*   180 */   485,  485,  485,  485,  485,  485,  485,  485,  485,  485,
+ /*   190 */   485,  485,  485,  485,  485,  485,  485,  485,  485,  485,
+ /*   200 */   485,  485,  422,  409,  370,  408,  420,  460,  432,  439,
+ /*   210 */   440,  396,  407,  394,  476,  406,  474,  405,  479,  392,
+ /*   220 */   404,  480,  441,  390,  403,  402,  446,  341,  453,  465,
+ /*   230 */   466,  388,  401,  386,  340,  400,  339,  399,  338,  384,
+ /*   240 */   398,  337,  442,  382,  397,  380,  448,  462,  454,  467,
+ /*   250 */   468,  368,  364,  363,  483,  379,  475,  367,  481,  362,
+ /*   260 */   361,  482,  443,  378,  366,  360,  450,  336,  455,  469,
+ /*   270 */   470,  359,  377,  365,  335,  356,  334,  358,  333,  357,
+ /*   280 */   355,  332,  444,  354,  353,  352,  452,  464,  456,  471,
+ /*   290 */   472,  351,  350,  349,  348,  347,  458,  484,  473,  477,
+ /*   300 */   478,  346,  345,  428,  427,  414,  344,  429,  433,  434,
+ /*   310 */   412,  376,  426,  425,  411,  416,  343,  430,  435,  436,
+ /*   320 */   374,  424,  423,  410,  372,  418,  342,  431,  437,  438,
+ /*   330 */   421,
 };
 #define YY_SZ_ACTTAB (int)(sizeof(yy_action)/sizeof(yy_action[0]))
 
@@ -371,7 +422,12 @@ static const char *const yyTokenName[] = {
   "multipoint_text_zm",  "multipoint_text_zm_2",  "linestring_text",  "linestring_text_z",
   "linestring_text_m",  "linestring_text_zm",  "linestring_text_repeated",  "linestring_text_z_repeated",
   "linestring_text_m_repeated",  "linestring_text_zm_repeated",  "multilinestring_text",  "multilinestring_text_z",
-  "multilinestring_text_m",  "multilinestring_text_zm",
+  "multilinestring_text_m",  "multilinestring_text_zm",  "ring_text",     "ring_text_z", 
+  "ring_text_m",   "ring_text_zm",  "ring_text_repeated",  "ring_text_z_repeated",
+  "ring_text_m_repeated",  "ring_text_zm_repeated",  "polygon_text",  "polygon_text_z",
+  "polygon_text_m",  "polygon_text_zm",  "polygon_text_repeated",  "polygon_text_z_repeated",
+  "polygon_text_m_repeated",  "polygon_text_zm_repeated",  "multipolygon_text",  "multipolygon_text_z",
+  "multipolygon_text_m",  "multipolygon_text_zm",
 };
 #endif /* NDEBUG */
 
@@ -489,14 +545,50 @@ static const char *const yyRuleName[] = {
  /* 107 */ "multilinestring_m ::= WKT_MULTILINESTRING_M_TAGGED_TEXT multilinestring_text_m",
  /* 108 */ "multilinestring_zm ::= WKT_MULTILINESTRING_ZM_TAGGED_TEXT WKT_EMPTY_SET",
  /* 109 */ "multilinestring_zm ::= WKT_MULTILINESTRING_ZM_TAGGED_TEXT multilinestring_text_zm",
- /* 110 */ "polygon ::= WKT_POLYGON_TAGGED_TEXT WKT_EMPTY_SET",
- /* 111 */ "polygon_z ::= WKT_POLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET",
- /* 112 */ "polygon_m ::= WKT_POLYGON_M_TAGGED_TEXT WKT_EMPTY_SET",
- /* 113 */ "polygon_zm ::= WKT_POLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET",
- /* 114 */ "multipolygon ::= WKT_MULTIPOLYGON_TAGGED_TEXT WKT_EMPTY_SET",
- /* 115 */ "multipolygon_z ::= WKT_MULTIPOLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET",
- /* 116 */ "multipolygon_m ::= WKT_MULTIPOLYGON_M_TAGGED_TEXT WKT_EMPTY_SET",
- /* 117 */ "multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 110 */ "ring_text ::= WKT_LPAREN coord_xy WKT_COMMA coord_xy WKT_COMMA coord_xy WKT_COMMA coord_xy coord_xy_repeated WKT_RPAREN",
+ /* 111 */ "ring_text_z ::= WKT_LPAREN coord_xyz WKT_COMMA coord_xyz WKT_COMMA coord_xyz WKT_COMMA coord_xyz coord_xyz_repeated WKT_RPAREN",
+ /* 112 */ "ring_text_m ::= WKT_LPAREN coord_xym WKT_COMMA coord_xym WKT_COMMA coord_xym WKT_COMMA coord_xym coord_xym_repeated WKT_RPAREN",
+ /* 113 */ "ring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm WKT_COMMA coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN",
+ /* 114 */ "ring_text_repeated ::=",
+ /* 115 */ "ring_text_repeated ::= WKT_COMMA ring_text ring_text_repeated",
+ /* 116 */ "ring_text_z_repeated ::=",
+ /* 117 */ "ring_text_z_repeated ::= WKT_COMMA ring_text_z ring_text_z_repeated",
+ /* 118 */ "ring_text_m_repeated ::=",
+ /* 119 */ "ring_text_m_repeated ::= WKT_COMMA ring_text_m ring_text_m_repeated",
+ /* 120 */ "ring_text_zm_repeated ::=",
+ /* 121 */ "ring_text_zm_repeated ::= WKT_COMMA ring_text_zm ring_text_zm_repeated",
+ /* 122 */ "polygon_text ::= WKT_LPAREN ring_text ring_text_repeated WKT_RPAREN",
+ /* 123 */ "polygon_text_z ::= WKT_LPAREN ring_text_z ring_text_z_repeated WKT_RPAREN",
+ /* 124 */ "polygon_text_m ::= WKT_LPAREN ring_text_m ring_text_m_repeated WKT_RPAREN",
+ /* 125 */ "polygon_text_zm ::= WKT_LPAREN ring_text_zm ring_text_zm_repeated WKT_RPAREN",
+ /* 126 */ "polygon_text_repeated ::=",
+ /* 127 */ "polygon_text_repeated ::= WKT_COMMA polygon_text polygon_text_repeated",
+ /* 128 */ "polygon_text_z_repeated ::=",
+ /* 129 */ "polygon_text_z_repeated ::= WKT_COMMA polygon_text_z polygon_text_z_repeated",
+ /* 130 */ "polygon_text_m_repeated ::=",
+ /* 131 */ "polygon_text_m_repeated ::= WKT_COMMA polygon_text_m polygon_text_m_repeated",
+ /* 132 */ "polygon_text_zm_repeated ::=",
+ /* 133 */ "polygon_text_zm_repeated ::= WKT_COMMA polygon_text_zm polygon_text_zm_repeated",
+ /* 134 */ "polygon ::= WKT_POLYGON_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 135 */ "polygon ::= WKT_POLYGON_TAGGED_TEXT polygon_text",
+ /* 136 */ "polygon_z ::= WKT_POLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 137 */ "polygon_z ::= WKT_POLYGON_Z_TAGGED_TEXT polygon_text_z",
+ /* 138 */ "polygon_m ::= WKT_POLYGON_M_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 139 */ "polygon_m ::= WKT_POLYGON_M_TAGGED_TEXT polygon_text_m",
+ /* 140 */ "polygon_zm ::= WKT_POLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 141 */ "polygon_zm ::= WKT_POLYGON_ZM_TAGGED_TEXT polygon_text_zm",
+ /* 142 */ "multipolygon_text ::= WKT_LPAREN polygon_text polygon_text_repeated WKT_RPAREN",
+ /* 143 */ "multipolygon_text_z ::= WKT_LPAREN polygon_text_z polygon_text_z_repeated WKT_RPAREN",
+ /* 144 */ "multipolygon_text_m ::= WKT_LPAREN polygon_text_m polygon_text_m_repeated WKT_RPAREN",
+ /* 145 */ "multipolygon_text_zm ::= WKT_LPAREN polygon_text_zm polygon_text_zm_repeated WKT_RPAREN",
+ /* 146 */ "multipolygon ::= WKT_MULTIPOLYGON_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 147 */ "multipolygon ::= WKT_MULTIPOLYGON_TAGGED_TEXT multipolygon_text",
+ /* 148 */ "multipolygon_z ::= WKT_MULTIPOLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 149 */ "multipolygon_z ::= WKT_MULTIPOLYGON_Z_TAGGED_TEXT multipolygon_text_z",
+ /* 150 */ "multipolygon_m ::= WKT_MULTIPOLYGON_M_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 151 */ "multipolygon_m ::= WKT_MULTIPOLYGON_M_TAGGED_TEXT multipolygon_text_m",
+ /* 152 */ "multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET",
+ /* 153 */ "multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT multipolygon_text_zm",
 };
 #endif /* NDEBUG */
 
@@ -913,13 +1005,49 @@ static const struct {
   { 47, 2 },
   { 48, 2 },
   { 48, 2 },
+  { 90, 10 },
+  { 91, 10 },
+  { 92, 10 },
+  { 93, 10 },
+  { 94, 0 },
+  { 94, 3 },
+  { 95, 0 },
+  { 95, 3 },
+  { 96, 0 },
+  { 96, 3 },
+  { 97, 0 },
+  { 97, 3 },
+  { 98, 4 },
+  { 99, 4 },
+  { 100, 4 },
+  { 101, 4 },
+  { 102, 0 },
+  { 102, 3 },
+  { 103, 0 },
+  { 103, 3 },
+  { 104, 0 },
+  { 104, 3 },
+  { 105, 0 },
+  { 105, 3 },
+  { 49, 2 },
   { 49, 2 },
   { 50, 2 },
+  { 50, 2 },
+  { 51, 2 },
   { 51, 2 },
   { 52, 2 },
+  { 52, 2 },
+  { 106, 4 },
+  { 107, 4 },
+  { 108, 4 },
+  { 109, 4 },
+  { 53, 2 },
   { 53, 2 },
   { 54, 2 },
+  { 54, 2 },
   { 55, 2 },
+  { 55, 2 },
+  { 56, 2 },
   { 56, 2 },
 };
 
@@ -1128,42 +1256,50 @@ static void yy_reduce(
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTILINESTRINGZM;
 }
         break;
-      case 110: /* polygon ::= WKT_POLYGON_TAGGED_TEXT WKT_EMPTY_SET */
+      case 134: /* polygon ::= WKT_POLYGON_TAGGED_TEXT WKT_EMPTY_SET */
+      case 135: /* polygon ::= WKT_POLYGON_TAGGED_TEXT polygon_text */ yytestcase(yyruleno==135);
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGON;
 }
         break;
-      case 111: /* polygon_z ::= WKT_POLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET */
+      case 136: /* polygon_z ::= WKT_POLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET */
+      case 137: /* polygon_z ::= WKT_POLYGON_Z_TAGGED_TEXT polygon_text_z */ yytestcase(yyruleno==137);
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONZ;
 }
         break;
-      case 112: /* polygon_m ::= WKT_POLYGON_M_TAGGED_TEXT WKT_EMPTY_SET */
+      case 138: /* polygon_m ::= WKT_POLYGON_M_TAGGED_TEXT WKT_EMPTY_SET */
+      case 139: /* polygon_m ::= WKT_POLYGON_M_TAGGED_TEXT polygon_text_m */ yytestcase(yyruleno==139);
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONM;
 }
         break;
-      case 113: /* polygon_zm ::= WKT_POLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET */
+      case 140: /* polygon_zm ::= WKT_POLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET */
+      case 141: /* polygon_zm ::= WKT_POLYGON_ZM_TAGGED_TEXT polygon_text_zm */ yytestcase(yyruleno==141);
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONZM;
 }
         break;
-      case 114: /* multipolygon ::= WKT_MULTIPOLYGON_TAGGED_TEXT WKT_EMPTY_SET */
+      case 146: /* multipolygon ::= WKT_MULTIPOLYGON_TAGGED_TEXT WKT_EMPTY_SET */
+      case 147: /* multipolygon ::= WKT_MULTIPOLYGON_TAGGED_TEXT multipolygon_text */ yytestcase(yyruleno==147);
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGON;
 }
         break;
-      case 115: /* multipolygon_z ::= WKT_MULTIPOLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET */
+      case 148: /* multipolygon_z ::= WKT_MULTIPOLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET */
+      case 149: /* multipolygon_z ::= WKT_MULTIPOLYGON_Z_TAGGED_TEXT multipolygon_text_z */ yytestcase(yyruleno==149);
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONZ;
 }
         break;
-      case 116: /* multipolygon_m ::= WKT_MULTIPOLYGON_M_TAGGED_TEXT WKT_EMPTY_SET */
+      case 150: /* multipolygon_m ::= WKT_MULTIPOLYGON_M_TAGGED_TEXT WKT_EMPTY_SET */
+      case 151: /* multipolygon_m ::= WKT_MULTIPOLYGON_M_TAGGED_TEXT multipolygon_text_m */ yytestcase(yyruleno==151);
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONM;
 }
         break;
-      case 117: /* multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET */
+      case 152: /* multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET */
+      case 153: /* multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT multipolygon_text_zm */ yytestcase(yyruleno==153);
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONZM;
 }
@@ -1238,6 +1374,34 @@ static void yy_reduce(
       /* (99) multilinestring_text_z ::= WKT_LPAREN linestring_text_z linestring_text_z_repeated WKT_RPAREN */ yytestcase(yyruleno==99);
       /* (100) multilinestring_text_m ::= WKT_LPAREN linestring_text_m linestring_text_m_repeated WKT_RPAREN */ yytestcase(yyruleno==100);
       /* (101) multilinestring_text_zm ::= WKT_LPAREN linestring_text_zm linestring_text_zm_repeated WKT_RPAREN */ yytestcase(yyruleno==101);
+      /* (110) ring_text ::= WKT_LPAREN coord_xy WKT_COMMA coord_xy WKT_COMMA coord_xy WKT_COMMA coord_xy coord_xy_repeated WKT_RPAREN */ yytestcase(yyruleno==110);
+      /* (111) ring_text_z ::= WKT_LPAREN coord_xyz WKT_COMMA coord_xyz WKT_COMMA coord_xyz WKT_COMMA coord_xyz coord_xyz_repeated WKT_RPAREN */ yytestcase(yyruleno==111);
+      /* (112) ring_text_m ::= WKT_LPAREN coord_xym WKT_COMMA coord_xym WKT_COMMA coord_xym WKT_COMMA coord_xym coord_xym_repeated WKT_RPAREN */ yytestcase(yyruleno==112);
+      /* (113) ring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm WKT_COMMA coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN */ yytestcase(yyruleno==113);
+      /* (114) ring_text_repeated ::= */ yytestcase(yyruleno==114);
+      /* (115) ring_text_repeated ::= WKT_COMMA ring_text ring_text_repeated */ yytestcase(yyruleno==115);
+      /* (116) ring_text_z_repeated ::= */ yytestcase(yyruleno==116);
+      /* (117) ring_text_z_repeated ::= WKT_COMMA ring_text_z ring_text_z_repeated */ yytestcase(yyruleno==117);
+      /* (118) ring_text_m_repeated ::= */ yytestcase(yyruleno==118);
+      /* (119) ring_text_m_repeated ::= WKT_COMMA ring_text_m ring_text_m_repeated */ yytestcase(yyruleno==119);
+      /* (120) ring_text_zm_repeated ::= */ yytestcase(yyruleno==120);
+      /* (121) ring_text_zm_repeated ::= WKT_COMMA ring_text_zm ring_text_zm_repeated */ yytestcase(yyruleno==121);
+      /* (122) polygon_text ::= WKT_LPAREN ring_text ring_text_repeated WKT_RPAREN */ yytestcase(yyruleno==122);
+      /* (123) polygon_text_z ::= WKT_LPAREN ring_text_z ring_text_z_repeated WKT_RPAREN */ yytestcase(yyruleno==123);
+      /* (124) polygon_text_m ::= WKT_LPAREN ring_text_m ring_text_m_repeated WKT_RPAREN */ yytestcase(yyruleno==124);
+      /* (125) polygon_text_zm ::= WKT_LPAREN ring_text_zm ring_text_zm_repeated WKT_RPAREN */ yytestcase(yyruleno==125);
+      /* (126) polygon_text_repeated ::= */ yytestcase(yyruleno==126);
+      /* (127) polygon_text_repeated ::= WKT_COMMA polygon_text polygon_text_repeated */ yytestcase(yyruleno==127);
+      /* (128) polygon_text_z_repeated ::= */ yytestcase(yyruleno==128);
+      /* (129) polygon_text_z_repeated ::= WKT_COMMA polygon_text_z polygon_text_z_repeated */ yytestcase(yyruleno==129);
+      /* (130) polygon_text_m_repeated ::= */ yytestcase(yyruleno==130);
+      /* (131) polygon_text_m_repeated ::= WKT_COMMA polygon_text_m polygon_text_m_repeated */ yytestcase(yyruleno==131);
+      /* (132) polygon_text_zm_repeated ::= */ yytestcase(yyruleno==132);
+      /* (133) polygon_text_zm_repeated ::= WKT_COMMA polygon_text_zm polygon_text_zm_repeated */ yytestcase(yyruleno==133);
+      /* (142) multipolygon_text ::= WKT_LPAREN polygon_text polygon_text_repeated WKT_RPAREN */ yytestcase(yyruleno==142);
+      /* (143) multipolygon_text_z ::= WKT_LPAREN polygon_text_z polygon_text_z_repeated WKT_RPAREN */ yytestcase(yyruleno==143);
+      /* (144) multipolygon_text_m ::= WKT_LPAREN polygon_text_m polygon_text_m_repeated WKT_RPAREN */ yytestcase(yyruleno==144);
+      /* (145) multipolygon_text_zm ::= WKT_LPAREN polygon_text_zm polygon_text_zm_repeated WKT_RPAREN */ yytestcase(yyruleno==145);
         break;
   };
   yygoto = yyRuleInfo[yyruleno].lhs;

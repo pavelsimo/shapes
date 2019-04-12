@@ -47,6 +47,7 @@ SOFTWARE.
 #include <simo/geom/linestring.hpp>
 #include <simo/geom/multilinestring.hpp>
 #include <simo/geom/polygon.hpp>
+#include <simo/geom/multipolygon.hpp>
 #include <simo/geom/linearring.hpp>
 
 #endif  // SIMO_SHAPES_HPP

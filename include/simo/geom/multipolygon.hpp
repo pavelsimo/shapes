@@ -6,7 +6,6 @@
 #include <sstream>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/detail/point_sequence.hpp>
 #include <simo/geom/bounds.hpp>
 
 namespace simo
@@ -62,9 +61,12 @@ class MultiPolygon : public BaseGeometry<MultiPolygon>
      *
      * @since 0.0.1
      */
-    static MultiPolygon from_wkt(const std::string& /*wkt*/)
+    static MultiPolygon from_wkt(const std::string& wkt)
     {
-        throw exceptions::NotImplementedError();
+        WktReader reader{};
+        auto result      = reader.read(wkt.c_str());
+        const auto& data = result.data;
+        return MultiPolygon();
     }
 
     /*!

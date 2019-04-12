@@ -402,7 +402,46 @@ multilinestring_zm ::= WKT_MULTILINESTRING_ZM_TAGGED_TEXT multilinestring_text_z
 // polygon |
 //==========
 
+ring_text ::= WKT_LPAREN coord_xy WKT_COMMA coord_xy WKT_COMMA coord_xy WKT_COMMA coord_xy coord_xy_repeated WKT_RPAREN.
+ring_text_z ::= WKT_LPAREN coord_xyz  WKT_COMMA coord_xyz WKT_COMMA coord_xyz WKT_COMMA coord_xyz coord_xyz_repeated WKT_RPAREN.
+ring_text_m ::= WKT_LPAREN coord_xym  WKT_COMMA coord_xym WKT_COMMA coord_xym WKT_COMMA coord_xym coord_xym_repeated WKT_RPAREN.
+ring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm WKT_COMMA coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN.
+
+ring_text_repeated ::= .
+ring_text_repeated ::= WKT_COMMA ring_text ring_text_repeated.
+
+ring_text_z_repeated ::= .
+ring_text_z_repeated ::= WKT_COMMA ring_text_z ring_text_z_repeated.
+
+ring_text_m_repeated ::= .
+ring_text_m_repeated ::= WKT_COMMA ring_text_m ring_text_m_repeated.
+
+ring_text_zm_repeated ::= .
+ring_text_zm_repeated ::= WKT_COMMA ring_text_zm ring_text_zm_repeated.
+
+polygon_text    ::=  WKT_LPAREN ring_text ring_text_repeated WKT_RPAREN.
+polygon_text_z  ::=  WKT_LPAREN ring_text_z ring_text_z_repeated WKT_RPAREN.
+polygon_text_m  ::=  WKT_LPAREN ring_text_m ring_text_m_repeated WKT_RPAREN.
+polygon_text_zm ::=  WKT_LPAREN ring_text_zm ring_text_zm_repeated WKT_RPAREN.
+
+polygon_text_repeated ::= .
+polygon_text_repeated ::= WKT_COMMA polygon_text polygon_text_repeated.
+
+polygon_text_z_repeated ::= .
+polygon_text_z_repeated ::= WKT_COMMA polygon_text_z polygon_text_z_repeated.
+
+polygon_text_m_repeated ::= .
+polygon_text_m_repeated ::= WKT_COMMA polygon_text_m polygon_text_m_repeated.
+
+polygon_text_zm_repeated ::= .
+polygon_text_zm_repeated ::= WKT_COMMA polygon_text_zm polygon_text_zm_repeated.
+
 polygon ::= WKT_POLYGON_TAGGED_TEXT WKT_EMPTY_SET.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGON;
+}
+
+polygon ::= WKT_POLYGON_TAGGED_TEXT polygon_text.
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGON;
 }
@@ -412,7 +451,17 @@ polygon_z ::= WKT_POLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET.
     result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONZ;
 }
 
+polygon_z ::= WKT_POLYGON_Z_TAGGED_TEXT polygon_text_z.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONZ;
+}
+
 polygon_m ::= WKT_POLYGON_M_TAGGED_TEXT WKT_EMPTY_SET.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONM;
+}
+
+polygon_m ::= WKT_POLYGON_M_TAGGED_TEXT polygon_text_m.
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONM;
 }
@@ -422,11 +471,26 @@ polygon_zm ::= WKT_POLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET.
     result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONZM;
 }
 
+polygon_zm ::= WKT_POLYGON_ZM_TAGGED_TEXT polygon_text_zm.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONZM;
+}
+
 //===============
 // multipolygon |
 //===============
 
+multipolygon_text    ::=  WKT_LPAREN polygon_text polygon_text_repeated WKT_RPAREN.
+multipolygon_text_z  ::=  WKT_LPAREN polygon_text_z polygon_text_z_repeated WKT_RPAREN.
+multipolygon_text_m  ::=  WKT_LPAREN polygon_text_m polygon_text_m_repeated WKT_RPAREN.
+multipolygon_text_zm ::=  WKT_LPAREN polygon_text_zm polygon_text_zm_repeated WKT_RPAREN.
+
 multipolygon ::= WKT_MULTIPOLYGON_TAGGED_TEXT WKT_EMPTY_SET.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGON;
+}
+
+multipolygon ::= WKT_MULTIPOLYGON_TAGGED_TEXT multipolygon_text.
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGON;
 }
@@ -436,7 +500,17 @@ multipolygon_z ::= WKT_MULTIPOLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET.
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONZ;
 }
 
+multipolygon_z ::= WKT_MULTIPOLYGON_Z_TAGGED_TEXT multipolygon_text_z.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONZ;
+}
+
 multipolygon_m ::= WKT_MULTIPOLYGON_M_TAGGED_TEXT WKT_EMPTY_SET.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONM;
+}
+
+multipolygon_m ::= WKT_MULTIPOLYGON_M_TAGGED_TEXT multipolygon_text_m.
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONM;
 }
@@ -445,3 +519,9 @@ multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET.
 {
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONZM;
 }
+
+multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT multipolygon_text_zm.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONZM;
+}
+

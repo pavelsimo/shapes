@@ -17,7 +17,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 option(SHAPES_SINGLE_HEADER "whether to use a single header or multiple headers" OFF)
 option(SHAPES_ENABLE_COVERAGE "whether to enable coverage" OFF)
 option(SHAPES_TESTING "build tests" ON)
-option(SHAPES_VERBOSE "whether to enable verbose output" OFF)
+option(SHAPES_VERBOSE "whether to enable verbose output" ON)
 
 ####################
 # warning settings #
@@ -108,7 +108,7 @@ add_custom_target(shapes_lexer COMMENT "re2c lexer code generation"
 ################
 add_custom_target(shapes_parser COMMENT "lemon parser"
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/include/simo/io
-        COMMAND lemon -l -q wkt_parser.y)
+        COMMAND lemon -l wkt_parser.y)
 
 ############
 # coverage #

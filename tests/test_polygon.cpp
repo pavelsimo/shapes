@@ -138,5 +138,20 @@ TEST_CASE("Polygon")
         {
             /// @todo (pavel) add test
         }
+
+        SECTION("xy - from wkt")
+        {
+            auto p = Polygon::from_wkt("POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))");
+        }
+
+        SECTION("xyz - from wkt")
+        {
+
+        }
+
+        SECTION("xyzm - from wkt")
+        {
+
+        }
     }
 }

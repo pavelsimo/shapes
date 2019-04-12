@@ -135,9 +135,12 @@ class Polygon : public BaseGeometry<Polygon>
      *
      * @since 0.0.1
      */
-    static Polygon from_wkt(const std::string& /*wkt*/)
+    static Polygon from_wkt(const std::string& wkt)
     {
-        throw exceptions::NotImplementedError();
+        WktReader reader{};
+        auto result      = reader.read(wkt.c_str());
+        const auto& data = result.data;
+        return Polygon();
     }
 
     /*!
