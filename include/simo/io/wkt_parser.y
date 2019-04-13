@@ -54,6 +54,10 @@ wkt_text ::= multipolygon.
 wkt_text ::= multipolygon_z.
 wkt_text ::= multipolygon_m.
 wkt_text ::= multipolygon_zm.
+wkt_text ::= geometrycollection.
+wkt_text ::= geometrycollection_z.
+wkt_text ::= geometrycollection_m.
+wkt_text ::= geometrycollection_zm.
 
 coord(A) ::= WKT_NUM(B). { A = B; }
 
@@ -525,3 +529,91 @@ multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT multipolygon_text_zm.
     result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONZM;
 }
 
+//=====================
+// geometrycollection |
+//=====================
+
+geometry_text ::= point.
+geometry_text ::= multipoint.
+geometry_text ::= linestring.
+geometry_text ::= multilinestring.
+geometry_text ::= polygon.
+geometry_text ::= multipolygon.
+
+geometry_text_repeated ::= .
+geometry_text_repeated ::= WKT_COMMA geometry_text geometry_text_repeated.
+
+geometry_text_z ::= point_z.
+geometry_text_z ::= multipoint_z.
+geometry_text_z ::= linestring_z.
+geometry_text_z ::= multilinestring_z.
+geometry_text_z ::= polygon_z.
+geometry_text_z ::= multipolygon_z.
+
+geometry_text_z_repeated ::= .
+geometry_text_z_repeated ::= WKT_COMMA geometry_text_z geometry_text_z_repeated.
+
+geometry_text_m ::= point_m.
+geometry_text_m ::= multipoint_m.
+geometry_text_m ::= linestring_m.
+geometry_text_m ::= multilinestring_m.
+geometry_text_m ::= polygon_m.
+geometry_text_m ::= multipolygon_m.
+
+geometry_text_m_repeated ::= .
+geometry_text_m_repeated ::= WKT_COMMA geometry_text_m geometry_text_m_repeated.
+
+geometry_text_zm ::= point_zm.
+geometry_text_zm ::= multipoint_zm.
+geometry_text_zm ::= linestring_zm.
+geometry_text_zm ::= multilinestring_zm.
+geometry_text_zm ::= polygon_zm.
+geometry_text_zm ::= multipolygon_zm.
+
+geometry_text_zm_repeated ::= .
+geometry_text_zm_repeated ::= WKT_COMMA geometry_text_zm geometry_text_zm_repeated.
+
+geometrycollection_text    ::=  WKT_LPAREN geometry_text geometry_text_repeated WKT_RPAREN.
+geometrycollection_text_z  ::=  WKT_LPAREN geometry_text_z geometry_text_z_repeated WKT_RPAREN.
+geometrycollection_text_m  ::=  WKT_LPAREN geometry_text_m geometry_text_m_repeated WKT_RPAREN.
+geometrycollection_text_zm ::=  WKT_LPAREN geometry_text_zm geometry_text_zm_repeated WKT_RPAREN.
+
+geometrycollection ::= WKT_GEOMETRYCOLLECTION_TAGGED_TEXT WKT_EMPTY_SET.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::GEOMETRYCOLLECTION;
+}
+
+geometrycollection ::= WKT_GEOMETRYCOLLECTION_TAGGED_TEXT geometrycollection_text.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::GEOMETRYCOLLECTION;
+}
+
+geometrycollection_z ::= WKT_GEOMETRYCOLLECTION_Z_TAGGED_TEXT WKT_EMPTY_SET.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::GEOMETRYCOLLECTIONZ;
+}
+
+geometrycollection_z ::= WKT_GEOMETRYCOLLECTION_Z_TAGGED_TEXT geometrycollection_text_z.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::GEOMETRYCOLLECTIONZ;
+}
+
+geometrycollection_m ::= WKT_GEOMETRYCOLLECTION_M_TAGGED_TEXT WKT_EMPTY_SET.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::GEOMETRYCOLLECTIONM;
+}
+
+geometrycollection_m ::= WKT_GEOMETRYCOLLECTION_M_TAGGED_TEXT geometrycollection_text_m.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::GEOMETRYCOLLECTIONM;
+}
+
+geometrycollection_zm ::= WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT WKT_EMPTY_SET.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::GEOMETRYCOLLECTIONZM;
+}
+
+geometrycollection_zm ::= WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT geometrycollection_text_zm.
+{
+    result->data.geom_type = simo::shapes::GeometryDetailedType::GEOMETRYCOLLECTIONZM;
+}

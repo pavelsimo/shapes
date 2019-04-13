@@ -146,6 +146,16 @@ class WktLexer
           multipolygon_zm_tagged_text  = 'MULTIPOLYGON' ws* 'ZM';
           multipolygon_zm_tagged_text  { return WKT_MULTIPOLYGON_ZM_TAGGED_TEXT; }
 
+          // geometrycollection
+          geometrycollection_tagged_text     = 'GEOMETRYCOLLECTION';
+          geometrycollection_tagged_text     { return WKT_GEOMETRYCOLLECTION_TAGGED_TEXT; }
+          geometrycollection_z_tagged_text   = 'GEOMETRYCOLLECTION' ws* 'Z';
+          geometrycollection_z_tagged_text   { return WKT_GEOMETRYCOLLECTION_Z_TAGGED_TEXT; }
+          geometrycollection_m_tagged_text   = 'GEOMETRYCOLLECTION' ws* 'M';
+          geometrycollection_m_tagged_text   { return WKT_GEOMETRYCOLLECTION_M_TAGGED_TEXT; }
+          geometrycollection_zm_tagged_text  = 'GEOMETRYCOLLECTION' ws* 'ZM';
+          geometrycollection_zm_tagged_text  { return WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT; }
+
           end             { return WKT_END_OF_INPUT; }
           .               { return WKT_PARSE_ERROR; }
         */
