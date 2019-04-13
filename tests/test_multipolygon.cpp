@@ -18,6 +18,6 @@ TEST_CASE("MultiPolygon")
 
     SECTION("xyzm - from wkt")
     {
-        //auto mp = MultiPolygon::from_wkt("MULTILINESTRING ZM ((10 10 10 10, 20 20 20 20, 10 40 40 40), (40 40 40 40, 30 30 30 30, 40 20 20 20, 30 10 10 10))");
+        auto mp = MultiPolygon::from_wkt("MULTIPOLYGON ZM (((40 40 10 -5, 20 45 10 -5, 45 30 10 -5, 40 40 10 -5)), ((20 35 10 -5, 10 30 10 -5, 10 10 10 -5, 30 5 10 -5, 45 20 10 -5, 20 35 10 -5), (30 20 10 -5, 20 15 10 -5, 20 25 10 -5, 30 20 10 -5)))");
     }
 }
