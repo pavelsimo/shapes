@@ -196,7 +196,7 @@ int8_t get_ndim(GeometryDetailedType detailed_type) noexcept
  * @brief returns a geometry detailed type given the geometry type and dimension type
  * @param geom_type the geometry type
  * @param dim_type the dimension type
- * @return the geometry detailed type
+ * @return a geometry detailed type
  *
  * @since 0.0.1
  */
@@ -364,6 +364,105 @@ GeometryDetailedType get_geom_detailed_type(GeometryType geom_type, DimensionTyp
                     return GeometryDetailedType::TINZM;
             }
         }
+    }
+}
+
+/*!
+ * @brief returns a geometry type given the geometry detailed type
+ * @param geom_detailed_type the geometry detailed type
+ * @return a geometry type
+ *
+ * @since 0.0.1
+ */
+GeometryType get_geom_type(GeometryDetailedType geom_detailed_type)
+{
+    switch(geom_detailed_type)
+    {
+        case GeometryDetailedType::GEOMETRY:
+        case GeometryDetailedType::GEOMETRYZ:
+        case GeometryDetailedType::GEOMETRYM:
+        case GeometryDetailedType::GEOMETRYZM:
+            return GeometryType::GEOMETRY;
+        case GeometryDetailedType::POINT:
+        case GeometryDetailedType::POINTZ:
+        case GeometryDetailedType::POINTM:
+        case GeometryDetailedType::POINTZM:
+            return GeometryType::POINT;
+        case GeometryDetailedType::MULTIPOINT:
+        case GeometryDetailedType::MULTIPOINTZ:
+        case GeometryDetailedType::MULTIPOINTM:
+        case GeometryDetailedType::MULTIPOINTZM:
+            return GeometryType::POINT;
+        case GeometryDetailedType::LINESTRING:
+        case GeometryDetailedType::LINESTRINGZ:
+        case GeometryDetailedType::LINESTRINGM:
+        case GeometryDetailedType::LINESTRINGZM:
+            return GeometryType::LINESTRING;
+        case GeometryDetailedType::MULTILINESTRING:
+        case GeometryDetailedType::MULTILINESTRINGZ:
+        case GeometryDetailedType::MULTILINESTRINGM:
+        case GeometryDetailedType::MULTILINESTRINGZM:
+            return GeometryType::MULTILINESTRING;
+        case GeometryDetailedType::POLYGON:
+        case GeometryDetailedType::POLYGONZ:
+        case GeometryDetailedType::POLYGONM:
+        case GeometryDetailedType::POLYGONZM:
+            return GeometryType::POLYGON;
+        case GeometryDetailedType::MULTIPOLYGON:
+        case GeometryDetailedType::MULTIPOLYGONZ:
+        case GeometryDetailedType::MULTIPOLYGONM:
+        case GeometryDetailedType::MULTIPOLYGONZM:
+            return GeometryType::POLYGON;
+        case GeometryDetailedType::GEOMETRYCOLLECTION:
+        case GeometryDetailedType::GEOMETRYCOLLECTIONZ:
+        case GeometryDetailedType::GEOMETRYCOLLECTIONM:
+        case GeometryDetailedType::GEOMETRYCOLLECTIONZM:
+            return GeometryType::GEOMETRYCOLLECTION;
+        case GeometryDetailedType::CIRCULARSTRING:
+        case GeometryDetailedType::CIRCULARSTRINGZ:
+        case GeometryDetailedType::CIRCULARSTRINGM:
+        case GeometryDetailedType::CIRCULARSTRINGZM:
+            return GeometryType::CIRCULARSTRING;
+        case GeometryDetailedType::COMPOUNDCURVE:
+        case GeometryDetailedType::COMPOUNDCURVEZ:
+        case GeometryDetailedType::COMPOUNDCURVEM:
+        case GeometryDetailedType::COMPOUNDCURVEZM:
+            return GeometryType::COMPOUNDCURVE;
+        case GeometryDetailedType::CURVEPOLYGON:
+        case GeometryDetailedType::CURVEPOLYGONZ:
+        case GeometryDetailedType::CURVEPOLYGONM:
+        case GeometryDetailedType::CURVEPOLYGONZM:
+            return GeometryType::CURVEPOLYGON;
+        case GeometryDetailedType::MULTICURVE:
+        case GeometryDetailedType::MULTICURVEZ:
+        case GeometryDetailedType::MULTICURVEM:
+        case GeometryDetailedType::MULTICURVEZM:
+            return GeometryType::MULTICURVE;
+        case GeometryDetailedType::MULTISURFACE:
+        case GeometryDetailedType::MULTISURFACEZ:
+        case GeometryDetailedType::MULTISURFACEM:
+        case GeometryDetailedType::MULTISURFACEZM:
+            return GeometryType::MULTISURFACE;
+        case GeometryDetailedType::CURVE:
+        case GeometryDetailedType::CURVEZ:
+        case GeometryDetailedType::CURVEM:
+        case GeometryDetailedType::CURVEZM:
+            return GeometryType::CURVE;
+        case GeometryDetailedType::SURFACE:
+        case GeometryDetailedType::SURFACEZ:
+        case GeometryDetailedType::SURFACEM:
+        case GeometryDetailedType::SURFACEZM:
+            return GeometryType::SURFACE;
+        case GeometryDetailedType::POLYHEDRALSURFACE:
+        case GeometryDetailedType::POLYHEDRALSURFACEZ:
+        case GeometryDetailedType::POLYHEDRALSURFACEM:
+        case GeometryDetailedType::POLYHEDRALSURFACEZM:
+            return GeometryType::POLYHEDRALSURFACE;
+        case GeometryDetailedType::TIN:
+        case GeometryDetailedType::TINZ:
+        case GeometryDetailedType::TINM:
+        case GeometryDetailedType::TINZM:
+            return GeometryType::TIN;
     }
 }
 
