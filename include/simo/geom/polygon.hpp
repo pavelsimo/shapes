@@ -17,6 +17,7 @@ namespace shapes
 
 /*!
  * @brief represents a polygon
+ * @ingroup geometry
  *
  * @since 0.0.1
  */

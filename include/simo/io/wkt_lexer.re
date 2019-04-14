@@ -11,6 +11,7 @@ namespace shapes
 
 /*!
  * @brief a Well-known text (WKT) markup language lexer
+ * @ingroup wkt
  *
  * @since 0.0.1
  */

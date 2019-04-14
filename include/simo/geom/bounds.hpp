@@ -11,6 +11,7 @@ namespace shapes
 
 /*!
  * @brief represents a bounding box
+ * @ingroup geometry
  *
  * @since 0.0.1
  */

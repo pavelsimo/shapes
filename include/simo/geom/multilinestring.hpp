@@ -16,6 +16,7 @@ namespace shapes
 
 /*!
  * @brief LineString collection
+ * @ingroup geometry
  *
  * @since 0.0.1
  */

@@ -16,6 +16,7 @@ namespace shapes
 
 /*!
  * @brief a curve where each consecutive pair of points defines a line segment.
+ * @ingroup geometry
  *
  * @since 0.0.1
  */

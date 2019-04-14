@@ -13,6 +13,7 @@ namespace shapes
 
 /*!
  * @brief a Well-known text (WKT) markup language reader
+ * @ingroup wkt
  *
  * @since 0.0.1
  */

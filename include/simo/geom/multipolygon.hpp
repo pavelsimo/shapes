@@ -15,6 +15,7 @@ namespace shapes
 
 /*!
  * @brief Polygon collection
+ * @ingroup geometry
  *
  * @since 0.0.1
  */

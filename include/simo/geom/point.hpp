@@ -23,6 +23,7 @@ namespace shapes
 
 /*!
  * @brief represents a point
+ * @ingroup geometry
  *
  * @since 0.0.1
  */

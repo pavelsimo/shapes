@@ -9,6 +9,7 @@ namespace shapes
 
 /*!
  * @brief a Well-known text (WKT) markup language parser result data
+ * @ingroup wkt
  *
  * @since 0.0.1
  */

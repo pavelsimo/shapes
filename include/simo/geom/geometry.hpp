@@ -15,6 +15,7 @@ namespace shapes
 /*!
  * @brief abstract class for all geometries
  * @tparam T the geometry type (e.g. Point, Polygon, LineString)
+ * @ingroup geometry
  *
  * @since 0.0.1
  */
