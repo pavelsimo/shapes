@@ -67,6 +67,10 @@ class MultiPolygon : public BaseGeometry<MultiPolygon>
         WktReader reader{};
         auto result      = reader.read(wkt.c_str());
         const auto& data = result.data;
+        if (not utils::is_multipolygon(data.geom_type))
+        {
+            throw exceptions::ParseError("invalid WKT string");
+        }
         return MultiPolygon();
     }
 

@@ -45,7 +45,7 @@ class Polygon : public BaseGeometry<Polygon>
      */
     Polygon(std::initializer_list<LinearRing> rings)
     {
-        if (rings.size() >= 1)
+        if (rings.size() > 0)
         {
             auto ring     = rings.begin();
             Bounds& b     = bounds;
@@ -141,6 +141,10 @@ class Polygon : public BaseGeometry<Polygon>
         WktReader reader{};
         auto result      = reader.read(wkt.c_str());
         const auto& data = result.data;
+        if (not utils::is_polygon(data.geom_type))
+        {
+            throw exceptions::ParseError("invalid WKT string");
+        }
         return Polygon();
     }
 

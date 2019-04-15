@@ -6,6 +6,7 @@
 #include <simo/shapes_fwd.hpp>
 #include <simo/geom/bounds.hpp>
 #include <simo/geom/types.hpp>
+#include <simo/geom/utils.hpp>
 
 namespace simo
 {
@@ -55,7 +56,7 @@ class BaseGeometry
     GeometryDetailedType detailed_type() const
     {
         auto type = static_cast<const T*>(this)->type_();
-        return get_geom_detailed_type(type, dim);
+        return utils::get_geom_detailed_type(type, dim);
     }
 
     /*!
@@ -177,7 +178,7 @@ class BaseGeometry
      */
     int8_t ndim() const
     {
-        return get_ndim(dim);
+        return utils::get_ndim(dim);
     }
 };
 

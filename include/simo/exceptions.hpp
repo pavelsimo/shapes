@@ -124,7 +124,7 @@ class GeometryError : public ShapesException
      * @since 0.0.1
      */
     explicit GeometryError(const std::string& reason)
-        : ShapesException("value error")
+        : ShapesException("geometry error")
     {
         set_reason(reason);
     }

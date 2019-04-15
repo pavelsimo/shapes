@@ -68,6 +68,10 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public GeometrySeq
         WktReader reader{};
         auto result      = reader.read(wkt.c_str());
         const auto& data = result.data;
+        if (not utils::is_multilinestring(data.geom_type))
+        {
+            throw exceptions::ParseError("invalid WKT string");
+        }
         return MultiLineString();
     }
 

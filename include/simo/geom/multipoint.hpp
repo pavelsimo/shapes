@@ -40,12 +40,27 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
     template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     MultiPoint(std::initializer_list<std::initializer_list<T>> init)
     {
-        seq.reserve(init.size());
-        for (const auto& coords : init)
+        if (init.size() > 0)
         {
-            Point p(coords);
-            bounds.extend(p.x, p.y);
-            seq.emplace_back(p);
+            seq.reserve(init.size());
+
+            auto it = init.begin();
+            Point head(*it);
+            dim = head.dim;
+            bounds.extend(head.x, head.y);
+            seq.emplace_back(head);
+
+            ++it;
+            for (; it != init.end(); ++it)
+            {
+                Point p(*it);
+                if (p.dim != dim)
+                {
+                    throw exceptions::GeometryError("dimensions mismatch between point 0 and point " + std::to_string(it - init.begin()));
+                }
+                bounds.extend(p.x, p.y);
+                seq.emplace_back(p);
+            }
         }
     }
 
@@ -75,31 +90,37 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
     static MultiPoint from_json(const std::string& json)
     {
         /// @todo (pavel) read properties to specify z, m and zm
-        nlohmann::json j = nlohmann::json::parse(json);
-        std::string type = j.at("type").get<std::string>();
-        if (type != "MultiPoint")
+        try
         {
-            throw exceptions::ParseError("invalid geometry type");
+            nlohmann::json j = nlohmann::json::parse(json);
+            std::string type = j.at("type").get<std::string>();
+            if (type != "MultiPoint")
+            {
+                throw exceptions::ParseError("invalid geometry type");
+            }
+            auto coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
+            std::vector<Point> res;
+            for (const auto& tuple : coords)
+            {
+                if (tuple.size() == 2)
+                {
+                    res.emplace_back(Point{tuple[0], tuple[1]});
+                }
+                else if (tuple.size() == 3)
+                {
+                    res.emplace_back(Point{tuple[0], tuple[1], tuple[2]});
+                }
+                else
+                {
+                    throw exceptions::ParseError("invalid dimensions");
+                }
+            }
+            return MultiPoint(res);
         }
-
-        auto coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
-        std::vector<Point> res;
-        for (const auto& tuple : coords)
+        catch (const nlohmann::json::exception& e)
         {
-            if (tuple.size() == 2)
-            {
-                res.emplace_back(Point{tuple[0], tuple[1]});
-            }
-            else if (tuple.size() == 3)
-            {
-                res.emplace_back(Point{tuple[0], tuple[1], tuple[2]});
-            }
-            else
-            {
-                throw exceptions::ParseError("invalid dimensions");
-            }
+            throw exceptions::ParseError("invalid json: " + std::string(e.what()));
         }
-        return MultiPoint(res);
     }
 
     /*!
@@ -165,19 +186,15 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
         WktReader reader{};
         auto result      = reader.read(wkt.c_str());
         const auto& data = result.data;
-        auto geom_type   = data.geom_type;
-        if (geom_type != GeometryDetailedType::MULTIPOINT and
-            geom_type != GeometryDetailedType::MULTIPOINTZ and
-            geom_type != GeometryDetailedType::MULTIPOINTM and
-            geom_type != GeometryDetailedType::MULTIPOINTZM)
+        if (not utils::is_multipoint(data.geom_type))
         {
             throw exceptions::ParseError("invalid WKT string");
         }
-
+        /// @todo (pavel) extract this repetition
         std::vector<Point> points;
         points.reserve(data.coords.size());
-        auto dim = get_dim(data.geom_type);
-        int ndim = get_ndim(dim);
+        auto dim = utils::get_dim(data.geom_type);
+        int ndim = utils::get_ndim(dim);
         Point p;
         p.dim = dim;
         for (size_t i = 0; i < result.data.coords.size(); i += ndim)
