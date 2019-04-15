@@ -4,93 +4,285 @@
 
 using namespace simo::shapes;
 
+
 TEST_CASE("Geometry")
 {
-    SECTION("Point")
+    SECTION("constructors")
     {
-        SECTION("xy")
+        SECTION("empty")
         {
-            //            std::unique_ptr<Geometry> geom = std::unique_ptr<Point>(new Point(1, 2));
-            //            CHECK(geom->type_str() == "Point");
-            //            CHECK(geom->type() == GeometryType::POINT);
-            //            CHECK(geom->detailed_type() == GeometryDetailedType::POINT);
-            //            CHECK(geom->ndim() == 2);
-            //            CHECK(geom->size() == 2);
-            //            CHECK(not geom->has_z());
-            //            CHECK(not geom->has_m());
-            //            CHECK(not geom->is_closed());
-            //            double x, y;
-            //            std::tie(x, y) = geom->xy()[0];
-            //            CHECK(x == 1.0);
-            //            CHECK(y == 2.0);
+            /// @todo add test
         }
 
-        SECTION("xyz")
+        SECTION("xy - constructor")
         {
-            //            std::unique_ptr<Geometry> geom = std::unique_ptr<Point>(new Point(1, 2, 3));
-            //            CHECK(geom->type_str() == "Point");
-            //            CHECK(geom->type() == GeometryType::POINT);
-            //            CHECK(geom->detailed_type() == GeometryDetailedType::POINTZ);
-            //            CHECK(geom->ndim() == 3);
-            //            CHECK(geom->has_z());
-            //            CHECK(geom->size() == 3);
-            //            CHECK(not geom->has_m());
-            //            CHECK(not geom->is_closed());
-            //            double x, y, z;
-            //            std::tie(x, y, z) = geom->xyz()[0];
-            //            CHECK(x == 1.0);
-            //            CHECK(y == 2.0);
-            //            CHECK(z == 3.0);
+            /// @todo add test
         }
 
-        SECTION("xym")
+        SECTION("xyz - constructor")
         {
-
-            /// @todo (pavel) add test
+            /// @todo add test
         }
 
-        SECTION("xyzm")
+        SECTION("xym - constructor")
         {
-            //            std::unique_ptr<Geometry> geom = std::unique_ptr<Point>(new Point(1, 2, 3, 4));
-            //            CHECK(geom->type_str() == "Point");
-            //            CHECK(geom->type() == GeometryType::POINT);
-            //            CHECK(geom->detailed_type() == GeometryDetailedType::POINTZM);
-            //            CHECK(geom->ndim() == 4);
-            //            CHECK(geom->has_z());
-            //            CHECK(geom->has_m());
-            //            CHECK(geom->size() == 4);
-            //            CHECK(not geom->is_closed());
-            //            double x, y, z, m;
-            //            std::tie(x, y, z, m) = geom->xyzm()[0];
-            //            CHECK(x == 1.0);
-            //            CHECK(y == 2.0);
-            //            CHECK(z == 3.0);
-            //            CHECK(m == 4.0);
+            // not supported
+        }
+
+        SECTION("xyzm - constructor")
+        {
+            /// @todo add test
+        }
+
+        SECTION("xy - initializer list")
+        {
+            /// @todo add test
+        }
+
+        SECTION("xyz - initializer list")
+        {
+            /// @todo add test
+        }
+
+        SECTION("xym - initializer list")
+        {
+            // not supported
+        }
+
+        SECTION("xyzm - initializer list")
+        {
+            /// @todo add test
+        }
+
+        SECTION("throws - initializer list")
+        {
+            /// @todo add test
         }
     }
 
-    SECTION("MultiPoint")
+    SECTION("from_... methods")
     {
-        /// @todo (pavel) add test
+        SECTION("json")
+        {
+            SECTION("xy - from json")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xyz - from json")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xym - from json")
+            {
+                /// @todo (pavel) add test
+            }
+
+            SECTION("xyzm - from json")
+            {
+                /// @todo (pavel) add test
+            }
+        }
+
+        SECTION("wkt")
+        {
+            SECTION("xy - from wkt")
+            {
+                /// @todo (pavel) add test
+            }
+
+            SECTION("xyz - from wkt")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xyzm - from wkt")
+            {
+                /// @todo add test
+            }
+
+            SECTION("empty - from wkt")
+            {
+                SECTION("empty - xy")
+                {
+                    /// @todo add test
+                }
+
+                SECTION("empty - xyz")
+                {
+                    /// @todo add test
+                }
+
+                SECTION("empty - xym")
+                {
+                    /// @todo add test
+                }
+
+                SECTION("empty - xyzm")
+                {
+                    /// @todo add test
+                }
+            }
+
+            SECTION("no throw - from wkt")
+            {
+                /// @todo add test
+            }
+
+            SECTION("throws - from wkt")
+            {
+                /// @todo add test
+            }
+
+            SECTION("misc - from wkt")
+            {
+                /// @todo add test
+            }
+        }
     }
 
-    SECTION("LineString")
+    SECTION("to_... methods")
     {
-        /// @todo (pavel) add test
+        SECTION("json")
+        {
+            SECTION("xy - to json")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xyz - to json")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xym - to json")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xyzm - to json")
+            {
+                /// @todo add test
+            }
+        }
+
+        SECTION("wkt")
+        {
+            SECTION("xy - to wkt")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xyz - to wkt")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xym - to wkt")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xyzm - to wkt")
+            {
+                /// @todo add test
+            }
+        }
     }
 
-    SECTION("MultiLineString")
+    SECTION("operators")
     {
-        /// @todo (pavel) add test
+        SECTION("equal to - operator")
+        {
+            SECTION("xy - equal to")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xyz - equal to")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xym - equal to")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xyzm - equal to")
+            {
+                /// @todo add test
+            }
+        }
+
+        SECTION("not equal to - operator")
+        {
+            SECTION("xy - not equal to")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xyz - not equal to")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xym - not equal to")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xyzm - not equal to")
+            {
+                /// @todo add test
+            }
+        }
+
+        SECTION("index operator")
+        {
+            SECTION("xy - index operator")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xyz - index operator")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xym - index operator")
+            {
+                /// @todo add test
+            }
+
+            SECTION("xyzm - index operator")
+            {
+                /// @todo add test
+            }
+        }
     }
 
-    SECTION("Polygon")
+    SECTION("coordinates tuples")
     {
-        /// @todo (pavel) add test
-    }
+        SECTION("xy - tuples")
+        {
+            /// @todo add test
+        }
 
-    SECTION("MultiPolygon")
-    {
-        /// @todo (pavel) add test
+        SECTION("xyz - tuples")
+        {
+            /// @todo add test
+        }
+
+        SECTION("xym - tuples")
+        {
+            /// @todo add test
+        }
+
+        SECTION("xyzm - tuples")
+        {
+            /// @todo add test
+        }
     }
 }

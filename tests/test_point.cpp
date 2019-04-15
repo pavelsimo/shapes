@@ -530,7 +530,6 @@ TEST_CASE("Point")
                 CHECK(n == p.size());
             }
         }
-
     }
 
     SECTION("coordinates tuples")

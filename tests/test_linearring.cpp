@@ -6,4 +6,5 @@ using namespace simo::shapes;
 
 TEST_CASE("LinearRing")
 {
+    ///...
 }
