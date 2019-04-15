@@ -89,17 +89,22 @@ TEST_CASE("MultiLineString")
         {
             SECTION("xy - from wkt")
             {
-                /// @todo (pavel) add test
+                auto mp = MultiLineString::from_wkt("MULTILINESTRING ((10 10, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))");
             }
 
             SECTION("xyz - from wkt")
+            {
+                auto mp = MultiLineString::from_wkt("MULTILINESTRING Z ((10 10 10, 20 20 20, 10 40 40), (40 40 40, 30 30 30, 40 20 20, 30 10 10))");
+            }
+
+            SECTION("xym - from wkt")
             {
                 /// @todo add test
             }
 
             SECTION("xyzm - from wkt")
             {
-                /// @todo add test
+                auto mp = MultiLineString::from_wkt("MULTILINESTRING ZM ((10 10 10 10, 20 20 20 20, 10 40 40 40), (40 40 40 40, 30 30 30 30, 40 20 20 20, 30 10 10 10))");
             }
 
             SECTION("empty - from wkt")
@@ -284,23 +289,5 @@ TEST_CASE("MultiLineString")
         {
             /// @todo add test
         }
-    }
-}
-
-TEST_CASE("MultiLineString")
-{
-    SECTION("xy - from wkt")
-    {
-        auto mp = MultiLineString::from_wkt("MULTILINESTRING ((10 10, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))");
-    }
-
-    SECTION("xyz - from wkt")
-    {
-        auto mp = MultiLineString::from_wkt("MULTILINESTRING Z ((10 10 10, 20 20 20, 10 40 40), (40 40 40, 30 30 30, 40 20 20, 30 10 10))");
-    }
-
-    SECTION("xyzm - from wkt")
-    {
-        auto mp = MultiLineString::from_wkt("MULTILINESTRING ZM ((10 10 10 10, 20 20 20 20, 10 40 40 40), (40 40 40 40, 30 30 30 30, 40 20 20 20, 30 10 10 10))");
     }
 }
