@@ -106,8 +106,8 @@ class LineString : public BaseGeometry<LineString>, public GeometrySequence<Poin
     static LineString from_wkt(const std::string& wkt)
     {
         WktReader reader{};
-        auto result             = reader.read(wkt.c_str());
-        const auto& data        = result.data;
+        auto result      = reader.read(wkt.c_str());
+        const auto& data = result.data;
         if (not utils::is_linestring(data.geom_type))
         {
             throw exceptions::ParseError("invalid WKT string");

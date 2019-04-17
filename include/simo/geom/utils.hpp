@@ -453,7 +453,6 @@ bool is_polygon(GeometryDetailedType geom_detailed_type)
     return is_polygon(get_geom_type(geom_detailed_type));
 }
 
-
 /*!
  * @param geom_type the geometry type
  * @return returns true if the geometry type is a MultiPolygon, otherwise false
