@@ -72,10 +72,13 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
      */
     explicit MultiPoint(const std::vector<Point>& points)
     {
-        seq = points;
-        for (const auto& p : seq)
+        if (not points.empty())
         {
-            bounds.extend(p.x, p.y);
+            dim = points[0].dim;
+            seq = points;
+            std::for_each(std::begin(points), std::end(points), [&](const Point& p) {
+                bounds.extend(p.x, p.y);
+            });
         }
     }
 
@@ -100,15 +103,19 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
             }
             auto coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
             std::vector<Point> res;
-            for (const auto& tuple : coords)
+            for (const auto& coord : coords)
             {
-                if (tuple.size() == 2)
+                if (coord.size() == 2)
                 {
-                    res.emplace_back(Point{tuple[0], tuple[1]});
+                    res.emplace_back(Point{coord[0], coord[1]});
                 }
-                else if (tuple.size() == 3)
+                else if (coord.size() == 3)
                 {
-                    res.emplace_back(Point{tuple[0], tuple[1], tuple[2]});
+                    res.emplace_back(Point{coord[0], coord[1], coord[2]});
+                }
+                else if (coord.size() == 4)
+                {
+                    res.emplace_back(Point{coord[0], coord[1], coord[2], coord[3]});
                 }
                 else
                 {

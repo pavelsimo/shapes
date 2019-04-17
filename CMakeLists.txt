@@ -28,7 +28,7 @@ if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU" )
 endif()
 
 if ( CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
-    add_compile_options(-Wweak-vtables -Wexit-time-destructors -Wglobal-constructors -Wmissing-noreturn)
+    add_compile_options(-Wexit-time-destructors -Wglobal-constructors -Wmissing-noreturn)
 endif()
 
 if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
