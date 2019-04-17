@@ -99,23 +99,24 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
             std::string type = j.at("type").get<std::string>();
             if (type != "MultiPoint")
             {
-                throw exceptions::ParseError("invalid geometry type");
+                throw exceptions::ParseError("invalid geometry type: " + std::string(type));
             }
             auto coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
             std::vector<Point> res;
+            res.reserve(coords.size());
             for (const auto& coord : coords)
             {
                 if (coord.size() == 2)
                 {
-                    res.emplace_back(Point{coord[0], coord[1]});
+                    res.emplace_back(coord[0], coord[1]);
                 }
                 else if (coord.size() == 3)
                 {
-                    res.emplace_back(Point{coord[0], coord[1], coord[2]});
+                    res.emplace_back(coord[0], coord[1], coord[2]);
                 }
                 else if (coord.size() == 4)
                 {
-                    res.emplace_back(Point{coord[0], coord[1], coord[2], coord[3]});
+                    res.emplace_back(coord[0], coord[1], coord[2], coord[3]);
                 }
                 else
                 {
