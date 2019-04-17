@@ -16,31 +16,94 @@ TEST_CASE("MultiPoint")
             CHECK(mp.type() == GeometryType::MULTIPOINT);
             CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINT);
             CHECK(mp.type_str() == "MultiPoint");
-//            CHECK(mp.bounds.maxx == 3.0);
-//            CHECK(mp.bounds.maxy == 4.0);
-//            CHECK(mp.bounds.minx == 1.0);
-//            CHECK(mp.bounds.miny == 2.0);
+            // CHECK(mp.bounds.maxx == 3.0);
+            // CHECK(mp.bounds.maxy == 4.0);
+            // CHECK(mp.bounds.minx == 1.0);
+            // CHECK(mp.bounds.miny == 2.0);
         }
 
-        SECTION("xy - constructor")
+        SECTION("xy - points vector")
         {
-            //MultiPoint mp = {{1.0, 2.0, 3.0, 4.0}, {-5.0, -6.0}};
-            /// @todo add test
+            std::vector<Point> points;
+            points.emplace_back(1.0, 2.0);
+            points.emplace_back(-3.0, -4.0);
+            MultiPoint mp(points);
+            CHECK(!mp.empty());
+            CHECK(mp.dim == DimensionType::XY);
+            CHECK(mp.type() == GeometryType::MULTIPOINT);
+            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINT);
+            CHECK(mp.type_str() == "MultiPoint");
+            const auto& p1 = mp[0];
+            CHECK(p1.x == 1.0);
+            CHECK(p1.y == 2.0);
+            const auto& p2 = mp[1];
+            CHECK(p2.x == -3.0);
+            CHECK(p2.y == -4.0);
         }
 
-        SECTION("xyz - constructor")
+        SECTION("xyz - points vector")
         {
-            /// @todo add test
+            std::vector<Point> points;
+            points.emplace_back(1.0, 2.0, 3.0);
+            points.emplace_back(-4.0, -5.0, -6.0);
+            MultiPoint mp(points);
+            CHECK(!mp.empty());
+            CHECK(mp.dim == DimensionType::XYZ);
+            CHECK(mp.type() == GeometryType::MULTIPOINT);
+            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTZ);
+            CHECK(mp.type_str() == "MultiPoint");
+            const auto& p1 = mp[0];
+            CHECK(p1.x == 1.0);
+            CHECK(p1.y == 2.0);
+            CHECK(p1.z == 3.0);
+            const auto& p2 = mp[1];
+            CHECK(p2.x == -4.0);
+            CHECK(p2.y == -5.0);
+            CHECK(p2.z == -6.0);
         }
 
-        SECTION("xym - constructor")
+        SECTION("xym - points vector")
         {
-            // not supported
+            std::vector<Point> points;
+            points.push_back(Point::from_xym(1.0, 2.0, 3.0));
+            points.push_back(Point::from_xym(-4.0, -5.0, -6.0));
+            MultiPoint mp(points);
+            CHECK(!mp.empty());
+            CHECK(mp.dim == DimensionType::XYM);
+            CHECK(mp.type() == GeometryType::MULTIPOINT);
+            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTM);
+            CHECK(mp.type_str() == "MultiPoint");
+            const auto& p1 = mp[0];
+            CHECK(p1.x == 1.0);
+            CHECK(p1.y == 2.0);
+            CHECK(p1.m == 3.0);
+            const auto& p2 = mp[1];
+            CHECK(p2.x == -4.0);
+            CHECK(p2.y == -5.0);
+            CHECK(p2.m == -6.0);
         }
 
-        SECTION("xyzm - constructor")
+        SECTION("xyzm - points vector")
         {
-            /// @todo add test
+            std::vector<Point> points;
+            points.emplace_back(1.0, 2.0, 3.0, 1.5);
+            points.emplace_back(-4.0, -5.0, -6.0, 1.5);
+            MultiPoint mp(points);
+            CHECK(!mp.empty());
+            CHECK(mp.dim == DimensionType::XYZM);
+            CHECK(mp.type() == GeometryType::MULTIPOINT);
+            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTZM);
+            CHECK(mp.type_str() == "MultiPoint");
+            const auto& p1 = mp[0];
+            CHECK(p1.x == 1.0);
+            CHECK(p1.y == 2.0);
+            CHECK(p1.z == 3.0);
+            CHECK(p1.m == 1.5);
+            const auto& p2 = mp[1];
+            CHECK(p2.x == -4.0);
+            CHECK(p2.y == -5.0);
+            CHECK(p2.z == -6.0);
+            CHECK(p1.m == 1.5);
         }
 
         SECTION("xy - initializer list")
@@ -104,7 +167,17 @@ TEST_CASE("MultiPoint")
 
         SECTION("throws - initializer list")
         {
-            /// @todo add test
+            // invalid points
+            CHECK_THROWS(MultiPoint{{1, 2, 3, 4, 5}});
+            CHECK_THROWS(MultiPoint{{1}});
+
+            // point mismatch
+            CHECK_THROWS(MultiPoint{{1, 2}, {1, 2, 3}});
+            CHECK_THROWS(MultiPoint{{1, 2}, {1, 2, 3, 4}});
+            CHECK_THROWS(MultiPoint{{1, 2, 3}, {1, 2}});
+            CHECK_THROWS(MultiPoint{{1, 2, 3}, {1, 2, 3, 4}});
+            CHECK_THROWS(MultiPoint{{1, 2, 3, 4}, {1, 2}});
+            CHECK_THROWS(MultiPoint{{1, 2, 3, 4}, {1, 2, 3}});
         }
     }
 
@@ -116,8 +189,8 @@ TEST_CASE("MultiPoint")
             {
                 std::string json = R"({"type":"MultiPoint","coordinates":[[1.0,2.0],[3.0,4.0]]})";
                 auto mp          = MultiPoint::from_json(json);
-                auto& p1          = mp[0];
-                auto& p2          = mp[1];
+                auto& p1         = mp[0];
+                auto& p2         = mp[1];
                 CHECK(p1.x == 1.0);
                 CHECK(p1.y == 2.0);
                 CHECK(p2.x == 3.0);
@@ -128,8 +201,8 @@ TEST_CASE("MultiPoint")
             {
                 std::string json = R"({"type":"MultiPoint","coordinates":[[1.0,2.0,3.0],[4.0,5.0,6.0]]})";
                 auto mp          = MultiPoint::from_json(json);
-                auto& p1          = mp[0];
-                auto& p2          = mp[1];
+                auto& p1         = mp[0];
+                auto& p2         = mp[1];
                 CHECK(p1.x == 1.0);
                 CHECK(p1.y == 2.0);
                 CHECK(p1.z == 3.0);
@@ -140,12 +213,23 @@ TEST_CASE("MultiPoint")
 
             SECTION("xym - from json")
             {
-                /// @todo (pavel) add test
+                // not supported
             }
 
             SECTION("xyzm - from json")
             {
-                /// @todo (pavel) add test
+                std::string json = R"({"type":"MultiPoint","coordinates":[[1.0,2.0,3.0,-10.0],[4.0,5.0,6.0,-10.0]]})";
+                auto mp          = MultiPoint::from_json(json);
+                auto& p1         = mp[0];
+                auto& p2         = mp[1];
+                CHECK(p1.x == 1.0);
+                CHECK(p1.y == 2.0);
+                CHECK(p1.z == 3.0);
+                CHECK(p1.m == -10.0);
+                CHECK(p2.x == 4.0);
+                CHECK(p2.y == 5.0);
+                CHECK(p2.z == 6.0);
+                CHECK(p2.m == -10.0);
             }
         }
 
@@ -227,23 +311,34 @@ TEST_CASE("MultiPoint")
 
                 SECTION("empty - xyz")
                 {
-                    /// @todo add test
+                    auto mp = MultiPoint::from_wkt("MULTIPOINT Z EMPTY");
+                    CHECK(mp.empty());
+                    CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTZ);
+                    CHECK(mp.dim == DimensionType::XYZ);
                 }
 
                 SECTION("empty - xym")
                 {
-                    /// @todo add test
+                    auto mp = MultiPoint::from_wkt("MULTIPOINT M EMPTY");
+                    CHECK(mp.empty());
+                    CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTM);
+                    CHECK(mp.dim == DimensionType::XYM);
                 }
 
                 SECTION("empty - xyzm")
                 {
-                    /// @todo add test
+                    auto mp = MultiPoint::from_wkt("MULTIPOINT ZM EMPTY");
+                    CHECK(mp.empty());
+                    CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTZM);
+                    CHECK(mp.dim == DimensionType::XYZM);
                 }
             }
 
             SECTION("no throw - from wkt")
             {
-                /// @todo add test
+                CHECK_NOTHROW(MultiPoint::from_wkt("MultiPointZM((1.4 2.3 1 1), (3.2 4.1 2 2))"));
+                CHECK_NOTHROW(MultiPoint::from_wkt("MultiPointZ((1.4 2.3 1), (3.2 4.1 2))"));
+                CHECK_NOTHROW(MultiPoint::from_wkt("MultiPoint((1.4 2.3), (3.2 4.1))"));
             }
 
             SECTION("throws - from wkt")
@@ -278,12 +373,14 @@ TEST_CASE("MultiPoint")
 
             SECTION("xym - to json")
             {
-                /// @todo add test
+                // not supported
             }
 
             SECTION("xyzm - to json")
             {
-                /// @todo add test
+                MultiPoint mp = {{1.0, 2.0, 3.0, -10.0}, {4.0, 5.0, 6.0, -10.0}};
+                mp.precision  = 1;
+                CHECK(mp.json() == R"({"type":"MultiPoint","coordinates":[[1.0,2.0,3.0,-10.0],[4.0,5.0,6.0,-10.0]]})");
             }
         }
 
@@ -291,22 +388,32 @@ TEST_CASE("MultiPoint")
         {
             SECTION("xy - to wkt")
             {
-                /// @todo add test
+                MultiPoint mp = {{1.0, 2.0}, {3.0, 4.0}};
+                mp.precision  = 1;
+                CHECK(mp.wkt() == R"(MULTIPOINT((1.0 2.0),(3.0 4.0)))");
             }
 
             SECTION("xyz - to wkt")
             {
-                /// @todo add test
+                MultiPoint mp = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+                mp.precision  = 1;
+                CHECK(mp.wkt() == R"(MULTIPOINTZ((1.0 2.0 3.0),(4.0 5.0 6.0)))");
             }
 
             SECTION("xym - to wkt")
             {
-                /// @todo add test
+                std::vector<Point> points;
+                points.push_back(Point::from_xym(1.0, 2.0, 3.0));
+                points.push_back(Point::from_xym(-4.0, -5.0, -6.0));
+                MultiPoint mp(points);
+                CHECK(mp.wkt() == R"(MULTIPOINTM((1.0 2.0 3.0),(-4.0 -5.0 -6.0)))");
             }
 
             SECTION("xyzm - to wkt")
             {
-                /// @todo add test
+                MultiPoint mp = {{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
+                mp.precision  = 1;
+                CHECK(mp.wkt() == R"(MULTIPOINTZM((1.0 2.0 3.0 4.0),(5.0 6.0 7.0 8.0)))");
             }
         }
     }
@@ -363,9 +470,9 @@ TEST_CASE("MultiPoint")
         {
             SECTION("xy - index operator")
             {
-                auto mp = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
-                auto& p1     = mp[0];
-                auto& p2     = mp[1];
+                auto mp  = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
+                auto& p1 = mp[0];
+                auto& p2 = mp[1];
                 CHECK(p1.x == 1.0);
                 CHECK(p1.y == 2.0);
                 CHECK(p2.x == 3.0);
@@ -374,7 +481,7 @@ TEST_CASE("MultiPoint")
 
             SECTION("xyz - index operator")
             {
-                auto mp = MultiPoint{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
+                auto mp  = MultiPoint{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
                 auto& p1 = mp[0];
                 auto& p2 = mp[1];
                 auto& p3 = mp[2];

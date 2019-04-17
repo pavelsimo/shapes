@@ -4,7 +4,6 @@
 
 using namespace simo::shapes;
 
-
 TEST_CASE("LineString")
 {
     SECTION("constructors")

@@ -41,7 +41,7 @@ TEST_CASE("Polygon")
         SECTION("xy shell - initializer list")
         {
             Polygon p = {
-                    {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}}  // shell
+                {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}}  // shell
             };
             CHECK(p.exterior[0].x == 1);
             CHECK(p.exterior[0].y == 2);
@@ -54,8 +54,8 @@ TEST_CASE("Polygon")
         SECTION("xy shell, holes - initializer list")
         {
             Polygon p = {
-                    {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}},  // shell
-                    {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}}   // hole #1
+                {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}},  // shell
+                {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}}   // hole #1
             };
             CHECK(p.exterior[0].x == 1);
             CHECK(p.exterior[0].y == 2);
@@ -332,4 +332,3 @@ TEST_CASE("Polygon")
         }
     }
 }
-
