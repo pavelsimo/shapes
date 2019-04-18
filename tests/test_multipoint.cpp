@@ -13,8 +13,8 @@ TEST_CASE("MultiPoint")
             MultiPoint mp;
             CHECK(mp.empty());
             CHECK(mp.dim == DimensionType::XY);
-            CHECK(mp.type() == GeometryType::MULTIPOINT);
-            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINT);
+            CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
+            CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINT);
             CHECK(mp.type_str() == "MultiPoint");
             // CHECK(mp.bounds.maxx == 3.0);
             // CHECK(mp.bounds.maxy == 4.0);
@@ -30,8 +30,8 @@ TEST_CASE("MultiPoint")
             MultiPoint mp(points);
             CHECK(!mp.empty());
             CHECK(mp.dim == DimensionType::XY);
-            CHECK(mp.type() == GeometryType::MULTIPOINT);
-            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINT);
+            CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
+            CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINT);
             CHECK(mp.type_str() == "MultiPoint");
             const auto& p1 = mp[0];
             CHECK(p1.x == 1.0);
@@ -49,8 +49,8 @@ TEST_CASE("MultiPoint")
             MultiPoint mp(points);
             CHECK(!mp.empty());
             CHECK(mp.dim == DimensionType::XYZ);
-            CHECK(mp.type() == GeometryType::MULTIPOINT);
-            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTZ);
+            CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
+            CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINTZ);
             CHECK(mp.type_str() == "MultiPoint");
             const auto& p1 = mp[0];
             CHECK(p1.x == 1.0);
@@ -70,8 +70,8 @@ TEST_CASE("MultiPoint")
             MultiPoint mp(points);
             CHECK(!mp.empty());
             CHECK(mp.dim == DimensionType::XYM);
-            CHECK(mp.type() == GeometryType::MULTIPOINT);
-            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTM);
+            CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
+            CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINTM);
             CHECK(mp.type_str() == "MultiPoint");
             const auto& p1 = mp[0];
             CHECK(p1.x == 1.0);
@@ -91,8 +91,8 @@ TEST_CASE("MultiPoint")
             MultiPoint mp(points);
             CHECK(!mp.empty());
             CHECK(mp.dim == DimensionType::XYZM);
-            CHECK(mp.type() == GeometryType::MULTIPOINT);
-            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTZM);
+            CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
+            CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINTZM);
             CHECK(mp.type_str() == "MultiPoint");
             const auto& p1 = mp[0];
             CHECK(p1.x == 1.0);
@@ -111,8 +111,8 @@ TEST_CASE("MultiPoint")
             MultiPoint mp = {{1.0, 2.0}, {-3.0, -4.0}};
             CHECK(!mp.empty());
             CHECK(mp.dim == DimensionType::XY);
-            CHECK(mp.type() == GeometryType::MULTIPOINT);
-            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINT);
+            CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
+            CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINT);
             CHECK(mp.type_str() == "MultiPoint");
             const auto& p1 = mp[0];
             CHECK(p1.x == 1.0);
@@ -127,8 +127,8 @@ TEST_CASE("MultiPoint")
             MultiPoint mp = {{1.0, 2.0, 3.0}, {-4.0, -5.0, -6.0}};
             CHECK(!mp.empty());
             CHECK(mp.dim == DimensionType::XYZ);
-            CHECK(mp.type() == GeometryType::MULTIPOINT);
-            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTZ);
+            CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
+            CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINTZ);
             CHECK(mp.type_str() == "MultiPoint");
             const auto& p1 = mp[0];
             CHECK(p1.x == 1.0);
@@ -150,8 +150,8 @@ TEST_CASE("MultiPoint")
             MultiPoint mp = {{1.0, 2.0, 3.0, 4.0}, {-5.0, -6.0, -7.0, -8.0}};
             CHECK(!mp.empty());
             CHECK(mp.dim == DimensionType::XYZM);
-            CHECK(mp.type() == GeometryType::MULTIPOINT);
-            CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTZM);
+            CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
+            CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINTZM);
             CHECK(mp.type_str() == "MultiPoint");
             const auto& p1 = mp[0];
             CHECK(p1.x == 1.0);
@@ -239,7 +239,7 @@ TEST_CASE("MultiPoint")
             {
                 auto mp = MultiPoint::from_wkt("MULTIPOINT((1.4 2.3), (3.2 4.1))");
                 CHECK(not mp.empty());
-                CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINT);
+                CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINT);
                 CHECK(mp.dim == DimensionType::XY);
                 const auto& p1 = mp[0];
                 CHECK(p1.x == 1.4);
@@ -253,7 +253,7 @@ TEST_CASE("MultiPoint")
             {
                 auto mp = MultiPoint::from_wkt("MULTIPOINTZ((1.4 2.3 1), (3.2 4.1 2))");
                 CHECK(not mp.empty());
-                CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTZ);
+                CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINTZ);
                 CHECK(mp.dim == DimensionType::XYZ);
                 const auto& p1 = mp[0];
                 CHECK(p1.x == 1.4);
@@ -269,7 +269,7 @@ TEST_CASE("MultiPoint")
             {
                 auto mp = MultiPoint::from_wkt("MULTIPOINTM((1.4 2.3 1), (3.2 4.1 2))");
                 CHECK(not mp.empty());
-                CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTM);
+                CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINTM);
                 CHECK(mp.dim == DimensionType::XYM);
                 const auto& p1 = mp[0];
                 CHECK(p1.x == 1.4);
@@ -285,7 +285,7 @@ TEST_CASE("MultiPoint")
             {
                 auto mp = MultiPoint::from_wkt("MULTIPOINTZM((1.4 2.3 1 1), (3.2 4.1 2 2))");
                 CHECK(not mp.empty());
-                CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTZM);
+                CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINTZM);
                 CHECK(mp.dim == DimensionType::XYZM);
                 const auto& p1 = mp[0];
                 CHECK(p1.x == 1.4);
@@ -305,7 +305,7 @@ TEST_CASE("MultiPoint")
                 {
                     auto mp = MultiPoint::from_wkt("MULTIPOINT EMPTY");
                     CHECK(mp.empty());
-                    CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINT);
+                    CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINT);
                     CHECK(mp.dim == DimensionType::XY);
                 }
 
@@ -313,7 +313,7 @@ TEST_CASE("MultiPoint")
                 {
                     auto mp = MultiPoint::from_wkt("MULTIPOINT Z EMPTY");
                     CHECK(mp.empty());
-                    CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTZ);
+                    CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINTZ);
                     CHECK(mp.dim == DimensionType::XYZ);
                 }
 
@@ -321,7 +321,7 @@ TEST_CASE("MultiPoint")
                 {
                     auto mp = MultiPoint::from_wkt("MULTIPOINT M EMPTY");
                     CHECK(mp.empty());
-                    CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTM);
+                    CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINTM);
                     CHECK(mp.dim == DimensionType::XYM);
                 }
 
@@ -329,7 +329,7 @@ TEST_CASE("MultiPoint")
                 {
                     auto mp = MultiPoint::from_wkt("MULTIPOINT ZM EMPTY");
                     CHECK(mp.empty());
-                    CHECK(mp.detailed_type() == GeometryDetailedType::MULTIPOINTZM);
+                    CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINTZM);
                     CHECK(mp.dim == DimensionType::XYZM);
                 }
             }

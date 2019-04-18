@@ -359,13 +359,13 @@ class Point : public BaseGeometry<Point>
         auto data   = result.data;
         switch (data.geom_type)
         {
-            case GeometryDetailedType::POINT:
+            case GeometryType::POINT:
                 return {data.coords[0], data.coords[1]};
-            case GeometryDetailedType::POINTZ:
+            case GeometryType::POINTZ:
                 return {data.coords[0], data.coords[1], data.coords[2]};
-            case GeometryDetailedType::POINTM:
+            case GeometryType::POINTM:
                 return Point::from_xym(data.coords[0], data.coords[1], data.coords[2]);
-            case GeometryDetailedType::POINTZM:
+            case GeometryType::POINTZM:
                 return {data.coords[0], data.coords[1], data.coords[2], data.coords[3]};
             default:
                 throw exceptions::ParseError("invalid WKT string");

@@ -16,8 +16,8 @@ TEST_CASE("Point")
             CHECK(p.z == 0);
             CHECK(p.m == 0);
             CHECK(p.dim == DimensionType::XY);
-            CHECK(p.type() == GeometryType::POINT);
-            CHECK(p.detailed_type() == GeometryDetailedType::POINT);
+            CHECK(p.geom_type() == GeometryType::POINT);
+            CHECK(p.geom_type_dim() == GeometryType::POINT);
             CHECK(p.type_str() == "Point");
         }
 
@@ -29,8 +29,8 @@ TEST_CASE("Point")
             CHECK(p.z == 0);
             CHECK(p.m == 0);
             CHECK(p.dim == DimensionType::XY);
-            CHECK(p.type() == GeometryType::POINT);
-            CHECK(p.detailed_type() == GeometryDetailedType::POINT);
+            CHECK(p.geom_type() == GeometryType::POINT);
+            CHECK(p.geom_type_dim() == GeometryType::POINT);
             CHECK(p.type_str() == "Point");
         }
 
@@ -42,8 +42,8 @@ TEST_CASE("Point")
             CHECK(p.z == 3);
             CHECK(p.m == 0);
             CHECK(p.dim == DimensionType::XYZ);
-            CHECK(p.type() == GeometryType::POINT);
-            CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
+            CHECK(p.geom_type() == GeometryType::POINT);
+            CHECK(p.geom_type_dim() == GeometryType::POINTZ);
             CHECK(p.type_str() == "Point");
         }
 
@@ -60,8 +60,8 @@ TEST_CASE("Point")
             CHECK(p.z == 3);
             CHECK(p.m == 4);
             CHECK(p.dim == DimensionType::XYZM);
-            CHECK(p.type() == GeometryType::POINT);
-            CHECK(p.detailed_type() == GeometryDetailedType::POINTZM);
+            CHECK(p.geom_type() == GeometryType::POINT);
+            CHECK(p.geom_type_dim() == GeometryType::POINTZM);
             CHECK(p.type_str() == "Point");
         }
 
@@ -73,8 +73,8 @@ TEST_CASE("Point")
             CHECK(p.z == 0);
             CHECK(p.m == 0);
             CHECK(p.dim == DimensionType::XY);
-            CHECK(p.type() == GeometryType::POINT);
-            CHECK(p.detailed_type() == GeometryDetailedType::POINT);
+            CHECK(p.geom_type() == GeometryType::POINT);
+            CHECK(p.geom_type_dim() == GeometryType::POINT);
             CHECK(p.type_str() == "Point");
         }
 
@@ -86,8 +86,8 @@ TEST_CASE("Point")
             CHECK(p.z == 3);
             CHECK(p.m == 0);
             CHECK(p.dim == DimensionType::XYZ);
-            CHECK(p.type() == GeometryType::POINT);
-            CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
+            CHECK(p.geom_type() == GeometryType::POINT);
+            CHECK(p.geom_type_dim() == GeometryType::POINTZ);
             CHECK(p.type_str() == "Point");
         }
 
@@ -104,8 +104,8 @@ TEST_CASE("Point")
             CHECK(p.z == 3);
             CHECK(p.m == 4);
             CHECK(p.dim == DimensionType::XYZM);
-            CHECK(p.type() == GeometryType::POINT);
-            CHECK(p.detailed_type() == GeometryDetailedType::POINTZM);
+            CHECK(p.geom_type() == GeometryType::POINT);
+            CHECK(p.geom_type_dim() == GeometryType::POINTZM);
             CHECK(p.type_str() == "Point");
         }
 
@@ -126,8 +126,8 @@ TEST_CASE("Point")
                 CHECK(p.x == 1.0);
                 CHECK(p.y == 2.0);
                 CHECK(p.dim == DimensionType::XY);
-                CHECK(p.type() == GeometryType::POINT);
-                CHECK(p.detailed_type() == GeometryDetailedType::POINT);
+                CHECK(p.geom_type() == GeometryType::POINT);
+                CHECK(p.geom_type_dim() == GeometryType::POINT);
                 CHECK(p.type_str() == "Point");
             }
 
@@ -138,8 +138,8 @@ TEST_CASE("Point")
                 CHECK(p.y == 2.0);
                 CHECK(p.z == 3.0);
                 CHECK(p.dim == DimensionType::XYZ);
-                CHECK(p.type() == GeometryType::POINT);
-                CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
+                CHECK(p.geom_type() == GeometryType::POINT);
+                CHECK(p.geom_type_dim() == GeometryType::POINTZ);
                 CHECK(p.type_str() == "Point");
             }
 
@@ -168,8 +168,8 @@ TEST_CASE("Point")
                 CHECK(p.y == 2.0);
                 CHECK(p.z == 3.0);
                 CHECK(p.dim == DimensionType::XYZ);
-                CHECK(p.type() == GeometryType::POINT);
-                CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
+                CHECK(p.geom_type() == GeometryType::POINT);
+                CHECK(p.geom_type_dim() == GeometryType::POINTZ);
                 CHECK(p.type_str() == "Point");
             }
 
@@ -181,8 +181,8 @@ TEST_CASE("Point")
                 CHECK(p.z == 3.0);
                 CHECK(p.m == 4.0);
                 CHECK(p.dim == DimensionType::XYZM);
-                CHECK(p.type() == GeometryType::POINT);
-                CHECK(p.detailed_type() == GeometryDetailedType::POINTZM);
+                CHECK(p.geom_type() == GeometryType::POINT);
+                CHECK(p.geom_type_dim() == GeometryType::POINTZM);
                 CHECK(p.type_str() == "Point");
             }
 
@@ -195,7 +195,7 @@ TEST_CASE("Point")
                     CHECK(p.y == 0);
                     CHECK(p.z == 0);
                     CHECK(p.m == 0);
-                    CHECK(p.detailed_type() == GeometryDetailedType::POINT);
+                    CHECK(p.geom_type_dim() == GeometryType::POINT);
                     CHECK(p.dim == DimensionType::XY);
                 }
 
@@ -206,7 +206,7 @@ TEST_CASE("Point")
                     CHECK(p.y == 0);
                     CHECK(p.z == 0);
                     CHECK(p.m == 0);
-                    CHECK(p.detailed_type() == GeometryDetailedType::POINTZ);
+                    CHECK(p.geom_type_dim() == GeometryType::POINTZ);
                     CHECK(p.dim == DimensionType::XYZ);
                 }
 
@@ -217,7 +217,7 @@ TEST_CASE("Point")
                     CHECK(p.y == 0);
                     CHECK(p.z == 0);
                     CHECK(p.m == 0);
-                    CHECK(p.detailed_type() == GeometryDetailedType::POINTM);
+                    CHECK(p.geom_type_dim() == GeometryType::POINTM);
                     CHECK(p.dim == DimensionType::XYM);
                 }
 
@@ -228,7 +228,7 @@ TEST_CASE("Point")
                     CHECK(p.y == 0);
                     CHECK(p.z == 0);
                     CHECK(p.m == 0);
-                    CHECK(p.detailed_type() == GeometryDetailedType::POINTZM);
+                    CHECK(p.geom_type_dim() == GeometryType::POINTZM);
                     CHECK(p.dim == DimensionType::XYZM);
                 }
             }
@@ -297,26 +297,26 @@ TEST_CASE("Point")
                     double y;
                     double z;
                     double m;
-                    GeometryDetailedType detailed_type;
+                    GeometryType detailed_type;
                     DimensionType dimension;
                 };
 
                 std::vector<test_case> test_cases = {
-                    {"POINT(1 2)", 1.0, 2.0, 0, 0, GeometryDetailedType::POINT, DimensionType::XY},
-                    {"POINT (1 2)", 1.0, 2.0, 0, 0, GeometryDetailedType::POINT, DimensionType::XY},
-                    {"POINTM(1 2 4)", 1.0, 2.0, 0, 4.0, GeometryDetailedType::POINTM, DimensionType::XYM},
-                    {"POINT M(1 2 4)", 1.0, 2.0, 0, 4.0, GeometryDetailedType::POINTM, DimensionType::XYM},
-                    {"POINT M (1 2 4)", 1.0, 2.0, 0, 4.0, GeometryDetailedType::POINTM, DimensionType::XYM},
-                    {"POINTZ(1 2 3)", 1.0, 2.0, 3.0, 0, GeometryDetailedType::POINTZ, DimensionType::XYZ},
-                    {"POINT Z(1 2 3)", 1.0, 2.0, 3.0, 0, GeometryDetailedType::POINTZ, DimensionType::XYZ},
-                    {"POINT Z (1 2 3)", 1.0, 2.0, 3.0, 0, GeometryDetailedType::POINTZ, DimensionType::XYZ},
-                    {"POINTZM(1 2 3 4)", 1.0, 2.0, 3.0, 4.0, GeometryDetailedType::POINTZM, DimensionType::XYZM},
-                    {"POINT ZM(1 2 3 4)", 1.0, 2.0, 3.0, 4.0, GeometryDetailedType::POINTZM, DimensionType::XYZM},
-                    {"POINT ZM (1 2 3 4)", 1.0, 2.0, 3.0, 4.0, GeometryDetailedType::POINTZM, DimensionType::XYZM},
-                    {"   POINT (1 2)  ", 1.0, 2.0, 0, 0, GeometryDetailedType::POINT, DimensionType::XY},
-                    {"   POINT (1          2)  ", 1.0, 2.0, 0, 0, GeometryDetailedType::POINT, DimensionType::XY},
-                    {"   POINT Z (    1          2    3)  ", 1.0, 2.0, 3.0, 0, GeometryDetailedType::POINTZ, DimensionType::XYZ},
-                    {"   POINT     ZM     (    1          2    5       9)  ", 1.0, 2.0, 5.0, 9.0, GeometryDetailedType::POINTZM, DimensionType::XYZM},
+                    {"POINT(1 2)", 1.0, 2.0, 0, 0, GeometryType::POINT, DimensionType::XY},
+                    {"POINT (1 2)", 1.0, 2.0, 0, 0, GeometryType::POINT, DimensionType::XY},
+                    {"POINTM(1 2 4)", 1.0, 2.0, 0, 4.0, GeometryType::POINTM, DimensionType::XYM},
+                    {"POINT M(1 2 4)", 1.0, 2.0, 0, 4.0, GeometryType::POINTM, DimensionType::XYM},
+                    {"POINT M (1 2 4)", 1.0, 2.0, 0, 4.0, GeometryType::POINTM, DimensionType::XYM},
+                    {"POINTZ(1 2 3)", 1.0, 2.0, 3.0, 0, GeometryType::POINTZ, DimensionType::XYZ},
+                    {"POINT Z(1 2 3)", 1.0, 2.0, 3.0, 0, GeometryType::POINTZ, DimensionType::XYZ},
+                    {"POINT Z (1 2 3)", 1.0, 2.0, 3.0, 0, GeometryType::POINTZ, DimensionType::XYZ},
+                    {"POINTZM(1 2 3 4)", 1.0, 2.0, 3.0, 4.0, GeometryType::POINTZM, DimensionType::XYZM},
+                    {"POINT ZM(1 2 3 4)", 1.0, 2.0, 3.0, 4.0, GeometryType::POINTZM, DimensionType::XYZM},
+                    {"POINT ZM (1 2 3 4)", 1.0, 2.0, 3.0, 4.0, GeometryType::POINTZM, DimensionType::XYZM},
+                    {"   POINT (1 2)  ", 1.0, 2.0, 0, 0, GeometryType::POINT, DimensionType::XY},
+                    {"   POINT (1          2)  ", 1.0, 2.0, 0, 0, GeometryType::POINT, DimensionType::XY},
+                    {"   POINT Z (    1          2    3)  ", 1.0, 2.0, 3.0, 0, GeometryType::POINTZ, DimensionType::XYZ},
+                    {"   POINT     ZM     (    1          2    5       9)  ", 1.0, 2.0, 5.0, 9.0, GeometryType::POINTZM, DimensionType::XYZM},
                 };
 
                 for (const auto test_case : test_cases)
@@ -332,7 +332,7 @@ TEST_CASE("Point")
                     CHECK(p.y == test_case.y);
                     CHECK(p.z == test_case.z);
                     CHECK(p.m == test_case.m);
-                    CHECK(p.detailed_type() == test_case.detailed_type);
+                    CHECK(p.geom_type_dim() == test_case.detailed_type);
                     CHECK(p.dim == test_case.dimension);
                 }
             }

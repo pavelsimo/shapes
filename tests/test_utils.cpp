@@ -8,34 +8,34 @@ TEST_CASE("Utils")
 {
     SECTION("get_dim()")
     {
-        CHECK(utils::get_dim(GeometryDetailedType::POINT) == DimensionType::XY);
-        CHECK(utils::get_dim(GeometryDetailedType::POINTZ) == DimensionType::XYZ);
-        CHECK(utils::get_dim(GeometryDetailedType::POINTM) == DimensionType::XYM);
-        CHECK(utils::get_dim(GeometryDetailedType::POINTZM) == DimensionType::XYZM);
-        CHECK(utils::get_dim(GeometryDetailedType::MULTIPOINT) == DimensionType::XY);
-        CHECK(utils::get_dim(GeometryDetailedType::MULTIPOINTZ) == DimensionType::XYZ);
-        CHECK(utils::get_dim(GeometryDetailedType::MULTIPOINTM) == DimensionType::XYM);
-        CHECK(utils::get_dim(GeometryDetailedType::MULTIPOINTZM) == DimensionType::XYZM);
-        CHECK(utils::get_dim(GeometryDetailedType::LINESTRING) == DimensionType::XY);
-        CHECK(utils::get_dim(GeometryDetailedType::LINESTRINGZ) == DimensionType::XYZ);
-        CHECK(utils::get_dim(GeometryDetailedType::LINESTRINGM) == DimensionType::XYM);
-        CHECK(utils::get_dim(GeometryDetailedType::LINESTRINGZM) == DimensionType::XYZM);
-        CHECK(utils::get_dim(GeometryDetailedType::MULTILINESTRING) == DimensionType::XY);
-        CHECK(utils::get_dim(GeometryDetailedType::MULTILINESTRINGZ) == DimensionType::XYZ);
-        CHECK(utils::get_dim(GeometryDetailedType::MULTILINESTRINGM) == DimensionType::XYM);
-        CHECK(utils::get_dim(GeometryDetailedType::MULTILINESTRINGZM) == DimensionType::XYZM);
-        CHECK(utils::get_dim(GeometryDetailedType::POLYGON) == DimensionType::XY);
-        CHECK(utils::get_dim(GeometryDetailedType::POLYGONZ) == DimensionType::XYZ);
-        CHECK(utils::get_dim(GeometryDetailedType::POLYGONM) == DimensionType::XYM);
-        CHECK(utils::get_dim(GeometryDetailedType::POLYGONZM) == DimensionType::XYZM);
-        CHECK(utils::get_dim(GeometryDetailedType::MULTIPOLYGON) == DimensionType::XY);
-        CHECK(utils::get_dim(GeometryDetailedType::MULTIPOLYGONZ) == DimensionType::XYZ);
-        CHECK(utils::get_dim(GeometryDetailedType::MULTIPOLYGONM) == DimensionType::XYM);
-        CHECK(utils::get_dim(GeometryDetailedType::MULTIPOLYGONZM) == DimensionType::XYZM);
-        CHECK(utils::get_dim(GeometryDetailedType::GEOMETRYCOLLECTION) == DimensionType::XY);
-        CHECK(utils::get_dim(GeometryDetailedType::GEOMETRYCOLLECTIONZ) == DimensionType::XYZ);
-        CHECK(utils::get_dim(GeometryDetailedType::GEOMETRYCOLLECTIONM) == DimensionType::XYM);
-        CHECK(utils::get_dim(GeometryDetailedType::GEOMETRYCOLLECTIONZM) == DimensionType::XYZM);
+        CHECK(utils::get_dim(GeometryType::POINT) == DimensionType::XY);
+        CHECK(utils::get_dim(GeometryType::POINTZ) == DimensionType::XYZ);
+        CHECK(utils::get_dim(GeometryType::POINTM) == DimensionType::XYM);
+        CHECK(utils::get_dim(GeometryType::POINTZM) == DimensionType::XYZM);
+        CHECK(utils::get_dim(GeometryType::MULTIPOINT) == DimensionType::XY);
+        CHECK(utils::get_dim(GeometryType::MULTIPOINTZ) == DimensionType::XYZ);
+        CHECK(utils::get_dim(GeometryType::MULTIPOINTM) == DimensionType::XYM);
+        CHECK(utils::get_dim(GeometryType::MULTIPOINTZM) == DimensionType::XYZM);
+        CHECK(utils::get_dim(GeometryType::LINESTRING) == DimensionType::XY);
+        CHECK(utils::get_dim(GeometryType::LINESTRINGZ) == DimensionType::XYZ);
+        CHECK(utils::get_dim(GeometryType::LINESTRINGM) == DimensionType::XYM);
+        CHECK(utils::get_dim(GeometryType::LINESTRINGZM) == DimensionType::XYZM);
+        CHECK(utils::get_dim(GeometryType::MULTILINESTRING) == DimensionType::XY);
+        CHECK(utils::get_dim(GeometryType::MULTILINESTRINGZ) == DimensionType::XYZ);
+        CHECK(utils::get_dim(GeometryType::MULTILINESTRINGM) == DimensionType::XYM);
+        CHECK(utils::get_dim(GeometryType::MULTILINESTRINGZM) == DimensionType::XYZM);
+        CHECK(utils::get_dim(GeometryType::POLYGON) == DimensionType::XY);
+        CHECK(utils::get_dim(GeometryType::POLYGONZ) == DimensionType::XYZ);
+        CHECK(utils::get_dim(GeometryType::POLYGONM) == DimensionType::XYM);
+        CHECK(utils::get_dim(GeometryType::POLYGONZM) == DimensionType::XYZM);
+        CHECK(utils::get_dim(GeometryType::MULTIPOLYGON) == DimensionType::XY);
+        CHECK(utils::get_dim(GeometryType::MULTIPOLYGONZ) == DimensionType::XYZ);
+        CHECK(utils::get_dim(GeometryType::MULTIPOLYGONM) == DimensionType::XYM);
+        CHECK(utils::get_dim(GeometryType::MULTIPOLYGONZM) == DimensionType::XYZM);
+        CHECK(utils::get_dim(GeometryType::GEOMETRYCOLLECTION) == DimensionType::XY);
+        CHECK(utils::get_dim(GeometryType::GEOMETRYCOLLECTIONZ) == DimensionType::XYZ);
+        CHECK(utils::get_dim(GeometryType::GEOMETRYCOLLECTIONM) == DimensionType::XYM);
+        CHECK(utils::get_dim(GeometryType::GEOMETRYCOLLECTIONZM) == DimensionType::XYZM);
     }
 
     SECTION("get_ndim() - dimension type")
@@ -48,107 +48,107 @@ TEST_CASE("Utils")
 
     SECTION("get_ndim() - geometry_detailed_type")
     {
-        CHECK(utils::get_ndim(GeometryDetailedType::POINT) == 2);
-        CHECK(utils::get_ndim(GeometryDetailedType::POINTZ) == 3);
-        CHECK(utils::get_ndim(GeometryDetailedType::POINTM) == 3);
-        CHECK(utils::get_ndim(GeometryDetailedType::POINTZM) == 4);
-        CHECK(utils::get_ndim(GeometryDetailedType::MULTIPOINT) == 2);
-        CHECK(utils::get_ndim(GeometryDetailedType::MULTIPOINTZ) == 3);
-        CHECK(utils::get_ndim(GeometryDetailedType::MULTIPOINTM) == 3);
-        CHECK(utils::get_ndim(GeometryDetailedType::MULTIPOINTZM) == 4);
-        CHECK(utils::get_ndim(GeometryDetailedType::LINESTRING) == 2);
-        CHECK(utils::get_ndim(GeometryDetailedType::LINESTRINGZ) == 3);
-        CHECK(utils::get_ndim(GeometryDetailedType::LINESTRINGM) == 3);
-        CHECK(utils::get_ndim(GeometryDetailedType::LINESTRINGZM) == 4);
-        CHECK(utils::get_ndim(GeometryDetailedType::MULTILINESTRING) == 2);
-        CHECK(utils::get_ndim(GeometryDetailedType::MULTILINESTRINGZ) == 3);
-        CHECK(utils::get_ndim(GeometryDetailedType::MULTILINESTRINGM) == 3);
-        CHECK(utils::get_ndim(GeometryDetailedType::MULTILINESTRINGZM) == 4);
-        CHECK(utils::get_ndim(GeometryDetailedType::POLYGON) == 2);
-        CHECK(utils::get_ndim(GeometryDetailedType::POLYGONZ) == 3);
-        CHECK(utils::get_ndim(GeometryDetailedType::POLYGONM) == 3);
-        CHECK(utils::get_ndim(GeometryDetailedType::POLYGONZM) == 4);
-        CHECK(utils::get_ndim(GeometryDetailedType::MULTIPOLYGON) == 2);
-        CHECK(utils::get_ndim(GeometryDetailedType::MULTIPOLYGONZ) == 3);
-        CHECK(utils::get_ndim(GeometryDetailedType::MULTIPOLYGONM) == 3);
-        CHECK(utils::get_ndim(GeometryDetailedType::MULTIPOLYGONZM) == 4);
-        CHECK(utils::get_ndim(GeometryDetailedType::GEOMETRYCOLLECTION) == 2);
-        CHECK(utils::get_ndim(GeometryDetailedType::GEOMETRYCOLLECTIONZ) == 3);
-        CHECK(utils::get_ndim(GeometryDetailedType::GEOMETRYCOLLECTIONM) == 3);
-        CHECK(utils::get_ndim(GeometryDetailedType::GEOMETRYCOLLECTIONZM) == 4);
+        CHECK(utils::get_ndim(GeometryType::POINT) == 2);
+        CHECK(utils::get_ndim(GeometryType::POINTZ) == 3);
+        CHECK(utils::get_ndim(GeometryType::POINTM) == 3);
+        CHECK(utils::get_ndim(GeometryType::POINTZM) == 4);
+        CHECK(utils::get_ndim(GeometryType::MULTIPOINT) == 2);
+        CHECK(utils::get_ndim(GeometryType::MULTIPOINTZ) == 3);
+        CHECK(utils::get_ndim(GeometryType::MULTIPOINTM) == 3);
+        CHECK(utils::get_ndim(GeometryType::MULTIPOINTZM) == 4);
+        CHECK(utils::get_ndim(GeometryType::LINESTRING) == 2);
+        CHECK(utils::get_ndim(GeometryType::LINESTRINGZ) == 3);
+        CHECK(utils::get_ndim(GeometryType::LINESTRINGM) == 3);
+        CHECK(utils::get_ndim(GeometryType::LINESTRINGZM) == 4);
+        CHECK(utils::get_ndim(GeometryType::MULTILINESTRING) == 2);
+        CHECK(utils::get_ndim(GeometryType::MULTILINESTRINGZ) == 3);
+        CHECK(utils::get_ndim(GeometryType::MULTILINESTRINGM) == 3);
+        CHECK(utils::get_ndim(GeometryType::MULTILINESTRINGZM) == 4);
+        CHECK(utils::get_ndim(GeometryType::POLYGON) == 2);
+        CHECK(utils::get_ndim(GeometryType::POLYGONZ) == 3);
+        CHECK(utils::get_ndim(GeometryType::POLYGONM) == 3);
+        CHECK(utils::get_ndim(GeometryType::POLYGONZM) == 4);
+        CHECK(utils::get_ndim(GeometryType::MULTIPOLYGON) == 2);
+        CHECK(utils::get_ndim(GeometryType::MULTIPOLYGONZ) == 3);
+        CHECK(utils::get_ndim(GeometryType::MULTIPOLYGONM) == 3);
+        CHECK(utils::get_ndim(GeometryType::MULTIPOLYGONZM) == 4);
+        CHECK(utils::get_ndim(GeometryType::GEOMETRYCOLLECTION) == 2);
+        CHECK(utils::get_ndim(GeometryType::GEOMETRYCOLLECTIONZ) == 3);
+        CHECK(utils::get_ndim(GeometryType::GEOMETRYCOLLECTIONM) == 3);
+        CHECK(utils::get_ndim(GeometryType::GEOMETRYCOLLECTIONZM) == 4);
     }
 
-    SECTION("get_geom_detailed_type()")
+    SECTION("get_geom_type_dim()")
     {
-        CHECK(utils::get_geom_detailed_type(GeometryType::POINT, DimensionType::XY) == GeometryDetailedType::POINT);
-        CHECK(utils::get_geom_detailed_type(GeometryType::POINT, DimensionType::XYZ) == GeometryDetailedType::POINTZ);
-        CHECK(utils::get_geom_detailed_type(GeometryType::POINT, DimensionType::XYM) == GeometryDetailedType::POINTM);
-        CHECK(utils::get_geom_detailed_type(GeometryType::POINT, DimensionType::XYZM) == GeometryDetailedType::POINTZM);
-        CHECK(utils::get_geom_detailed_type(GeometryType::MULTIPOINT, DimensionType::XY) == GeometryDetailedType::MULTIPOINT);
-        CHECK(utils::get_geom_detailed_type(GeometryType::MULTIPOINT, DimensionType::XYZ) == GeometryDetailedType::MULTIPOINTZ);
-        CHECK(utils::get_geom_detailed_type(GeometryType::MULTIPOINT, DimensionType::XYM) == GeometryDetailedType::MULTIPOINTM);
-        CHECK(utils::get_geom_detailed_type(GeometryType::MULTIPOINT, DimensionType::XYZM) == GeometryDetailedType::MULTIPOINTZM);
-        CHECK(utils::get_geom_detailed_type(GeometryType::LINESTRING, DimensionType::XY) == GeometryDetailedType::LINESTRING);
-        CHECK(utils::get_geom_detailed_type(GeometryType::LINESTRING, DimensionType::XYZ) == GeometryDetailedType::LINESTRINGZ);
-        CHECK(utils::get_geom_detailed_type(GeometryType::LINESTRING, DimensionType::XYM) == GeometryDetailedType::LINESTRINGM);
-        CHECK(utils::get_geom_detailed_type(GeometryType::LINESTRING, DimensionType::XYZM) == GeometryDetailedType::LINESTRINGZM);
-        CHECK(utils::get_geom_detailed_type(GeometryType::MULTILINESTRING, DimensionType::XY) == GeometryDetailedType::MULTILINESTRING);
-        CHECK(utils::get_geom_detailed_type(GeometryType::MULTILINESTRING, DimensionType::XYZ) == GeometryDetailedType::MULTILINESTRINGZ);
-        CHECK(utils::get_geom_detailed_type(GeometryType::MULTILINESTRING, DimensionType::XYM) == GeometryDetailedType::MULTILINESTRINGM);
-        CHECK(utils::get_geom_detailed_type(GeometryType::MULTILINESTRING, DimensionType::XYZM) == GeometryDetailedType::MULTILINESTRINGZM);
-        CHECK(utils::get_geom_detailed_type(GeometryType::POLYGON, DimensionType::XY) == GeometryDetailedType::POLYGON);
-        CHECK(utils::get_geom_detailed_type(GeometryType::POLYGON, DimensionType::XYZ) == GeometryDetailedType::POLYGONZ);
-        CHECK(utils::get_geom_detailed_type(GeometryType::POLYGON, DimensionType::XYM) == GeometryDetailedType::POLYGONM);
-        CHECK(utils::get_geom_detailed_type(GeometryType::POLYGON, DimensionType::XYZM) == GeometryDetailedType::POLYGONZM);
-        CHECK(utils::get_geom_detailed_type(GeometryType::MULTIPOLYGON, DimensionType::XY) == GeometryDetailedType::MULTIPOLYGON);
-        CHECK(utils::get_geom_detailed_type(GeometryType::MULTIPOLYGON, DimensionType::XYZ) == GeometryDetailedType::MULTIPOLYGONZ);
-        CHECK(utils::get_geom_detailed_type(GeometryType::MULTIPOLYGON, DimensionType::XYM) == GeometryDetailedType::MULTIPOLYGONM);
-        CHECK(utils::get_geom_detailed_type(GeometryType::MULTIPOLYGON, DimensionType::XYZM) == GeometryDetailedType::MULTIPOLYGONZM);
-        CHECK(utils::get_geom_detailed_type(GeometryType::GEOMETRYCOLLECTION, DimensionType::XY) == GeometryDetailedType::GEOMETRYCOLLECTION);
-        CHECK(utils::get_geom_detailed_type(GeometryType::GEOMETRYCOLLECTION, DimensionType::XYZ) == GeometryDetailedType::GEOMETRYCOLLECTIONZ);
-        CHECK(utils::get_geom_detailed_type(GeometryType::GEOMETRYCOLLECTION, DimensionType::XYM) == GeometryDetailedType::GEOMETRYCOLLECTIONM);
-        CHECK(utils::get_geom_detailed_type(GeometryType::GEOMETRYCOLLECTION, DimensionType::XYZM) == GeometryDetailedType::GEOMETRYCOLLECTIONZM);
+        CHECK(utils::get_geom_type_dim(GeometryType::POINT, DimensionType::XY) == GeometryType::POINT);
+        CHECK(utils::get_geom_type_dim(GeometryType::POINT, DimensionType::XYZ) == GeometryType::POINTZ);
+        CHECK(utils::get_geom_type_dim(GeometryType::POINT, DimensionType::XYM) == GeometryType::POINTM);
+        CHECK(utils::get_geom_type_dim(GeometryType::POINT, DimensionType::XYZM) == GeometryType::POINTZM);
+        CHECK(utils::get_geom_type_dim(GeometryType::MULTIPOINT, DimensionType::XY) == GeometryType::MULTIPOINT);
+        CHECK(utils::get_geom_type_dim(GeometryType::MULTIPOINT, DimensionType::XYZ) == GeometryType::MULTIPOINTZ);
+        CHECK(utils::get_geom_type_dim(GeometryType::MULTIPOINT, DimensionType::XYM) == GeometryType::MULTIPOINTM);
+        CHECK(utils::get_geom_type_dim(GeometryType::MULTIPOINT, DimensionType::XYZM) == GeometryType::MULTIPOINTZM);
+        CHECK(utils::get_geom_type_dim(GeometryType::LINESTRING, DimensionType::XY) == GeometryType::LINESTRING);
+        CHECK(utils::get_geom_type_dim(GeometryType::LINESTRING, DimensionType::XYZ) == GeometryType::LINESTRINGZ);
+        CHECK(utils::get_geom_type_dim(GeometryType::LINESTRING, DimensionType::XYM) == GeometryType::LINESTRINGM);
+        CHECK(utils::get_geom_type_dim(GeometryType::LINESTRING, DimensionType::XYZM) == GeometryType::LINESTRINGZM);
+        CHECK(utils::get_geom_type_dim(GeometryType::MULTILINESTRING, DimensionType::XY) == GeometryType::MULTILINESTRING);
+        CHECK(utils::get_geom_type_dim(GeometryType::MULTILINESTRING, DimensionType::XYZ) == GeometryType::MULTILINESTRINGZ);
+        CHECK(utils::get_geom_type_dim(GeometryType::MULTILINESTRING, DimensionType::XYM) == GeometryType::MULTILINESTRINGM);
+        CHECK(utils::get_geom_type_dim(GeometryType::MULTILINESTRING, DimensionType::XYZM) == GeometryType::MULTILINESTRINGZM);
+        CHECK(utils::get_geom_type_dim(GeometryType::POLYGON, DimensionType::XY) == GeometryType::POLYGON);
+        CHECK(utils::get_geom_type_dim(GeometryType::POLYGON, DimensionType::XYZ) == GeometryType::POLYGONZ);
+        CHECK(utils::get_geom_type_dim(GeometryType::POLYGON, DimensionType::XYM) == GeometryType::POLYGONM);
+        CHECK(utils::get_geom_type_dim(GeometryType::POLYGON, DimensionType::XYZM) == GeometryType::POLYGONZM);
+        CHECK(utils::get_geom_type_dim(GeometryType::MULTIPOLYGON, DimensionType::XY) == GeometryType::MULTIPOLYGON);
+        CHECK(utils::get_geom_type_dim(GeometryType::MULTIPOLYGON, DimensionType::XYZ) == GeometryType::MULTIPOLYGONZ);
+        CHECK(utils::get_geom_type_dim(GeometryType::MULTIPOLYGON, DimensionType::XYM) == GeometryType::MULTIPOLYGONM);
+        CHECK(utils::get_geom_type_dim(GeometryType::MULTIPOLYGON, DimensionType::XYZM) == GeometryType::MULTIPOLYGONZM);
+        CHECK(utils::get_geom_type_dim(GeometryType::GEOMETRYCOLLECTION, DimensionType::XY) == GeometryType::GEOMETRYCOLLECTION);
+        CHECK(utils::get_geom_type_dim(GeometryType::GEOMETRYCOLLECTION, DimensionType::XYZ) == GeometryType::GEOMETRYCOLLECTIONZ);
+        CHECK(utils::get_geom_type_dim(GeometryType::GEOMETRYCOLLECTION, DimensionType::XYM) == GeometryType::GEOMETRYCOLLECTIONM);
+        CHECK(utils::get_geom_type_dim(GeometryType::GEOMETRYCOLLECTION, DimensionType::XYZM) == GeometryType::GEOMETRYCOLLECTIONZM);
     }
 
     SECTION("get_geom_type()")
     {
-        CHECK(utils::get_geom_type(GeometryDetailedType::POINT) == GeometryType::POINT);
-        CHECK(utils::get_geom_type(GeometryDetailedType::POINTZ) == GeometryType::POINT);
-        CHECK(utils::get_geom_type(GeometryDetailedType::POINTM) == GeometryType::POINT);
-        CHECK(utils::get_geom_type(GeometryDetailedType::POINTZM) == GeometryType::POINT);
-        CHECK(utils::get_geom_type(GeometryDetailedType::MULTIPOINT) == GeometryType::MULTIPOINT);
-        CHECK(utils::get_geom_type(GeometryDetailedType::MULTIPOINTZ) == GeometryType::MULTIPOINT);
-        CHECK(utils::get_geom_type(GeometryDetailedType::MULTIPOINTM) == GeometryType::MULTIPOINT);
-        CHECK(utils::get_geom_type(GeometryDetailedType::MULTIPOINTZM) == GeometryType::MULTIPOINT);
-        CHECK(utils::get_geom_type(GeometryDetailedType::LINESTRING) == GeometryType::LINESTRING);
-        CHECK(utils::get_geom_type(GeometryDetailedType::LINESTRINGZ) == GeometryType::LINESTRING);
-        CHECK(utils::get_geom_type(GeometryDetailedType::LINESTRINGM) == GeometryType::LINESTRING);
-        CHECK(utils::get_geom_type(GeometryDetailedType::LINESTRINGZM) == GeometryType::LINESTRING);
-        CHECK(utils::get_geom_type(GeometryDetailedType::MULTILINESTRING) == GeometryType::MULTILINESTRING);
-        CHECK(utils::get_geom_type(GeometryDetailedType::MULTILINESTRINGZ) == GeometryType::MULTILINESTRING);
-        CHECK(utils::get_geom_type(GeometryDetailedType::MULTILINESTRINGM) == GeometryType::MULTILINESTRING);
-        CHECK(utils::get_geom_type(GeometryDetailedType::MULTILINESTRINGZM) == GeometryType::MULTILINESTRING);
-        CHECK(utils::get_geom_type(GeometryDetailedType::POLYGON) == GeometryType::POLYGON);
-        CHECK(utils::get_geom_type(GeometryDetailedType::POLYGONZ) == GeometryType::POLYGON);
-        CHECK(utils::get_geom_type(GeometryDetailedType::POLYGONM) == GeometryType::POLYGON);
-        CHECK(utils::get_geom_type(GeometryDetailedType::POLYGONZM) == GeometryType::POLYGON);
-        CHECK(utils::get_geom_type(GeometryDetailedType::MULTIPOLYGON) == GeometryType::MULTIPOLYGON);
-        CHECK(utils::get_geom_type(GeometryDetailedType::MULTIPOLYGONZ) == GeometryType::MULTIPOLYGON);
-        CHECK(utils::get_geom_type(GeometryDetailedType::MULTIPOLYGONM) == GeometryType::MULTIPOLYGON);
-        CHECK(utils::get_geom_type(GeometryDetailedType::MULTIPOLYGONZM) == GeometryType::MULTIPOLYGON);
-        CHECK(utils::get_geom_type(GeometryDetailedType::GEOMETRYCOLLECTION) == GeometryType::GEOMETRYCOLLECTION);
-        CHECK(utils::get_geom_type(GeometryDetailedType::GEOMETRYCOLLECTIONZ) == GeometryType::GEOMETRYCOLLECTION);
-        CHECK(utils::get_geom_type(GeometryDetailedType::GEOMETRYCOLLECTIONM) == GeometryType::GEOMETRYCOLLECTION);
-        CHECK(utils::get_geom_type(GeometryDetailedType::GEOMETRYCOLLECTIONZM) == GeometryType::GEOMETRYCOLLECTION);
+        CHECK(utils::get_geom_type(GeometryType::POINT) == GeometryType::POINT);
+        CHECK(utils::get_geom_type(GeometryType::POINTZ) == GeometryType::POINT);
+        CHECK(utils::get_geom_type(GeometryType::POINTM) == GeometryType::POINT);
+        CHECK(utils::get_geom_type(GeometryType::POINTZM) == GeometryType::POINT);
+        CHECK(utils::get_geom_type(GeometryType::MULTIPOINT) == GeometryType::MULTIPOINT);
+        CHECK(utils::get_geom_type(GeometryType::MULTIPOINTZ) == GeometryType::MULTIPOINT);
+        CHECK(utils::get_geom_type(GeometryType::MULTIPOINTM) == GeometryType::MULTIPOINT);
+        CHECK(utils::get_geom_type(GeometryType::MULTIPOINTZM) == GeometryType::MULTIPOINT);
+        CHECK(utils::get_geom_type(GeometryType::LINESTRING) == GeometryType::LINESTRING);
+        CHECK(utils::get_geom_type(GeometryType::LINESTRINGZ) == GeometryType::LINESTRING);
+        CHECK(utils::get_geom_type(GeometryType::LINESTRINGM) == GeometryType::LINESTRING);
+        CHECK(utils::get_geom_type(GeometryType::LINESTRINGZM) == GeometryType::LINESTRING);
+        CHECK(utils::get_geom_type(GeometryType::MULTILINESTRING) == GeometryType::MULTILINESTRING);
+        CHECK(utils::get_geom_type(GeometryType::MULTILINESTRINGZ) == GeometryType::MULTILINESTRING);
+        CHECK(utils::get_geom_type(GeometryType::MULTILINESTRINGM) == GeometryType::MULTILINESTRING);
+        CHECK(utils::get_geom_type(GeometryType::MULTILINESTRINGZM) == GeometryType::MULTILINESTRING);
+        CHECK(utils::get_geom_type(GeometryType::POLYGON) == GeometryType::POLYGON);
+        CHECK(utils::get_geom_type(GeometryType::POLYGONZ) == GeometryType::POLYGON);
+        CHECK(utils::get_geom_type(GeometryType::POLYGONM) == GeometryType::POLYGON);
+        CHECK(utils::get_geom_type(GeometryType::POLYGONZM) == GeometryType::POLYGON);
+        CHECK(utils::get_geom_type(GeometryType::MULTIPOLYGON) == GeometryType::MULTIPOLYGON);
+        CHECK(utils::get_geom_type(GeometryType::MULTIPOLYGONZ) == GeometryType::MULTIPOLYGON);
+        CHECK(utils::get_geom_type(GeometryType::MULTIPOLYGONM) == GeometryType::MULTIPOLYGON);
+        CHECK(utils::get_geom_type(GeometryType::MULTIPOLYGONZM) == GeometryType::MULTIPOLYGON);
+        CHECK(utils::get_geom_type(GeometryType::GEOMETRYCOLLECTION) == GeometryType::GEOMETRYCOLLECTION);
+        CHECK(utils::get_geom_type(GeometryType::GEOMETRYCOLLECTIONZ) == GeometryType::GEOMETRYCOLLECTION);
+        CHECK(utils::get_geom_type(GeometryType::GEOMETRYCOLLECTIONM) == GeometryType::GEOMETRYCOLLECTION);
+        CHECK(utils::get_geom_type(GeometryType::GEOMETRYCOLLECTIONZM) == GeometryType::GEOMETRYCOLLECTION);
     }
 
     SECTION("is_point()")
     {
         CHECK(utils::is_point(GeometryType::POINT));
-        CHECK(utils::is_point(GeometryDetailedType::POINT));
-        CHECK(utils::is_point(GeometryDetailedType::POINTZ));
-        CHECK(utils::is_point(GeometryDetailedType::POINTM));
-        CHECK(utils::is_point(GeometryDetailedType::POINTZM));
+        CHECK(utils::is_point(GeometryType::POINT));
+        CHECK(utils::is_point(GeometryType::POINTZ));
+        CHECK(utils::is_point(GeometryType::POINTM));
+        CHECK(utils::is_point(GeometryType::POINTZM));
         CHECK(not utils::is_point(GeometryType::MULTIPOINT));
         CHECK(not utils::is_point(GeometryType::LINESTRING));
         CHECK(not utils::is_point(GeometryType::MULTILINESTRING));
@@ -160,10 +160,10 @@ TEST_CASE("Utils")
     SECTION("is_multipoint()")
     {
         CHECK(utils::is_multipoint(GeometryType::MULTIPOINT));
-        CHECK(utils::is_multipoint(GeometryDetailedType::MULTIPOINT));
-        CHECK(utils::is_multipoint(GeometryDetailedType::MULTIPOINTZ));
-        CHECK(utils::is_multipoint(GeometryDetailedType::MULTIPOINTM));
-        CHECK(utils::is_multipoint(GeometryDetailedType::MULTIPOINTZM));
+        CHECK(utils::is_multipoint(GeometryType::MULTIPOINT));
+        CHECK(utils::is_multipoint(GeometryType::MULTIPOINTZ));
+        CHECK(utils::is_multipoint(GeometryType::MULTIPOINTM));
+        CHECK(utils::is_multipoint(GeometryType::MULTIPOINTZM));
         CHECK(not utils::is_multipoint(GeometryType::POINT));
         CHECK(not utils::is_multipoint(GeometryType::LINESTRING));
         CHECK(not utils::is_multipoint(GeometryType::MULTILINESTRING));
@@ -175,10 +175,10 @@ TEST_CASE("Utils")
     SECTION("is_linestring()")
     {
         CHECK(utils::is_linestring(GeometryType::LINESTRING));
-        CHECK(utils::is_linestring(GeometryDetailedType::LINESTRING));
-        CHECK(utils::is_linestring(GeometryDetailedType::LINESTRINGZ));
-        CHECK(utils::is_linestring(GeometryDetailedType::LINESTRINGM));
-        CHECK(utils::is_linestring(GeometryDetailedType::LINESTRINGZM));
+        CHECK(utils::is_linestring(GeometryType::LINESTRING));
+        CHECK(utils::is_linestring(GeometryType::LINESTRINGZ));
+        CHECK(utils::is_linestring(GeometryType::LINESTRINGM));
+        CHECK(utils::is_linestring(GeometryType::LINESTRINGZM));
         CHECK(not utils::is_linestring(GeometryType::POINT));
         CHECK(not utils::is_linestring(GeometryType::MULTIPOINT));
         CHECK(not utils::is_linestring(GeometryType::MULTILINESTRING));
@@ -190,10 +190,10 @@ TEST_CASE("Utils")
     SECTION("is_multilinestring()")
     {
         CHECK(utils::is_multilinestring(GeometryType::MULTILINESTRING));
-        CHECK(utils::is_multilinestring(GeometryDetailedType::MULTILINESTRING));
-        CHECK(utils::is_multilinestring(GeometryDetailedType::MULTILINESTRINGZ));
-        CHECK(utils::is_multilinestring(GeometryDetailedType::MULTILINESTRINGM));
-        CHECK(utils::is_multilinestring(GeometryDetailedType::MULTILINESTRINGZM));
+        CHECK(utils::is_multilinestring(GeometryType::MULTILINESTRING));
+        CHECK(utils::is_multilinestring(GeometryType::MULTILINESTRINGZ));
+        CHECK(utils::is_multilinestring(GeometryType::MULTILINESTRINGM));
+        CHECK(utils::is_multilinestring(GeometryType::MULTILINESTRINGZM));
         CHECK(not utils::is_multilinestring(GeometryType::POINT));
         CHECK(not utils::is_multilinestring(GeometryType::MULTIPOINT));
         CHECK(not utils::is_multilinestring(GeometryType::LINESTRING));
@@ -205,10 +205,10 @@ TEST_CASE("Utils")
     SECTION("is_polygon()")
     {
         CHECK(utils::is_polygon(GeometryType::POLYGON));
-        CHECK(utils::is_polygon(GeometryDetailedType::POLYGON));
-        CHECK(utils::is_polygon(GeometryDetailedType::POLYGONZ));
-        CHECK(utils::is_polygon(GeometryDetailedType::POLYGONM));
-        CHECK(utils::is_polygon(GeometryDetailedType::POLYGONZM));
+        CHECK(utils::is_polygon(GeometryType::POLYGON));
+        CHECK(utils::is_polygon(GeometryType::POLYGONZ));
+        CHECK(utils::is_polygon(GeometryType::POLYGONM));
+        CHECK(utils::is_polygon(GeometryType::POLYGONZM));
         CHECK(not utils::is_polygon(GeometryType::POINT));
         CHECK(not utils::is_polygon(GeometryType::MULTIPOINT));
         CHECK(not utils::is_polygon(GeometryType::LINESTRING));
@@ -220,10 +220,10 @@ TEST_CASE("Utils")
     SECTION("is_multipolygon()")
     {
         CHECK(utils::is_multipolygon(GeometryType::MULTIPOLYGON));
-        CHECK(utils::is_multipolygon(GeometryDetailedType::MULTIPOLYGON));
-        CHECK(utils::is_multipolygon(GeometryDetailedType::MULTIPOLYGONZ));
-        CHECK(utils::is_multipolygon(GeometryDetailedType::MULTIPOLYGONM));
-        CHECK(utils::is_multipolygon(GeometryDetailedType::MULTIPOLYGONZM));
+        CHECK(utils::is_multipolygon(GeometryType::MULTIPOLYGON));
+        CHECK(utils::is_multipolygon(GeometryType::MULTIPOLYGONZ));
+        CHECK(utils::is_multipolygon(GeometryType::MULTIPOLYGONM));
+        CHECK(utils::is_multipolygon(GeometryType::MULTIPOLYGONZM));
         CHECK(not utils::is_multipolygon(GeometryType::POINT));
         CHECK(not utils::is_multipolygon(GeometryType::MULTIPOINT));
         CHECK(not utils::is_multipolygon(GeometryType::LINESTRING));

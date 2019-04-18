@@ -90,7 +90,7 @@ TEST_CASE("LineString")
             {
                 auto mp = LineString::from_wkt("LINESTRING(1.4 2.3, 3.2 4.1)");
                 CHECK(not mp.empty());
-                CHECK(mp.detailed_type() == GeometryDetailedType::LINESTRING);
+                CHECK(mp.geom_type_dim() == GeometryType::LINESTRING);
                 CHECK(mp.dim == DimensionType::XY);
                 const auto& p1 = mp[0];
                 CHECK(p1.x == 1.4);

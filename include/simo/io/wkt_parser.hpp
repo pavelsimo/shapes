@@ -16,7 +16,7 @@ namespace shapes
 struct WktData
 {
     /// the dimension type of the geometry
-    GeometryDetailedType geom_type;
+    GeometryType geom_type;
 
     /// the number of dimensions
     int ndim;

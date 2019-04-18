@@ -4,9 +4,12 @@
 #include <ciso646>
 #include <iostream>
 #include <cassert>
+
+using namespace simo::shapes;
+
 }
 
-%extra_argument { struct simo::shapes::WktResult *result }
+%extra_argument { struct WktResult *result }
 
 %token_type {double}
 
@@ -71,12 +74,12 @@ point ::= WKT_POINT_TAGGED_TEXT WKT_EMPTY_SET.
 {
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POINT;
+    result->data.geom_type = GeometryType::POINT;
 }
 
 point ::= WKT_POINT_TAGGED_TEXT point_text.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POINT;
+    result->data.geom_type = GeometryType::POINT;
 }
 
 // point z
@@ -86,12 +89,12 @@ point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_EMPTY_SET.
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZ;
+    result->data.geom_type = GeometryType::POINTZ;
 }
 
 point_z ::= WKT_POINT_Z_TAGGED_TEXT point_text_z.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZ;
+    result->data.geom_type = GeometryType::POINTZ;
 }
 
 // point m
@@ -101,12 +104,12 @@ point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_EMPTY_SET.
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTM;
+    result->data.geom_type = GeometryType::POINTM;
 }
 
 point_m ::= WKT_POINT_M_TAGGED_TEXT point_text_m.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTM;
+    result->data.geom_type = GeometryType::POINTM;
 }
 
 // point zm
@@ -117,12 +120,12 @@ point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_EMPTY_SET.
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZM;
+    result->data.geom_type = GeometryType::POINTZM;
 }
 
 point_zm ::= WKT_POINT_ZM_TAGGED_TEXT point_text_zm.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POINTZM;
+    result->data.geom_type = GeometryType::POINTZM;
 }
 
 // coords
@@ -211,68 +214,68 @@ multipoint_text_zm_2 ::= WKT_COMMA coord_xyzm multipoint_text_zm_2.
 
 multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINT;
+    result->data.geom_type = GeometryType::MULTIPOINT;
 }
 
 multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN point_text multipoint_text WKT_RPAREN.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINT;
+    result->data.geom_type = GeometryType::MULTIPOINT;
 }
 
 multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN coord_xy multipoint_text_2 WKT_RPAREN.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINT;
+    result->data.geom_type = GeometryType::MULTIPOINT;
 }
 
 // multipoint z
 
 multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTZ;
+    result->data.geom_type = GeometryType::MULTIPOINTZ;
 }
 
 multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_LPAREN point_text_z multipoint_text_z WKT_RPAREN.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTZ;
+    result->data.geom_type = GeometryType::MULTIPOINTZ;
 }
 
 multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_LPAREN coord_xyz multipoint_text_z_2 WKT_RPAREN.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTZ;
+    result->data.geom_type = GeometryType::MULTIPOINTZ;
 }
 
 // multipoint m
 
 multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTM;
+    result->data.geom_type = GeometryType::MULTIPOINTM;
 }
 
 multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_LPAREN point_text_m multipoint_text_m WKT_RPAREN.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTM;
+    result->data.geom_type = GeometryType::MULTIPOINTM;
 }
 
 multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_LPAREN coord_xym multipoint_text_m_2 WKT_RPAREN.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTM;
+    result->data.geom_type = GeometryType::MULTIPOINTM;
 }
 
 // multipoint zm
 
 multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTZM;
+    result->data.geom_type = GeometryType::MULTIPOINTZM;
 }
 
 multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN point_text_zm multipoint_text_zm WKT_RPAREN.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTZM;
+    result->data.geom_type = GeometryType::MULTIPOINTZM;
 }
 
 multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN coord_xyzm multipoint_text_zm_2 WKT_RPAREN.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOINTZM;
+    result->data.geom_type = GeometryType::MULTIPOINTZM;
 }
 
 //=============
@@ -301,48 +304,48 @@ linestring_text_zm_repeated ::= WKT_COMMA linestring_text_zm linestring_text_zm_
 
 linestring ::= WKT_LINESTRING_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::LINESTRING;
+    result->data.geom_type = GeometryType::LINESTRING;
 }
 
 linestring ::= WKT_LINESTRING_TAGGED_TEXT linestring_text.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::LINESTRING;
+    result->data.geom_type = GeometryType::LINESTRING;
 }
 
 // linestring z
 
 linestring_z ::= WKT_LINESTRING_Z_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::LINESTRINGZ;
+    result->data.geom_type = GeometryType::LINESTRINGZ;
 }
 
 linestring_z ::= WKT_LINESTRING_Z_TAGGED_TEXT linestring_text_z.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::LINESTRINGZ;
+    result->data.geom_type = GeometryType::LINESTRINGZ;
 }
 
 // linestring m
 
 linestring_m ::= WKT_LINESTRING_M_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::LINESTRINGM;
+    result->data.geom_type = GeometryType::LINESTRINGM;
 }
 
 linestring_m ::= WKT_LINESTRING_M_TAGGED_TEXT linestring_text_m.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::LINESTRINGM;
+    result->data.geom_type = GeometryType::LINESTRINGM;
 }
 
 // linestring zm
 
 linestring_zm ::= WKT_LINESTRING_ZM_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::LINESTRINGZM;
+    result->data.geom_type = GeometryType::LINESTRINGZM;
 }
 
 linestring_zm ::= WKT_LINESTRING_ZM_TAGGED_TEXT linestring_text_zm.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::LINESTRINGZM;
+    result->data.geom_type = GeometryType::LINESTRINGZM;
 }
 
 //==================
@@ -358,48 +361,48 @@ multilinestring_text_zm ::=  WKT_LPAREN linestring_text_zm linestring_text_zm_re
 
 multilinestring ::= WKT_MULTILINESTRING_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTILINESTRING;
+    result->data.geom_type = GeometryType::MULTILINESTRING;
 }
 
 multilinestring ::= WKT_MULTILINESTRING_TAGGED_TEXT multilinestring_text.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTILINESTRING;
+    result->data.geom_type = GeometryType::MULTILINESTRING;
 }
 
 // multilinestring z
 
 multilinestring_z ::= WKT_MULTILINESTRING_Z_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTILINESTRINGZ;
+    result->data.geom_type = GeometryType::MULTILINESTRINGZ;
 }
 
 multilinestring_z ::= WKT_MULTILINESTRING_Z_TAGGED_TEXT multilinestring_text_z.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTILINESTRINGZ;
+    result->data.geom_type = GeometryType::MULTILINESTRINGZ;
 }
 
 // multilinestring m
 
 multilinestring_m ::= WKT_MULTILINESTRING_M_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTILINESTRINGM;
+    result->data.geom_type = GeometryType::MULTILINESTRINGM;
 }
 
 multilinestring_m ::= WKT_MULTILINESTRING_M_TAGGED_TEXT multilinestring_text_m.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTILINESTRINGM;
+    result->data.geom_type = GeometryType::MULTILINESTRINGM;
 }
 
 // multilinestring zm
 
 multilinestring_zm ::= WKT_MULTILINESTRING_ZM_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTILINESTRINGZM;
+    result->data.geom_type = GeometryType::MULTILINESTRINGZM;
 }
 
 multilinestring_zm ::= WKT_MULTILINESTRING_ZM_TAGGED_TEXT multilinestring_text_zm.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTILINESTRINGZM;
+    result->data.geom_type = GeometryType::MULTILINESTRINGZM;
 }
 
 //==========
@@ -442,42 +445,42 @@ polygon_text_zm_repeated ::= WKT_COMMA polygon_text_zm polygon_text_zm_repeated.
 
 polygon ::= WKT_POLYGON_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGON;
+    result->data.geom_type = GeometryType::POLYGON;
 }
 
 polygon ::= WKT_POLYGON_TAGGED_TEXT polygon_text.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGON;
+    result->data.geom_type = GeometryType::POLYGON;
 }
 
 polygon_z ::= WKT_POLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONZ;
+    result->data.geom_type = GeometryType::POLYGONZ;
 }
 
 polygon_z ::= WKT_POLYGON_Z_TAGGED_TEXT polygon_text_z.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONZ;
+    result->data.geom_type = GeometryType::POLYGONZ;
 }
 
 polygon_m ::= WKT_POLYGON_M_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONM;
+    result->data.geom_type = GeometryType::POLYGONM;
 }
 
 polygon_m ::= WKT_POLYGON_M_TAGGED_TEXT polygon_text_m.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONM;
+    result->data.geom_type = GeometryType::POLYGONM;
 }
 
 polygon_zm ::= WKT_POLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONZM;
+    result->data.geom_type = GeometryType::POLYGONZM;
 }
 
 polygon_zm ::= WKT_POLYGON_ZM_TAGGED_TEXT polygon_text_zm.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::POLYGONZM;
+    result->data.geom_type = GeometryType::POLYGONZM;
 }
 
 //===============
@@ -491,42 +494,42 @@ multipolygon_text_zm ::=  WKT_LPAREN polygon_text_zm polygon_text_zm_repeated WK
 
 multipolygon ::= WKT_MULTIPOLYGON_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGON;
+    result->data.geom_type = GeometryType::MULTIPOLYGON;
 }
 
 multipolygon ::= WKT_MULTIPOLYGON_TAGGED_TEXT multipolygon_text.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGON;
+    result->data.geom_type = GeometryType::MULTIPOLYGON;
 }
 
 multipolygon_z ::= WKT_MULTIPOLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONZ;
+    result->data.geom_type = GeometryType::MULTIPOLYGONZ;
 }
 
 multipolygon_z ::= WKT_MULTIPOLYGON_Z_TAGGED_TEXT multipolygon_text_z.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONZ;
+    result->data.geom_type = GeometryType::MULTIPOLYGONZ;
 }
 
 multipolygon_m ::= WKT_MULTIPOLYGON_M_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONM;
+    result->data.geom_type = GeometryType::MULTIPOLYGONM;
 }
 
 multipolygon_m ::= WKT_MULTIPOLYGON_M_TAGGED_TEXT multipolygon_text_m.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONM;
+    result->data.geom_type = GeometryType::MULTIPOLYGONM;
 }
 
 multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONZM;
+    result->data.geom_type = GeometryType::MULTIPOLYGONZM;
 }
 
 multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT multipolygon_text_zm.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::MULTIPOLYGONZM;
+    result->data.geom_type = GeometryType::MULTIPOLYGONZM;
 }
 
 //=====================
@@ -580,40 +583,45 @@ geometrycollection_text_zm ::=  WKT_LPAREN geometry_text_zm geometry_text_zm_rep
 
 geometrycollection ::= WKT_GEOMETRYCOLLECTION_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::GEOMETRYCOLLECTION;
+    result->data.geom_type = GeometryType::GEOMETRYCOLLECTION;
 }
 
 geometrycollection ::= WKT_GEOMETRYCOLLECTION_TAGGED_TEXT geometrycollection_text.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::GEOMETRYCOLLECTION;
+    result->data.geom_type = GeometryType::GEOMETRYCOLLECTION;
 }
 
 geometrycollection_z ::= WKT_GEOMETRYCOLLECTION_Z_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::GEOMETRYCOLLECTIONZ;
+    result->data.geom_type = GeometryType::GEOMETRYCOLLECTIONZ;
 }
 
 geometrycollection_z ::= WKT_GEOMETRYCOLLECTION_Z_TAGGED_TEXT geometrycollection_text_z.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::GEOMETRYCOLLECTIONZ;
+    result->data.geom_type = GeometryType::GEOMETRYCOLLECTIONZ;
 }
 
 geometrycollection_m ::= WKT_GEOMETRYCOLLECTION_M_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::GEOMETRYCOLLECTIONM;
+    result->data.geom_type = GeometryType::GEOMETRYCOLLECTIONM;
 }
 
 geometrycollection_m ::= WKT_GEOMETRYCOLLECTION_M_TAGGED_TEXT geometrycollection_text_m.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::GEOMETRYCOLLECTIONM;
+    result->data.geom_type = GeometryType::GEOMETRYCOLLECTIONM;
 }
 
 geometrycollection_zm ::= WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::GEOMETRYCOLLECTIONZM;
+    result->data.geom_type = GeometryType::GEOMETRYCOLLECTIONZM;
 }
 
 geometrycollection_zm ::= WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT geometrycollection_text_zm.
 {
-    result->data.geom_type = simo::shapes::GeometryDetailedType::GEOMETRYCOLLECTIONZM;
+    result->data.geom_type = GeometryType::GEOMETRYCOLLECTIONZM;
+}
+
+
+%code {
+
 }

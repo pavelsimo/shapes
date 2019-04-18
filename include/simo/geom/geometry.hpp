@@ -42,7 +42,7 @@ class BaseGeometry
      *
      * @since 0.0.1
      */
-    GeometryType type() const
+    GeometryType geom_type() const
     {
         return static_cast<const T*>(this)->type_();
     }
@@ -53,10 +53,10 @@ class BaseGeometry
      *
      * @since 0.0.1
      */
-    GeometryDetailedType detailed_type() const
+    GeometryType geom_type_dim() const
     {
         auto type = static_cast<const T*>(this)->type_();
-        return utils::get_geom_detailed_type(type, dim);
+        return utils::get_geom_type_dim(type, dim);
     }
 
     /*!

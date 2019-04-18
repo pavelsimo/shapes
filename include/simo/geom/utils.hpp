@@ -11,15 +11,15 @@ namespace utils
 {
 
 /*!
- * @brief returns the dimension type given a geometry detailed type
- * @param detailed_type the detailed type
+ * @brief returns the dimension type given a geometry type
+ * @param geom_type the geometry type
  * @return the dimension type
  *
  * @since 0.0.1
  */
-DimensionType get_dim(GeometryDetailedType detailed_type) noexcept
+DimensionType get_dim(GeometryType geom_type) noexcept
 {
-    int value = static_cast<int>(detailed_type);
+    int value = static_cast<int>(geom_type);
     if (value >= 1000 and value < 2000)
     {
         return DimensionType::XYZ;
@@ -58,288 +58,254 @@ int8_t get_ndim(DimensionType dim_type) noexcept
 }
 
 /*!
- * @brief returns the number of dimensions given a geometry detailed type
- * @param detailed_type the geometry detailed type
+ * @brief returns the number of dimensions given a geometry type
+ * @param geom_type the geometry type
  * @return the number of dimensions
  *
  * @since 0.0.1
  */
-int8_t get_ndim(GeometryDetailedType detailed_type) noexcept
+int8_t get_ndim(GeometryType geom_type) noexcept
 {
-    return get_ndim(get_dim(detailed_type));
+    return get_ndim(get_dim(geom_type));
 }
 
+
 /*!
- * @brief returns a geometry detailed type given the geometry type and dimension type
+ * @brief returns a geometry type given the geometry type
  * @param geom_type the geometry type
- * @param dim_type the dimension type
- * @return a geometry detailed type
- *
- * @since 0.0.1
- */
-GeometryDetailedType get_geom_detailed_type(GeometryType geom_type, DimensionType dim_type) noexcept
-{
-    switch (dim_type)
-    {
-        case DimensionType::XY:
-        {
-            switch (geom_type)
-            {
-                case GeometryType::GEOMETRY:
-                    return GeometryDetailedType::GEOMETRY;
-                case GeometryType::POINT:
-                    return GeometryDetailedType::POINT;
-                case GeometryType::LINESTRING:
-                    return GeometryDetailedType::LINESTRING;
-                case GeometryType::POLYGON:
-                    return GeometryDetailedType::POLYGON;
-                case GeometryType::MULTIPOINT:
-                    return GeometryDetailedType::MULTIPOINT;
-                case GeometryType::MULTILINESTRING:
-                    return GeometryDetailedType::MULTILINESTRING;
-                case GeometryType::MULTIPOLYGON:
-                    return GeometryDetailedType::MULTIPOLYGON;
-                case GeometryType::GEOMETRYCOLLECTION:
-                    return GeometryDetailedType::GEOMETRYCOLLECTION;
-                case GeometryType::CIRCULARSTRING:
-                    return GeometryDetailedType::CIRCULARSTRING;
-                case GeometryType::COMPOUNDCURVE:
-                    return GeometryDetailedType::COMPOUNDCURVE;
-                case GeometryType::CURVEPOLYGON:
-                    return GeometryDetailedType::CURVEPOLYGON;
-                case GeometryType::MULTICURVE:
-                    return GeometryDetailedType::MULTICURVE;
-                case GeometryType::MULTISURFACE:
-                    return GeometryDetailedType::MULTISURFACE;
-                case GeometryType::CURVE:
-                    return GeometryDetailedType::CURVE;
-                case GeometryType::SURFACE:
-                    return GeometryDetailedType::SURFACE;
-                case GeometryType::POLYHEDRALSURFACE:
-                    return GeometryDetailedType::POLYHEDRALSURFACE;
-                case GeometryType::TIN:
-                    return GeometryDetailedType::TIN;
-            }
-        }
-        case DimensionType::XYZ:
-        {
-            switch (geom_type)
-            {
-                case GeometryType::GEOMETRY:
-                    return GeometryDetailedType::GEOMETRYZ;
-                case GeometryType::POINT:
-                    return GeometryDetailedType::POINTZ;
-                case GeometryType::LINESTRING:
-                    return GeometryDetailedType::LINESTRINGZ;
-                case GeometryType::POLYGON:
-                    return GeometryDetailedType::POLYGONZ;
-                case GeometryType::MULTIPOINT:
-                    return GeometryDetailedType::MULTIPOINTZ;
-                case GeometryType::MULTILINESTRING:
-                    return GeometryDetailedType::MULTILINESTRINGZ;
-                case GeometryType::MULTIPOLYGON:
-                    return GeometryDetailedType::MULTIPOLYGONZ;
-                case GeometryType::GEOMETRYCOLLECTION:
-                    return GeometryDetailedType::GEOMETRYCOLLECTIONZ;
-                case GeometryType::CIRCULARSTRING:
-                    return GeometryDetailedType::CIRCULARSTRINGZ;
-                case GeometryType::COMPOUNDCURVE:
-                    return GeometryDetailedType::COMPOUNDCURVEZ;
-                case GeometryType::CURVEPOLYGON:
-                    return GeometryDetailedType::CURVEPOLYGONZ;
-                case GeometryType::MULTICURVE:
-                    return GeometryDetailedType::MULTICURVEZ;
-                case GeometryType::MULTISURFACE:
-                    return GeometryDetailedType::MULTISURFACEZ;
-                case GeometryType::CURVE:
-                    return GeometryDetailedType::CURVEZ;
-                case GeometryType::SURFACE:
-                    return GeometryDetailedType::SURFACEZ;
-                case GeometryType::POLYHEDRALSURFACE:
-                    return GeometryDetailedType::POLYHEDRALSURFACEZ;
-                case GeometryType::TIN:
-                    return GeometryDetailedType::TINZ;
-            }
-        }
-        case DimensionType::XYM:
-        {
-            switch (geom_type)
-            {
-                case GeometryType::GEOMETRY:
-                    return GeometryDetailedType::GEOMETRYM;
-                case GeometryType::POINT:
-                    return GeometryDetailedType::POINTM;
-                case GeometryType::LINESTRING:
-                    return GeometryDetailedType::LINESTRINGM;
-                case GeometryType::POLYGON:
-                    return GeometryDetailedType::POLYGONM;
-                case GeometryType::MULTIPOINT:
-                    return GeometryDetailedType::MULTIPOINTM;
-                case GeometryType::MULTILINESTRING:
-                    return GeometryDetailedType::MULTILINESTRINGM;
-                case GeometryType::MULTIPOLYGON:
-                    return GeometryDetailedType::MULTIPOLYGONM;
-                case GeometryType::GEOMETRYCOLLECTION:
-                    return GeometryDetailedType::GEOMETRYCOLLECTIONM;
-                case GeometryType::CIRCULARSTRING:
-                    return GeometryDetailedType::CIRCULARSTRINGM;
-                case GeometryType::COMPOUNDCURVE:
-                    return GeometryDetailedType::COMPOUNDCURVEM;
-                case GeometryType::CURVEPOLYGON:
-                    return GeometryDetailedType::CURVEPOLYGONM;
-                case GeometryType::MULTICURVE:
-                    return GeometryDetailedType::MULTICURVEM;
-                case GeometryType::MULTISURFACE:
-                    return GeometryDetailedType::MULTISURFACEM;
-                case GeometryType::CURVE:
-                    return GeometryDetailedType::CURVEM;
-                case GeometryType::SURFACE:
-                    return GeometryDetailedType::SURFACEM;
-                case GeometryType::POLYHEDRALSURFACE:
-                    return GeometryDetailedType::POLYHEDRALSURFACEM;
-                case GeometryType::TIN:
-                    return GeometryDetailedType::TINM;
-            }
-        }
-        case DimensionType::XYZM:
-        {
-            switch (geom_type)
-            {
-                case GeometryType::GEOMETRY:
-                    return GeometryDetailedType::GEOMETRYZM;
-                case GeometryType::POINT:
-                    return GeometryDetailedType::POINTZM;
-                case GeometryType::LINESTRING:
-                    return GeometryDetailedType::LINESTRINGZM;
-                case GeometryType::POLYGON:
-                    return GeometryDetailedType::POLYGONZM;
-                case GeometryType::MULTIPOINT:
-                    return GeometryDetailedType::MULTIPOINTZM;
-                case GeometryType::MULTILINESTRING:
-                    return GeometryDetailedType::MULTILINESTRINGZM;
-                case GeometryType::MULTIPOLYGON:
-                    return GeometryDetailedType::MULTIPOLYGONZM;
-                case GeometryType::GEOMETRYCOLLECTION:
-                    return GeometryDetailedType::GEOMETRYCOLLECTIONZM;
-                case GeometryType::CIRCULARSTRING:
-                    return GeometryDetailedType::CIRCULARSTRINGZM;
-                case GeometryType::COMPOUNDCURVE:
-                    return GeometryDetailedType::COMPOUNDCURVEZM;
-                case GeometryType::CURVEPOLYGON:
-                    return GeometryDetailedType::CURVEPOLYGONZM;
-                case GeometryType::MULTICURVE:
-                    return GeometryDetailedType::MULTICURVEZM;
-                case GeometryType::MULTISURFACE:
-                    return GeometryDetailedType::MULTISURFACEZM;
-                case GeometryType::CURVE:
-                    return GeometryDetailedType::CURVEZM;
-                case GeometryType::SURFACE:
-                    return GeometryDetailedType::SURFACEZM;
-                case GeometryType::POLYHEDRALSURFACE:
-                    return GeometryDetailedType::POLYHEDRALSURFACEZM;
-                case GeometryType::TIN:
-                    return GeometryDetailedType::TINZM;
-            }
-        }
-    }
-}
-
-/*!
- * @brief returns a geometry type given the geometry detailed type
- * @param geom_detailed_type the geometry detailed type
  * @return a geometry type
  *
  * @since 0.0.1
  */
-GeometryType get_geom_type(GeometryDetailedType geom_detailed_type)
+GeometryType get_geom_type(GeometryType geom_type)
 {
-    switch (geom_detailed_type)
+    switch (geom_type)
     {
-        case GeometryDetailedType::GEOMETRY:
-        case GeometryDetailedType::GEOMETRYZ:
-        case GeometryDetailedType::GEOMETRYM:
-        case GeometryDetailedType::GEOMETRYZM:
+        case GeometryType::GEOMETRY:
+        case GeometryType::GEOMETRYZ:
+        case GeometryType::GEOMETRYM:
+        case GeometryType::GEOMETRYZM:
             return GeometryType::GEOMETRY;
-        case GeometryDetailedType::POINT:
-        case GeometryDetailedType::POINTZ:
-        case GeometryDetailedType::POINTM:
-        case GeometryDetailedType::POINTZM:
+        case GeometryType::POINT:
+        case GeometryType::POINTZ:
+        case GeometryType::POINTM:
+        case GeometryType::POINTZM:
             return GeometryType::POINT;
-        case GeometryDetailedType::MULTIPOINT:
-        case GeometryDetailedType::MULTIPOINTZ:
-        case GeometryDetailedType::MULTIPOINTM:
-        case GeometryDetailedType::MULTIPOINTZM:
+        case GeometryType::MULTIPOINT:
+        case GeometryType::MULTIPOINTZ:
+        case GeometryType::MULTIPOINTM:
+        case GeometryType::MULTIPOINTZM:
             return GeometryType::MULTIPOINT;
-        case GeometryDetailedType::LINESTRING:
-        case GeometryDetailedType::LINESTRINGZ:
-        case GeometryDetailedType::LINESTRINGM:
-        case GeometryDetailedType::LINESTRINGZM:
+        case GeometryType::LINESTRING:
+        case GeometryType::LINESTRINGZ:
+        case GeometryType::LINESTRINGM:
+        case GeometryType::LINESTRINGZM:
             return GeometryType::LINESTRING;
-        case GeometryDetailedType::MULTILINESTRING:
-        case GeometryDetailedType::MULTILINESTRINGZ:
-        case GeometryDetailedType::MULTILINESTRINGM:
-        case GeometryDetailedType::MULTILINESTRINGZM:
+        case GeometryType::MULTILINESTRING:
+        case GeometryType::MULTILINESTRINGZ:
+        case GeometryType::MULTILINESTRINGM:
+        case GeometryType::MULTILINESTRINGZM:
             return GeometryType::MULTILINESTRING;
-        case GeometryDetailedType::POLYGON:
-        case GeometryDetailedType::POLYGONZ:
-        case GeometryDetailedType::POLYGONM:
-        case GeometryDetailedType::POLYGONZM:
+        case GeometryType::POLYGON:
+        case GeometryType::POLYGONZ:
+        case GeometryType::POLYGONM:
+        case GeometryType::POLYGONZM:
             return GeometryType::POLYGON;
-        case GeometryDetailedType::MULTIPOLYGON:
-        case GeometryDetailedType::MULTIPOLYGONZ:
-        case GeometryDetailedType::MULTIPOLYGONM:
-        case GeometryDetailedType::MULTIPOLYGONZM:
+        case GeometryType::MULTIPOLYGON:
+        case GeometryType::MULTIPOLYGONZ:
+        case GeometryType::MULTIPOLYGONM:
+        case GeometryType::MULTIPOLYGONZM:
             return GeometryType::MULTIPOLYGON;
-        case GeometryDetailedType::GEOMETRYCOLLECTION:
-        case GeometryDetailedType::GEOMETRYCOLLECTIONZ:
-        case GeometryDetailedType::GEOMETRYCOLLECTIONM:
-        case GeometryDetailedType::GEOMETRYCOLLECTIONZM:
+        case GeometryType::GEOMETRYCOLLECTION:
+        case GeometryType::GEOMETRYCOLLECTIONZ:
+        case GeometryType::GEOMETRYCOLLECTIONM:
+        case GeometryType::GEOMETRYCOLLECTIONZM:
             return GeometryType::GEOMETRYCOLLECTION;
-        case GeometryDetailedType::CIRCULARSTRING:
-        case GeometryDetailedType::CIRCULARSTRINGZ:
-        case GeometryDetailedType::CIRCULARSTRINGM:
-        case GeometryDetailedType::CIRCULARSTRINGZM:
+        case GeometryType::CIRCULARSTRING:
+        case GeometryType::CIRCULARSTRINGZ:
+        case GeometryType::CIRCULARSTRINGM:
+        case GeometryType::CIRCULARSTRINGZM:
             return GeometryType::CIRCULARSTRING;
-        case GeometryDetailedType::COMPOUNDCURVE:
-        case GeometryDetailedType::COMPOUNDCURVEZ:
-        case GeometryDetailedType::COMPOUNDCURVEM:
-        case GeometryDetailedType::COMPOUNDCURVEZM:
+        case GeometryType::COMPOUNDCURVE:
+        case GeometryType::COMPOUNDCURVEZ:
+        case GeometryType::COMPOUNDCURVEM:
+        case GeometryType::COMPOUNDCURVEZM:
             return GeometryType::COMPOUNDCURVE;
-        case GeometryDetailedType::CURVEPOLYGON:
-        case GeometryDetailedType::CURVEPOLYGONZ:
-        case GeometryDetailedType::CURVEPOLYGONM:
-        case GeometryDetailedType::CURVEPOLYGONZM:
+        case GeometryType::CURVEPOLYGON:
+        case GeometryType::CURVEPOLYGONZ:
+        case GeometryType::CURVEPOLYGONM:
+        case GeometryType::CURVEPOLYGONZM:
             return GeometryType::CURVEPOLYGON;
-        case GeometryDetailedType::MULTICURVE:
-        case GeometryDetailedType::MULTICURVEZ:
-        case GeometryDetailedType::MULTICURVEM:
-        case GeometryDetailedType::MULTICURVEZM:
+        case GeometryType::MULTICURVE:
+        case GeometryType::MULTICURVEZ:
+        case GeometryType::MULTICURVEM:
+        case GeometryType::MULTICURVEZM:
             return GeometryType::MULTICURVE;
-        case GeometryDetailedType::MULTISURFACE:
-        case GeometryDetailedType::MULTISURFACEZ:
-        case GeometryDetailedType::MULTISURFACEM:
-        case GeometryDetailedType::MULTISURFACEZM:
+        case GeometryType::MULTISURFACE:
+        case GeometryType::MULTISURFACEZ:
+        case GeometryType::MULTISURFACEM:
+        case GeometryType::MULTISURFACEZM:
             return GeometryType::MULTISURFACE;
-        case GeometryDetailedType::CURVE:
-        case GeometryDetailedType::CURVEZ:
-        case GeometryDetailedType::CURVEM:
-        case GeometryDetailedType::CURVEZM:
+        case GeometryType::CURVE:
+        case GeometryType::CURVEZ:
+        case GeometryType::CURVEM:
+        case GeometryType::CURVEZM:
             return GeometryType::CURVE;
-        case GeometryDetailedType::SURFACE:
-        case GeometryDetailedType::SURFACEZ:
-        case GeometryDetailedType::SURFACEM:
-        case GeometryDetailedType::SURFACEZM:
+        case GeometryType::SURFACE:
+        case GeometryType::SURFACEZ:
+        case GeometryType::SURFACEM:
+        case GeometryType::SURFACEZM:
             return GeometryType::SURFACE;
-        case GeometryDetailedType::POLYHEDRALSURFACE:
-        case GeometryDetailedType::POLYHEDRALSURFACEZ:
-        case GeometryDetailedType::POLYHEDRALSURFACEM:
-        case GeometryDetailedType::POLYHEDRALSURFACEZM:
+        case GeometryType::POLYHEDRALSURFACE:
+        case GeometryType::POLYHEDRALSURFACEZ:
+        case GeometryType::POLYHEDRALSURFACEM:
+        case GeometryType::POLYHEDRALSURFACEZM:
             return GeometryType::POLYHEDRALSURFACE;
-        case GeometryDetailedType::TIN:
-        case GeometryDetailedType::TINZ:
-        case GeometryDetailedType::TINM:
-        case GeometryDetailedType::TINZM:
+        case GeometryType::TIN:
+        case GeometryType::TINZ:
+        case GeometryType::TINM:
+        case GeometryType::TINZM:
             return GeometryType::TIN;
+    }
+}
+
+/*!
+ * @brief returns a geometry type with dimension given the geometry type and the dimension type
+ * @param geom_type the geometry type
+ * @param dim_type the dimension type
+ * @return a geometry type
+ *
+ * @since 0.0.1
+ */
+GeometryType get_geom_type_dim(GeometryType geom_type, DimensionType dim_type) noexcept
+{
+    auto geom_type_ = get_geom_type(geom_type);
+    switch (dim_type)
+    {
+        case DimensionType::XY:
+        {
+            return geom_type_;
+        }
+        case DimensionType::XYZ:
+        {
+            switch (geom_type_)
+            {
+                case GeometryType::POINT:
+                    return GeometryType::POINTZ;
+                case GeometryType::LINESTRING:
+                    return GeometryType::LINESTRINGZ;
+                case GeometryType::POLYGON:
+                    return GeometryType::POLYGONZ;
+                case GeometryType::MULTIPOINT:
+                    return GeometryType::MULTIPOINTZ;
+                case GeometryType::MULTILINESTRING:
+                    return GeometryType::MULTILINESTRINGZ;
+                case GeometryType::MULTIPOLYGON:
+                    return GeometryType::MULTIPOLYGONZ;
+                case GeometryType::GEOMETRYCOLLECTION:
+                    return GeometryType::GEOMETRYCOLLECTIONZ;
+                case GeometryType::CIRCULARSTRING:
+                    return GeometryType::CIRCULARSTRINGZ;
+                case GeometryType::COMPOUNDCURVE:
+                    return GeometryType::COMPOUNDCURVEZ;
+                case GeometryType::CURVEPOLYGON:
+                    return GeometryType::CURVEPOLYGONZ;
+                case GeometryType::MULTICURVE:
+                    return GeometryType::MULTICURVEZ;
+                case GeometryType::MULTISURFACE:
+                    return GeometryType::MULTISURFACEZ;
+                case GeometryType::CURVE:
+                    return GeometryType::CURVEZ;
+                case GeometryType::SURFACE:
+                    return GeometryType::SURFACEZ;
+                case GeometryType::POLYHEDRALSURFACE:
+                    return GeometryType::POLYHEDRALSURFACEZ;
+                case GeometryType::TIN:
+                    return GeometryType::TINZ;
+                default:
+                    return GeometryType::GEOMETRYZ;
+            }
+        }
+        case DimensionType::XYM:
+        {
+            switch (geom_type_)
+            {
+                case GeometryType::POINT:
+                    return GeometryType::POINTM;
+                case GeometryType::LINESTRING:
+                    return GeometryType::LINESTRINGM;
+                case GeometryType::POLYGON:
+                    return GeometryType::POLYGONM;
+                case GeometryType::MULTIPOINT:
+                    return GeometryType::MULTIPOINTM;
+                case GeometryType::MULTILINESTRING:
+                    return GeometryType::MULTILINESTRINGM;
+                case GeometryType::MULTIPOLYGON:
+                    return GeometryType::MULTIPOLYGONM;
+                case GeometryType::GEOMETRYCOLLECTION:
+                    return GeometryType::GEOMETRYCOLLECTIONM;
+                case GeometryType::CIRCULARSTRING:
+                    return GeometryType::CIRCULARSTRINGM;
+                case GeometryType::COMPOUNDCURVE:
+                    return GeometryType::COMPOUNDCURVEM;
+                case GeometryType::CURVEPOLYGON:
+                    return GeometryType::CURVEPOLYGONM;
+                case GeometryType::MULTICURVE:
+                    return GeometryType::MULTICURVEM;
+                case GeometryType::MULTISURFACE:
+                    return GeometryType::MULTISURFACEM;
+                case GeometryType::CURVE:
+                    return GeometryType::CURVEM;
+                case GeometryType::SURFACE:
+                    return GeometryType::SURFACEM;
+                case GeometryType::POLYHEDRALSURFACE:
+                    return GeometryType::POLYHEDRALSURFACEM;
+                case GeometryType::TIN:
+                    return GeometryType::TINM;
+                default:
+                    return GeometryType::GEOMETRYM;
+            }
+        }
+        case DimensionType::XYZM:
+        {
+            switch (geom_type_)
+            {
+                case GeometryType::POINT:
+                    return GeometryType::POINTZM;
+                case GeometryType::LINESTRING:
+                    return GeometryType::LINESTRINGZM;
+                case GeometryType::POLYGON:
+                    return GeometryType::POLYGONZM;
+                case GeometryType::MULTIPOINT:
+                    return GeometryType::MULTIPOINTZM;
+                case GeometryType::MULTILINESTRING:
+                    return GeometryType::MULTILINESTRINGZM;
+                case GeometryType::MULTIPOLYGON:
+                    return GeometryType::MULTIPOLYGONZM;
+                case GeometryType::GEOMETRYCOLLECTION:
+                    return GeometryType::GEOMETRYCOLLECTIONZM;
+                case GeometryType::CIRCULARSTRING:
+                    return GeometryType::CIRCULARSTRINGZM;
+                case GeometryType::COMPOUNDCURVE:
+                    return GeometryType::COMPOUNDCURVEZM;
+                case GeometryType::CURVEPOLYGON:
+                    return GeometryType::CURVEPOLYGONZM;
+                case GeometryType::MULTICURVE:
+                    return GeometryType::MULTICURVEZM;
+                case GeometryType::MULTISURFACE:
+                    return GeometryType::MULTISURFACEZM;
+                case GeometryType::CURVE:
+                    return GeometryType::CURVEZM;
+                case GeometryType::SURFACE:
+                    return GeometryType::SURFACEZM;
+                case GeometryType::POLYHEDRALSURFACE:
+                    return GeometryType::POLYHEDRALSURFACEZM;
+                case GeometryType::TIN:
+                    return GeometryType::TINZM;
+                default:
+                    return GeometryType::GEOMETRYZM;
+            }
+        }
     }
 }
 
@@ -351,18 +317,7 @@ GeometryType get_geom_type(GeometryDetailedType geom_detailed_type)
  */
 bool is_point(GeometryType geom_type)
 {
-    return geom_type == GeometryType::POINT;
-}
-
-/*!
- * @param geom_detailed_type  the geometry detailed type
- * @return returns true if the geometry detailed type is a Point, otherwise false
- *
- * @since 0.0.1
- */
-bool is_point(GeometryDetailedType geom_detailed_type)
-{
-    return is_point(get_geom_type(geom_detailed_type));
+    return geom_type == GeometryType::POINT or geom_type == GeometryType::POINTZ or geom_type == GeometryType::POINTM or geom_type == GeometryType::POINTZM;
 }
 
 /*!
@@ -373,18 +328,7 @@ bool is_point(GeometryDetailedType geom_detailed_type)
  */
 bool is_multipoint(GeometryType geom_type)
 {
-    return geom_type == GeometryType::MULTIPOINT;
-}
-
-/*!
- * @param geom_detailed_type the geometry detailed type
- * @return returns true if the geometry detailed type is a MultiPoint, otherwise false
- *
- * @since 0.0.1
- */
-bool is_multipoint(GeometryDetailedType geom_detailed_type)
-{
-    return is_multipoint(get_geom_type(geom_detailed_type));
+    return geom_type == GeometryType::MULTIPOINT or geom_type == GeometryType::MULTIPOINTZ or geom_type == GeometryType::MULTIPOINTM or geom_type == GeometryType::MULTIPOINTZM;
 }
 
 /*!
@@ -395,18 +339,7 @@ bool is_multipoint(GeometryDetailedType geom_detailed_type)
  */
 bool is_linestring(GeometryType geom_type)
 {
-    return geom_type == GeometryType::LINESTRING;
-}
-
-/*!
- * @param geom_detailed_type the geometry detailed type
- * @return returns true if the geometry detailed type is a LineString, otherwise false
- *
- * @since 0.0.1
- */
-bool is_linestring(GeometryDetailedType geom_detailed_type)
-{
-    return is_linestring(get_geom_type(geom_detailed_type));
+    return geom_type == GeometryType::LINESTRING or geom_type == GeometryType::LINESTRINGZ or geom_type == GeometryType::LINESTRINGM or geom_type == GeometryType::LINESTRINGZM;
 }
 
 /*!
@@ -417,18 +350,7 @@ bool is_linestring(GeometryDetailedType geom_detailed_type)
  */
 bool is_multilinestring(GeometryType geom_type)
 {
-    return geom_type == GeometryType::MULTILINESTRING;
-}
-
-/*!
- * @param geom_detailed_type the geometry detailed type
- * @return returns true if the geometry detailed type is a MultiLineString, otherwise false
- *
- * @since 0.0.1
- */
-bool is_multilinestring(GeometryDetailedType geom_detailed_type)
-{
-    return is_multilinestring(get_geom_type(geom_detailed_type));
+    return geom_type == GeometryType::MULTILINESTRING or geom_type == GeometryType::MULTILINESTRINGZ or geom_type == GeometryType::MULTILINESTRINGM or geom_type == GeometryType::MULTILINESTRINGZM;
 }
 
 /*!
@@ -439,18 +361,7 @@ bool is_multilinestring(GeometryDetailedType geom_detailed_type)
  */
 bool is_polygon(GeometryType geom_type)
 {
-    return geom_type == GeometryType::POLYGON;
-}
-
-/*!
- * @param geom_detailed_type the geometry detailed type
- * @return returns true if the geometry detailed type is a Polygon, otherwise false
- *
- * @since 0.0.1
- */
-bool is_polygon(GeometryDetailedType geom_detailed_type)
-{
-    return is_polygon(get_geom_type(geom_detailed_type));
+    return geom_type == GeometryType::POLYGON or geom_type == GeometryType::POLYGONZ or geom_type == GeometryType::POLYGONM or geom_type == GeometryType::POLYGONZM;
 }
 
 /*!
@@ -461,18 +372,7 @@ bool is_polygon(GeometryDetailedType geom_detailed_type)
  */
 bool is_multipolygon(GeometryType geom_type)
 {
-    return geom_type == GeometryType::MULTIPOLYGON;
-}
-
-/*!
- * @param geom_detailed_type the geometry detailed type
- * @return returns true if the geometry detailed type is a MultiPolygon, otherwise false
- *
- * @since 0.0.1
- */
-bool is_multipolygon(GeometryDetailedType geom_detailed_type)
-{
-    return is_multipolygon(get_geom_type(geom_detailed_type));
+    return geom_type == GeometryType::MULTIPOLYGON or geom_type == GeometryType::MULTIPOLYGONZ or geom_type == GeometryType::MULTIPOLYGONM or geom_type == GeometryType::MULTIPOLYGONZM;
 }
 
 }  // namespace utils

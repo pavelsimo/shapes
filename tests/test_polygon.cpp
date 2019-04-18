@@ -13,8 +13,8 @@ TEST_CASE("Polygon")
             Polygon p;
             CHECK(p.empty());
             CHECK(p.size() == 0);
-            CHECK(p.type() == GeometryType::POLYGON);
-            CHECK(p.detailed_type() == GeometryDetailedType::POLYGON);
+            CHECK(p.geom_type() == GeometryType::POLYGON);
+            CHECK(p.geom_type_dim() == GeometryType::POLYGON);
             CHECK(p.type_str() == "Polygon");
         }
 
