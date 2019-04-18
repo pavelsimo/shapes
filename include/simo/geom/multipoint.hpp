@@ -92,42 +92,29 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
      */
     static MultiPoint from_json(const std::string& json)
     {
-        /// @todo (pavel) read properties to specify z, m and zm
         try
         {
-            nlohmann::json j = nlohmann::json::parse(json);
-            std::string type = j.at("type").get<std::string>();
-            if (type != "MultiPoint")
+            auto j = nlohmann::json::parse(json);
+            auto geom_type = j.at("type").get<std::string>();
+            if (geom_type != "MultiPoint")
             {
-                throw exceptions::ParseError("invalid geometry type: " + std::string(type));
+                throw exceptions::ParseError("invalid geometry type: " + std::string(geom_type));
             }
-            auto coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
+            const auto& coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
             std::vector<Point> res;
             res.reserve(coords.size());
-            for (const auto& coord : coords)
-            {
-                if (coord.size() == 2)
-                {
-                    res.emplace_back(coord[0], coord[1]);
-                }
-                else if (coord.size() == 3)
-                {
-                    res.emplace_back(coord[0], coord[1], coord[2]);
-                }
-                else if (coord.size() == 4)
-                {
-                    res.emplace_back(coord[0], coord[1], coord[2], coord[3]);
-                }
-                else
-                {
-                    throw exceptions::ParseError("invalid dimensions");
-                }
-            }
+            std::for_each(std::begin(coords), std::end(coords), [&](const std::vector<double>& coord) {
+                res.emplace_back(coord);
+            });
             return MultiPoint(res);
         }
         catch (const nlohmann::json::exception& e)
         {
             throw exceptions::ParseError("invalid json: " + std::string(e.what()));
+        }
+        catch (const exceptions::GeometryError&)
+        {
+            throw exceptions::ParseError("invalid geometry");
         }
     }
 

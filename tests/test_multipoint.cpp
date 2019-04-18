@@ -339,6 +339,7 @@ TEST_CASE("MultiPoint")
                 CHECK_NOTHROW(MultiPoint::from_wkt("MultiPointZM((1.4 2.3 1 1), (3.2 4.1 2 2))"));
                 CHECK_NOTHROW(MultiPoint::from_wkt("MultiPointZ((1.4 2.3 1), (3.2 4.1 2))"));
                 CHECK_NOTHROW(MultiPoint::from_wkt("MultiPoint((1.4 2.3), (3.2 4.1))"));
+
             }
 
             SECTION("throws - from wkt")

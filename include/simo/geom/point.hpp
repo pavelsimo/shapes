@@ -93,6 +93,78 @@ class Point : public BaseGeometry<Point>
     }
 
     /*!
+     * @brief creates a Point from coordinates
+     * @param coords the coordinates
+     *
+     * @since 0.0.1
+     */
+    explicit Point(const std::vector<double>& coords)
+    {
+        if (coords.size() == 2)
+        {
+            x = coords[0];
+            y = coords[1];
+            dim = DimensionType::XY;
+        }
+        else if (coords.size() == 3)
+        {
+            x = coords[0];
+            y = coords[1];
+            z = coords[2];
+            dim = DimensionType::XYZ;
+        }
+        else if (coords.size() == 4)
+        {
+            x = coords[0];
+            y = coords[1];
+            z = coords[2];
+            m = coords[3];
+            dim = DimensionType::XYZM;
+        }
+        else
+        {
+            throw exceptions::GeometryError("too many coordinates");
+        }
+    }
+    /*!
+     * @brief creates a Point
+     * @tparam T an arithmetic value (e.g. int, float, double)
+     * @param init the coordinates list
+     * @throw exception if the given number of coordinates is either less than two or greater than four
+     *
+     * @since 0.0.1
+     */
+    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    Point(std::initializer_list<T> init)
+    {
+        if (init.size() == 2)
+        {
+            x   = *init.begin();
+            y   = *(init.begin() + 1);
+            dim = DimensionType::XY;
+        }
+        else if (init.size() == 3)
+        {
+            x   = *init.begin();
+            y   = *(init.begin() + 1);
+            z   = *(init.begin() + 2);
+            dim = DimensionType::XYZ;
+        }
+        else if (init.size() == 4)
+        {
+            x   = *init.begin();
+            y   = *(init.begin() + 1);
+            z   = *(init.begin() + 2);
+            m   = *(init.begin() + 3);
+            dim = DimensionType::XYZM;
+        }
+        else
+        {
+            throw exceptions::GeometryError("invalid number of dimensions " + std::to_string(init.size()));
+        }
+    }
+
+    /*!
      * @brief creates a Point from coordinates (x, y)
      * @param x the x-coordinate value
      * @param y the y-coordinate value
@@ -147,44 +219,6 @@ class Point : public BaseGeometry<Point>
     static Point from_xyzm(double x, double y, double z, double m)
     {
         return {x, y, z, m};
-    }
-
-    /*!
-     * @brief creates a Point
-     * @tparam T an arithmetic value (e.g. int, float, double)
-     * @param init the coordinates list
-     * @throw exception if the given number of coordinates is either less than two or greater than four
-     *
-     * @since 0.0.1
-     */
-    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-    Point(std::initializer_list<T> init)
-    {
-        if (init.size() == 2)
-        {
-            x   = *init.begin();
-            y   = *(init.begin() + 1);
-            dim = DimensionType::XY;
-        }
-        else if (init.size() == 3)
-        {
-            x   = *init.begin();
-            y   = *(init.begin() + 1);
-            z   = *(init.begin() + 2);
-            dim = DimensionType::XYZ;
-        }
-        else if (init.size() == 4)
-        {
-            x   = *init.begin();
-            y   = *(init.begin() + 1);
-            z   = *(init.begin() + 2);
-            m   = *(init.begin() + 3);
-            dim = DimensionType::XYZM;
-        }
-        else
-        {
-            throw exceptions::GeometryError("invalid number of dimensions " + std::to_string(init.size()));
-        }
     }
 
     /*!
@@ -261,28 +295,25 @@ class Point : public BaseGeometry<Point>
      */
     static Point from_json(const std::string& json)
     {
-        /// @todo (pavel) read properties to specify z, m and zm
-        nlohmann::json j = nlohmann::json::parse(json);
-        std::string type = j.at("type").get<std::string>();
-        if (type != "Point")
+        try
         {
-            throw exceptions::ParseError("invalid geometry type");
+            auto j = nlohmann::json::parse(json);
+            auto geom_type = j.at("type").get<std::string>();
+            if (geom_type != "Point")
+            {
+                throw exceptions::ParseError("invalid geometry type");
+            }
+            auto coords = j.at("coordinates").get<std::vector<double>>();
+            return Point(coords);
         }
-
-        std::vector<double> coords = j.at("coordinates");
-        if (coords.size() == 2)
+        catch (const nlohmann::json::exception& e)
         {
-            return {coords[0], coords[1]};
+            throw exceptions::ParseError("invalid json: " + std::string(e.what()));
         }
-        else if (coords.size() == 3)
+        catch (const exceptions::GeometryError&)
         {
-            return {coords[0], coords[1], coords[2]};
+            throw exceptions::ParseError("invalid geometry");
         }
-        else if (coords.size() == 4)
-        {
-            return {coords[0], coords[1], coords[2], coords[3]};
-        }
-        throw exceptions::ParseError("");
     }
 
     /*!
