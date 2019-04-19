@@ -15,7 +15,7 @@ TEST_CASE("Polygon")
             CHECK(p.size() == 0);
             CHECK(p.geom_type() == GeometryType::POLYGON);
             CHECK(p.geom_type_dim() == GeometryType::POLYGON);
-            CHECK(p.type_str() == "Polygon");
+            CHECK(p.geom_type_str() == "Polygon");
         }
 
         SECTION("xy - constructor")

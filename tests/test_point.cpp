@@ -18,7 +18,7 @@ TEST_CASE("Point")
             CHECK(p.dim == DimensionType::XY);
             CHECK(p.geom_type() == GeometryType::POINT);
             CHECK(p.geom_type_dim() == GeometryType::POINT);
-            CHECK(p.type_str() == "Point");
+            CHECK(p.geom_type_str() == "Point");
         }
 
         SECTION("xy - constructor")
@@ -31,7 +31,7 @@ TEST_CASE("Point")
             CHECK(p.dim == DimensionType::XY);
             CHECK(p.geom_type() == GeometryType::POINT);
             CHECK(p.geom_type_dim() == GeometryType::POINT);
-            CHECK(p.type_str() == "Point");
+            CHECK(p.geom_type_str() == "Point");
         }
 
         SECTION("xyz - constructor")
@@ -44,7 +44,7 @@ TEST_CASE("Point")
             CHECK(p.dim == DimensionType::XYZ);
             CHECK(p.geom_type() == GeometryType::POINT);
             CHECK(p.geom_type_dim() == GeometryType::POINTZ);
-            CHECK(p.type_str() == "Point");
+            CHECK(p.geom_type_str() == "Point");
         }
 
         SECTION("xym - constructor")
@@ -62,7 +62,7 @@ TEST_CASE("Point")
             CHECK(p.dim == DimensionType::XYZM);
             CHECK(p.geom_type() == GeometryType::POINT);
             CHECK(p.geom_type_dim() == GeometryType::POINTZM);
-            CHECK(p.type_str() == "Point");
+            CHECK(p.geom_type_str() == "Point");
         }
 
         SECTION("xy - initializer list")
@@ -75,7 +75,7 @@ TEST_CASE("Point")
             CHECK(p.dim == DimensionType::XY);
             CHECK(p.geom_type() == GeometryType::POINT);
             CHECK(p.geom_type_dim() == GeometryType::POINT);
-            CHECK(p.type_str() == "Point");
+            CHECK(p.geom_type_str() == "Point");
         }
 
         SECTION("xyz - initializer list")
@@ -88,7 +88,7 @@ TEST_CASE("Point")
             CHECK(p.dim == DimensionType::XYZ);
             CHECK(p.geom_type() == GeometryType::POINT);
             CHECK(p.geom_type_dim() == GeometryType::POINTZ);
-            CHECK(p.type_str() == "Point");
+            CHECK(p.geom_type_str() == "Point");
         }
 
         SECTION("xym - initializer list")
@@ -106,7 +106,7 @@ TEST_CASE("Point")
             CHECK(p.dim == DimensionType::XYZM);
             CHECK(p.geom_type() == GeometryType::POINT);
             CHECK(p.geom_type_dim() == GeometryType::POINTZM);
-            CHECK(p.type_str() == "Point");
+            CHECK(p.geom_type_str() == "Point");
         }
 
         SECTION("throws - initializer list")
@@ -128,7 +128,7 @@ TEST_CASE("Point")
                 CHECK(p.dim == DimensionType::XY);
                 CHECK(p.geom_type() == GeometryType::POINT);
                 CHECK(p.geom_type_dim() == GeometryType::POINT);
-                CHECK(p.type_str() == "Point");
+                CHECK(p.geom_type_str() == "Point");
             }
 
             SECTION("xyz - from json")
@@ -140,7 +140,7 @@ TEST_CASE("Point")
                 CHECK(p.dim == DimensionType::XYZ);
                 CHECK(p.geom_type() == GeometryType::POINT);
                 CHECK(p.geom_type_dim() == GeometryType::POINTZ);
-                CHECK(p.type_str() == "Point");
+                CHECK(p.geom_type_str() == "Point");
             }
 
             SECTION("xym - from json")
@@ -170,7 +170,7 @@ TEST_CASE("Point")
                 CHECK(p.dim == DimensionType::XYZ);
                 CHECK(p.geom_type() == GeometryType::POINT);
                 CHECK(p.geom_type_dim() == GeometryType::POINTZ);
-                CHECK(p.type_str() == "Point");
+                CHECK(p.geom_type_str() == "Point");
             }
 
             SECTION("xyzm - from wkt")
@@ -183,7 +183,7 @@ TEST_CASE("Point")
                 CHECK(p.dim == DimensionType::XYZM);
                 CHECK(p.geom_type() == GeometryType::POINT);
                 CHECK(p.geom_type_dim() == GeometryType::POINTZM);
-                CHECK(p.type_str() == "Point");
+                CHECK(p.geom_type_str() == "Point");
             }
 
             SECTION("empty - from wkt")

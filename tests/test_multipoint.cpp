@@ -15,11 +15,7 @@ TEST_CASE("MultiPoint")
             CHECK(mp.dim == DimensionType::XY);
             CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
             CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINT);
-            CHECK(mp.type_str() == "MultiPoint");
-            // CHECK(mp.bounds.maxx == 3.0);
-            // CHECK(mp.bounds.maxy == 4.0);
-            // CHECK(mp.bounds.minx == 1.0);
-            // CHECK(mp.bounds.miny == 2.0);
+            CHECK(mp.geom_type_str() == "MultiPoint");
         }
 
         SECTION("xy - points vector")
@@ -32,7 +28,7 @@ TEST_CASE("MultiPoint")
             CHECK(mp.dim == DimensionType::XY);
             CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
             CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINT);
-            CHECK(mp.type_str() == "MultiPoint");
+            CHECK(mp.geom_type_str() == "MultiPoint");
             const auto& p1 = mp[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -51,7 +47,7 @@ TEST_CASE("MultiPoint")
             CHECK(mp.dim == DimensionType::XYZ);
             CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
             CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINTZ);
-            CHECK(mp.type_str() == "MultiPoint");
+            CHECK(mp.geom_type_str() == "MultiPoint");
             const auto& p1 = mp[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -72,7 +68,7 @@ TEST_CASE("MultiPoint")
             CHECK(mp.dim == DimensionType::XYM);
             CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
             CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINTM);
-            CHECK(mp.type_str() == "MultiPoint");
+            CHECK(mp.geom_type_str() == "MultiPoint");
             const auto& p1 = mp[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -93,7 +89,7 @@ TEST_CASE("MultiPoint")
             CHECK(mp.dim == DimensionType::XYZM);
             CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
             CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINTZM);
-            CHECK(mp.type_str() == "MultiPoint");
+            CHECK(mp.geom_type_str() == "MultiPoint");
             const auto& p1 = mp[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -113,7 +109,7 @@ TEST_CASE("MultiPoint")
             CHECK(mp.dim == DimensionType::XY);
             CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
             CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINT);
-            CHECK(mp.type_str() == "MultiPoint");
+            CHECK(mp.geom_type_str() == "MultiPoint");
             const auto& p1 = mp[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -129,7 +125,7 @@ TEST_CASE("MultiPoint")
             CHECK(mp.dim == DimensionType::XYZ);
             CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
             CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINTZ);
-            CHECK(mp.type_str() == "MultiPoint");
+            CHECK(mp.geom_type_str() == "MultiPoint");
             const auto& p1 = mp[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -152,7 +148,7 @@ TEST_CASE("MultiPoint")
             CHECK(mp.dim == DimensionType::XYZM);
             CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
             CHECK(mp.geom_type_dim() == GeometryType::MULTIPOINTZM);
-            CHECK(mp.type_str() == "MultiPoint");
+            CHECK(mp.geom_type_str() == "MultiPoint");
             const auto& p1 = mp[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -425,22 +421,37 @@ TEST_CASE("MultiPoint")
         {
             SECTION("xy - equal to")
             {
-                /// @todo add test
+                auto mp1 = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
+                auto mp2 = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
+                CHECK(mp1 == mp2);
             }
 
             SECTION("xyz - equal to")
             {
-                /// @todo add test
+                auto mp1 = MultiPoint{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+                auto mp2 = MultiPoint{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+                CHECK(mp1 == mp2);
             }
 
             SECTION("xym - equal to")
             {
-                /// @todo add test
+                std::vector<Point> pts1;
+                pts1.push_back(Point::from_xym(1.0, 2.0, 3.0));
+                pts1.push_back(Point::from_xym(4.0, 5.0, 6.0));
+                auto mp1 = MultiPoint(pts1);
+
+                std::vector<Point> pts2;
+                pts2.push_back(Point::from_xym(1.0, 2.0, 3.0));
+                pts2.push_back(Point::from_xym(4.0, 5.0, 6.0));
+                auto mp2 = MultiPoint(pts2);
+                CHECK(mp1 == mp2);
             }
 
             SECTION("xyzm - equal to")
             {
-                /// @todo add test
+                auto mp1 = MultiPoint{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
+                auto mp2 = MultiPoint{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
+                CHECK(mp1 == mp2);
             }
         }
 
@@ -448,22 +459,36 @@ TEST_CASE("MultiPoint")
         {
             SECTION("xy - not equal to")
             {
-                /// @todo add test
+                auto mp1 = MultiPoint{{1.0, 2.0}, {1.0, 2.0}};
+                auto mp2 = MultiPoint{{1.0, 2.0}, {2.0, 1.0}};
+                CHECK(mp1 != mp2);
             }
 
             SECTION("xyz - not equal to")
             {
-                /// @todo add test
+                auto mp1 = MultiPoint{{1.0, 2.0, 3.0}, {3.0, 2.0, 1.0}};
+                auto mp2 = MultiPoint{{1.0, 2.0, 3.0}, {1.0, 2.0, 3.0}};
+                CHECK(mp1 != mp2);
             }
 
             SECTION("xym - not equal to")
             {
-                /// @todo add test
+                std::vector<Point> pts1;
+                pts1.push_back(Point::from_xym(1.0, 2.0, 3.0));
+                pts1.push_back(Point::from_xym(4.0, 5.0, 6.0));
+                auto mp1 = MultiPoint(pts1);
+                std::vector<Point> pts2;
+                pts2.push_back(Point::from_xym(1.0, 2.0, 3.0));
+                pts2.push_back(Point::from_xym(6.0, 5.0, 4.0));
+                auto mp2 = MultiPoint(pts2);
+                CHECK(mp1 != mp2);
             }
 
             SECTION("xyzm - not equal to")
             {
-                /// @todo add test
+                auto mp1 = MultiPoint{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
+                auto mp2 = MultiPoint{{1.0, 2.0, 3.0, 4.0}, {8.0, 7.0, 6.0, 5.0}};
+                CHECK(mp1 != mp2);
             }
         }
 
@@ -473,25 +498,36 @@ TEST_CASE("MultiPoint")
             {
                 auto mp  = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
                 auto& p1 = mp[0];
-                auto& p2 = mp[1];
+                CHECK(p1.geom_type_dim() == GeometryType::POINT);
                 CHECK(p1.x == 1.0);
                 CHECK(p1.y == 2.0);
+
+                auto& p2 = mp[1];
+                CHECK(p2.geom_type_dim() == GeometryType::POINT);
                 CHECK(p2.x == 3.0);
                 CHECK(p2.y == 4.0);
             }
 
             SECTION("xyz - index operator")
             {
-                auto mp  = MultiPoint{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
+                auto mp  = MultiPoint{{1.0, 2.0, -1.0}, {3.0, 4.0, -2.0}, {5.0, 6.0, -3.0}};
                 auto& p1 = mp[0];
-                auto& p2 = mp[1];
-                auto& p3 = mp[2];
+                CHECK(p1.geom_type_dim() == GeometryType::POINTZ);
                 CHECK(p1.x == 1.0);
                 CHECK(p1.y == 2.0);
+                CHECK(p1.z == -1.0);
+
+                auto& p2 = mp[1];
+                CHECK(p2.geom_type_dim() == GeometryType::POINTZ);
                 CHECK(p2.x == 3.0);
                 CHECK(p2.y == 4.0);
+                CHECK(p2.z == -2.0);
+
+                auto& p3 = mp[2];
+                CHECK(p3.geom_type_dim() == GeometryType::POINTZ);
                 CHECK(p3.x == 5.0);
                 CHECK(p3.y == 6.0);
+                CHECK(p3.z == -3.0);
             }
 
             SECTION("xym - index operator")
@@ -501,7 +537,27 @@ TEST_CASE("MultiPoint")
 
             SECTION("xyzm - index operator")
             {
-                /// @todo add test
+                auto mp  = MultiPoint{{1.0, 2.0, 3.0, -1.0}, {3.0, 4.0, 5.0, -2.0}, {5.0, 6.0, 7.0, -3.0}};
+                auto& p1 = mp[0];
+                CHECK(p1.geom_type_dim() == GeometryType::POINTZM);
+                CHECK(p1.x == 1.0);
+                CHECK(p1.y == 2.0);
+                CHECK(p1.z == 3.0);
+                CHECK(p1.m == -1.0);
+
+                auto& p2 = mp[1];
+                CHECK(p2.geom_type_dim() == GeometryType::POINTZM);
+                CHECK(p2.x == 3.0);
+                CHECK(p2.y == 4.0);
+                CHECK(p2.z == 5.0);
+                CHECK(p2.m == -2.0);
+
+                auto& p3 = mp[2];
+                CHECK(p3.geom_type_dim() == GeometryType::POINTZM);
+                CHECK(p3.x == 5.0);
+                CHECK(p3.y == 6.0);
+                CHECK(p3.z == 7.0);
+                CHECK(p3.m == -3.0);
             }
         }
     }
@@ -510,12 +566,41 @@ TEST_CASE("MultiPoint")
     {
         SECTION("xy - tuples")
         {
-            /// @todo add test
+            auto mp  = MultiPoint{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
+            auto coords = mp.xy();
+            CHECK(mp.size() == coords.size());
+
+            double x, y;
+            std::tie(x, y) = coords[0];
+            CHECK(x == 1.0);
+            CHECK(y == 2.0);
+            std::tie(x, y) = coords[1];
+            CHECK(x == 3.0);
+            CHECK(y == 4.0);
+            std::tie(x, y) = coords[2];
+            CHECK(x == 5.0);
+            CHECK(y == 6.0);
         }
 
         SECTION("xyz - tuples")
         {
-            /// @todo add test
+            auto mp  = MultiPoint{{1.0, 2.0, -1.0}, {3.0, 4.0, -2.0}, {5.0, 6.0, -3.0}};
+            auto coords = mp.xyz();
+            CHECK(mp.size() == coords.size());
+
+            double x, y, z;
+            std::tie(x, y, z) = coords[0];
+            CHECK(x == 1.0);
+            CHECK(y == 2.0);
+            CHECK(z == -1.0);
+            std::tie(x, y, z) = coords[1];
+            CHECK(x == 3.0);
+            CHECK(y == 4.0);
+            CHECK(z == -2.0);
+            std::tie(x, y, z) = coords[2];
+            CHECK(x == 5.0);
+            CHECK(y == 6.0);
+            CHECK(z == -3.0);
         }
 
         SECTION("xym - tuples")
@@ -525,7 +610,26 @@ TEST_CASE("MultiPoint")
 
         SECTION("xyzm - tuples")
         {
-            /// @todo add test
+            auto mp  = MultiPoint{{1.0, 2.0, -1.0, -10.0}, {3.0, 4.0, -2.0, -20.0}, {5.0, 6.0, -3.0, -30.0}};
+            auto coords = mp.xyzm();
+            CHECK(mp.size() == coords.size());
+
+            double x, y, z, m;
+            std::tie(x, y, z, m) = coords[0];
+            CHECK(x == 1.0);
+            CHECK(y == 2.0);
+            CHECK(z == -1.0);
+            CHECK(m == -10.0);
+            std::tie(x, y, z, m) = coords[1];
+            CHECK(x == 3.0);
+            CHECK(y == 4.0);
+            CHECK(z == -2.0);
+            CHECK(m == -20.0);
+            std::tie(x, y, z, m) = coords[2];
+            CHECK(x == 5.0);
+            CHECK(y == 6.0);
+            CHECK(z == -3.0);
+            CHECK(m == -30.0);
         }
     }
 
@@ -557,5 +661,34 @@ TEST_CASE("MultiPoint")
             }
             CHECK(n == 3);
         }
+
+        SECTION("xym - for each")
+        {
+            /// @todo add test
+        }
+
+        SECTION("xyzm - for each")
+        {
+            auto mp = MultiPoint{{1.0, 2.0, 3.0, -1.0}, {4.0, 5.0, 6.0, -2.0}, {7.0, 8.0, 9.0, -3.0}};
+            int n   = 0;
+            for (const auto& p : mp)
+            {
+                CHECK(p.x != 0);
+                CHECK(p.y != 0);
+                CHECK(p.z != 0);
+                CHECK(p.m != 0);
+                ++n;
+            }
+            CHECK(n == 3);
+        }
+    }
+
+    SECTION("bounds")
+    {
+        auto mp  = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
+        CHECK(mp.bounds.maxx == 3.0);
+        CHECK(mp.bounds.maxy == 4.0);
+        CHECK(mp.bounds.minx == 1.0);
+        CHECK(mp.bounds.miny == 2.0);
     }
 }
