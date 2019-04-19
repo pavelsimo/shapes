@@ -102,23 +102,23 @@ class Point : public BaseGeometry<Point>
     {
         if (coords.size() == 2)
         {
-            x = coords[0];
-            y = coords[1];
+            x   = coords[0];
+            y   = coords[1];
             dim = DimensionType::XY;
         }
         else if (coords.size() == 3)
         {
-            x = coords[0];
-            y = coords[1];
-            z = coords[2];
+            x   = coords[0];
+            y   = coords[1];
+            z   = coords[2];
             dim = DimensionType::XYZ;
         }
         else if (coords.size() == 4)
         {
-            x = coords[0];
-            y = coords[1];
-            z = coords[2];
-            m = coords[3];
+            x   = coords[0];
+            y   = coords[1];
+            z   = coords[2];
+            m   = coords[3];
             dim = DimensionType::XYZM;
         }
         else
@@ -297,7 +297,7 @@ class Point : public BaseGeometry<Point>
     {
         try
         {
-            auto j = nlohmann::json::parse(json);
+            auto j         = nlohmann::json::parse(json);
             auto geom_type = j.at("type").get<std::string>();
             if (geom_type != "Point")
             {

@@ -97,7 +97,7 @@ class GeometrySequence
         }
     }
 
-   /*!
+    /*!
     * @param pos the element position
     * @return returns a reference to the element at position n in T
     *

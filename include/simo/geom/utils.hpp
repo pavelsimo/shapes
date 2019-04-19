@@ -68,7 +68,6 @@ int8_t get_ndim(GeometryType geom_type) noexcept
     return get_ndim(get_dim(geom_type));
 }
 
-
 /*!
  * @brief returns a geometry type given the geometry type
  * @param geom_type the geometry type

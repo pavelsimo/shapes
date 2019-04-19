@@ -94,7 +94,7 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
     {
         try
         {
-            auto j = nlohmann::json::parse(json);
+            auto j         = nlohmann::json::parse(json);
             auto geom_type = j.at("type").get<std::string>();
             if (geom_type != "MultiPoint")
             {

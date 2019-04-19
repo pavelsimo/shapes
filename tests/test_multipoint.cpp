@@ -335,7 +335,6 @@ TEST_CASE("MultiPoint")
                 CHECK_NOTHROW(MultiPoint::from_wkt("MultiPointZM((1.4 2.3 1 1), (3.2 4.1 2 2))"));
                 CHECK_NOTHROW(MultiPoint::from_wkt("MultiPointZ((1.4 2.3 1), (3.2 4.1 2))"));
                 CHECK_NOTHROW(MultiPoint::from_wkt("MultiPoint((1.4 2.3), (3.2 4.1))"));
-
             }
 
             SECTION("throws - from wkt")
@@ -566,7 +565,7 @@ TEST_CASE("MultiPoint")
     {
         SECTION("xy - tuples")
         {
-            auto mp  = MultiPoint{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
+            auto mp     = MultiPoint{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
             auto coords = mp.xy();
             CHECK(mp.size() == coords.size());
 
@@ -584,7 +583,7 @@ TEST_CASE("MultiPoint")
 
         SECTION("xyz - tuples")
         {
-            auto mp  = MultiPoint{{1.0, 2.0, -1.0}, {3.0, 4.0, -2.0}, {5.0, 6.0, -3.0}};
+            auto mp     = MultiPoint{{1.0, 2.0, -1.0}, {3.0, 4.0, -2.0}, {5.0, 6.0, -3.0}};
             auto coords = mp.xyz();
             CHECK(mp.size() == coords.size());
 
@@ -609,7 +608,7 @@ TEST_CASE("MultiPoint")
             pts1.push_back(Point::from_xym(1.0, 2.0, -1.0));
             pts1.push_back(Point::from_xym(3.0, 4.0, -2.0));
             pts1.push_back(Point::from_xym(5.0, 6.0, -3.0));
-            auto mp = MultiPoint(pts1);
+            auto mp     = MultiPoint(pts1);
             auto coords = mp.xym();
             CHECK(mp.size() == coords.size());
 
@@ -630,7 +629,7 @@ TEST_CASE("MultiPoint")
 
         SECTION("xyzm - tuples")
         {
-            auto mp  = MultiPoint{{1.0, 2.0, -1.0, -10.0}, {3.0, 4.0, -2.0, -20.0}, {5.0, 6.0, -3.0, -30.0}};
+            auto mp     = MultiPoint{{1.0, 2.0, -1.0, -10.0}, {3.0, 4.0, -2.0, -20.0}, {5.0, 6.0, -3.0, -30.0}};
             auto coords = mp.xyzm();
             CHECK(mp.size() == coords.size());
 
@@ -705,7 +704,7 @@ TEST_CASE("MultiPoint")
 
     SECTION("bounds")
     {
-        auto mp  = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
+        auto mp = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
         CHECK(mp.bounds.maxx == 3.0);
         CHECK(mp.bounds.maxy == 4.0);
         CHECK(mp.bounds.minx == 1.0);
