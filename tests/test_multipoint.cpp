@@ -605,7 +605,27 @@ TEST_CASE("MultiPoint")
 
         SECTION("xym - tuples")
         {
-            /// @todo add test
+            std::vector<Point> pts1;
+            pts1.push_back(Point::from_xym(1.0, 2.0, -1.0));
+            pts1.push_back(Point::from_xym(3.0, 4.0, -2.0));
+            pts1.push_back(Point::from_xym(5.0, 6.0, -3.0));
+            auto mp = MultiPoint(pts1);
+            auto coords = mp.xym();
+            CHECK(mp.size() == coords.size());
+
+            double x, y, m;
+            std::tie(x, y, m) = coords[0];
+            CHECK(x == 1.0);
+            CHECK(y == 2.0);
+            CHECK(m == -1.0);
+            std::tie(x, y, m) = coords[1];
+            CHECK(x == 3.0);
+            CHECK(y == 4.0);
+            CHECK(m == -2.0);
+            std::tie(x, y, m) = coords[2];
+            CHECK(x == 5.0);
+            CHECK(y == 6.0);
+            CHECK(m == -3.0);
         }
 
         SECTION("xyzm - tuples")
