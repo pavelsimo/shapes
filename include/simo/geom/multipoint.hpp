@@ -251,18 +251,65 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
         return ss.str();
     }
 
+    /*!
+     * @brief returns true if all coordinates are equal, otherwise false
+     * @param other the MultiPoint to compare
+     * @return true if all coordinates are equal, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool operator==(const MultiPoint& other) const
+    {
+        if (size() != other.size())
+        {
+            return false;
+        }
+
+        for (size_t i = 0; i < other.size(); ++i)
+        {
+            if (at(i) != other.at(i))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /*!
+     * @brief returns true if at least one coordinate is different, otherwise false
+     * @param other the point to compare
+     * @return true if at least one coordinate is different, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool operator!=(const MultiPoint& other) const
+    {
+        return not(*this == other);
+    }
+
+    /*!
+    * @param pos the element position
+    * @return returns a reference to the element at position n in T
+    *
+    * @since 0.0.1
+    */
+    Point& operator[](size_t pos)
+    {
+        return at(pos);
+    }
+
   private:
     /// for allow BaseGeometry to access MultiPoint private members
     friend class BaseGeometry<MultiPoint>;
 
     /// @private
-    GeometryType type_() const
+    GeometryType geom_type_() const
     {
         return GeometryType::MULTIPOINT;
     }
 
     /// @private
-    std::string type_str_() const
+    std::string geom_type_str_() const
     {
         return "MultiPoint";
     }

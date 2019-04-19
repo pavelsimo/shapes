@@ -93,13 +93,13 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public GeometrySeq
     friend class BaseGeometry<MultiLineString>;
 
     /// @private
-    GeometryType type_() const
+    GeometryType geom_type_() const
     {
         return GeometryType::MULTILINESTRING;
     }
 
     /// @private
-    std::string type_str_() const
+    std::string geom_type_str_() const
     {
         return "MultiLineString";
     }

@@ -92,13 +92,13 @@ class MultiPolygon : public BaseGeometry<MultiPolygon>
     friend class BaseGeometry<MultiPolygon>;
 
     /// @private
-    GeometryType type_() const
+    GeometryType geom_type_() const
     {
         return GeometryType::MULTIPOLYGON;
     }
 
     /// @private
-    std::string type_str_() const
+    std::string geom_type_str_() const
     {
         return "MultiPolygon";
     }

@@ -172,13 +172,13 @@ class LineString : public BaseGeometry<LineString>, public GeometrySequence<Poin
     }
 
     /// @private
-    GeometryType type_() const
+    GeometryType geom_type_() const
     {
         return GeometryType::LINESTRING;
     }
 
     /// @private
-    std::string type_str_() const
+    std::string geom_type_str_() const
     {
         return "LineString";
     }

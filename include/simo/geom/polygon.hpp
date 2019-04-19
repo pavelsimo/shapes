@@ -168,13 +168,13 @@ class Polygon : public BaseGeometry<Polygon>
     friend class BaseGeometry<Polygon>;
 
     /// @private
-    GeometryType type_() const
+    GeometryType geom_type_() const
     {
         return GeometryType::POLYGON;
     }
 
     /// @private
-    std::string type_str_() const
+    std::string geom_type_str_() const
     {
         return "Polygon";
     }

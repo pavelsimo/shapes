@@ -415,13 +415,13 @@ class Point : public BaseGeometry<Point>
     friend class BaseGeometry<Point>;
 
     /// @private
-    GeometryType type_() const
+    GeometryType geom_type_() const
     {
         return GeometryType::POINT;
     }
 
     /// @private
-    std::string type_str_() const
+    std::string geom_type_str_() const
     {
         return "Point";
     }

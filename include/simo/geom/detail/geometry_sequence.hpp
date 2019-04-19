@@ -72,7 +72,7 @@ class GeometrySequence
      *
      * @since 0.0.1
      */
-    T& at(size_t pos)
+    const T& at(size_t pos) const
     {
         try
         {
@@ -84,15 +84,17 @@ class GeometrySequence
         }
     }
 
-    /*!
-     * @param pos the element position
-     * @return returns a reference to the element at position n in T
-     *
-     * @since 0.0.1
-     */
-    T& operator[](size_t pos)
+    /// @copydoc GeometrySequence::at()
+    T& at(size_t pos)
     {
-        return at(pos);
+        try
+        {
+            return seq.at(pos);
+        }
+        catch (std::out_of_range&)
+        {
+            throw exceptions::IndexError("index at " + std::to_string(pos) + " is out of range");
+        }
     }
 
   protected:

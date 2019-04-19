@@ -44,7 +44,7 @@ class BaseGeometry
      */
     GeometryType geom_type() const
     {
-        return static_cast<const T*>(this)->type_();
+        return static_cast<const T*>(this)->geom_type_();
     }
 
     /*!
@@ -55,8 +55,8 @@ class BaseGeometry
      */
     GeometryType geom_type_dim() const
     {
-        auto type = static_cast<const T*>(this)->type_();
-        return utils::get_geom_type_dim(type, dim);
+        auto geom_type = static_cast<const T*>(this)->geom_type_();
+        return utils::get_geom_type_dim(geom_type, dim);
     }
 
     /*!
@@ -65,9 +65,9 @@ class BaseGeometry
      *
      * @since 0.0.1
      */
-    std::string type_str() const
+    std::string geom_type_str() const
     {
-        return static_cast<const T*>(this)->type_str_();
+        return static_cast<const T*>(this)->geom_type_str_();
     }
 
     /*!

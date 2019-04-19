@@ -49,7 +49,6 @@ int8_t get_ndim(DimensionType dim_type) noexcept
         case DimensionType::XYZM:
             return 4;
         case DimensionType::XYZ:
-            // fall through
         case DimensionType::XYM:
             return 3;
         case DimensionType::XY:
