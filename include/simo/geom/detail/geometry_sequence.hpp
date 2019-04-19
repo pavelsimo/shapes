@@ -97,6 +97,17 @@ class GeometrySequence
         }
     }
 
+   /*!
+    * @param pos the element position
+    * @return returns a reference to the element at position n in T
+    *
+    * @since 0.0.1
+    */
+    T& operator[](size_t pos)
+    {
+        return at(pos);
+    }
+
   protected:
     /// the geometry sequence
     std::vector<T> seq;

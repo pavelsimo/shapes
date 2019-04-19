@@ -287,17 +287,6 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
         return not(*this == other);
     }
 
-    /*!
-    * @param pos the element position
-    * @return returns a reference to the element at position n in T
-    *
-    * @since 0.0.1
-    */
-    Point& operator[](size_t pos)
-    {
-        return at(pos);
-    }
-
   private:
     /// for allow BaseGeometry to access MultiPoint private members
     friend class BaseGeometry<MultiPoint>;

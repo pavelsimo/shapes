@@ -48,8 +48,8 @@ class BaseGeometry
     }
 
     /*!
-     * @brief returns the geometry detailed type (e.g. GeometryType::PointZ, GeometryType::MultiPointZM)
-     * @return the geometry detailed type
+     * @brief returns the geometry type with dimension (e.g. GeometryType::PointZ, GeometryType::MultiPointZM)
+     * @return the geometry type with dimension
      *
      * @since 0.0.1
      */
