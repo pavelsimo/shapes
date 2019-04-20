@@ -5,8 +5,6 @@
 #include <iostream>
 #include <cassert>
 
-using namespace simo::shapes;
-
 }
 
 %extra_argument { struct WktResult *result }
@@ -14,13 +12,13 @@ using namespace simo::shapes;
 %token_type {double}
 
 %stack_overflow {
-    result->parser_error = 1;
+    result->parser_error = true;
 }
 
 %stack_size 1048576
 
 %syntax_error {
-    result->parser_error = 1;
+    result->parser_error = true;
 #ifdef SHAPES_VERBOSE
     int n = sizeof(yyTokenName) / sizeof(yyTokenName[0]);
     for (int i = 0; i < n; ++i) {
@@ -619,9 +617,4 @@ geometrycollection_zm ::= WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT WKT_EMPTY_SET.
 geometrycollection_zm ::= WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT geometrycollection_text_zm.
 {
     result->data.geom_type = GeometryType::GEOMETRYCOLLECTIONZM;
-}
-
-
-%code {
-
 }

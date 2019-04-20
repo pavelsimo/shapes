@@ -18,9 +18,6 @@ struct WktData
     /// the dimension type of the geometry
     GeometryType geom_type;
 
-    /// the number of dimensions
-    int ndim;
-
     /// the coordinates as a sequence of numbers
     std::vector<double> coords;
 
@@ -36,14 +33,14 @@ struct WktData
 struct WktResult
 {
     /// whether there is a parser error
-    int parser_error;
+    bool parser_error = false;
 
     /// the parser result data
     WktData data;
 };
 
-}  // namespace shapes
-}  // namespace simo
-
 #include <simo/io/wkt_parser.h>
 #include <simo/io/wkt_parser.c>
+
+}  // namespace shapes
+}  // namespace simo

@@ -11,8 +11,6 @@
 #include <iostream>
 #include <cassert>
 
-using namespace simo::shapes;
-
 /* Next is all token values, in a form suitable for use by makeheaders.
 ** This section will be null unless lemon is run with the -m switch.
 */

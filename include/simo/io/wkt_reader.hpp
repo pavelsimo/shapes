@@ -77,7 +77,7 @@ class WktReader
                 Parse(m_parser, token, 0, &result);
             }
 
-            if (result.parser_error == 1)
+            if (result.parser_error)
             {
                 /// @todo (pavel) add position to the error message
                 throw exceptions::ParseError("wkt parser error");
