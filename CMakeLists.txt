@@ -100,15 +100,21 @@ add_custom_target(shapes_amalgamate COMMENT "merging the headers"
 # re2c lexer #
 ##############
 add_custom_target(shapes_lexer COMMENT "re2c lexer code generation"
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/include/simo/io
-        COMMAND re2c -i -b -o wkt_lexer.hpp wkt_lexer.re)
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/include/simo/io/detail
+        COMMAND re2c -i -b -o wkt_lexer.hpp wkt_lexer.re
+        COMMAND mv wkt_lexer.hpp ${PROJECT_SOURCE_DIR}/include/simo/io)
 
 ################
 # lemon parser #
 ################
 add_custom_target(shapes_parser COMMENT "lemon parser"
-        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/include/simo/io
-        COMMAND lemon -l wkt_parser.y)
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/include/simo/io/detail
+        COMMAND lemon -l -q wkt_parser.y
+        COMMAND cat wkt_parser.hpp.header wkt_parser.c wkt_parser.hpp.footer > wkt_parser.hpp
+        COMMAND cat wkt_token.hpp.header wkt_parser.h wkt_token.hpp.footer > wkt_token.hpp
+        COMMAND rm wkt_parser.h wkt_parser.c
+        COMMAND mv wkt_parser.hpp ${PROJECT_SOURCE_DIR}/include/simo/io
+        COMMAND mv wkt_token.hpp ${PROJECT_SOURCE_DIR}/include/simo/io)
 
 ############
 # coverage #

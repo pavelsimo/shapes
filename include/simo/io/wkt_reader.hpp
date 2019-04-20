@@ -44,10 +44,11 @@ class WktReader
      *
      * @since 0.0.1
      */
-    WktResult read(const char* wkt)
+    WktResult read(const std::string& wkt)
     {
         WktLexer lexer(wkt);
         WktResult result{};
+
 #ifdef SHAPES_VERBOSE
         ParseTrace(stdout, "[shapes] ");
 #endif

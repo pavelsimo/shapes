@@ -1,9 +1,4 @@
 %include {
-#pragma once
-
-#include <ciso646>
-#include <iostream>
-#include <cassert>
 
 }
 

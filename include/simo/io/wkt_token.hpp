@@ -1,3 +1,5 @@
+#pragma once
+
 #define WKT_NUM                         1
 #define WKT_POINT_TAGGED_TEXT           2
 #define WKT_EMPTY_SET                   3

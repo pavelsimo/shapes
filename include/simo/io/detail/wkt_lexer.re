@@ -2,6 +2,7 @@
 
 #include <ciso646>
 #include <iostream>
+#include <simo/io/wkt_token.hpp>
 
 namespace simo
 {
@@ -25,11 +26,11 @@ class WktLexer
      *
      * @since 0.0.1
      */
-    WktLexer(const char* source)
-        : content(source)
+    WktLexer(const std::string& source)
+            : content(source)
     {
-        start = cursor = source;
-        limit          = content + strlen(source);
+        start = cursor = source.c_str();
+        limit          = start + source.size();
     }
 
     /*!
@@ -174,8 +175,8 @@ class WktLexer
     }
 
   private:
-    /// pointer to the buffer
-    const char* content = nullptr;
+    /// the source string
+    std::string content;
 
     /// pointer to the beginning of the current token
     const char* start = nullptr;
