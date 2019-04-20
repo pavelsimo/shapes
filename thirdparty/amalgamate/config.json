@@ -5,5 +5,5 @@
 		"include/simo/shapes.hpp",
 		"thirdparty/json/json.hpp"
 	],
-	"include_paths": ["include", "thirdpary"]
+	"include_paths": ["include", "thirdparty"]
 }
