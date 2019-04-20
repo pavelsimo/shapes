@@ -333,21 +333,22 @@ TEST_CASE("MultiPoint")
             SECTION("no throw - from wkt")
             {
                 CHECK_NOTHROW(MultiPoint::from_wkt("MultiPointZM((1.4 2.3 1 1), (3.2 4.1 2 2))"));
+                CHECK_NOTHROW(MultiPoint::from_wkt("multipointzm((1.4 2.3 1 1), (3.2 4.1 2 2))"));
                 CHECK_NOTHROW(MultiPoint::from_wkt("MultiPointZ((1.4 2.3 1), (3.2 4.1 2))"));
                 CHECK_NOTHROW(MultiPoint::from_wkt("MultiPoint((1.4 2.3), (3.2 4.1))"));
                 CHECK_NOTHROW(MultiPoint::from_wkt("MULTIPOINT ((10 40), (40 30), (20 20), (30 10))"));
                 CHECK_NOTHROW(MultiPoint::from_wkt("MULTIPOINT (10 40, 40 30, 20 20, 30 10)"));
+                CHECK_NOTHROW(MultiPoint::from_wkt("MULTIPOINT Z (10 40 -10, 40 30 -10, 20 20 -10, 30 10 -10)"));
                 CHECK_NOTHROW(MultiPoint::from_wkt("MULTIPOINT (10.00232 40.32412, 40.11241 30.429017, 20.43754 20.4323, 30.75534 10.234234)"));
             }
 
             SECTION("throws - from wkt")
             {
-                /// @todo add test
-            }
-
-            SECTION("misc - from wkt")
-            {
-                /// @todo add test
+                CHECK_THROWS(MultiPoint::from_wkt("MultiPointZM((1.4 2.3), (3.2 4.1))"));
+                CHECK_THROWS(MultiPoint::from_wkt("MultiPointZM((1.4 2.3 1), (3.2 4.1 2))"));
+                CHECK_THROWS(MultiPoint::from_wkt("MultiPointZM((1.4 2.3, 1.3)"));
+                CHECK_THROWS(MultiPoint::from_wkt("MultiPointZM((1.4 2.3, 1.3"));
+                CHECK_THROWS(MultiPoint::from_wkt("MultiPointZM((1.4.3 2.3.3 1.1.1 1.1.1), (3.2.1 4.1.1 2.2.1 2.2.3))"));
             }
         }
     }
@@ -534,7 +535,29 @@ TEST_CASE("MultiPoint")
 
             SECTION("xym - index operator")
             {
-                /// @todo add test
+                std::vector<Point> pts;
+                pts.push_back(Point::from_xym(1.0, 2.0, -1.0));
+                pts.push_back(Point::from_xym(3.0, 4.0, -2.0));
+                pts.push_back(Point::from_xym(5.0, 6.0, -3.0));
+                auto mp  = MultiPoint(pts);
+
+                auto& p1 = mp[0];
+                CHECK(p1.geom_type_dim() == GeometryType::POINTM);
+                CHECK(p1.x == 1.0);
+                CHECK(p1.y == 2.0);
+                CHECK(p1.m == -1.0);
+
+                auto& p2 = mp[1];
+                CHECK(p2.geom_type_dim() == GeometryType::POINTM);
+                CHECK(p2.x == 3.0);
+                CHECK(p2.y == 4.0);
+                CHECK(p2.m == -2.0);
+
+                auto& p3 = mp[2];
+                CHECK(p3.geom_type_dim() == GeometryType::POINTM);
+                CHECK(p3.x == 5.0);
+                CHECK(p3.y == 6.0);
+                CHECK(p3.m == -3.0);
             }
 
             SECTION("xyzm - index operator")
@@ -686,7 +709,20 @@ TEST_CASE("MultiPoint")
 
         SECTION("xym - for each")
         {
-            /// @todo add test
+            std::vector<Point> pts;
+            pts.push_back(Point::from_xym(1.0, 2.0, 3.0));
+            pts.push_back(Point::from_xym(4.0, 5.0, 6.0));
+            pts.push_back(Point::from_xym(7.0, 8.0, 9.0));
+            auto mp = MultiPoint(pts);
+            int n   = 0;
+            for (const auto& p : mp)
+            {
+                CHECK(p.x != 0);
+                CHECK(p.y != 0);
+                CHECK(p.m != 0);
+                ++n;
+            }
+            CHECK(n == 3);
         }
 
         SECTION("xyzm - for each")
