@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/detail/geometry_sequence.hpp>
+#include <simo/geom/detail/sequence.hpp>
 #include <simo/geom/bounds.hpp>
 
 namespace simo
@@ -21,7 +21,7 @@ namespace shapes
  *
  * @since 0.0.1
  */
-class LinearRing : public BaseGeometry<LinearRing>, public GeometrySequence<Point>
+class LinearRing : public BaseGeometry<LinearRing>, public detail::GeometrySequence<Point>
 {
   public:
     /// two-dimensional rotation direction, clockwise=true, counterclockwise=false

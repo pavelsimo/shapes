@@ -539,7 +539,7 @@ TEST_CASE("MultiPoint")
                 pts.push_back(Point::from_xym(1.0, 2.0, -1.0));
                 pts.push_back(Point::from_xym(3.0, 4.0, -2.0));
                 pts.push_back(Point::from_xym(5.0, 6.0, -3.0));
-                auto mp  = MultiPoint(pts);
+                auto mp = MultiPoint(pts);
 
                 auto& p1 = mp[0];
                 CHECK(p1.geom_type_dim() == GeometryType::POINTM);

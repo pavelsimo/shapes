@@ -6,7 +6,8 @@
 #include <sstream>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/detail/geometry_sequence.hpp>
+#include <simo/geom/detail/sequence.hpp>
+#include <simo/geom/utils.hpp>
 #include <simo/geom/bounds.hpp>
 
 namespace simo
@@ -20,7 +21,7 @@ namespace shapes
  *
  * @since 0.0.1
  */
-class LineString : public BaseGeometry<LineString>, public GeometrySequence<Point>
+class LineString : public BaseGeometry<LineString>, public detail::GeometrySequence<Point>
 {
   public:
     /*!
@@ -42,13 +43,7 @@ class LineString : public BaseGeometry<LineString>, public GeometrySequence<Poin
     template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     LineString(std::initializer_list<std::initializer_list<T>> init)
     {
-        seq.reserve(init.size());
-        for (const auto& coords : init)
-        {
-            Point p(coords);
-            bounds.extend(p.x, p.y);
-            seq.emplace_back(p);
-        }
+        detail::create_sequence(init, seq, bounds, dim);
         throw_for_invalid();
     }
 
@@ -62,11 +57,18 @@ class LineString : public BaseGeometry<LineString>, public GeometrySequence<Poin
      */
     explicit LineString(const std::vector<Point>& points)
     {
-        seq = points;
-        for (const auto& p : seq)
-        {
-            bounds.extend(p.x, p.y);
-        }
+        detail::create_sequence(points, seq, bounds, dim);
+        throw_for_invalid();
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param coords
+     * @param coords_dim
+     */
+    LineString(const std::vector<double>& coords, DimensionType coords_dim)
+    {
+        detail::create_sequence(coords, coords_dim, seq, bounds, dim);
         throw_for_invalid();
     }
 
@@ -143,6 +145,30 @@ class LineString : public BaseGeometry<LineString>, public GeometrySequence<Poin
     std::string wkt()
     {
         throw exceptions::NotImplementedError();
+    }
+
+    /*!
+     * @brief returns true if all Point's are equal, otherwise false
+     * @param other the LineString to compare
+     * @return true if all Point's are equal, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool operator==(const LineString& other) const
+    {
+        return detail::is_equal_sequence(*this, other);
+    }
+
+    /*!
+     * @brief returns true if at least one Point is different, otherwise false
+     * @param other the LineString to compare
+     * @return true if at least one Point is different, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool operator!=(const LineString& other) const
+    {
+        return not(*this == other);
     }
 
   private:

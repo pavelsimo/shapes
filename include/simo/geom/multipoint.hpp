@@ -6,7 +6,7 @@
 #include <sstream>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/detail/geometry_sequence.hpp>
+#include <simo/geom/detail/sequence.hpp>
 #include <simo/geom/bounds.hpp>
 
 namespace simo
@@ -20,7 +20,7 @@ namespace shapes
  *
  * @since 0.0.1
  */
-class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Point>
+class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySequence<Point>
 {
   public:
     /*!
@@ -37,31 +37,10 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
       *
       * @since 0.0.1
       */
-    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    template <typename T>
     MultiPoint(std::initializer_list<std::initializer_list<T>> init)
     {
-        if (init.size() > 0)
-        {
-            seq.reserve(init.size());
-
-            auto it = init.begin();
-            Point head(*it);
-            dim = head.dim;
-            bounds.extend(head.x, head.y);
-            seq.emplace_back(head);
-
-            ++it;
-            for (; it != init.end(); ++it)
-            {
-                Point p(*it);
-                if (p.dim != dim)
-                {
-                    throw exceptions::GeometryError("dimensions mismatch between point 0 and point " + std::to_string(it - init.begin()));
-                }
-                bounds.extend(p.x, p.y);
-                seq.emplace_back(p);
-            }
-        }
+        detail::create_sequence(init, seq, bounds, dim);
     }
 
     /*!
@@ -72,14 +51,17 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
      */
     explicit MultiPoint(const std::vector<Point>& points)
     {
-        if (not points.empty())
-        {
-            dim = points[0].dim;
-            seq = points;
-            std::for_each(std::begin(points), std::end(points), [&](const Point& p) {
-                bounds.extend(p.x, p.y);
-            });
-        }
+        detail::create_sequence(points, seq, bounds, dim);
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param coords
+     * @param coords_dim
+     */
+    MultiPoint(const std::vector<double>& coords, DimensionType coords_dim)
+    {
+        detail::create_sequence(coords, coords_dim, seq, bounds, dim);
     }
 
     /*!
@@ -185,24 +167,8 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
         {
             throw exceptions::ParseError("invalid WKT string");
         }
-        /// @todo (pavel) extract this repetition
-        std::vector<Point> points;
-        points.reserve(data.coords.size());
         auto dim = utils::get_dim(data.geom_type);
-        int ndim = utils::get_ndim(dim);
-        Point p;
-        p.dim = dim;
-        for (size_t i = 0; i < result.data.coords.size(); i += ndim)
-        {
-            for (size_t j = 0; j < size_t(ndim); ++j)
-            {
-                p[j] = result.data.coords[i + j];
-            }
-            points.push_back(p);
-        }
-        MultiPoint res(points);
-        res.dim = dim;
-        return res;
+        return MultiPoint(result.data.coords, dim);
     }
 
     /*!
@@ -252,33 +218,21 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
     }
 
     /*!
-     * @brief returns true if all coordinates are equal, otherwise false
+     * @brief returns true if all Point's are equal, otherwise false
      * @param other the MultiPoint to compare
-     * @return true if all coordinates are equal, otherwise false
+     * @return true if all Point's are equal, otherwise false
      *
      * @since 0.0.1
      */
     bool operator==(const MultiPoint& other) const
     {
-        if (size() != other.size())
-        {
-            return false;
-        }
-
-        for (size_t i = 0; i < other.size(); ++i)
-        {
-            if (at(i) != other.at(i))
-            {
-                return false;
-            }
-        }
-        return true;
+        return detail::is_equal_sequence(*this, other);
     }
 
     /*!
-     * @brief returns true if at least one coordinate is different, otherwise false
-     * @param other the point to compare
-     * @return true if at least one coordinate is different, otherwise false
+     * @brief returns true if at least one Point is different, otherwise false
+     * @param other the Point to compare
+     * @return true if at least one Point is different, otherwise false
      *
      * @since 0.0.1
      */
