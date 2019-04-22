@@ -143,8 +143,7 @@ void create_sequence(std::initializer_list<std::initializer_list<T>> init, std::
             Point p(*it);
             if (p.dim != dim)
             {
-                throw exceptions::GeometryError(
-                    "dimension mismatch in start point and point at index " + std::to_string(it - init.begin()));
+                throw exceptions::GeometryError("dimension mismatch in start point and point at index " + std::to_string(it - init.begin()));
             }
             bounds.extend(p.x, p.y);
             seq.emplace_back(p);
@@ -176,8 +175,8 @@ void create_sequence(const std::vector<Point>& points, std::vector<Point>& seq, 
 /*!
  * @brief creates a Point sequence from an arithmetic value sequence
  * @tparam T an arithmetic value (e.g. int, float, double)
- * @param coords
- * @param coords_dim
+ * @param coords the arithmetic value sequence
+ * @param input_dim the input dimension type
  * @param[out] seq the output Point sequence
  * @param[out] bounds the bounding box for the Point sequence
  * @param[out] dim the dimension type
@@ -185,13 +184,13 @@ void create_sequence(const std::vector<Point>& points, std::vector<Point>& seq, 
  * @since 0.0.1
  */
 template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-void create_sequence(const std::vector<T>& coords, const DimensionType coords_dim, std::vector<Point>& seq, Bounds& bounds, DimensionType& dim)
+void create_sequence(const std::vector<T>& coords, const DimensionType input_dim, std::vector<Point>& seq, Bounds& bounds, DimensionType& dim)
 {
-    auto ndim = static_cast<size_t>(utils::get_ndim(coords_dim));
+    auto ndim = static_cast<size_t>(utils::get_ndim(input_dim));
     seq.reserve(coords.size() / ndim);
-    dim = coords_dim;
+    dim = input_dim;
     Point p;
-    p.dim = coords_dim;
+    p.dim = input_dim;
     for (size_t i = 0; i < coords.size(); i += ndim)
     {
         for (size_t k = 0; k < ndim; ++k)

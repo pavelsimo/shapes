@@ -36,6 +36,26 @@ DimensionType get_dim(GeometryType geom_type) noexcept
 }
 
 /*!
+ * @brief returns the dimension type given the number of dimensions
+ * @param ndim the number of dimensions
+ * @return the dimension type
+ *
+ * @since 0.0.1
+ */
+DimensionType get_dim(int8_t ndim) noexcept
+{
+    switch (ndim)
+    {
+        case 3:
+            return DimensionType::XYZ;
+        case 4:
+            return DimensionType::XYZM;
+        default:
+            return DimensionType::XY;
+    }
+}
+
+/*!
  * @brief returns the number of dimensions given a dimension type
  * @param dim_type the dimension type
  * @return the number of dimensions
@@ -75,7 +95,7 @@ int8_t get_ndim(GeometryType geom_type) noexcept
  *
  * @since 0.0.1
  */
-GeometryType get_geom_type(GeometryType geom_type)
+GeometryType get_geom_type(GeometryType geom_type) noexcept
 {
     switch (geom_type)
     {
@@ -313,7 +333,7 @@ GeometryType get_geom_type_dim(GeometryType geom_type, DimensionType dim_type) n
  *
  * @since 0.0.1
  */
-bool is_point(GeometryType geom_type)
+bool is_point(GeometryType geom_type) noexcept
 {
     return geom_type == GeometryType::POINT or geom_type == GeometryType::POINTZ or geom_type == GeometryType::POINTM or geom_type == GeometryType::POINTZM;
 }
@@ -324,7 +344,7 @@ bool is_point(GeometryType geom_type)
  *
  * @since 0.0.1
  */
-bool is_multipoint(GeometryType geom_type)
+bool is_multipoint(GeometryType geom_type) noexcept
 {
     return geom_type == GeometryType::MULTIPOINT or geom_type == GeometryType::MULTIPOINTZ or geom_type == GeometryType::MULTIPOINTM or geom_type == GeometryType::MULTIPOINTZM;
 }
@@ -335,7 +355,7 @@ bool is_multipoint(GeometryType geom_type)
  *
  * @since 0.0.1
  */
-bool is_linestring(GeometryType geom_type)
+bool is_linestring(GeometryType geom_type) noexcept
 {
     return geom_type == GeometryType::LINESTRING or geom_type == GeometryType::LINESTRINGZ or geom_type == GeometryType::LINESTRINGM or geom_type == GeometryType::LINESTRINGZM;
 }
@@ -346,7 +366,7 @@ bool is_linestring(GeometryType geom_type)
  *
  * @since 0.0.1
  */
-bool is_multilinestring(GeometryType geom_type)
+bool is_multilinestring(GeometryType geom_type) noexcept
 {
     return geom_type == GeometryType::MULTILINESTRING or geom_type == GeometryType::MULTILINESTRINGZ or geom_type == GeometryType::MULTILINESTRINGM or geom_type == GeometryType::MULTILINESTRINGZM;
 }
@@ -357,7 +377,7 @@ bool is_multilinestring(GeometryType geom_type)
  *
  * @since 0.0.1
  */
-bool is_polygon(GeometryType geom_type)
+bool is_polygon(GeometryType geom_type) noexcept
 {
     return geom_type == GeometryType::POLYGON or geom_type == GeometryType::POLYGONZ or geom_type == GeometryType::POLYGONM or geom_type == GeometryType::POLYGONZM;
 }
@@ -368,7 +388,7 @@ bool is_polygon(GeometryType geom_type)
  *
  * @since 0.0.1
  */
-bool is_multipolygon(GeometryType geom_type)
+bool is_multipolygon(GeometryType geom_type) noexcept
 {
     return geom_type == GeometryType::MULTIPOLYGON or geom_type == GeometryType::MULTIPOLYGONZ or geom_type == GeometryType::MULTIPOLYGONM or geom_type == GeometryType::MULTIPOLYGONZM;
 }

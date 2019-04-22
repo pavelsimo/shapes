@@ -36,7 +36,8 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
      * @tparam T an arithmetic value (e.g. int, float, double)
      * @param init the initializer list
      *
-     * @throw GeometryError DOCUMENT ME!
+     * @throw GeometryError if geometry contains only one point
+     * @throw GeometryError if geometry contains two equal points
      *
      * @since 0.0.1
      */
@@ -51,7 +52,8 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
      * @brief creates a LineString from a given point vector
      * @param points the point list
      *
-     * @throw GeometryError DOCUMENT ME!
+     * @throw GeometryError if geometry contains only one point
+     * @throw GeometryError if geometry contains two equal points
      *
      * @since 0.0.1
      */
@@ -65,15 +67,52 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
      * @brief creates a LineString from a given arithmetic value sequence
      * @tparam T an arithmetic value (e.g. int, float, double)
      * @param coords the arithmetic value sequence
-     * @param coords_dim the dimension of the points
+     * @param input_dim the dimension type for the LineString points
+     *
+     * @throw GeometryError if geometry contains only one point
+     * @throw GeometryError if geometry contains two equal points
      *
      * @since 0.0.1
      */
-    LineString(const std::vector<double>& coords, DimensionType coords_dim)
+    LineString(const std::vector<double>& coords, DimensionType input_dim)
     {
-        detail::create_sequence(coords, coords_dim, seq, bounds, dim);
+        detail::create_sequence(coords, input_dim, seq, bounds, dim);
         throw_for_invalid();
     }
+
+    /*!
+     * @brief creates a LineString from an iterator range
+     * @tparam InputIt the iterator type
+     * @param first the first element of the iterator
+     * @param last the last element of the iterator
+     * @param input_dim the dimension type for the LineString points
+     *
+     * @throw GeometryError if geometry contains only one point
+     * @throw GeometryError if geometry contains two equal points
+     *
+     * @since 0.0.1
+     */
+    template <typename InputIt>
+    LineString(InputIt first, InputIt last, DimensionType input_dim)
+    {
+        auto ndim = static_cast<size_t>(utils::get_ndim(input_dim));
+        seq.reserve((last - first) / ndim);
+        dim = input_dim;
+        Point p;
+        p.dim = input_dim;
+        for (auto it = first; it != last; it += ndim)
+        {
+            auto coord = it;
+            for (size_t k = 0; k < ndim; ++k)
+            {
+                p[k] = *coord;
+            }
+            bounds.extend(p.x, p.y);
+            seq.push_back(p);
+        }
+        throw_for_invalid();
+    }
+
 
     /*!
      * @brief creates a LineString from a geojson string
