@@ -37,7 +37,7 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
       *
       * @since 0.0.1
       */
-    template <typename T>
+    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
     MultiPoint(std::initializer_list<std::initializer_list<T>> init)
     {
         detail::create_sequence(init, seq, bounds, dim);
@@ -45,7 +45,7 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
 
     /*!
      * @brief creates a MultiPoint from a given point vector
-     * @param points the point list
+     * @param points the Point sequence
      *
      * @since 0.0.1
      */
@@ -55,11 +55,15 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief DOCUMENT ME!
-     * @param coords
-     * @param coords_dim
+     * @brief creates a MultiPoint from a given arithmetic value sequence
+     * @tparam T an arithmetic value (e.g. int, float, double)
+     * @param coords the arithmetic value sequence
+     * @param coords_dim the dimension of the points
+     *
+     * @since 0.0.1
      */
-    MultiPoint(const std::vector<double>& coords, DimensionType coords_dim)
+    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+    MultiPoint(const std::vector<T>& coords, DimensionType coords_dim)
     {
         detail::create_sequence(coords, coords_dim, seq, bounds, dim);
     }
@@ -109,7 +113,6 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
      */
     std::string json()
     {
-        /// @todo (pavel) add properties to specify z, m and zm
         std::stringstream ss;
         ss << std::fixed << std::setprecision(precision);
         ss << "{\"type\":\"MultiPoint\",\"coordinates\":[";
@@ -161,7 +164,7 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
     static MultiPoint from_wkt(const std::string& wkt)
     {
         WktReader reader{};
-        auto result      = reader.read(wkt.c_str());
+        auto result      = reader.read(wkt);
         const auto& data = result.data;
         if (not utils::is_multipoint(data.geom_type))
         {
@@ -183,7 +186,6 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
     {
         std::stringstream ss;
         ss << std::fixed << std::setprecision(precision);
-
         ss << "MULTIPOINT";
         if (has_z())
         {

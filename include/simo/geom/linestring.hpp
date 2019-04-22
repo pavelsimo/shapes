@@ -62,9 +62,12 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief DOCUMENT ME!
-     * @param coords
-     * @param coords_dim
+     * @brief creates a LineString from a given arithmetic value sequence
+     * @tparam T an arithmetic value (e.g. int, float, double)
+     * @param coords the arithmetic value sequence
+     * @param coords_dim the dimension of the points
+     *
+     * @since 0.0.1
      */
     LineString(const std::vector<double>& coords, DimensionType coords_dim)
     {
@@ -80,9 +83,32 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
      *
      * @since 0.0.1
      */
-    static LineString from_json(const std::string& /*json*/)
+    static LineString from_json(const std::string& json)
     {
-        throw exceptions::NotImplementedError();
+        try
+        {
+            auto j         = nlohmann::json::parse(json);
+            auto geom_type = j.at("type").get<std::string>();
+            if (geom_type != "LineString")
+            {
+                throw exceptions::ParseError("invalid geometry type: " + std::string(geom_type));
+            }
+            const auto& coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
+            std::vector<Point> res;
+            res.reserve(coords.size());
+            std::for_each(std::begin(coords), std::end(coords), [&](const std::vector<double>& coord) {
+                res.emplace_back(coord);
+            });
+            return LineString(res);
+        }
+        catch (const nlohmann::json::exception& e)
+        {
+            throw exceptions::ParseError("invalid json: " + std::string(e.what()));
+        }
+        catch (const exceptions::GeometryError&)
+        {
+            throw exceptions::ParseError("invalid geometry");
+        }
     }
 
     /*!
@@ -94,7 +120,42 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
      */
     std::string json()
     {
-        throw exceptions::NotImplementedError();
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(precision);
+        ss << "{\"type\":\"LineString\",\"coordinates\":[";
+        for (size_t i = 0; i < seq.size(); ++i)
+        {
+            if (i > 0)
+            {
+                ss << ",";
+            }
+            const auto& p = seq[i];
+            switch (p.dim)
+            {
+                case DimensionType::XY:
+                {
+                    ss << "[" << p.x << "," << p.y << "]";
+                    break;
+                }
+                case DimensionType::XYZ:
+                {
+                    ss << "[" << p.x << "," << p.y << "," << p.z << "]";
+                    break;
+                }
+                case DimensionType::XYM:
+                {
+                    ss << "[" << p.x << "," << p.y << "," << p.m << "]";
+                    break;
+                }
+                case DimensionType::XYZM:
+                {
+                    ss << "[" << p.x << "," << p.y << "," << p.z << "," << p.m << "]";
+                    break;
+                }
+            }
+        }
+        ss << "]}";
+        return ss.str();
     }
 
     /*!
@@ -108,30 +169,14 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     static LineString from_wkt(const std::string& wkt)
     {
         WktReader reader{};
-        auto result      = reader.read(wkt.c_str());
+        auto result      = reader.read(wkt);
         const auto& data = result.data;
         if (not utils::is_linestring(data.geom_type))
         {
             throw exceptions::ParseError("invalid WKT string");
         }
-
-        std::vector<Point> points;
-        points.reserve(data.coords.size());
         auto dim = utils::get_dim(data.geom_type);
-        int ndim = utils::get_ndim(dim);
-        Point p;
-        p.dim = dim;
-        for (size_t i = 0; i < result.data.coords.size(); i += ndim)
-        {
-            for (size_t j = 0; j < size_t(ndim); ++j)
-            {
-                p[j] = result.data.coords[i + j];
-            }
-            points.push_back(p);
-        }
-        LineString res(points);
-        res.dim = dim;
-        return res;
+        return LineString(result.data.coords, dim);
     }
 
     /*!
@@ -144,7 +189,38 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
      */
     std::string wkt()
     {
-        throw exceptions::NotImplementedError();
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(precision);
+        ss << "LINESTRING";
+        if (has_z())
+        {
+            ss << "Z";
+        }
+        if (has_m())
+        {
+            ss << "M";
+        }
+
+        ss << "(";
+        for (size_t i = 0; i < seq.size(); ++i)
+        {
+            const Point& p = seq[i];
+            if (i > 0)
+            {
+                ss << ",";
+            }
+            ss << p.x << " " << p.y;
+            if (has_z())
+            {
+                ss << " " << p.z;
+            }
+            if (has_m())
+            {
+                ss << " " << p.m;
+            }
+        }
+        ss << ")";
+        return ss.str();
     }
 
     /*!
