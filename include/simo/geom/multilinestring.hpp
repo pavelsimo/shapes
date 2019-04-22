@@ -15,7 +15,7 @@ namespace shapes
 {
 
 /*!
- * @brief LineString collection
+ * @brief a LineString collection
  * @ingroup geometry
  *
  * @since 0.0.1
@@ -31,6 +31,49 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     MultiLineString() = default;
 
     /*!
+     * @brief DOCUMENT ME!
+     * @param init
+     *
+     * @since 0.0.1
+     */
+    MultiLineString(std::initializer_list<LineString> init)
+    {
+        if (init.size() > 0)
+        {
+            const auto& head = *init.begin();
+            dim = head.dim;
+            seq.reserve(init.size());
+            for(auto it = init.begin(); it != init.end(); ++it)
+            {
+                const auto& l = *it;
+                if (l.dim != dim)
+                {
+                    throw exceptions::GeometryError("dimension mismatch in start point and point at index " + std::to_string(it - init.begin()));
+                }
+                bounds.extend(l.bounds.minx, l.bounds.miny);
+                bounds.extend(l.bounds.maxx, l.bounds.maxy);
+            }
+        }
+    }
+
+    /*!
+     *
+     * @param linestrings
+     */
+    explicit MultiLineString(const std::vector<LineString>& linestrings)
+    {
+        if (not linestrings.empty())
+        {
+            seq = linestrings;
+            dim = linestrings[0].dim;
+            std::for_each(std::begin(linestrings), std::end(linestrings), [&](const LineString& l) {
+                bounds.extend(l.bounds.minx, l.bounds.miny);
+                bounds.extend(l.bounds.maxx, l.bounds.maxy);
+            });
+        }
+    }
+
+    /*!
      * @brief creates a MultiLineString from a geojson string
      * @param json the geojson string
      * @return a MultiLineString object
@@ -38,9 +81,37 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
      *
      * @since 0.0.1
      */
-    static MultiLineString from_json(const std::string& /*json*/)
+    static MultiLineString from_json(const std::string& json)
     {
-        throw exceptions::NotImplementedError();
+        try
+        {
+            auto j         = nlohmann::json::parse(json);
+            auto geom_type = j.at("type").get<std::string>();
+            if (geom_type != "MultiLineString")
+            {
+                throw exceptions::ParseError("invalid geometry type: " + std::string(geom_type));
+            }
+            const auto& linestrings = j.at("coordinates");
+            std::vector<LineString> res;
+            res.reserve(linestrings.size());
+            for (const auto& linestring: linestrings)
+            {
+                if (not linestring.empty())
+                {
+                    res.emplace_back(linestring, utils::get_dim(static_cast<int8_t>(linestring.size())));
+                }
+
+            }
+            return MultiLineString(res);
+        }
+        catch (const nlohmann::json::exception& e)
+        {
+            throw exceptions::ParseError("invalid json: " + std::string(e.what()));
+        }
+        catch (const exceptions::GeometryError& e)
+        {
+            throw exceptions::ParseError("invalid geometry: " + std::string(e.what()));
+        }
     }
 
     /*!
@@ -66,7 +137,7 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     static MultiLineString from_wkt(const std::string& wkt)
     {
         WktReader reader{};
-        auto result      = reader.read(wkt.c_str());
+        auto result      = reader.read(wkt);
         const auto& data = result.data;
         if (not utils::is_multilinestring(data.geom_type))
         {
