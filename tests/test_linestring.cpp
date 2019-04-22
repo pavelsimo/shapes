@@ -233,7 +233,7 @@ TEST_CASE("LineString")
         {
             SECTION("xy - from wkt")
             {
-                auto mp = LineString::from_wkt("LINESTRING((1.4 2.3), (3.2 4.1))");
+                auto mp = LineString::from_wkt("LINESTRING(1.4 2.3, 3.2 4.1)");
                 CHECK(not mp.empty());
                 CHECK(mp.geom_type_dim() == GeometryType::LINESTRING);
                 CHECK(mp.dim == DimensionType::XY);
@@ -247,9 +247,9 @@ TEST_CASE("LineString")
 
             SECTION("xyz - from wkt")
             {
-                auto mp = LineString::from_wkt("LINESTRINGZ((1.4 2.3 1), (3.2 4.1 2))");
+                auto mp = LineString::from_wkt("LINESTRINGZ(1.4 2.3 1, 3.2 4.1 2)");
                 CHECK(not mp.empty());
-                CHECK(mp.geom_type_dim() == GeometryType::LINESTRING);
+                CHECK(mp.geom_type_dim() == GeometryType::LINESTRINGZ);
                 CHECK(mp.dim == DimensionType::XYZ);
                 const auto& p1 = mp[0];
                 CHECK(p1.x == 1.4);
@@ -263,7 +263,7 @@ TEST_CASE("LineString")
 
             SECTION("xym - from wkt")
             {
-                auto mp = LineString::from_wkt("LINESTRINGM((1.4 2.3 1), (3.2 4.1 2))");
+                auto mp = LineString::from_wkt("LINESTRINGM(1.4 2.3 1, 3.2 4.1 2)");
                 CHECK(not mp.empty());
                 CHECK(mp.geom_type_dim() == GeometryType::LINESTRINGM);
                 CHECK(mp.dim == DimensionType::XYM);
@@ -279,7 +279,7 @@ TEST_CASE("LineString")
 
             SECTION("xyzm - from wkt")
             {
-                auto mp = LineString::from_wkt("LineStringZM((1.4 2.3 1 1), (3.2 4.1 2 2))");
+                auto mp = LineString::from_wkt("LineStringZM(1.4 2.3 1 1, 3.2 4.1 2 2)");
                 CHECK(not mp.empty());
                 CHECK(mp.geom_type_dim() == GeometryType::LINESTRINGZM);
                 CHECK(mp.dim == DimensionType::XYZM);
@@ -332,11 +332,11 @@ TEST_CASE("LineString")
 
             SECTION("no throw - from wkt")
             {
-                CHECK_NOTHROW(LineString::from_wkt("LineStringZM((1.4 2.3 1 1), (3.2 4.1 2 2))"));
-                CHECK_NOTHROW(LineString::from_wkt("lineStringzm((1.4 2.3 1 1), (3.2 4.1 2 2))"));
-                CHECK_NOTHROW(LineString::from_wkt("LineStringZ((1.4 2.3 1), (3.2 4.1 2))"));
-                CHECK_NOTHROW(LineString::from_wkt("LineString((1.4 2.3), (3.2 4.1))"));
-                CHECK_NOTHROW(LineString::from_wkt("LineString ((10 40), (40 30), (20 20), (30 10))"));
+                CHECK_NOTHROW(LineString::from_wkt("LineStringZM(1.4 2.3 1 1, 3.2 4.1 2 2)"));
+                CHECK_NOTHROW(LineString::from_wkt("lineStringzm(1.4 2.3 1 1, 3.2 4.1 2 2)"));
+                CHECK_NOTHROW(LineString::from_wkt("LineStringZ(1.4 2.3 1, 3.2 4.1 2)"));
+                CHECK_NOTHROW(LineString::from_wkt("LineString(1.4 2.3, 3.2 4.1)"));
+                CHECK_NOTHROW(LineString::from_wkt("LineString (10 40, 40 30, 20 20, 30 10)"));
                 CHECK_NOTHROW(LineString::from_wkt("LineString (10 40, 40 30, 20 20, 30 10)"));
                 CHECK_NOTHROW(LineString::from_wkt("LineString Z (10 40 -10, 40 30 -10, 20 20 -10, 30 10 -10)"));
                 CHECK_NOTHROW(LineString::from_wkt("LineString (10.00232 40.32412, 40.11241 30.429017, 20.43754 20.4323, 30.75534 10.234234)"));
@@ -344,11 +344,11 @@ TEST_CASE("LineString")
 
             SECTION("throws - from wkt")
             {
-                CHECK_THROWS(LineString::from_wkt("LineStringZM((1.4 2.3), (3.2 4.1))"));
-                CHECK_THROWS(LineString::from_wkt("LineStringZM((1.4 2.3 1), (3.2 4.1 2))"));
+                CHECK_THROWS(LineString::from_wkt("LineStringZM(1.4 2.3, 3.2 4.1)"));
+                CHECK_THROWS(LineString::from_wkt("LineStringZM(1.4 2.3 1, 3.2 4.1 2)"));
                 CHECK_THROWS(LineString::from_wkt("LineStringZM((1.4 2.3, 1.3)"));
                 CHECK_THROWS(LineString::from_wkt("LineStringZM((1.4 2.3, 1.3"));
-                CHECK_THROWS(LineString::from_wkt("LineStringZM((1.4.3 2.3.3 1.1.1 1.1.1), (3.2.1 4.1.1 2.2.1 2.2.3))"));
+                CHECK_THROWS(LineString::from_wkt("LineStringZM(1.4.3 2.3.3 1.1.1 1.1.1, 3.2.1 4.1.1 2.2.1 2.2.3)"));
             }
         }
     }
@@ -390,14 +390,14 @@ TEST_CASE("LineString")
             {
                 LineString mp = {{1.0, 2.0}, {3.0, 4.0}};
                 mp.precision  = 1;
-                CHECK(mp.wkt() == R"(LINESTRING((1.0 2.0),(3.0 4.0)))");
+                CHECK(mp.wkt() == R"(LINESTRING(1.0 2.0,3.0 4.0))");
             }
 
             SECTION("xyz - to wkt")
             {
                 LineString mp = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
                 mp.precision  = 1;
-                CHECK(mp.wkt() == R"(LINESTRINGZ((1.0 2.0 3.0),(4.0 5.0 6.0)))");
+                CHECK(mp.wkt() == R"(LINESTRINGZ(1.0 2.0 3.0,4.0 5.0 6.0))");
             }
 
             SECTION("xym - to wkt")
@@ -406,14 +406,14 @@ TEST_CASE("LineString")
                 points.push_back(Point::from_xym(1.0, 2.0, 3.0));
                 points.push_back(Point::from_xym(-4.0, -5.0, -6.0));
                 LineString mp(points);
-                CHECK(mp.wkt() == R"(LINESTRINGM((1.0 2.0 3.0),(-4.0 -5.0 -6.0)))");
+                CHECK(mp.wkt() == R"(LINESTRINGM(1.0 2.0 3.0,-4.0 -5.0 -6.0))");
             }
 
             SECTION("xyzm - to wkt")
             {
                 LineString mp = {{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
                 mp.precision  = 1;
-                CHECK(mp.wkt() == R"(LINESTRINGZM((1.0 2.0 3.0 4.0),(5.0 6.0 7.0 8.0)))");
+                CHECK(mp.wkt() == R"(LINESTRINGZM(1.0 2.0 3.0 4.0,5.0 6.0 7.0 8.0))");
             }
         }
     }
@@ -462,15 +462,15 @@ TEST_CASE("LineString")
         {
             SECTION("xy - not equal to")
             {
-                auto mp1 = LineString{{1.0, 2.0}, {1.0, 2.0}};
-                auto mp2 = LineString{{1.0, 2.0}, {2.0, 1.0}};
+                auto mp1 = LineString{{1.0, 2.0}, {4.0, 5.0}};
+                auto mp2 = LineString{{1.0, 2.0}, {8.0, 10.0}};
                 CHECK(mp1 != mp2);
             }
 
             SECTION("xyz - not equal to")
             {
                 auto mp1 = LineString{{1.0, 2.0, 3.0}, {3.0, 2.0, 1.0}};
-                auto mp2 = LineString{{1.0, 2.0, 3.0}, {1.0, 2.0, 3.0}};
+                auto mp2 = LineString{{1.0, 2.0, 3.0}, {10.0, 20.0, 30.0}};
                 CHECK(mp1 != mp2);
             }
 
