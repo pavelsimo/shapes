@@ -276,9 +276,24 @@ multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN coord_xyzm multipoint
 //=============
 
 linestring_text ::= WKT_LPAREN coord_xy  WKT_COMMA coord_xy  coord_xy_repeated WKT_RPAREN.
+{
+    result->data.offsets.push_back(result->data.coords.size());
+}
+
 linestring_text_z ::= WKT_LPAREN coord_xyz  WKT_COMMA coord_xyz  coord_xyz_repeated WKT_RPAREN.
+{
+    result->data.offsets.push_back(result->data.coords.size());
+}
+
 linestring_text_m ::= WKT_LPAREN coord_xym  WKT_COMMA coord_xym  coord_xym_repeated WKT_RPAREN.
+{
+    result->data.offsets.push_back(result->data.coords.size());
+}
+
 linestring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN.
+{
+    result->data.offsets.push_back(result->data.coords.size());
+}
 
 linestring_text_repeated ::= .
 linestring_text_repeated ::= WKT_COMMA linestring_text linestring_text_repeated.

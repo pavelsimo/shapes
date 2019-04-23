@@ -3162,6 +3162,17 @@ static void yy_reduce(
                 result->data.geom_type = GeometryType::MULTIPOINTZM;
             }
             break;
+        case 82: /* linestring_text ::= WKT_LPAREN coord_xy WKT_COMMA coord_xy coord_xy_repeated WKT_RPAREN */
+        case 83: /* linestring_text_z ::= WKT_LPAREN coord_xyz WKT_COMMA coord_xyz coord_xyz_repeated WKT_RPAREN */
+            yytestcase(yyruleno == 83);
+        case 84: /* linestring_text_m ::= WKT_LPAREN coord_xym WKT_COMMA coord_xym coord_xym_repeated WKT_RPAREN */
+            yytestcase(yyruleno == 84);
+        case 85: /* linestring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN */
+            yytestcase(yyruleno == 85);
+            {
+                result->data.offsets.push_back(result->data.coords.size());
+            }
+            break;
         case 94: /* linestring ::= WKT_LINESTRING_TAGGED_TEXT WKT_EMPTY_SET */
         case 95: /* linestring ::= WKT_LINESTRING_TAGGED_TEXT linestring_text */
             yytestcase(yyruleno == 95);
@@ -3360,10 +3371,6 @@ static void yy_reduce(
             /* (67) multipoint_text_zm ::= WKT_COMMA point_text_zm multipoint_text_zm */ yytestcase(yyruleno == 67);
             /* (68) multipoint_text_zm_2 ::= */ yytestcase(yyruleno == 68);
             /* (69) multipoint_text_zm_2 ::= WKT_COMMA coord_xyzm multipoint_text_zm_2 */ yytestcase(yyruleno == 69);
-            /* (82) linestring_text ::= WKT_LPAREN coord_xy WKT_COMMA coord_xy coord_xy_repeated WKT_RPAREN */ yytestcase(yyruleno == 82);
-            /* (83) linestring_text_z ::= WKT_LPAREN coord_xyz WKT_COMMA coord_xyz coord_xyz_repeated WKT_RPAREN */ yytestcase(yyruleno == 83);
-            /* (84) linestring_text_m ::= WKT_LPAREN coord_xym WKT_COMMA coord_xym coord_xym_repeated WKT_RPAREN */ yytestcase(yyruleno == 84);
-            /* (85) linestring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN */ yytestcase(yyruleno == 85);
             /* (86) linestring_text_repeated ::= */ yytestcase(yyruleno == 86);
             /* (87) linestring_text_repeated ::= WKT_COMMA linestring_text linestring_text_repeated */ yytestcase(yyruleno == 87);
             /* (88) linestring_text_z_repeated ::= */ yytestcase(yyruleno == 88);
