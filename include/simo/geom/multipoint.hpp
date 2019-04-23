@@ -98,9 +98,9 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
         {
             throw exceptions::ParseError("invalid json: " + std::string(e.what()));
         }
-        catch (const exceptions::GeometryError&)
+        catch (const exceptions::GeometryError& e)
         {
-            throw exceptions::ParseError("invalid geometry");
+            throw exceptions::ParseError("invalid geometry: " + std::string(e.what()));
         }
     }
 
@@ -168,7 +168,7 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
         const auto& data = result.data;
         if (not utils::is_multipoint(data.geom_type))
         {
-            throw exceptions::ParseError("invalid WKT string");
+            throw exceptions::ParseError("invalid wkt string");
         }
         auto dim = utils::get_dim(data.geom_type);
         return MultiPoint(result.data.coords, dim);

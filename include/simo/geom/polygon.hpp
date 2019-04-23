@@ -143,7 +143,7 @@ class Polygon : public BaseGeometry<Polygon>
         const auto& data = result.data;
         if (not utils::is_polygon(data.geom_type))
         {
-            throw exceptions::ParseError("invalid WKT string");
+            throw exceptions::ParseError("invalid wkt string");
         }
         return Polygon();
     }

@@ -36,8 +36,8 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
      * @tparam T an arithmetic value (e.g. int, float, double)
      * @param init the initializer list
      *
-     * @throw GeometryError if geometry contains only one point
-     * @throw GeometryError if geometry contains two equal points
+     * @throw GeometryError if the geometry contains only one point
+     * @throw GeometryError if the geometry contains two equal points
      *
      * @since 0.0.1
      */
@@ -52,8 +52,8 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
      * @brief creates a LineString from a given point vector
      * @param points the point list
      *
-     * @throw GeometryError if geometry contains only one point
-     * @throw GeometryError if geometry contains two equal points
+     * @throw GeometryError if the geometry contains only one point
+     * @throw GeometryError if the geometry contains two equal points
      *
      * @since 0.0.1
      */
@@ -69,8 +69,8 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
      * @param coords the arithmetic value sequence
      * @param input_dim the dimension type for the LineString points
      *
-     * @throw GeometryError if geometry contains only one point
-     * @throw GeometryError if geometry contains two equal points
+     * @throw GeometryError if the geometry contains only one point
+     * @throw GeometryError if the geometry contains two equal points
      *
      * @since 0.0.1
      */
@@ -87,8 +87,8 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
      * @param last the last element of the iterator
      * @param input_dim the dimension type for the LineString points
      *
-     * @throw GeometryError if geometry contains only one point
-     * @throw GeometryError if geometry contains two equal points
+     * @throw GeometryError if the geometry contains only one point
+     * @throw GeometryError if the geometry contains two equal points
      *
      * @since 0.0.1
      */
@@ -112,7 +112,6 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
         }
         throw_for_invalid();
     }
-
 
     /*!
      * @brief creates a LineString from a geojson string
@@ -144,9 +143,9 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
         {
             throw exceptions::ParseError("invalid json: " + std::string(e.what()));
         }
-        catch (const exceptions::GeometryError&)
+        catch (const exceptions::GeometryError& e)
         {
-            throw exceptions::ParseError("invalid geometry");
+            throw exceptions::ParseError("invalid geometry: " + std::string(e.what()));
         }
     }
 
@@ -212,7 +211,7 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
         const auto& data = result.data;
         if (not utils::is_linestring(data.geom_type))
         {
-            throw exceptions::ParseError("invalid WKT string");
+            throw exceptions::ParseError("invalid wkt string");
         }
         auto dim = utils::get_dim(data.geom_type);
         return LineString(result.data.coords, dim);
@@ -300,14 +299,14 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
 
         if (seq.size() < 2)
         {
-            throw exceptions::GeometryError("LineString should be either empty or with 2 or more points");
+            throw exceptions::GeometryError("a linestring should be either empty or with 2 or more points");
         }
 
         if (seq.size() == 2)
         {
             if (seq[0] == seq[1])
             {
-                throw exceptions::GeometryError("LineString with exactly two equal points");
+                throw exceptions::GeometryError("a linestring with exactly two equal points");
             }
         }
     }

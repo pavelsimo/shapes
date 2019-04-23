@@ -65,17 +65,19 @@ TEST_CASE("MultiLineString")
         {
             SECTION("xy - from json")
             {
-//                std::string json = R"(
-//                {
-//                    "type": "MultiLineString",
-//                            "coordinates": [
-//                    [[10, 10], [20, 20], [10, 40]],
-//                    [[40, 40], [30, 30], [40, 20], [30, 10]]
-//                    ]
-//                }
-//                )";
-//                auto mls          = MultiLineString::from_json(json);
-//                CHECK(mls.size() == 2);
+                std::string json    = R"(
+                {
+                    "type": "MultiLineString",
+                            "coordinates": [
+                    [[10, 10], [20, 20], [10, 40]],
+                    [[40, 40], [30, 30], [40, 20], [30, 10]]
+                    ]
+                }
+                )";
+                auto mls            = MultiLineString::from_json(json);
+                std::string j_str   = mls.json();
+                std::string wkt_str = mls.wkt();
+                CHECK(mls.size() == 2);
             }
 
             SECTION("xyz - from json")

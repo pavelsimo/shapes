@@ -96,6 +96,8 @@ class Point : public BaseGeometry<Point>
      * @brief creates a Point from coordinates
      * @param coords the coordinates
      *
+     * @throw GeometryError DOCUMENT ME!
+     *
      * @since 0.0.1
      */
     explicit Point(const std::vector<double>& coords)
@@ -123,7 +125,7 @@ class Point : public BaseGeometry<Point>
         }
         else
         {
-            throw exceptions::GeometryError("too many coordinates");
+            throw exceptions::GeometryError("invalid number of dimensions " + std::to_string(coords.size()));
         }
     }
     /*!
@@ -131,6 +133,8 @@ class Point : public BaseGeometry<Point>
      * @tparam T an arithmetic value (e.g. int, float, double)
      * @param init the coordinates list
      * @throw exception if the given number of coordinates is either less than two or greater than four
+     *
+     * @throw GeometryError DOCUMENT ME!
      *
      * @since 0.0.1
      */
@@ -236,22 +240,18 @@ class Point : public BaseGeometry<Point>
         {
             throw exceptions::IndexError("index at " + std::to_string(pos) + " is out of range");
         }
-
         if (pos == 0)
         {
             return x;
         }
-
         if (pos == 1)
         {
             return y;
         }
-
         if (pos == 2)
         {
             return dim == DimensionType::XYM ? m : z;
         }
-
         return m;
     }
 
@@ -310,9 +310,9 @@ class Point : public BaseGeometry<Point>
         {
             throw exceptions::ParseError("invalid json: " + std::string(e.what()));
         }
-        catch (const exceptions::GeometryError&)
+        catch (const exceptions::GeometryError& e)
         {
-            throw exceptions::ParseError("invalid geometry");
+            throw exceptions::ParseError("invalid geometry: " + std::string(e.what()));
         }
     }
 
@@ -368,7 +368,7 @@ class Point : public BaseGeometry<Point>
             case GeometryType::POINTZM:
                 return {data.coords[0], data.coords[1], data.coords[2], data.coords[3]};
             default:
-                throw exceptions::ParseError("invalid WKT string");
+                throw exceptions::ParseError("invalid wkt string");
         }
     }
 

@@ -143,7 +143,7 @@ void create_sequence(std::initializer_list<std::initializer_list<T>> init, std::
             Point p(*it);
             if (p.dim != dim)
             {
-                throw exceptions::GeometryError("dimension mismatch in start point and point at index " + std::to_string(it - init.begin()));
+                throw exceptions::GeometryError("dimension mismatch at index " + std::to_string(it - init.begin()));
             }
             bounds.extend(p.x, p.y);
             seq.emplace_back(p);
