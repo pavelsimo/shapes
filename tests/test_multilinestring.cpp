@@ -10,37 +10,95 @@ TEST_CASE("MultiLineString")
     {
         SECTION("empty")
         {
-            /// @todo add test
+            MultiLineString ml;
+            CHECK(ml.empty());
+            CHECK(ml.dim == DimensionType::XY);
+            CHECK(ml.geom_type() == GeometryType::MULTILINESTRING);
+            CHECK(ml.geom_type_dim() == GeometryType::MULTILINESTRING);
+            CHECK(ml.geom_type_str() == "MultiLineString");
         }
 
-        SECTION("xy - constructor")
+        SECTION("xy - linestring vector")
         {
-            /// @todo add test
+            std::vector<LineString> linestrings;
+            linestrings.push_back({{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}});
+            linestrings.push_back({{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}});
+            MultiLineString ml(linestrings);
+            CHECK(ml.size() == 2);
+            CHECK(ml.dim == DimensionType::XY);
+            CHECK(ml[0][0].x == 1.0);
+            CHECK(ml[0][0].y == 2.0);
+            CHECK(ml[1][2].x == 16.0);
+            CHECK(ml[1][2].y == 17.0);
         }
 
-        SECTION("xyz - constructor")
+        SECTION("xyz - linestring vector")
         {
-            /// @todo add test
+            std::vector<LineString> linestrings;
+            linestrings.push_back({{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}});
+            linestrings.push_back({{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}});
+            MultiLineString ml(linestrings);
+            CHECK(ml.size() == 2);
+            CHECK(ml.dim == DimensionType::XYZ);
+            CHECK(ml[0][0].x == 1.0);
+            CHECK(ml[0][0].y == 2.0);
+            CHECK(ml[0][0].z == 3.0);
+            CHECK(ml[1][2].x == 16.0);
+            CHECK(ml[1][2].y == 17.0);
+            CHECK(ml[1][2].z == 18.0);
         }
 
-        SECTION("xym - constructor")
+        SECTION("xym - linestring vector")
         {
             // not supported
         }
 
-        SECTION("xyzm - constructor")
+        SECTION("xyzm - linestring vector")
         {
-            /// @todo add test
+            std::vector<LineString> linestrings;
+            linestrings.push_back({{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}});
+            linestrings.push_back({{11.0, 12.0, 13.0, -4.5}, {13.0, 14.0, 15.0, -5.5}, {16.0, 17.0, 18.0, -6.5}});
+            MultiLineString ml(linestrings);
+            CHECK(ml.size() == 2);
+            CHECK(ml.dim == DimensionType::XYZM);
+            CHECK(ml[0][0].x == 1.0);
+            CHECK(ml[0][0].y == 2.0);
+            CHECK(ml[0][0].z == 3.0);
+            CHECK(ml[0][0].m == -1.5);
+            CHECK(ml[1][2].x == 16.0);
+            CHECK(ml[1][2].y == 17.0);
+            CHECK(ml[1][2].z == 18.0);
+            CHECK(ml[1][2].m == -6.5);
         }
 
         SECTION("xy - initializer list")
         {
-            /// @todo add test
+            auto ml = MultiLineString{
+                    {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
+                    {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}
+            };
+            CHECK(ml.size() == 2);
+            CHECK(ml.dim == DimensionType::XY);
+            CHECK(ml[0][0].x == 1.0);
+            CHECK(ml[0][0].y == 2.0);
+            CHECK(ml[1][2].x == 16.0);
+            CHECK(ml[1][2].y == 17.0);
         }
 
         SECTION("xyz - initializer list")
         {
-            /// @todo add test
+            auto ml = MultiLineString{
+                    {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+                    {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}
+            };
+            CHECK(ml.size() == 2);
+            CHECK(ml.dim == DimensionType::XYZ);
+            CHECK(ml[0][0].x == 1.0);
+            CHECK(ml[0][0].y == 2.0);
+            CHECK(ml[0][0].z == 3.0);
+            CHECK(ml[1][2].x == 16.0);
+            CHECK(ml[1][2].y == 17.0);
+            CHECK(ml[1][2].z == 18.0);
         }
 
         SECTION("xym - initializer list")
@@ -50,7 +108,20 @@ TEST_CASE("MultiLineString")
 
         SECTION("xyzm - initializer list")
         {
-            /// @todo add test
+            auto ml = MultiLineString{
+                {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
+                {{11.0, 12.0, 13.0, -4.5}, {13.0, 14.0, 15.0, -5.5}, {16.0, 17.0, 18.0, -6.5}}
+            };
+            CHECK(ml.size() == 2);
+            CHECK(ml.dim == DimensionType::XYZM);
+            CHECK(ml[0][0].x == 1.0);
+            CHECK(ml[0][0].y == 2.0);
+            CHECK(ml[0][0].z == 3.0);
+            CHECK(ml[0][0].m == -1.5);
+            CHECK(ml[1][2].x == 16.0);
+            CHECK(ml[1][2].y == 17.0);
+            CHECK(ml[1][2].z == 18.0);
+            CHECK(ml[1][2].m == -6.5);
         }
 
         SECTION("throws - initializer list")
