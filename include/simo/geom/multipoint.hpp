@@ -263,6 +263,7 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
     std::vector<std::tuple<double, double>> xy_() const
     {
         std::vector<std::tuple<double, double>> res;
+        res.reserve(seq.size());
         for (const auto& point : seq)
         {
             res.emplace_back(point.x, point.y);
@@ -274,6 +275,7 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
     std::vector<std::tuple<double, double, double>> xyz_() const
     {
         std::vector<std::tuple<double, double, double>> res;
+        res.reserve(seq.size());
         for (const auto& point : seq)
         {
             res.emplace_back(point.x, point.y, point.z);
@@ -285,6 +287,7 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
     std::vector<std::tuple<double, double, double>> xym_() const
     {
         std::vector<std::tuple<double, double, double>> res;
+        res.reserve(seq.size());
         for (const auto& point : seq)
         {
             res.emplace_back(point.x, point.y, point.m);
@@ -296,6 +299,7 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
     std::vector<std::tuple<double, double, double, double>> xyzm_() const
     {
         std::vector<std::tuple<double, double, double, double>> res;
+        res.reserve(seq.size());
         for (const auto& point : seq)
         {
             res.emplace_back(point.x, point.y, point.z, point.m);

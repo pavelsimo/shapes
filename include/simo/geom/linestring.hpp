@@ -3,6 +3,7 @@
 #include <ciso646>
 #include <vector>
 #include <set>
+#include <iterator>
 #include <sstream>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
@@ -95,22 +96,25 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     template <typename InputIt>
     LineString(InputIt first, InputIt last, DimensionType input_dim)
     {
-        auto ndim = static_cast<size_t>(utils::get_ndim(input_dim));
-        seq.reserve((last - first) / ndim);
-        dim = input_dim;
-        Point p;
-        p.dim = input_dim;
-        for (auto it = first; it != last; it += ndim)
+        if (std::distance(first, last) > 0)
         {
-            auto coord = it;
-            for (size_t k = 0; k < ndim; ++k)
+            auto ndim = static_cast<size_t>(utils::get_ndim(input_dim));
+            seq.reserve(std::distance(first, last)  / ndim);
+            dim = input_dim;
+            Point p;
+            p.dim = input_dim;
+            for (auto it = first; it != last; it += ndim)
             {
-                p[k] = *coord;
+                auto coord = it;
+                for (size_t k = 0; k < ndim; ++k, ++coord)
+                {
+                    p[k] = *coord;
+                }
+                bounds.extend(p.x, p.y);
+                seq.push_back(p);
             }
-            bounds.extend(p.x, p.y);
-            seq.push_back(p);
+            throw_for_invalid();
         }
-        throw_for_invalid();
     }
 
     /*!
@@ -327,6 +331,7 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     std::vector<std::tuple<double, double>> xy_() const
     {
         std::vector<std::tuple<double, double>> res;
+        res.reserve(seq.size());
         for (const auto& point : seq)
         {
             res.emplace_back(point.x, point.y);
@@ -338,6 +343,7 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     std::vector<std::tuple<double, double, double>> xyz_() const
     {
         std::vector<std::tuple<double, double, double>> res;
+        res.reserve(seq.size());
         for (const auto& point : seq)
         {
             res.emplace_back(point.x, point.y, point.z);
@@ -349,6 +355,7 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     std::vector<std::tuple<double, double, double>> xym_() const
     {
         std::vector<std::tuple<double, double, double>> res;
+        res.reserve(seq.size());
         for (const auto& point : seq)
         {
             res.emplace_back(point.x, point.y, point.m);
@@ -360,6 +367,7 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     std::vector<std::tuple<double, double, double, double>> xyzm_() const
     {
         std::vector<std::tuple<double, double, double, double>> res;
+        res.reserve(seq.size());
         for (const auto& point : seq)
         {
             res.emplace_back(point.x, point.y, point.z, point.m);
