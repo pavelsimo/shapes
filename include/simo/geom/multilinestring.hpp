@@ -4,6 +4,7 @@
 #include <vector>
 #include <set>
 #include <sstream>
+#include <iterator>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
 #include <simo/geom/detail/sequence.hpp>
@@ -31,8 +32,8 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     MultiLineString() = default;
 
     /*!
-     * @brief DOCUMENT ME!
-     * @param init
+     * @brief creates a MultiLineString from a given a LineString initializer list
+     * @param init the initializer list
      *
      * @since 0.0.1
      */
@@ -52,13 +53,16 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
                 }
                 bounds.extend(l.bounds.minx, l.bounds.miny);
                 bounds.extend(l.bounds.maxx, l.bounds.maxy);
+                seq.push_back(l);
             }
         }
     }
 
     /*!
+     * @brief creates a MultiLineString from a given LineString vector
+     * @param linestrings the LineString vector
      *
-     * @param linestrings
+     * @since 0.0.1
      */
     explicit MultiLineString(const std::vector<LineString>& linestrings)
     {
@@ -68,11 +72,44 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
             dim = linestrings[0].dim;
             for (auto it = linestrings.begin(); it != linestrings.end(); ++it)
             {
-                const auto& l = *it;
-                if (l.dim != dim)
+                const auto& linestring = *it;
+                if (linestring.dim != dim)
                 {
                     throw exceptions::GeometryError("dimension mismatch at index " + std::to_string(it - linestrings.begin()));
                 }
+                bounds.extend(linestring.bounds.minx, linestring.bounds.miny);
+                bounds.extend(linestring.bounds.maxx, linestring.bounds.maxy);
+            }
+        }
+    }
+
+    /*!
+     * @brief creates a MultiLineString from two pair of iterators
+     * @tparam CoordInputIt the coordinate input iterator
+     * @tparam OffsetInputIt the offset input iterator
+     * @param coord_first the first coordinate iterator
+     * @param coord_last the second coordinate iterator
+     * @param offset_first the offset first iterator
+     * @param offset_last the offset last iterator
+     * @param input_dim the dimension type
+     *
+     * @since 0.0.1
+     */
+    template <typename CoordInputIt, typename OffsetInputIt>
+    MultiLineString(CoordInputIt coord_first, CoordInputIt coord_last, OffsetInputIt offset_first, OffsetInputIt offset_last, DimensionType input_dim)
+    {
+        if (std::distance(coord_first, coord_last) > 0)
+        {
+            auto ndim = static_cast<size_t>(utils::get_ndim(input_dim));
+            seq.reserve((coord_last - coord_first) / ndim);
+            dim = input_dim;
+            size_t lo = 0;
+            for (auto it = offset_first; it != offset_last; ++it)
+            {
+                size_t hi = *it;
+                seq.emplace_back(coord_first + lo, coord_first + hi, input_dim);
+                lo = hi;
+                const auto& l = seq[seq.size() - 1];
                 bounds.extend(l.bounds.minx, l.bounds.miny);
                 bounds.extend(l.bounds.maxx, l.bounds.maxy);
             }
@@ -200,7 +237,7 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
         {
             throw exceptions::ParseError("invalid wkt string");
         }
-        return MultiLineString();
+        return {data.coords.begin(), data.coords.end(), data.offsets.begin(), data.offsets.end(), utils::get_dim(data.geom_type)};
     }
 
     /*!
@@ -275,25 +312,53 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     /// @private
     std::vector<std::tuple<double, double>> xy_() const
     {
-        throw exceptions::NotImplementedError();
+        std::vector<std::tuple<double, double>> res;
+        res.reserve(num_points());
+        for(const auto& l: seq)
+        {
+            auto xy = l.xy();
+            res.insert(res.end(), xy.begin(), xy.end());
+        }
+        return res;
     }
 
     /// @private
     std::vector<std::tuple<double, double, double>> xyz_() const
     {
-        throw exceptions::NotImplementedError();
+        std::vector<std::tuple<double, double, double>> res;
+        res.reserve(num_points());
+        for(const auto& l: seq)
+        {
+            auto xyz = l.xyz();
+            res.insert(res.end(), xyz.begin(), xyz.end());
+        }
+        return res;
     }
 
     /// @private
     std::vector<std::tuple<double, double, double>> xym_() const
     {
-        throw exceptions::NotImplementedError();
+        std::vector<std::tuple<double, double, double>> res;
+        res.reserve(num_points());
+        for(const auto& l: seq)
+        {
+            auto xym = l.xym();
+            res.insert(res.end(), xym.begin(), xym.end());
+        }
+        return res;
     }
 
     /// @private
     std::vector<std::tuple<double, double, double, double>> xyzm_() const
     {
-        throw exceptions::NotImplementedError();
+        std::vector<std::tuple<double, double, double, double>> res;
+        res.reserve(num_points());
+        for(const auto& l: seq)
+        {
+            auto xyzm = l.xyzm();
+            res.insert(res.end(), xyzm.begin(), xyzm.end());
+        }
+        return res;
     }
 
     /// @private
@@ -307,6 +372,17 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     {
         return seq.size();
     }
+
+    /// @private
+    size_t num_points() const
+    {
+        size_t n = 0;
+        for(const auto& linestring: seq)
+        {
+            n += linestring.size();
+        }
+        return n;
+    };
 
     /// @private
     bool is_closed_() const
