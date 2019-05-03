@@ -23,16 +23,16 @@ TEST_CASE("LineString")
             std::vector<Point> points;
             points.emplace_back(1.0, 2.0);
             points.emplace_back(-3.0, -4.0);
-            LineString mp(points);
-            CHECK(!mp.empty());
-            CHECK(mp.dim == DimensionType::XY);
-            CHECK(mp.geom_type() == GeometryType::LINESTRING);
-            CHECK(mp.geom_type_dim() == GeometryType::LINESTRING);
-            CHECK(mp.geom_type_str() == "LineString");
-            const auto& p1 = mp[0];
+            LineString ls(points);
+            CHECK(not ls.empty());
+            CHECK(ls.dim == DimensionType::XY);
+            CHECK(ls.geom_type() == GeometryType::LINESTRING);
+            CHECK(ls.geom_type_dim() == GeometryType::LINESTRING);
+            CHECK(ls.geom_type_str() == "LineString");
+            const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
-            const auto& p2 = mp[1];
+            const auto& p2 = ls[1];
             CHECK(p2.x == -3.0);
             CHECK(p2.y == -4.0);
         }
@@ -42,17 +42,17 @@ TEST_CASE("LineString")
             std::vector<Point> points;
             points.emplace_back(1.0, 2.0, 3.0);
             points.emplace_back(-4.0, -5.0, -6.0);
-            LineString mp(points);
-            CHECK(!mp.empty());
-            CHECK(mp.dim == DimensionType::XYZ);
-            CHECK(mp.geom_type() == GeometryType::LINESTRING);
-            CHECK(mp.geom_type_dim() == GeometryType::LINESTRINGZ);
-            CHECK(mp.geom_type_str() == "LineString");
-            const auto& p1 = mp[0];
+            LineString ls(points);
+            CHECK(!ls.empty());
+            CHECK(ls.dim == DimensionType::XYZ);
+            CHECK(ls.geom_type() == GeometryType::LINESTRING);
+            CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGZ);
+            CHECK(ls.geom_type_str() == "LineString");
+            const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
             CHECK(p1.z == 3.0);
-            const auto& p2 = mp[1];
+            const auto& p2 = ls[1];
             CHECK(p2.x == -4.0);
             CHECK(p2.y == -5.0);
             CHECK(p2.z == -6.0);
@@ -63,17 +63,17 @@ TEST_CASE("LineString")
             std::vector<Point> points;
             points.push_back(Point::from_xym(1.0, 2.0, 3.0));
             points.push_back(Point::from_xym(-4.0, -5.0, -6.0));
-            LineString mp(points);
-            CHECK(!mp.empty());
-            CHECK(mp.dim == DimensionType::XYM);
-            CHECK(mp.geom_type() == GeometryType::LINESTRING);
-            CHECK(mp.geom_type_dim() == GeometryType::LINESTRINGM);
-            CHECK(mp.geom_type_str() == "LineString");
-            const auto& p1 = mp[0];
+            LineString ls(points);
+            CHECK(!ls.empty());
+            CHECK(ls.dim == DimensionType::XYM);
+            CHECK(ls.geom_type() == GeometryType::LINESTRING);
+            CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGM);
+            CHECK(ls.geom_type_str() == "LineString");
+            const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
             CHECK(p1.m == 3.0);
-            const auto& p2 = mp[1];
+            const auto& p2 = ls[1];
             CHECK(p2.x == -4.0);
             CHECK(p2.y == -5.0);
             CHECK(p2.m == -6.0);
@@ -84,18 +84,18 @@ TEST_CASE("LineString")
             std::vector<Point> points;
             points.emplace_back(1.0, 2.0, 3.0, 1.5);
             points.emplace_back(-4.0, -5.0, -6.0, 1.5);
-            LineString mp(points);
-            CHECK(!mp.empty());
-            CHECK(mp.dim == DimensionType::XYZM);
-            CHECK(mp.geom_type() == GeometryType::LINESTRING);
-            CHECK(mp.geom_type_dim() == GeometryType::LINESTRINGZM);
-            CHECK(mp.geom_type_str() == "LineString");
-            const auto& p1 = mp[0];
+            LineString ls(points);
+            CHECK(!ls.empty());
+            CHECK(ls.dim == DimensionType::XYZM);
+            CHECK(ls.geom_type() == GeometryType::LINESTRING);
+            CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGZM);
+            CHECK(ls.geom_type_str() == "LineString");
+            const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
             CHECK(p1.z == 3.0);
             CHECK(p1.m == 1.5);
-            const auto& p2 = mp[1];
+            const auto& p2 = ls[1];
             CHECK(p2.x == -4.0);
             CHECK(p2.y == -5.0);
             CHECK(p2.z == -6.0);
@@ -104,33 +104,33 @@ TEST_CASE("LineString")
 
         SECTION("xy - initializer list")
         {
-            LineString mp = {{1.0, 2.0}, {-3.0, -4.0}};
-            CHECK(!mp.empty());
-            CHECK(mp.dim == DimensionType::XY);
-            CHECK(mp.geom_type() == GeometryType::LINESTRING);
-            CHECK(mp.geom_type_dim() == GeometryType::LINESTRING);
-            CHECK(mp.geom_type_str() == "LineString");
-            const auto& p1 = mp[0];
+            LineString ls = {{1.0, 2.0}, {-3.0, -4.0}};
+            CHECK(!ls.empty());
+            CHECK(ls.dim == DimensionType::XY);
+            CHECK(ls.geom_type() == GeometryType::LINESTRING);
+            CHECK(ls.geom_type_dim() == GeometryType::LINESTRING);
+            CHECK(ls.geom_type_str() == "LineString");
+            const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
-            const auto& p2 = mp[1];
+            const auto& p2 = ls[1];
             CHECK(p2.x == -3.0);
             CHECK(p2.y == -4.0);
         }
 
         SECTION("xyz - initializer list")
         {
-            LineString mp = {{1.0, 2.0, 3.0}, {-4.0, -5.0, -6.0}};
-            CHECK(!mp.empty());
-            CHECK(mp.dim == DimensionType::XYZ);
-            CHECK(mp.geom_type() == GeometryType::LINESTRING);
-            CHECK(mp.geom_type_dim() == GeometryType::LINESTRINGZ);
-            CHECK(mp.geom_type_str() == "LineString");
-            const auto& p1 = mp[0];
+            LineString ls = {{1.0, 2.0, 3.0}, {-4.0, -5.0, -6.0}};
+            CHECK(!ls.empty());
+            CHECK(ls.dim == DimensionType::XYZ);
+            CHECK(ls.geom_type() == GeometryType::LINESTRING);
+            CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGZ);
+            CHECK(ls.geom_type_str() == "LineString");
+            const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
             CHECK(p1.z == 3.0);
-            const auto& p2 = mp[1];
+            const auto& p2 = ls[1];
             CHECK(p2.x == -4.0);
             CHECK(p2.y == -5.0);
             CHECK(p2.z == -6.0);
@@ -143,18 +143,18 @@ TEST_CASE("LineString")
 
         SECTION("xyzm - initializer list")
         {
-            LineString mp = {{1.0, 2.0, 3.0, 4.0}, {-5.0, -6.0, -7.0, -8.0}};
-            CHECK(!mp.empty());
-            CHECK(mp.dim == DimensionType::XYZM);
-            CHECK(mp.geom_type() == GeometryType::LINESTRING);
-            CHECK(mp.geom_type_dim() == GeometryType::LINESTRINGZM);
-            CHECK(mp.geom_type_str() == "LineString");
-            const auto& p1 = mp[0];
+            LineString ls = {{1.0, 2.0, 3.0, 4.0}, {-5.0, -6.0, -7.0, -8.0}};
+            CHECK(!ls.empty());
+            CHECK(ls.dim == DimensionType::XYZM);
+            CHECK(ls.geom_type() == GeometryType::LINESTRING);
+            CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGZM);
+            CHECK(ls.geom_type_str() == "LineString");
+            const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
             CHECK(p1.z == 3.0);
             CHECK(p1.m == 4.0);
-            const auto& p2 = mp[1];
+            const auto& p2 = ls[1];
             CHECK(p2.x == -5.0);
             CHECK(p2.y == -6.0);
             CHECK(p2.z == -7.0);
@@ -184,9 +184,9 @@ TEST_CASE("LineString")
             SECTION("xy - from json")
             {
                 std::string json = R"({"type":"LineString","coordinates":[[1.0,2.0],[3.0,4.0]]})";
-                auto mp          = LineString::from_json(json);
-                auto& p1         = mp[0];
-                auto& p2         = mp[1];
+                auto ls          = LineString::from_json(json);
+                auto& p1         = ls[0];
+                auto& p2         = ls[1];
                 CHECK(p1.x == 1.0);
                 CHECK(p1.y == 2.0);
                 CHECK(p2.x == 3.0);
@@ -196,9 +196,9 @@ TEST_CASE("LineString")
             SECTION("xyz - from json")
             {
                 std::string json = R"({"type":"LineString","coordinates":[[1.0,2.0,3.0],[4.0,5.0,6.0]]})";
-                auto mp          = LineString::from_json(json);
-                auto& p1         = mp[0];
-                auto& p2         = mp[1];
+                auto ls          = LineString::from_json(json);
+                auto& p1         = ls[0];
+                auto& p2         = ls[1];
                 CHECK(p1.x == 1.0);
                 CHECK(p1.y == 2.0);
                 CHECK(p1.z == 3.0);
@@ -215,9 +215,9 @@ TEST_CASE("LineString")
             SECTION("xyzm - from json")
             {
                 std::string json = R"({"type":"LineString","coordinates":[[1.0,2.0,3.0,-10.0],[4.0,5.0,6.0,-10.0]]})";
-                auto mp          = LineString::from_json(json);
-                auto& p1         = mp[0];
-                auto& p2         = mp[1];
+                auto ls          = LineString::from_json(json);
+                auto& p1         = ls[0];
+                auto& p2         = ls[1];
                 CHECK(p1.x == 1.0);
                 CHECK(p1.y == 2.0);
                 CHECK(p1.z == 3.0);
@@ -233,29 +233,29 @@ TEST_CASE("LineString")
         {
             SECTION("xy - from wkt")
             {
-                auto mp = LineString::from_wkt("LINESTRING(1.4 2.3, 3.2 4.1)");
-                CHECK(not mp.empty());
-                CHECK(mp.geom_type_dim() == GeometryType::LINESTRING);
-                CHECK(mp.dim == DimensionType::XY);
-                const auto& p1 = mp[0];
+                auto ls = LineString::from_wkt("LINESTRING(1.4 2.3, 3.2 4.1)");
+                CHECK(not ls.empty());
+                CHECK(ls.geom_type_dim() == GeometryType::LINESTRING);
+                CHECK(ls.dim == DimensionType::XY);
+                const auto& p1 = ls[0];
                 CHECK(p1.x == 1.4);
                 CHECK(p1.y == 2.3);
-                const auto& p2 = mp[1];
+                const auto& p2 = ls[1];
                 CHECK(p2.x == 3.2);
                 CHECK(p2.y == 4.1);
             }
 
             SECTION("xyz - from wkt")
             {
-                auto mp = LineString::from_wkt("LINESTRINGZ(1.4 2.3 1, 3.2 4.1 2)");
-                CHECK(not mp.empty());
-                CHECK(mp.geom_type_dim() == GeometryType::LINESTRINGZ);
-                CHECK(mp.dim == DimensionType::XYZ);
-                const auto& p1 = mp[0];
+                auto ls = LineString::from_wkt("LINESTRINGZ(1.4 2.3 1, 3.2 4.1 2)");
+                CHECK(not ls.empty());
+                CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGZ);
+                CHECK(ls.dim == DimensionType::XYZ);
+                const auto& p1 = ls[0];
                 CHECK(p1.x == 1.4);
                 CHECK(p1.y == 2.3);
                 CHECK(p1.z == 1);
-                const auto& p2 = mp[1];
+                const auto& p2 = ls[1];
                 CHECK(p2.x == 3.2);
                 CHECK(p2.y == 4.1);
                 CHECK(p2.z == 2);
@@ -263,15 +263,15 @@ TEST_CASE("LineString")
 
             SECTION("xym - from wkt")
             {
-                auto mp = LineString::from_wkt("LINESTRINGM(1.4 2.3 1, 3.2 4.1 2)");
-                CHECK(not mp.empty());
-                CHECK(mp.geom_type_dim() == GeometryType::LINESTRINGM);
-                CHECK(mp.dim == DimensionType::XYM);
-                const auto& p1 = mp[0];
+                auto ls = LineString::from_wkt("LINESTRINGM(1.4 2.3 1, 3.2 4.1 2)");
+                CHECK(not ls.empty());
+                CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGM);
+                CHECK(ls.dim == DimensionType::XYM);
+                const auto& p1 = ls[0];
                 CHECK(p1.x == 1.4);
                 CHECK(p1.y == 2.3);
                 CHECK(p1.m == 1);
-                const auto& p2 = mp[1];
+                const auto& p2 = ls[1];
                 CHECK(p2.x == 3.2);
                 CHECK(p2.y == 4.1);
                 CHECK(p2.m == 2);
@@ -279,16 +279,16 @@ TEST_CASE("LineString")
 
             SECTION("xyzm - from wkt")
             {
-                auto mp = LineString::from_wkt("LineStringZM(1.4 2.3 1 1, 3.2 4.1 2 2)");
-                CHECK(not mp.empty());
-                CHECK(mp.geom_type_dim() == GeometryType::LINESTRINGZM);
-                CHECK(mp.dim == DimensionType::XYZM);
-                const auto& p1 = mp[0];
+                auto ls = LineString::from_wkt("LineStringZM(1.4 2.3 1 1, 3.2 4.1 2 2)");
+                CHECK(not ls.empty());
+                CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGZM);
+                CHECK(ls.dim == DimensionType::XYZM);
+                const auto& p1 = ls[0];
                 CHECK(p1.x == 1.4);
                 CHECK(p1.y == 2.3);
                 CHECK(p1.z == 1);
                 CHECK(p1.m == 1);
-                const auto& p2 = mp[1];
+                const auto& p2 = ls[1];
                 CHECK(p2.x == 3.2);
                 CHECK(p2.y == 4.1);
                 CHECK(p2.z == 2);
@@ -299,34 +299,34 @@ TEST_CASE("LineString")
             {
                 SECTION("empty - xy")
                 {
-                    auto mp = LineString::from_wkt("LineString EMPTY");
-                    CHECK(mp.empty());
-                    CHECK(mp.geom_type_dim() == GeometryType::LINESTRING);
-                    CHECK(mp.dim == DimensionType::XY);
+                    auto ls = LineString::from_wkt("LineString empty");
+                    CHECK(ls.empty());
+                    CHECK(ls.geom_type_dim() == GeometryType::LINESTRING);
+                    CHECK(ls.dim == DimensionType::XY);
                 }
 
                 SECTION("empty - xyz")
                 {
-                    auto mp = LineString::from_wkt("LineString Z EMPTY");
-                    CHECK(mp.empty());
-                    CHECK(mp.geom_type_dim() == GeometryType::LINESTRINGZ);
-                    CHECK(mp.dim == DimensionType::XYZ);
+                    auto ls = LineString::from_wkt("LineString Z empty");
+                    CHECK(ls.empty());
+                    CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGZ);
+                    CHECK(ls.dim == DimensionType::XYZ);
                 }
 
                 SECTION("empty - xym")
                 {
-                    auto mp = LineString::from_wkt("LineString M EMPTY");
-                    CHECK(mp.empty());
-                    CHECK(mp.geom_type_dim() == GeometryType::LINESTRINGM);
-                    CHECK(mp.dim == DimensionType::XYM);
+                    auto ls = LineString::from_wkt("LineString M empty");
+                    CHECK(ls.empty());
+                    CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGM);
+                    CHECK(ls.dim == DimensionType::XYM);
                 }
 
                 SECTION("empty - xyzm")
                 {
-                    auto mp = LineString::from_wkt("LineString ZM EMPTY");
-                    CHECK(mp.empty());
-                    CHECK(mp.geom_type_dim() == GeometryType::LINESTRINGZM);
-                    CHECK(mp.dim == DimensionType::XYZM);
+                    auto ls = LineString::from_wkt("LineString ZM empty");
+                    CHECK(ls.empty());
+                    CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGZM);
+                    CHECK(ls.dim == DimensionType::XYZM);
                 }
             }
 
@@ -359,16 +359,16 @@ TEST_CASE("LineString")
         {
             SECTION("xy - to json")
             {
-                LineString mp = {{1.0, 2.0}, {3.0, 4.0}};
-                mp.precision  = 1;
-                CHECK(mp.json() == R"({"type":"LineString","coordinates":[[1.0,2.0],[3.0,4.0]]})");
+                LineString ls = {{1.0, 2.0}, {3.0, 4.0}};
+                ls.precision  = 1;
+                CHECK(ls.json() == R"({"type":"LineString","coordinates":[[1.0,2.0],[3.0,4.0]]})");
             }
 
             SECTION("xyz - to json")
             {
-                LineString mp = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
-                mp.precision  = 1;
-                CHECK(mp.json() == R"({"type":"LineString","coordinates":[[1.0,2.0,3.0],[4.0,5.0,6.0]]})");
+                LineString ls = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+                ls.precision  = 1;
+                CHECK(ls.json() == R"({"type":"LineString","coordinates":[[1.0,2.0,3.0],[4.0,5.0,6.0]]})");
             }
 
             SECTION("xym - to json")
@@ -378,9 +378,9 @@ TEST_CASE("LineString")
 
             SECTION("xyzm - to json")
             {
-                LineString mp = {{1.0, 2.0, 3.0, -10.0}, {4.0, 5.0, 6.0, -10.0}};
-                mp.precision  = 1;
-                CHECK(mp.json() == R"({"type":"LineString","coordinates":[[1.0,2.0,3.0,-10.0],[4.0,5.0,6.0,-10.0]]})");
+                LineString ls = {{1.0, 2.0, 3.0, -10.0}, {4.0, 5.0, 6.0, -10.0}};
+                ls.precision  = 1;
+                CHECK(ls.json() == R"({"type":"LineString","coordinates":[[1.0,2.0,3.0,-10.0],[4.0,5.0,6.0,-10.0]]})");
             }
         }
 
@@ -388,16 +388,16 @@ TEST_CASE("LineString")
         {
             SECTION("xy - to wkt")
             {
-                LineString mp = {{1.0, 2.0}, {3.0, 4.0}};
-                mp.precision  = 1;
-                CHECK(mp.wkt() == R"(LINESTRING(1.0 2.0,3.0 4.0))");
+                LineString ls = {{1.0, 2.0}, {3.0, 4.0}};
+                ls.precision  = 1;
+                CHECK(ls.wkt() == R"(LINESTRING(1.0 2.0,3.0 4.0))");
             }
 
             SECTION("xyz - to wkt")
             {
-                LineString mp = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
-                mp.precision  = 1;
-                CHECK(mp.wkt() == R"(LINESTRINGZ(1.0 2.0 3.0,4.0 5.0 6.0))");
+                LineString ls = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+                ls.precision  = 1;
+                CHECK(ls.wkt() == R"(LINESTRINGZ(1.0 2.0 3.0,4.0 5.0 6.0))");
             }
 
             SECTION("xym - to wkt")
@@ -405,15 +405,15 @@ TEST_CASE("LineString")
                 std::vector<Point> points;
                 points.push_back(Point::from_xym(1.0, 2.0, 3.0));
                 points.push_back(Point::from_xym(-4.0, -5.0, -6.0));
-                LineString mp(points);
-                CHECK(mp.wkt() == R"(LINESTRINGM(1.0 2.0 3.0,-4.0 -5.0 -6.0))");
+                LineString ls(points);
+                CHECK(ls.wkt() == R"(LINESTRINGM(1.0 2.0 3.0,-4.0 -5.0 -6.0))");
             }
 
             SECTION("xyzm - to wkt")
             {
-                LineString mp = {{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
-                mp.precision  = 1;
-                CHECK(mp.wkt() == R"(LINESTRINGZM(1.0 2.0 3.0 4.0,5.0 6.0 7.0 8.0))");
+                LineString ls = {{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
+                ls.precision  = 1;
+                CHECK(ls.wkt() == R"(LINESTRINGZM(1.0 2.0 3.0 4.0,5.0 6.0 7.0 8.0))");
             }
         }
     }
@@ -424,16 +424,16 @@ TEST_CASE("LineString")
         {
             SECTION("xy - equal to")
             {
-                auto mp1 = LineString{{1.0, 2.0}, {3.0, 4.0}};
-                auto mp2 = LineString{{1.0, 2.0}, {3.0, 4.0}};
-                CHECK(mp1 == mp2);
+                auto ls1 = LineString{{1.0, 2.0}, {3.0, 4.0}};
+                auto ls2 = LineString{{1.0, 2.0}, {3.0, 4.0}};
+                CHECK(ls1 == ls2);
             }
 
             SECTION("xyz - equal to")
             {
-                auto mp1 = LineString{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
-                auto mp2 = LineString{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
-                CHECK(mp1 == mp2);
+                auto ls1 = LineString{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+                auto ls2 = LineString{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+                CHECK(ls1 == ls2);
             }
 
             SECTION("xym - equal to")
@@ -441,20 +441,20 @@ TEST_CASE("LineString")
                 std::vector<Point> pts1;
                 pts1.push_back(Point::from_xym(1.0, 2.0, 3.0));
                 pts1.push_back(Point::from_xym(4.0, 5.0, 6.0));
-                auto mp1 = LineString(pts1);
+                auto ls1 = LineString(pts1);
 
                 std::vector<Point> pts2;
                 pts2.push_back(Point::from_xym(1.0, 2.0, 3.0));
                 pts2.push_back(Point::from_xym(4.0, 5.0, 6.0));
-                auto mp2 = LineString(pts2);
-                CHECK(mp1 == mp2);
+                auto ls2 = LineString(pts2);
+                CHECK(ls1 == ls2);
             }
 
             SECTION("xyzm - equal to")
             {
-                auto mp1 = LineString{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
-                auto mp2 = LineString{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
-                CHECK(mp1 == mp2);
+                auto ls1 = LineString{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
+                auto ls2 = LineString{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
+                CHECK(ls1 == ls2);
             }
         }
 
@@ -462,16 +462,16 @@ TEST_CASE("LineString")
         {
             SECTION("xy - not equal to")
             {
-                auto mp1 = LineString{{1.0, 2.0}, {4.0, 5.0}};
-                auto mp2 = LineString{{1.0, 2.0}, {8.0, 10.0}};
-                CHECK(mp1 != mp2);
+                auto ls1 = LineString{{1.0, 2.0}, {4.0, 5.0}};
+                auto ls2 = LineString{{1.0, 2.0}, {8.0, 10.0}};
+                CHECK(ls1 != ls2);
             }
 
             SECTION("xyz - not equal to")
             {
-                auto mp1 = LineString{{1.0, 2.0, 3.0}, {3.0, 2.0, 1.0}};
-                auto mp2 = LineString{{1.0, 2.0, 3.0}, {10.0, 20.0, 30.0}};
-                CHECK(mp1 != mp2);
+                auto ls1 = LineString{{1.0, 2.0, 3.0}, {3.0, 2.0, 1.0}};
+                auto ls2 = LineString{{1.0, 2.0, 3.0}, {10.0, 20.0, 30.0}};
+                CHECK(ls1 != ls2);
             }
 
             SECTION("xym - not equal to")
@@ -479,19 +479,19 @@ TEST_CASE("LineString")
                 std::vector<Point> pts1;
                 pts1.push_back(Point::from_xym(1.0, 2.0, 3.0));
                 pts1.push_back(Point::from_xym(4.0, 5.0, 6.0));
-                auto mp1 = LineString(pts1);
+                auto ls1 = LineString(pts1);
                 std::vector<Point> pts2;
                 pts2.push_back(Point::from_xym(1.0, 2.0, 3.0));
                 pts2.push_back(Point::from_xym(6.0, 5.0, 4.0));
-                auto mp2 = LineString(pts2);
-                CHECK(mp1 != mp2);
+                auto ls2 = LineString(pts2);
+                CHECK(ls1 != ls2);
             }
 
             SECTION("xyzm - not equal to")
             {
-                auto mp1 = LineString{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
-                auto mp2 = LineString{{1.0, 2.0, 3.0, 4.0}, {8.0, 7.0, 6.0, 5.0}};
-                CHECK(mp1 != mp2);
+                auto ls1 = LineString{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
+                auto ls2 = LineString{{1.0, 2.0, 3.0, 4.0}, {8.0, 7.0, 6.0, 5.0}};
+                CHECK(ls1 != ls2);
             }
         }
 
@@ -499,13 +499,13 @@ TEST_CASE("LineString")
         {
             SECTION("xy - index operator")
             {
-                auto mp  = LineString{{1.0, 2.0}, {3.0, 4.0}};
-                auto& p1 = mp[0];
+                auto ls  = LineString{{1.0, 2.0}, {3.0, 4.0}};
+                auto& p1 = ls[0];
                 CHECK(p1.geom_type_dim() == GeometryType::POINT);
                 CHECK(p1.x == 1.0);
                 CHECK(p1.y == 2.0);
 
-                auto& p2 = mp[1];
+                auto& p2 = ls[1];
                 CHECK(p2.geom_type_dim() == GeometryType::POINT);
                 CHECK(p2.x == 3.0);
                 CHECK(p2.y == 4.0);
@@ -513,20 +513,20 @@ TEST_CASE("LineString")
 
             SECTION("xyz - index operator")
             {
-                auto mp  = LineString{{1.0, 2.0, -1.0}, {3.0, 4.0, -2.0}, {5.0, 6.0, -3.0}};
-                auto& p1 = mp[0];
+                auto ls  = LineString{{1.0, 2.0, -1.0}, {3.0, 4.0, -2.0}, {5.0, 6.0, -3.0}};
+                auto& p1 = ls[0];
                 CHECK(p1.geom_type_dim() == GeometryType::POINTZ);
                 CHECK(p1.x == 1.0);
                 CHECK(p1.y == 2.0);
                 CHECK(p1.z == -1.0);
 
-                auto& p2 = mp[1];
+                auto& p2 = ls[1];
                 CHECK(p2.geom_type_dim() == GeometryType::POINTZ);
                 CHECK(p2.x == 3.0);
                 CHECK(p2.y == 4.0);
                 CHECK(p2.z == -2.0);
 
-                auto& p3 = mp[2];
+                auto& p3 = ls[2];
                 CHECK(p3.geom_type_dim() == GeometryType::POINTZ);
                 CHECK(p3.x == 5.0);
                 CHECK(p3.y == 6.0);
@@ -539,21 +539,21 @@ TEST_CASE("LineString")
                 pts.push_back(Point::from_xym(1.0, 2.0, -1.0));
                 pts.push_back(Point::from_xym(3.0, 4.0, -2.0));
                 pts.push_back(Point::from_xym(5.0, 6.0, -3.0));
-                auto mp = LineString(pts);
+                auto ls = LineString(pts);
 
-                auto& p1 = mp[0];
+                auto& p1 = ls[0];
                 CHECK(p1.geom_type_dim() == GeometryType::POINTM);
                 CHECK(p1.x == 1.0);
                 CHECK(p1.y == 2.0);
                 CHECK(p1.m == -1.0);
 
-                auto& p2 = mp[1];
+                auto& p2 = ls[1];
                 CHECK(p2.geom_type_dim() == GeometryType::POINTM);
                 CHECK(p2.x == 3.0);
                 CHECK(p2.y == 4.0);
                 CHECK(p2.m == -2.0);
 
-                auto& p3 = mp[2];
+                auto& p3 = ls[2];
                 CHECK(p3.geom_type_dim() == GeometryType::POINTM);
                 CHECK(p3.x == 5.0);
                 CHECK(p3.y == 6.0);
@@ -562,22 +562,22 @@ TEST_CASE("LineString")
 
             SECTION("xyzm - index operator")
             {
-                auto mp  = LineString{{1.0, 2.0, 3.0, -1.0}, {3.0, 4.0, 5.0, -2.0}, {5.0, 6.0, 7.0, -3.0}};
-                auto& p1 = mp[0];
+                auto ls  = LineString{{1.0, 2.0, 3.0, -1.0}, {3.0, 4.0, 5.0, -2.0}, {5.0, 6.0, 7.0, -3.0}};
+                auto& p1 = ls[0];
                 CHECK(p1.geom_type_dim() == GeometryType::POINTZM);
                 CHECK(p1.x == 1.0);
                 CHECK(p1.y == 2.0);
                 CHECK(p1.z == 3.0);
                 CHECK(p1.m == -1.0);
 
-                auto& p2 = mp[1];
+                auto& p2 = ls[1];
                 CHECK(p2.geom_type_dim() == GeometryType::POINTZM);
                 CHECK(p2.x == 3.0);
                 CHECK(p2.y == 4.0);
                 CHECK(p2.z == 5.0);
                 CHECK(p2.m == -2.0);
 
-                auto& p3 = mp[2];
+                auto& p3 = ls[2];
                 CHECK(p3.geom_type_dim() == GeometryType::POINTZM);
                 CHECK(p3.x == 5.0);
                 CHECK(p3.y == 6.0);
@@ -591,9 +591,9 @@ TEST_CASE("LineString")
     {
         SECTION("xy - tuples")
         {
-            auto mp     = LineString{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
-            auto coords = mp.xy();
-            CHECK(mp.size() == coords.size());
+            auto ls     = LineString{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
+            auto coords = ls.xy();
+            CHECK(ls.size() == coords.size());
 
             double x, y;
             std::tie(x, y) = coords[0];
@@ -609,9 +609,9 @@ TEST_CASE("LineString")
 
         SECTION("xyz - tuples")
         {
-            auto mp     = LineString{{1.0, 2.0, -1.0}, {3.0, 4.0, -2.0}, {5.0, 6.0, -3.0}};
-            auto coords = mp.xyz();
-            CHECK(mp.size() == coords.size());
+            auto ls     = LineString{{1.0, 2.0, -1.0}, {3.0, 4.0, -2.0}, {5.0, 6.0, -3.0}};
+            auto coords = ls.xyz();
+            CHECK(ls.size() == coords.size());
 
             double x, y, z;
             std::tie(x, y, z) = coords[0];
@@ -634,9 +634,9 @@ TEST_CASE("LineString")
             pts1.push_back(Point::from_xym(1.0, 2.0, -1.0));
             pts1.push_back(Point::from_xym(3.0, 4.0, -2.0));
             pts1.push_back(Point::from_xym(5.0, 6.0, -3.0));
-            auto mp     = LineString(pts1);
-            auto coords = mp.xym();
-            CHECK(mp.size() == coords.size());
+            auto ls     = LineString(pts1);
+            auto coords = ls.xym();
+            CHECK(ls.size() == coords.size());
 
             double x, y, m;
             std::tie(x, y, m) = coords[0];
@@ -655,9 +655,9 @@ TEST_CASE("LineString")
 
         SECTION("xyzm - tuples")
         {
-            auto mp     = LineString{{1.0, 2.0, -1.0, -10.0}, {3.0, 4.0, -2.0, -20.0}, {5.0, 6.0, -3.0, -30.0}};
-            auto coords = mp.xyzm();
-            CHECK(mp.size() == coords.size());
+            auto ls     = LineString{{1.0, 2.0, -1.0, -10.0}, {3.0, 4.0, -2.0, -20.0}, {5.0, 6.0, -3.0, -30.0}};
+            auto coords = ls.xyzm();
+            CHECK(ls.size() == coords.size());
 
             double x, y, z, m;
             std::tie(x, y, z, m) = coords[0];
@@ -682,9 +682,9 @@ TEST_CASE("LineString")
     {
         SECTION("xy - for each")
         {
-            auto mp = LineString{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
+            auto ls = LineString{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
             int n   = 0;
-            for (const auto& p : mp)
+            for (const auto& p : ls)
             {
                 CHECK(p.x != 0);
                 CHECK(p.y != 0);
@@ -695,9 +695,9 @@ TEST_CASE("LineString")
 
         SECTION("xyz - for each")
         {
-            auto mp = LineString{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}};
+            auto ls = LineString{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}};
             int n   = 0;
-            for (const auto& p : mp)
+            for (const auto& p : ls)
             {
                 CHECK(p.x != 0);
                 CHECK(p.y != 0);
@@ -713,9 +713,9 @@ TEST_CASE("LineString")
             pts.push_back(Point::from_xym(1.0, 2.0, 3.0));
             pts.push_back(Point::from_xym(4.0, 5.0, 6.0));
             pts.push_back(Point::from_xym(7.0, 8.0, 9.0));
-            auto mp = LineString(pts);
+            auto ls = LineString(pts);
             int n   = 0;
-            for (const auto& p : mp)
+            for (const auto& p : ls)
             {
                 CHECK(p.x != 0);
                 CHECK(p.y != 0);
@@ -727,9 +727,9 @@ TEST_CASE("LineString")
 
         SECTION("xyzm - for each")
         {
-            auto mp = LineString{{1.0, 2.0, 3.0, -1.0}, {4.0, 5.0, 6.0, -2.0}, {7.0, 8.0, 9.0, -3.0}};
+            auto ls = LineString{{1.0, 2.0, 3.0, -1.0}, {4.0, 5.0, 6.0, -2.0}, {7.0, 8.0, 9.0, -3.0}};
             int n   = 0;
-            for (const auto& p : mp)
+            for (const auto& p : ls)
             {
                 CHECK(p.x != 0);
                 CHECK(p.y != 0);
@@ -743,10 +743,10 @@ TEST_CASE("LineString")
 
     SECTION("bounds")
     {
-        auto mp = LineString{{1.0, 2.0}, {3.0, 4.0}};
-        CHECK(mp.bounds.maxx == 3.0);
-        CHECK(mp.bounds.maxy == 4.0);
-        CHECK(mp.bounds.minx == 1.0);
-        CHECK(mp.bounds.miny == 2.0);
+        auto ls = LineString{{1.0, 2.0}, {3.0, 4.0}};
+        CHECK(ls.bounds.maxx == 3.0);
+        CHECK(ls.bounds.maxy == 4.0);
+        CHECK(ls.bounds.minx == 1.0);
+        CHECK(ls.bounds.miny == 2.0);
     }
 }

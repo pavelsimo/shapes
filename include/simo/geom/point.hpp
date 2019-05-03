@@ -285,6 +285,8 @@ class Point : public BaseGeometry<Point>
         return not(*this == other);
     }
 
+    /// @todo (pavel) implement operator std::ostream & operator<<
+
     /*!
      * @brief creates a Point from a geojson string
      * @param json the geojson string
@@ -355,7 +357,7 @@ class Point : public BaseGeometry<Point>
     static Point from_wkt(const std::string& wkt)
     {
         WktReader reader{};
-        auto result = reader.read(wkt.c_str());
+        auto result = reader.read(wkt);
         auto data   = result.data;
         switch (data.geom_type)
         {

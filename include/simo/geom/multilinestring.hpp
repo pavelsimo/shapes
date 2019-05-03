@@ -98,11 +98,11 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     template <typename CoordInputIt, typename OffsetInputIt>
     MultiLineString(CoordInputIt coord_first, CoordInputIt coord_last, OffsetInputIt offset_first, OffsetInputIt offset_last, DimensionType input_dim)
     {
+        dim = input_dim;
         if (std::distance(coord_first, coord_last) > 0)
         {
             auto ndim = static_cast<size_t>(utils::get_ndim(input_dim));
             seq.reserve((coord_last - coord_first) / ndim);
-            dim = input_dim;
             size_t lo = 0;
             for (auto it = offset_first; it != offset_last; ++it)
             {

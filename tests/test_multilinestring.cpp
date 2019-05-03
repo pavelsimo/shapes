@@ -140,30 +140,75 @@ TEST_CASE("MultiLineString")
                 {
                     "type": "MultiLineString",
                             "coordinates": [
-                    [[10, 10], [20, 20], [10, 40]],
-                    [[40, 40], [30, 30], [40, 20], [30, 10]]
+                    [[10, 35], [20, 20], [10, 40]],
+                    [[40, 40], [30, 30], [40, 20], [30, 5]]
                     ]
                 }
                 )";
-                auto mls            = MultiLineString::from_json(json);
-                std::string j_str   = mls.json();
-                std::string wkt_str = mls.wkt();
-                CHECK(mls.size() == 2);
+                auto ml            = MultiLineString::from_json(json);
+                CHECK(ml.size() == 2);
+                CHECK(ml.dim == DimensionType::XY);
+                CHECK(ml.geom_type() == GeometryType::MULTILINESTRING);
+                CHECK(ml.geom_type_dim() == GeometryType::MULTILINESTRING);
+                CHECK(ml[0][0].x == 10.0);
+                CHECK(ml[0][0].y == 35.0);
+                CHECK(ml[1][3].x == 30.0);
+                CHECK(ml[1][3].y == 5.0);
             }
 
             SECTION("xyz - from json")
             {
-                /// @todo add test
+                std::string json    = R"(
+                {
+                    "type": "MultiLineString",
+                            "coordinates": [
+                    [[10, 35, -10], [20, 20, -10], [10, 40, -10]],
+                    [[40, 40, -20], [30, 30, -20], [40, 20, -20], [30, 5, -20]]
+                    ]
+                }
+                )";
+                auto ml            = MultiLineString::from_json(json);
+                CHECK(ml.size() == 2);
+                CHECK(ml.dim == DimensionType::XYZ);
+                CHECK(ml.geom_type() == GeometryType::MULTILINESTRING);
+                CHECK(ml.geom_type_dim() == GeometryType::MULTILINESTRINGZ);
+                CHECK(ml[0][0].x == 10.0);
+                CHECK(ml[0][0].y == 35.0);
+                CHECK(ml[0][0].z == -10.0);
+                CHECK(ml[1][3].x == 30.0);
+                CHECK(ml[1][3].y == 5.0);
+                CHECK(ml[1][3].z == -20.0);
             }
 
             SECTION("xym - from json")
             {
-                /// @todo (pavel) add test
+                // not supported
             }
 
             SECTION("xyzm - from json")
             {
-                /// @todo (pavel) add test
+                std::string json    = R"(
+                {
+                    "type": "MultiLineString",
+                            "coordinates": [
+                    [[10, 35, -10, -5], [20, 20, -10, -5], [10, 40, -10, -5]],
+                    [[40, 40, -20, -4000], [30, 30, -20, -4000], [40, 20, -20, -4000], [30, 5, -20, -4000]]
+                    ]
+                }
+                )";
+                auto ml            = MultiLineString::from_json(json);
+                CHECK(ml.size() == 2);
+                CHECK(ml.dim == DimensionType::XYZM);
+                CHECK(ml.geom_type() == GeometryType::MULTILINESTRING);
+                CHECK(ml.geom_type_dim() == GeometryType::MULTILINESTRINGZM);
+                CHECK(ml[0][0].x == 10.0);
+                CHECK(ml[0][0].y == 35.0);
+                CHECK(ml[0][0].z == -10.0);
+                CHECK(ml[0][0].m == -5.0);
+                CHECK(ml[1][3].x == 30.0);
+                CHECK(ml[1][3].y == 5.0);
+                CHECK(ml[1][3].z == -20.0);
+                CHECK(ml[1][3].m == -4000.0);
             }
         }
 
@@ -171,55 +216,114 @@ TEST_CASE("MultiLineString")
         {
             SECTION("xy - from wkt")
             {
-                auto mp = MultiLineString::from_wkt("MULTILINESTRING ((10 10, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))");
+                auto ml = MultiLineString::from_wkt("MULTILINESTRING ((10 35, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))");
+                CHECK(ml.size() == 2);
+                CHECK(ml.dim == DimensionType::XY);
+                CHECK(ml.geom_type() == GeometryType::MULTILINESTRING);
+                CHECK(ml.geom_type_dim() == GeometryType::MULTILINESTRING);
+                CHECK(ml[0][0].x == 10.0);
+                CHECK(ml[0][0].y == 35.0);
+                CHECK(ml[1][3].x == 30.0);
+                CHECK(ml[1][3].y == 10.0);
             }
 
             SECTION("xyz - from wkt")
             {
-                auto mp = MultiLineString::from_wkt("MULTILINESTRING Z ((10 10 10, 20 20 20, 10 40 40), (40 40 40, 30 30 30, 40 20 20, 30 10 10))");
+                auto ml = MultiLineString::from_wkt("MULTILINESTRING Z ((10 35 -10, 20 20 20, 10 40 40), (40 40 40, 30 30 30, 40 20 20, 30 10 -3010.5))");
+                CHECK(ml.size() == 2);
+                CHECK(ml.dim == DimensionType::XYZ);
+                CHECK(ml.geom_type() == GeometryType::MULTILINESTRING);
+                CHECK(ml.geom_type_dim() == GeometryType::MULTILINESTRINGZ);
+                CHECK(ml[0][0].x == 10.0);
+                CHECK(ml[0][0].y == 35.0);
+                CHECK(ml[0][0].z == -10);
+                CHECK(ml[1][3].x == 30.0);
+                CHECK(ml[1][3].y == 10.0);
+                CHECK(ml[1][3].z == -3010.5);
             }
 
             SECTION("xym - from wkt")
             {
-                /// @todo add test
+                auto ml = MultiLineString::from_wkt("MULTILINESTRING M ((10 35 -10, 20 20 20, 10 40 40), (40 40 40, 30 30 30, 40 20 20, 30 10 -3010.5))");
+                CHECK(ml.size() == 2);
+                CHECK(ml.dim == DimensionType::XYM);
+                CHECK(ml.geom_type() == GeometryType::MULTILINESTRING);
+                CHECK(ml.geom_type_dim() == GeometryType::MULTILINESTRINGM);
+                CHECK(ml[0][0].x == 10.0);
+                CHECK(ml[0][0].y == 35.0);
+                CHECK(ml[0][0].m == -10);
+                CHECK(ml[1][3].x == 30.0);
+                CHECK(ml[1][3].y == 10.0);
+                CHECK(ml[1][3].m == -3010.5);
             }
 
             SECTION("xyzm - from wkt")
             {
-                auto mp = MultiLineString::from_wkt("MULTILINESTRING ZM ((10 10 10 10, 20 20 20 20, 10 40 40 40), (40 40 40 40, 30 30 30 30, 40 20 20 20, 30 10 10 10))");
+                auto ml = MultiLineString::from_wkt("MULTILINESTRING ZM ((-100 -50 -25 -5, 0.5 1.0 1.5 2.0, 1000 500 250 50), (40 40 40 40, 30 30 30 30, 40 20 20 20, 30 -10 -210 50))");
+                CHECK(ml.size() == 2);
+                CHECK(ml.dim == DimensionType::XYZM);
+                CHECK(ml.geom_type() == GeometryType::MULTILINESTRING);
+                CHECK(ml.geom_type_dim() == GeometryType::MULTILINESTRINGZM);
+                CHECK(ml[0][0].x == -100.0);
+                CHECK(ml[0][0].y == -50.0);
+                CHECK(ml[0][0].z == -25);
+                CHECK(ml[0][0].m == -5);
+                CHECK(ml[1][3].x == 30.0);
+                CHECK(ml[1][3].y == -10.0);
+                CHECK(ml[1][3].z == -210);
+                CHECK(ml[1][3].m == 50);
             }
 
             SECTION("empty - from wkt")
             {
                 SECTION("empty - xy")
                 {
-                    /// @todo add test
+                    auto ml = MultiLineString::from_wkt("MultiLineString EMPTY");
+                    CHECK(ml.empty());
+                    CHECK(ml.geom_type_dim() == GeometryType::MULTILINESTRING);
+                    CHECK(ml.dim == DimensionType::XY);
                 }
 
                 SECTION("empty - xyz")
                 {
-                    /// @todo add test
+                    auto ml = MultiLineString::from_wkt("MultiLineString Z EMPTY");
+                    CHECK(ml.empty());
+                    CHECK(ml.geom_type_dim() == GeometryType::MULTILINESTRINGZ);
+                    CHECK(ml.dim == DimensionType::XYZ);
                 }
 
                 SECTION("empty - xym")
                 {
-                    /// @todo add test
+                    auto ml = MultiLineString::from_wkt("MultiLineString M EMPTY");
+                    CHECK(ml.empty());
+                    CHECK(ml.geom_type_dim() == GeometryType::MULTILINESTRINGM);
+                    CHECK(ml.dim == DimensionType::XYM);
                 }
 
                 SECTION("empty - xyzm")
                 {
-                    /// @todo add test
+                    auto ml = MultiLineString::from_wkt("MultiLineString ZM EMPTY");
+                    CHECK(ml.empty());
+                    CHECK(ml.geom_type_dim() == GeometryType::MULTILINESTRINGZM);
+                    CHECK(ml.dim == DimensionType::XYZM);
                 }
             }
 
             SECTION("no throw - from wkt")
             {
-                /// @todo add test
+                CHECK_NOTHROW(MultiLineString::from_wkt("multilinestring m ((10 35 -10, 20 20 20, 10 40 40), (40 40 40, 30 30 30, 40 20 20, 30 10 -3010.5))"));
+                CHECK_NOTHROW(MultiLineString::from_wkt("multilinestring z ((10 35 -10, 20 20 20, 10 40 40), (40 40 40, 30 30 30, 40 20 20, 30 10 -3010.5))"));
             }
 
             SECTION("throws - from wkt")
             {
-                /// @todo add test
+                CHECK_THROWS(MultiLineString::from_wkt("MULTILINESTRING ((10 35, 20 20, 10 40"));
+                CHECK_THROWS(MultiLineString::from_wkt("MULTILINESTRING ((10 35 -10, 20 20 20, 10 40 40), (40 40 40, 30 30 30, 40 20 20, 30 10 -3010.5))"));
+                CHECK_THROWS(MultiLineString::from_wkt("MULTILINESTRING ZM ((10 35 -10, 20 20 20, 10 40 40), (40 40 40, 30 30 30, 40 20 20, 30 10 -3010.5))"));
+                CHECK_THROWS(MultiLineString::from_wkt("MULTILINESTRING ((10 35, 20 20, 10 40)))"));
+                CHECK_THROWS(MultiLineString::from_wkt("MULTILINESTRING Z ((10 35, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))"));
+                CHECK_THROWS(MultiLineString::from_wkt("MULTILINESTRING ZM ((10 35, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))"));
+                CHECK_THROWS(MultiLineString::from_wkt("MULTILINESTRING M ((10 35, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))"));
             }
 
             SECTION("misc - from wkt")
@@ -258,12 +362,22 @@ TEST_CASE("MultiLineString")
         {
             SECTION("xy - to wkt")
             {
-                /// @todo add test
+                auto ml = MultiLineString{
+                        {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
+                        {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}
+                };
+                ml.precision = 1;
+                CHECK(ml.wkt() == "MULTILINESTRING((1.0 2.0,4.0 5.0,7.0 8.0),(11.0 12.0,13.0 14.0,16.0 17.0))");
             }
 
             SECTION("xyz - to wkt")
             {
-                /// @todo add test
+                auto ml = MultiLineString{
+                        {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+                        {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}
+                };
+                ml.precision = 1;
+                CHECK(ml.wkt() == "MULTILINESTRINGZ((1.0 2.0 3.0,4.0 5.0 6.0,7.0 8.0 9.0),(11.0 12.0 13.0,13.0 14.0 15.0,16.0 17.0 18.0))");
             }
 
             SECTION("xym - to wkt")
@@ -273,7 +387,12 @@ TEST_CASE("MultiLineString")
 
             SECTION("xyzm - to wkt")
             {
-                /// @todo add test
+                auto ml = MultiLineString{
+                        {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
+                        {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}
+                };
+                ml.precision = 1;
+                CHECK(ml.wkt() == "MULTILINESTRINGZM((1.0 2.0 3.0 -1.5,4.0 5.0 6.0 -2.5,7.0 8.0 9.0 -3.5),(11.0 12.0 13.0 -10.5,13.0 14.0 15.0 -11.5,16.0 17.0 18.0 -12.5))");
             }
         }
     }
