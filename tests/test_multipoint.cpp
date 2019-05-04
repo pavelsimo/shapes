@@ -104,7 +104,7 @@ TEST_CASE("MultiPoint")
 
         SECTION("xy - initializer list")
         {
-            MultiPoint mp = {{1.0, 2.0}, {-3.0, -4.0}};
+            auto mp = MultiPoint{{1.0, 2.0}, {-3.0, -4.0}};
             CHECK(!mp.empty());
             CHECK(mp.dim == DimensionType::XY);
             CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
@@ -120,7 +120,7 @@ TEST_CASE("MultiPoint")
 
         SECTION("xyz - initializer list")
         {
-            MultiPoint mp = {{1.0, 2.0, 3.0}, {-4.0, -5.0, -6.0}};
+            auto mp = MultiPoint{{1.0, 2.0, 3.0}, {-4.0, -5.0, -6.0}};
             CHECK(!mp.empty());
             CHECK(mp.dim == DimensionType::XYZ);
             CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
@@ -143,7 +143,7 @@ TEST_CASE("MultiPoint")
 
         SECTION("xyzm - initializer list")
         {
-            MultiPoint mp = {{1.0, 2.0, 3.0, 4.0}, {-5.0, -6.0, -7.0, -8.0}};
+            auto mp = MultiPoint{{1.0, 2.0, 3.0, 4.0}, {-5.0, -6.0, -7.0, -8.0}};
             CHECK(!mp.empty());
             CHECK(mp.dim == DimensionType::XYZM);
             CHECK(mp.geom_type() == GeometryType::MULTIPOINT);
@@ -359,15 +359,15 @@ TEST_CASE("MultiPoint")
         {
             SECTION("xy - to json")
             {
-                MultiPoint mp = {{1.0, 2.0}, {3.0, 4.0}};
-                mp.precision  = 1;
+                auto mp      = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
+                mp.precision = 1;
                 CHECK(mp.json() == R"({"type":"MultiPoint","coordinates":[[1.0,2.0],[3.0,4.0]]})");
             }
 
             SECTION("xyz - to json")
             {
-                MultiPoint mp = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
-                mp.precision  = 1;
+                auto mp      = MultiPoint{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+                mp.precision = 1;
                 CHECK(mp.json() == R"({"type":"MultiPoint","coordinates":[[1.0,2.0,3.0],[4.0,5.0,6.0]]})");
             }
 
@@ -378,8 +378,8 @@ TEST_CASE("MultiPoint")
 
             SECTION("xyzm - to json")
             {
-                MultiPoint mp = {{1.0, 2.0, 3.0, -10.0}, {4.0, 5.0, 6.0, -10.0}};
-                mp.precision  = 1;
+                auto mp      = MultiPoint{{1.0, 2.0, 3.0, -10.0}, {4.0, 5.0, 6.0, -10.0}};
+                mp.precision = 1;
                 CHECK(mp.json() == R"({"type":"MultiPoint","coordinates":[[1.0,2.0,3.0,-10.0],[4.0,5.0,6.0,-10.0]]})");
             }
         }
@@ -388,15 +388,15 @@ TEST_CASE("MultiPoint")
         {
             SECTION("xy - to wkt")
             {
-                MultiPoint mp = {{1.0, 2.0}, {3.0, 4.0}};
-                mp.precision  = 1;
+                auto mp      = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
+                mp.precision = 1;
                 CHECK(mp.wkt() == R"(MULTIPOINT((1.0 2.0),(3.0 4.0)))");
             }
 
             SECTION("xyz - to wkt")
             {
-                MultiPoint mp = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
-                mp.precision  = 1;
+                auto mp      = MultiPoint{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+                mp.precision = 1;
                 CHECK(mp.wkt() == R"(MULTIPOINTZ((1.0 2.0 3.0),(4.0 5.0 6.0)))");
             }
 
@@ -411,8 +411,8 @@ TEST_CASE("MultiPoint")
 
             SECTION("xyzm - to wkt")
             {
-                MultiPoint mp = {{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
-                mp.precision  = 1;
+                auto mp      = MultiPoint{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
+                mp.precision = 1;
                 CHECK(mp.wkt() == R"(MULTIPOINTZM((1.0 2.0 3.0 4.0),(5.0 6.0 7.0 8.0)))");
             }
         }

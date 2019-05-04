@@ -74,9 +74,8 @@ TEST_CASE("MultiLineString")
         SECTION("xy - initializer list")
         {
             auto ml = MultiLineString{
-                    {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
-                    {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}
-            };
+                {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
+                {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}};
             CHECK(ml.size() == 2);
             CHECK(ml.dim == DimensionType::XY);
             CHECK(ml[0][0].x == 1.0);
@@ -88,9 +87,8 @@ TEST_CASE("MultiLineString")
         SECTION("xyz - initializer list")
         {
             auto ml = MultiLineString{
-                    {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
-                    {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}
-            };
+                {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+                {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
             CHECK(ml.size() == 2);
             CHECK(ml.dim == DimensionType::XYZ);
             CHECK(ml[0][0].x == 1.0);
@@ -110,8 +108,7 @@ TEST_CASE("MultiLineString")
         {
             auto ml = MultiLineString{
                 {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
-                {{11.0, 12.0, 13.0, -4.5}, {13.0, 14.0, 15.0, -5.5}, {16.0, 17.0, 18.0, -6.5}}
-            };
+                {{11.0, 12.0, 13.0, -4.5}, {13.0, 14.0, 15.0, -5.5}, {16.0, 17.0, 18.0, -6.5}}};
             CHECK(ml.size() == 2);
             CHECK(ml.dim == DimensionType::XYZM);
             CHECK(ml[0][0].x == 1.0);
@@ -126,7 +123,8 @@ TEST_CASE("MultiLineString")
 
         SECTION("throws - initializer list")
         {
-            /// @todo add test
+            CHECK_THROWS(MultiLineString{{{1.0}, {4.0}, {7.0}}, {{11.0}, {13.0}, {16.0}}});
+            CHECK_THROWS(MultiLineString{{{1.0, 2.0, 3.0, -1.5, 0.0}, {4.0, 5.0, 6.0, -2.5, 0.0}, {7.0, 8.0, 9.0, -3.5, 0.0}}, {{11.0, 12.0, 13.0, -4.5, 0.0}, {13.0, 14.0, 15.0, -5.5, 0.0}, {16.0, 17.0, 18.0, -6.5, 0.0}}});
         }
     }
 
@@ -136,7 +134,7 @@ TEST_CASE("MultiLineString")
         {
             SECTION("xy - from json")
             {
-                std::string json    = R"(
+                std::string json = R"(
                 {
                     "type": "MultiLineString",
                             "coordinates": [
@@ -145,7 +143,7 @@ TEST_CASE("MultiLineString")
                     ]
                 }
                 )";
-                auto ml            = MultiLineString::from_json(json);
+                auto ml          = MultiLineString::from_json(json);
                 CHECK(ml.size() == 2);
                 CHECK(ml.dim == DimensionType::XY);
                 CHECK(ml.geom_type() == GeometryType::MULTILINESTRING);
@@ -158,7 +156,7 @@ TEST_CASE("MultiLineString")
 
             SECTION("xyz - from json")
             {
-                std::string json    = R"(
+                std::string json = R"(
                 {
                     "type": "MultiLineString",
                             "coordinates": [
@@ -167,7 +165,7 @@ TEST_CASE("MultiLineString")
                     ]
                 }
                 )";
-                auto ml            = MultiLineString::from_json(json);
+                auto ml          = MultiLineString::from_json(json);
                 CHECK(ml.size() == 2);
                 CHECK(ml.dim == DimensionType::XYZ);
                 CHECK(ml.geom_type() == GeometryType::MULTILINESTRING);
@@ -187,7 +185,7 @@ TEST_CASE("MultiLineString")
 
             SECTION("xyzm - from json")
             {
-                std::string json    = R"(
+                std::string json = R"(
                 {
                     "type": "MultiLineString",
                             "coordinates": [
@@ -196,7 +194,7 @@ TEST_CASE("MultiLineString")
                     ]
                 }
                 )";
-                auto ml            = MultiLineString::from_json(json);
+                auto ml          = MultiLineString::from_json(json);
                 CHECK(ml.size() == 2);
                 CHECK(ml.dim == DimensionType::XYZM);
                 CHECK(ml.geom_type() == GeometryType::MULTILINESTRING);
@@ -339,12 +337,20 @@ TEST_CASE("MultiLineString")
         {
             SECTION("xy - to json")
             {
-                /// @todo add test
+                auto ml = MultiLineString{
+                    {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
+                    {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}};
+                ml.precision = 1;
+                CHECK(ml.json() == R"({"type":"MultiLineString","coordinates":[[[1.0,2.0],[4.0,5.0],[7.0,8.0]],[[11.0,12.0],[13.0,14.0],[16.0,17.0]]]})");
             }
 
             SECTION("xyz - to json")
             {
-                /// @todo add test
+                auto ml = MultiLineString{
+                    {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+                    {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
+                ml.precision = 1;
+                CHECK(ml.json() == R"({"type":"MultiLineString","coordinates":[[[1.0,2.0,3.0],[4.0,5.0,6.0],[7.0,8.0,9.0]],[[11.0,12.0,13.0],[13.0,14.0,15.0],[16.0,17.0,18.0]]]})");
             }
 
             SECTION("xym - to json")
@@ -354,7 +360,11 @@ TEST_CASE("MultiLineString")
 
             SECTION("xyzm - to json")
             {
-                /// @todo add test
+                auto ml = MultiLineString{
+                    {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
+                    {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}};
+                ml.precision = 1;
+                CHECK(ml.json() == R"({"type":"MultiLineString","coordinates":[[[1.0,2.0,3.0,-1.5],[4.0,5.0,6.0,-2.5],[7.0,8.0,9.0,-3.5]],[[11.0,12.0,13.0,-10.5],[13.0,14.0,15.0,-11.5],[16.0,17.0,18.0,-12.5]]]})");
             }
         }
 
@@ -363,9 +373,8 @@ TEST_CASE("MultiLineString")
             SECTION("xy - to wkt")
             {
                 auto ml = MultiLineString{
-                        {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
-                        {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}
-                };
+                    {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
+                    {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}};
                 ml.precision = 1;
                 CHECK(ml.wkt() == "MULTILINESTRING((1.0 2.0,4.0 5.0,7.0 8.0),(11.0 12.0,13.0 14.0,16.0 17.0))");
             }
@@ -373,9 +382,8 @@ TEST_CASE("MultiLineString")
             SECTION("xyz - to wkt")
             {
                 auto ml = MultiLineString{
-                        {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
-                        {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}
-                };
+                    {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+                    {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
                 ml.precision = 1;
                 CHECK(ml.wkt() == "MULTILINESTRINGZ((1.0 2.0 3.0,4.0 5.0 6.0,7.0 8.0 9.0),(11.0 12.0 13.0,13.0 14.0 15.0,16.0 17.0 18.0))");
             }
@@ -388,9 +396,8 @@ TEST_CASE("MultiLineString")
             SECTION("xyzm - to wkt")
             {
                 auto ml = MultiLineString{
-                        {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
-                        {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}
-                };
+                    {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
+                    {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}};
                 ml.precision = 1;
                 CHECK(ml.wkt() == "MULTILINESTRINGZM((1.0 2.0 3.0 -1.5,4.0 5.0 6.0 -2.5,7.0 8.0 9.0 -3.5),(11.0 12.0 13.0 -10.5,13.0 14.0 15.0 -11.5,16.0 17.0 18.0 -12.5))");
             }
@@ -403,12 +410,24 @@ TEST_CASE("MultiLineString")
         {
             SECTION("xy - equal to")
             {
-                /// @todo add test
+                auto ml1 = MultiLineString{
+                        {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
+                        {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}};
+                auto ml2 = MultiLineString{
+                        {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
+                        {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}};
+                CHECK(ml1 == ml2);
             }
 
             SECTION("xyz - equal to")
             {
-                /// @todo add test
+                auto ml1 = MultiLineString{
+                        {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+                        {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
+                auto ml2 = MultiLineString{
+                        {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+                        {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
+                CHECK(ml1 == ml2);
             }
 
             SECTION("xym - equal to")
@@ -418,7 +437,13 @@ TEST_CASE("MultiLineString")
 
             SECTION("xyzm - equal to")
             {
-                /// @todo add test
+                auto ml1 = MultiLineString{
+                    {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
+                    {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}};
+                auto ml2 = MultiLineString{
+                    {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
+                    {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}};
+                CHECK(ml1 == ml2);
             }
         }
 
@@ -426,12 +451,24 @@ TEST_CASE("MultiLineString")
         {
             SECTION("xy - not equal to")
             {
-                /// @todo add test
+                auto ml1 = MultiLineString{
+                        {{5.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
+                        {{11.0, 12.0}, {13.0, 14.0}, {16.0, 20.0}}};
+                auto ml2 = MultiLineString{
+                        {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
+                        {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}};
+                CHECK(ml1 != ml2);
             }
 
             SECTION("xyz - not equal to")
             {
-                /// @todo add test
+                auto ml1 = MultiLineString{
+                        {{8.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+                        {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
+                auto ml2 = MultiLineString{
+                        {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+                        {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {26.0, 17.0, 18.0}}};
+                CHECK(ml1 != ml2);
             }
 
             SECTION("xym - not equal to")
@@ -441,7 +478,13 @@ TEST_CASE("MultiLineString")
 
             SECTION("xyzm - not equal to")
             {
-                /// @todo add test
+                auto ml1 = MultiLineString{
+                        {{1.0, 200.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
+                        {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}};
+                auto ml2 = MultiLineString{
+                        {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -3.5}, {7.0, 8.0, 9.0, -3.5}},
+                        {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}};
+                CHECK(ml1 != ml2);
             }
         }
 
