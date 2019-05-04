@@ -10,7 +10,7 @@ namespace shapes
 {
 
 /*!
- * @brief represents a bounding box
+ * @brief Represents a bounding box
  * @ingroup geometry
  *
  * @since 0.0.1
@@ -31,7 +31,7 @@ class Bounds
     double maxy;
 
     /*!
-     * @brief creates a Bounds object
+     * @brief Creates a Bounds object
      *
      * @since 0.0.1
      */
@@ -44,7 +44,8 @@ class Bounds
     }
 
     /*!
-     * @brief creates a Bounds object from the given coordinates
+     * @brief Creates a Bounds object from the given coordinates
+     *
      * @param minx the x-coordinate of the first corner
      * @param miny the y-coordinate of the first corner
      * @param maxx the x-coordinate of the second corner
@@ -58,7 +59,8 @@ class Bounds
     }
 
     /*!
-     * @brief extends the bounds to contain the given point
+     * @brief Extends the bounds to contain the given point
+     *
      * @param x the x-coordinate of the point
      * @param y the y-coordinate of the point
      * @return the Bounds object
@@ -75,8 +77,7 @@ class Bounds
     }
 
     /*!
-     * @brief returns a (x, y) tuple with the center of the bounds
-     * @return a tuple
+     * @return a (x, y) tuple with the center of the bounds
      *
      * @since 0.0.1
      */
@@ -86,8 +87,7 @@ class Bounds
     }
 
     /*!
-     * @brief returns a (x, y) tuple with the bottom left bounds
-     * @return a tuple
+     * @return a (x, y) tuple with the bottom left bounds
      *
      * @since 0.0.1
      */
@@ -97,8 +97,7 @@ class Bounds
     }
 
     /*!
-     * @brief returns a (x, y) tuple with the top right bounds
-     * @return a tuple
+     * @return a (x, y) tuple with the top right bounds
      *
      * @since 0.0.1
      */
@@ -108,8 +107,7 @@ class Bounds
     }
 
     /*!
-     * @brief returns a (x, y) tuple with the top left bounds
-     * @return a tuple
+     * @return a (x, y) tuple with the top left bounds
      *
      * @since 0.0.1
      */
@@ -119,8 +117,7 @@ class Bounds
     }
 
     /*!
-     * @brief returns a (x, y) tuple with the bottom right bounds
-     * @return a tuple
+     * @return a (x, y) tuple with the bottom right bounds
      *
      * @since 0.0.1
      */
@@ -130,7 +127,6 @@ class Bounds
     }
 
     /*!
-     * @brief returns true if the bounds contains the given point
      * @param x the x-coordinate of the point
      * @param y the y-coordinate of the point
      * @return true if the Bounds contains the given point, otherwise false
@@ -143,7 +139,6 @@ class Bounds
     }
 
     /*!
-     * @brief returns true if the bounds contains the given one
      * @param other the bounds
      * @return true if the Bounds contain the given one, otherwise false
      *
@@ -155,7 +150,6 @@ class Bounds
     }
 
     /*!
-     * @brief returns true if the bounds intersect the given one
      * @param other the bounds
      * @return true if the Bounds intersect the given one, otherwise false
      *
@@ -167,7 +161,6 @@ class Bounds
     }
 
     /*!
-     * @brief returns true if the bounds overlaps the given one
      * @param other the bounds
      * @return true if the Bounds overlaps the given one, otherwise false
      *

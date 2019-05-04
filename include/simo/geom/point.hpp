@@ -22,7 +22,7 @@ namespace shapes
 {
 
 /*!
- * @brief represents a point
+ * @brief Represents a point
  * @ingroup geometry
  *
  * @since 0.0.1
@@ -43,7 +43,8 @@ class Point : public BaseGeometry<Point>
     double m = 0;
 
     /*!
-     * @brief creates a Point
+     * @brief Creates a Point
+     *
      * @note the default behaviour is to create a 2-dimensional point with coordinates (0, 0)
      *
      * @since 0.0.1
@@ -51,7 +52,8 @@ class Point : public BaseGeometry<Point>
     Point() = default;
 
     /*!
-     * @brief creates a Point from coordinates (x, y)
+     * @brief Creates a Point from coordinates (x, y)
+     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      *
@@ -64,7 +66,8 @@ class Point : public BaseGeometry<Point>
     }
 
     /*!
-     * @brief creates a Point from coordinates (x, y, z)
+     * @brief Creates a Point from coordinates (x, y, z)
+     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      * @param z the z-coordinate value
@@ -78,7 +81,8 @@ class Point : public BaseGeometry<Point>
     }
 
     /*!
-     * @brief creates a Point from coordinates (x, y, z, m)
+     * @brief Creates a Point from coordinates (x, y, z, m)
+     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      * @param z the z-coordinate value
@@ -93,7 +97,8 @@ class Point : public BaseGeometry<Point>
     }
 
     /*!
-     * @brief creates a Point from coordinates
+     * @brief Creates a Point from coordinates
+     *
      * @param coords the coordinates
      *
      * @throw GeometryError DOCUMENT ME!
@@ -129,7 +134,8 @@ class Point : public BaseGeometry<Point>
         }
     }
     /*!
-     * @brief creates a Point
+     * @brief Creates a Point
+     *
      * @tparam T an arithmetic value (e.g. int, float, double)
      * @param init the coordinates list
      * @throw exception if the given number of coordinates is either less than two or greater than four
@@ -169,7 +175,8 @@ class Point : public BaseGeometry<Point>
     }
 
     /*!
-     * @brief creates a Point from coordinates (x, y)
+     * @brief Creates a Point from coordinates (x, y)
+     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      *
@@ -181,7 +188,8 @@ class Point : public BaseGeometry<Point>
     }
 
     /*!
-     * @brief creates a Point from coordinates (x, y, z)
+     * @brief Creates a Point from coordinates (x, y, z)
+     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      * @param z the z-coordinate value
@@ -194,7 +202,8 @@ class Point : public BaseGeometry<Point>
     }
 
     /*!
-     * @brief creates a Point from coordinates (x, y, m)
+     * @brief Creates a Point from coordinates (x, y, m)
+     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      * @param m the m-coordinate value
@@ -212,7 +221,8 @@ class Point : public BaseGeometry<Point>
     }
 
     /*!
-     * @brief creates a Point from coordinates (x, y, z, m)
+     * @brief Creates a Point from coordinates (x, y, z, m)
+     *
      * @param x the x-coordinate value
      * @param y the y-coordinate value
      * @param z the z-coordinate value
@@ -226,7 +236,8 @@ class Point : public BaseGeometry<Point>
     }
 
     /*!
-     * @brief returns the coordinate at the given index
+     * @brief Returns the coordinate at the given index
+     *
      * @param pos the coordinate position
      * @return a double with the coordinate value
      *
@@ -261,34 +272,11 @@ class Point : public BaseGeometry<Point>
         return at(pos);
     }
 
-    /*!
-     * @brief returns true if all coordinates are equal, otherwise false
-     * @param other the point to compare
-     * @return true if all coordinates are equal, otherwise false
-     *
-     * @since 0.0.1
-     */
-    bool operator==(const Point& other) const
-    {
-        return x == other.x and y == other.y and z == other.z and m == other.m;
-    }
-
-    /*!
-     * @brief returns true if at least one coordinate is different, otherwise false
-     * @param other the point to compare
-     * @return true if at least one coordinate is different, otherwise false
-     *
-     * @since 0.0.1
-     */
-    bool operator!=(const Point& other) const
-    {
-        return not(*this == other);
-    }
-
     /// @todo (pavel) implement operator std::ostream & operator<<
 
     /*!
-     * @brief creates a Point from a geojson string
+     * @brief Creates a Point from a geojson string
+     *
      * @param json the geojson string
      * @return a Point object
      * @sa https://tools.ietf.org/html/rfc7946
@@ -319,7 +307,8 @@ class Point : public BaseGeometry<Point>
     }
 
     /*!
-     * @brief dumps the geojson representation of the Point
+     * @brief Dumps the geojson representation of the Point
+     *
      * @return a geojson string
      * @sa https://tools.ietf.org/html/rfc7946
      *
@@ -345,7 +334,8 @@ class Point : public BaseGeometry<Point>
     }
 
     /*!
-     * @brief creates a Point from a WKT string
+     * @brief Creates a Point from a WKT string
+     *
      * @param wkt the WKT string
      * @return a Point object
      * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
@@ -375,7 +365,8 @@ class Point : public BaseGeometry<Point>
     }
 
     /*!
-     * @brief dumps the WKT representation of the point
+     * @brief Dumps the WKT representation of the point
+     *
      * @return a WKT string
      * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
@@ -411,6 +402,24 @@ class Point : public BaseGeometry<Point>
         ss << ")";
         return ss.str();
     }
+
+    /*!
+     * @param lhs a Point
+     * @param rhs a Point
+     * @return true if all coordinates are equal, otherwise false
+     *
+     * @since 0.0.1
+     */
+    friend bool operator==(const Point& lhs, const Point& rhs);
+
+    /*!
+     * @param lhs a Point
+     * @param rhs a Point
+     * @return true if at least one coordinate is different, otherwise false
+     *
+     * @since 0.0.1
+     */
+    friend bool operator!=(const Point& lhs, const Point& rhs);
 
   private:
     /// for allow BaseGeometry to access Point private members
@@ -472,6 +481,16 @@ class Point : public BaseGeometry<Point>
         return {std::make_tuple(x, y, z, m)};
     }
 };
+
+bool operator==(const Point& lhs, const Point& rhs)
+{
+    return lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z and lhs.m == rhs.m;
+}
+
+bool operator!=(const Point& lhs, const Point& rhs)
+{
+    return not operator==(lhs, rhs);
+}
 
 }  // namespace shapes
 }  // namespace simo

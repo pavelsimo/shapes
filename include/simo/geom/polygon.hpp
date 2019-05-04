@@ -16,7 +16,7 @@ namespace shapes
 {
 
 /*!
- * @brief represents a polygon
+ * @brief Represents a polygon
  * @ingroup geometry
  *
  * @since 0.0.1
@@ -31,14 +31,15 @@ class Polygon : public BaseGeometry<Polygon>
     std::vector<LinearRing> interiors;
 
     /*!
-     * @brief creates an empty Polygon
+     * @brief Creates an empty Polygon
      *
      * @since 0.0.1
      */
     Polygon() = default;
 
     /*!
-     * @brief creates a Polygon
+     * @brief Creates a Polygon
+     *
      * @param rings a LinearRing sequence with the shell and holes of the polygon
      *
      * @since 0.0.1
@@ -65,7 +66,8 @@ class Polygon : public BaseGeometry<Polygon>
     }
 
     /*!
-     * @brief creates a Polygon
+     * @brief Creates a Polygon
+     *
      * @param shell the shell of the polygon as a Point sequence
      *
      * @since 0.0.1
@@ -80,7 +82,8 @@ class Polygon : public BaseGeometry<Polygon>
     }
 
     /*!
-     * @brief creates a Polygon
+     * @brief Creates a Polygon
+     *
      * @param shell the shell of the polygon as a Point sequence
      * @param holes one or more collection of points, each representing a hole in the polygon
      *
@@ -104,7 +107,8 @@ class Polygon : public BaseGeometry<Polygon>
     }
 
     /*!
-     * @brief creates a Polygon from a geojson string
+     * @brief Creates a Polygon from a geojson string
+     *
      * @param json the geojson string
      * @return a Polygon object
      * @sa https://tools.ietf.org/html/rfc7946
@@ -117,7 +121,8 @@ class Polygon : public BaseGeometry<Polygon>
     }
 
     /*!
-     * @brief dumps the geojson representation of the Polygon
+     * @brief Dumps the geojson representation of the Polygon
+     *
      * @return a geojson string
      * @sa https://tools.ietf.org/html/rfc7946
      *
@@ -129,7 +134,8 @@ class Polygon : public BaseGeometry<Polygon>
     }
 
     /*!
-     * @brief creates a Polygon from a WKT string
+     * @brief Creates a Polygon from a WKT string
+     *
      * @param wkt the WKT string
      * @return a Polygon object
      * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
@@ -149,7 +155,8 @@ class Polygon : public BaseGeometry<Polygon>
     }
 
     /*!
-     * @brief creates a Polygon from a WKT string
+     * @brief Creates a Polygon from a WKT string
+     *
      * @param wkt the WKT string
      * @return a Polygon object
      * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry

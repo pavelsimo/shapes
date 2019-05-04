@@ -16,7 +16,8 @@ namespace shapes
 {
 
 /*!
- * @brief a LineString collection
+ * @brief A LineString collection
+ *
  * @ingroup geometry
  *
  * @since 0.0.1
@@ -25,14 +26,15 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
 {
   public:
     /*!
-     * @brief creates an empty MultiLineString
+     * @brief Creates an empty MultiLineString
      *
      * @since 0.0.1
      */
     MultiLineString() = default;
 
     /*!
-     * @brief creates a MultiLineString from a given a LineString initializer list
+     * @brief Creates a MultiLineString from a given a LineString initializer list
+     *
      * @param init the initializer list
      *
      * @since 0.0.1
@@ -59,7 +61,8 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     }
 
     /*!
-     * @brief creates a MultiLineString from a given LineString vector
+     * @brief Creates a MultiLineString from a given LineString vector
+     *
      * @param linestrings the LineString vector
      *
      * @since 0.0.1
@@ -84,7 +87,8 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     }
 
     /*!
-     * @brief creates a MultiLineString from two pair of iterators
+     * @brief Creates a MultiLineString from two pair of iterators
+     *
      * @tparam CoordInputIt the coordinate input iterator
      * @tparam OffsetInputIt the offset input iterator
      * @param coord_first the first coordinate iterator
@@ -108,7 +112,7 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
             {
                 size_t hi = *it;
                 seq.emplace_back(coord_first + lo, coord_first + hi, input_dim);
-                lo = hi;
+                lo            = hi;
                 const auto& l = seq[seq.size() - 1];
                 bounds.extend(l.bounds.minx, l.bounds.miny);
                 bounds.extend(l.bounds.maxx, l.bounds.maxy);
@@ -117,7 +121,8 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     }
 
     /*!
-     * @brief creates a MultiLineString from a geojson string
+     * @brief Creates a MultiLineString from a geojson string
+     *
      * @param json the geojson string
      * @return a MultiLineString object
      * @sa https://tools.ietf.org/html/rfc7946
@@ -164,7 +169,8 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     }
 
     /*!
-     * @brief dumps the geojson representation of the MultiLineString
+     * @brief Dumps the geojson representation of the MultiLineString
+     *
      * @return a geojson string
      * @sa https://tools.ietf.org/html/rfc7946
      *
@@ -221,7 +227,8 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     }
 
     /*!
-     * @brief creates a MultiLineString from a WKT string
+     * @brief Creates a MultiLineString from a WKT string
+     *
      * @param wkt the WKT string
      * @return a MultiLineString object
      * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
@@ -241,7 +248,8 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     }
 
     /*!
-     * @brief creates a MultiLineString from a WKT string
+     * @brief Creates a MultiLineString from a WKT string
+     *
      * @param wkt the WKT string
      * @return a MultiLineString object
      * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
@@ -293,6 +301,24 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
         return ss.str();
     }
 
+    /*!
+     * @param lhs a MultiLinestring
+     * @param rhs a MultiLinestring
+     * @return true if all LineStrings are equal, otherwise false
+     *
+     * @since 0.0.1
+     */
+    friend bool operator==(const MultiLineString& lhs, const MultiLineString& rhs);
+
+    /*!
+     * @param lhs a MultiLinestring
+     * @param rhs a MultiLinestring
+     * @return true if at least one LineString is different, otherwise false
+     *
+     * @since 0.0.1
+     */
+    friend bool operator!=(const MultiLineString& lhs, const MultiLineString& rhs);
+
   private:
     /// for allow BaseGeometry to access MultiLineString private members
     friend class BaseGeometry<MultiLineString>;
@@ -314,7 +340,7 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     {
         std::vector<std::tuple<double, double>> res;
         res.reserve(num_points());
-        for(const auto& l: seq)
+        for (const auto& l : seq)
         {
             auto xy = l.xy();
             res.insert(res.end(), xy.begin(), xy.end());
@@ -327,7 +353,7 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     {
         std::vector<std::tuple<double, double, double>> res;
         res.reserve(num_points());
-        for(const auto& l: seq)
+        for (const auto& l : seq)
         {
             auto xyz = l.xyz();
             res.insert(res.end(), xyz.begin(), xyz.end());
@@ -340,7 +366,7 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     {
         std::vector<std::tuple<double, double, double>> res;
         res.reserve(num_points());
-        for(const auto& l: seq)
+        for (const auto& l : seq)
         {
             auto xym = l.xym();
             res.insert(res.end(), xym.begin(), xym.end());
@@ -353,7 +379,7 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     {
         std::vector<std::tuple<double, double, double, double>> res;
         res.reserve(num_points());
-        for(const auto& l: seq)
+        for (const auto& l : seq)
         {
             auto xyzm = l.xyzm();
             res.insert(res.end(), xyzm.begin(), xyzm.end());
@@ -377,7 +403,7 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     size_t num_points() const
     {
         size_t n = 0;
-        for(const auto& linestring: seq)
+        for (const auto& linestring : seq)
         {
             n += linestring.size();
         }
@@ -390,6 +416,16 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
         throw exceptions::NotImplementedError();
     }
 };
+
+bool operator==(const MultiLineString& lhs, const MultiLineString& rhs)
+{
+    return detail::is_equal_sequence(lhs, rhs);
+}
+
+bool operator!=(const MultiLineString& lhs, const MultiLineString& rhs)
+{
+    return not operator==(lhs, rhs);
+}
 
 }  // namespace shapes
 }  // namespace simo

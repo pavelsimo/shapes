@@ -14,7 +14,8 @@ namespace shapes
 {
 
 /*!
- * @brief abstract class for all geometries
+ * @brief Abstract class for all geometries
+ *
  * @tparam T the geometry type (e.g. Point, Polygon, LineString)
  * @ingroup geometry
  *
@@ -37,7 +38,8 @@ class BaseGeometry
     int8_t precision = 1;
 
     /*!
-     * @brief returns the geometry type (e.g. GeometryType::Point, GeometryType::MultiPoint)
+     * @brief Returns the geometry type (e.g. GeometryType::Point, GeometryType::MultiPoint)
+     *
      * @return the geometry type
      *
      * @since 0.0.1
@@ -48,7 +50,8 @@ class BaseGeometry
     }
 
     /*!
-     * @brief returns the geometry type with dimension (e.g. GeometryType::PointZ, GeometryType::MultiPointZM)
+     * @brief Returns the geometry type with dimension (e.g. GeometryType::PointZ, GeometryType::MultiPointZM)
+     *
      * @return the geometry type with dimension
      *
      * @since 0.0.1
@@ -60,7 +63,8 @@ class BaseGeometry
     }
 
     /*!
-     * @brief returns the geometry type as a string (e.g. Point, LineString)
+     * @brief Returns the geometry type as a string (e.g. Point, LineString)
+     *
      * @return the geometry type as a string
      *
      * @since 0.0.1
@@ -71,7 +75,8 @@ class BaseGeometry
     }
 
     /*!
-     * @brief returns true if the geometry is empty
+     * @brief Returns true if the geometry is empty
+     *
      * @return true if the the geometry is empty, otherwise false
      *
      * @since 0.0.1
@@ -82,7 +87,8 @@ class BaseGeometry
     }
 
     /*!
-     * @brief returns the geometry size
+     * @brief Returns the geometry size
+     *
      * @return the size of the geometry
      *
      * @since 0.0.1
@@ -93,7 +99,8 @@ class BaseGeometry
     }
 
     /*!
-     * @brief returns the geometry (x, y) coordinates as a tuple
+     * @brief Returns the geometry (x, y) coordinates as a tuple
+     *
      * @return a vector of (x, y) tuples
      *
      * @since 0.0.1
@@ -104,7 +111,8 @@ class BaseGeometry
     }
 
     /*!
-     * @brief returns the geometry (x, y, z) coordinates as a tuple
+     * @brief Returns the geometry (x, y, z) coordinates as a tuple
+     *
      * @return a vector of (x, y, z) tuples
      *
      * @since 0.0.1
@@ -115,7 +123,8 @@ class BaseGeometry
     }
 
     /*!
-     * @brief returns the geometry (x, y, m) coordinates as a tuple
+     * @brief Returns the geometry (x, y, m) coordinates as a tuple
+     *
      * @return a vector of (x, y, m) tuples
      *
      * @since 0.0.1
@@ -126,7 +135,8 @@ class BaseGeometry
     }
 
     /*!
-     * @brief returns the geometry (x, y, z, m) coordinates as a tuple
+     * @brief Returns the geometry (x, y, z, m) coordinates as a tuple
+     *
      * @return a vector of (x, y, z, m) tuples
      *
      * @since 0.0.1
@@ -137,7 +147,8 @@ class BaseGeometry
     }
 
     /*!
-     * @brief whether the geometry has z-coordinate
+     * @brief Whether the geometry has the z-coordinate
+     *
      * @return true if the geometry has z-coordinate, otherwise false
      *
      * @since 0.0.1
@@ -148,7 +159,8 @@ class BaseGeometry
     }
 
     /*!
-     * @brief whether the geometry has m-coordinate
+     * @brief Whether the geometry has the m-coordinate (measurement coordinate)
+     *
      * @return true if the geometry has m-coordinate, otherwise false
      *
      * @since 0.0.1
@@ -159,7 +171,8 @@ class BaseGeometry
     }
 
     /*!
-     * @brief whether the geometry is closed
+     * @brief Whether the geometry is closed
+     *
      * @return true if the geometry is closed, otherwise false
      *
      * @since 0.0.1
@@ -170,7 +183,8 @@ class BaseGeometry
     }
 
     /*!
-     * @brief returns the number of dimensions of the geometry
+     * @brief Returns the number of dimensions of the geometry
+     *
      * @return the number of dimensions
      * @note the number of dimensions is (x, y) = 2, (x, y, z) = 3, (x, y, m) = 3 and (x, y, z, m) = 4
      *
@@ -183,7 +197,7 @@ class BaseGeometry
 };
 
 /*!
- * @brief the geometry type
+ * @brief The geometry type
  *
  * @since 0.0.1
  */

@@ -16,6 +16,7 @@ namespace shapes
 
 /*!
  * @brief Point collection
+ *
  * @ingroup geometry
  *
  * @since 0.0.1
@@ -24,14 +25,15 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
 {
   public:
     /*!
-     * @brief creates an empty MultiPoint
+     * @brief Creates an empty MultiPoint
      *
      * @since 0.0.1
      */
     MultiPoint() = default;
 
     /*!
-      * @brief creates a MultiPoint from a given initializer list
+      * @brief Creates a MultiPoint from a given initializer list
+      *
       * @tparam T an arithmetic value (e.g. int, float, double)
       * @param init the initializer list
       *
@@ -44,7 +46,8 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief creates a MultiPoint from a given point vector
+     * @brief Creates a MultiPoint from a given point vector
+     *
      * @param points the Point sequence
      *
      * @since 0.0.1
@@ -55,7 +58,8 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief creates a MultiPoint from a given arithmetic value sequence
+     * @brief Creates a MultiPoint from a given arithmetic value sequence
+     *
      * @tparam T an arithmetic value (e.g. int, float, double)
      * @param coords the arithmetic value sequence
      * @param coords_dim the dimension of the points
@@ -69,7 +73,8 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief creates a MultiPoint from a geojson string
+     * @brief Creates a MultiPoint from a geojson string
+     *
      * @param json the geojson string
      * @return a MultiPoint object
      * @sa https://tools.ietf.org/html/rfc7946
@@ -105,7 +110,8 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief dumps the geojson representation of the MultiPoint
+     * @brief Dumps the geojson representation of the MultiPoint
+     *
      * @return a geojson string
      * @sa https://tools.ietf.org/html/rfc7946
      *
@@ -152,7 +158,8 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief creates a MultiPoint from a WKT string
+     * @brief Creates a MultiPoint from a WKT string
+     *
      * @param wkt the WKT string
      * @return a MultiPoint object
      * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
@@ -175,7 +182,8 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief creates a MultiPoint from a WKT string
+     * @brief Creates a MultiPoint from a WKT string
+     *
      * @param wkt the WKT string
      * @return a MultiPoint object
      * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
@@ -220,28 +228,22 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief returns true if all Point's are equal, otherwise false
-     * @param other the MultiPoint to compare
+     * @param lhs a MultiPoint
+     * @param rhs a MultiPoint
      * @return true if all Point's are equal, otherwise false
      *
      * @since 0.0.1
      */
-    bool operator==(const MultiPoint& other) const
-    {
-        return detail::is_equal_sequence(*this, other);
-    }
+    friend bool operator==(const MultiPoint& lhs, const MultiPoint& rhs);
 
     /*!
-     * @brief returns true if at least one Point is different, otherwise false
-     * @param other the Point to compare
+     * @param lhs a MultiPoint
+     * @param rhs a MultiPoint
      * @return true if at least one Point is different, otherwise false
      *
      * @since 0.0.1
      */
-    bool operator!=(const MultiPoint& other) const
-    {
-        return not(*this == other);
-    }
+    friend bool operator!=(const MultiPoint& lhs, const MultiPoint& rhs);
 
   private:
     /// for allow BaseGeometry to access MultiPoint private members
@@ -330,6 +332,16 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
         return seq[0] == seq[last_index];
     }
 };
+
+bool operator==(const MultiPoint& lhs, const MultiPoint& rhs)
+{
+    return detail::is_equal_sequence(lhs, rhs);
+}
+
+bool operator!=(const MultiPoint& lhs, const MultiPoint& rhs)
+{
+    return not operator==(lhs, rhs);
+}
 
 }  // namespace shapes
 }  // namespace simo

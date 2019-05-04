@@ -12,7 +12,7 @@ namespace exceptions
 {
 
 /*!
- * @brief base shapes exception
+ * @brief Base shapes exception
  *
  * @since 0.0.1
  */
@@ -20,7 +20,8 @@ class ShapesException : public std::exception
 {
   public:
     /*!
-     * @brief creates a shapes exception
+     * @brief Creates a shapes exception
+     *
      * @param reason the exception reason
      *
      * @since 0.0.1
@@ -29,7 +30,8 @@ class ShapesException : public std::exception
         : m_reason(reason) {}
 
     /*!
-     * @brief returns the exception reason
+     * @brief Returns the exception reason
+     *
      * @return a string with the exception reason
      *
      * @since 0.0.1
@@ -41,7 +43,8 @@ class ShapesException : public std::exception
 
   protected:
     /*!
-     * @brief set the exception reason
+     * @brief Set the exception reason
+     *
      * @param reason the exception reason
      *
      * @since 0.0.1
@@ -57,7 +60,7 @@ class ShapesException : public std::exception
 };
 
 /*!
- * @brief exception thrown when an error has been found while parsing
+ * @brief Exception thrown when an error has been found while parsing
  *
  * @since 0.0.1
  */
@@ -65,7 +68,8 @@ class ParseError : public ShapesException
 {
   public:
     /*!
-     * @brief creates a parse error with the given reason
+     * @brief Creates a parse error with the given reason
+     *
      * @param reason the reason message
      *
      * @since 0.0.1
@@ -78,7 +82,7 @@ class ParseError : public ShapesException
 };
 
 /*!
- * @brief exception thrown when method or routine is not implemented
+ * @brief Exception thrown when method or routine is not implemented
  *
  * @since 0.0.1
  */
@@ -86,7 +90,7 @@ class NotImplementedError : public ShapesException
 {
   public:
     /*!
-     * @brief creates a not implemented error exception
+     * @brief Creates a not implemented error exception
      *
      * @since 0.0.1
      */
@@ -96,7 +100,7 @@ class NotImplementedError : public ShapesException
     }
 
     /*!
-     * @brief creates a not implemented error exception
+     * @brief Creates a not implemented error exception
      *
      * @param reason the reason message
      *
@@ -110,7 +114,7 @@ class NotImplementedError : public ShapesException
 };
 
 /*!
- * @brief exception thrown when a geometry error is found
+ * @brief Exception thrown when a geometry error is found
  *
  * @since 0.0.1
  */
@@ -118,7 +122,8 @@ class GeometryError : public ShapesException
 {
   public:
     /*!
-     * @brief creates a geometry error exception
+     * @brief Creates a geometry error exception
+     *
      * @param reason the exception reason
      *
      * @since 0.0.1
@@ -131,7 +136,7 @@ class GeometryError : public ShapesException
 };
 
 /*!
- * @brief exception thrown when a sequence index is out of range
+ * @brief Exception thrown when a sequence index is out of range
  *
  * @since 0.0.1
  */
@@ -139,7 +144,8 @@ class IndexError : public ShapesException
 {
   public:
     /*!
-     * @brief creates a index error exception
+     * @brief Creates a index error exception
+     *
      * @param reason the exception reason
      *
      * @since 0.0.1

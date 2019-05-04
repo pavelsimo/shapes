@@ -11,7 +11,8 @@ namespace utils
 {
 
 /*!
- * @brief returns the dimension type given a geometry type
+ * @brief Returns the dimension type given a geometry type
+ *
  * @param geom_type the geometry type
  * @return the dimension type
  *
@@ -36,7 +37,8 @@ DimensionType get_dim(GeometryType geom_type) noexcept
 }
 
 /*!
- * @brief returns the dimension type given the number of dimensions
+ * @brief Returns the dimension type given the number of dimensions
+ *
  * @param ndim the number of dimensions
  * @return the dimension type
  *
@@ -56,7 +58,8 @@ DimensionType get_dim(int8_t ndim) noexcept
 }
 
 /*!
- * @brief returns the number of dimensions given a dimension type
+ * @brief Returns the number of dimensions given a dimension type
+ *
  * @param dim_type the dimension type
  * @return the number of dimensions
  *
@@ -77,7 +80,8 @@ int8_t get_ndim(DimensionType dim_type) noexcept
 }
 
 /*!
- * @brief returns the number of dimensions given a geometry type
+ * @brief Returns the number of dimensions given a geometry type
+ *
  * @param geom_type the geometry type
  * @return the number of dimensions
  *
@@ -89,7 +93,8 @@ int8_t get_ndim(GeometryType geom_type) noexcept
 }
 
 /*!
- * @brief returns a geometry type given the geometry type
+ * @brief Returns a geometry type given the geometry type
+ *
  * @param geom_type the geometry type
  * @return a geometry type
  *
@@ -188,7 +193,8 @@ GeometryType get_geom_type(GeometryType geom_type) noexcept
 }
 
 /*!
- * @brief returns a geometry type with dimension given the geometry type and the dimension type
+ * @brief Returns a geometry type with dimension given the geometry type and the dimension type
+ *
  * @param geom_type the geometry type
  * @param dim_type the dimension type
  * @return a geometry type
@@ -329,7 +335,7 @@ GeometryType get_geom_type_dim(GeometryType geom_type, DimensionType dim_type) n
 
 /*!
  * @param geom_type the geometry type
- * @return returns true if the geometry type is a Point, otherwise false
+ * @return true if the geometry type is a Point, otherwise false
  *
  * @since 0.0.1
  */
@@ -340,7 +346,7 @@ bool is_point(GeometryType geom_type) noexcept
 
 /*!
  * @param geom_type the geometry type
- * @return returns true if the geometry type is a MultiPoint, otherwise false
+ * @return true if the geometry type is a MultiPoint, otherwise false
  *
  * @since 0.0.1
  */
@@ -351,7 +357,7 @@ bool is_multipoint(GeometryType geom_type) noexcept
 
 /*!
  * @param geom_type the geometry type
- * @return returns true if the geometry type is a LineString, otherwise false
+ * @return true if the geometry type is a LineString, otherwise false
  *
  * @since 0.0.1
  */
@@ -362,7 +368,7 @@ bool is_linestring(GeometryType geom_type) noexcept
 
 /*!
  * @param geom_type the geometry type
- * @return returns true if the geometry type is a MultiLineString, otherwise false
+ * @return true if the geometry type is a MultiLineString, otherwise false
  *
  * @since 0.0.1
  */
@@ -373,7 +379,7 @@ bool is_multilinestring(GeometryType geom_type) noexcept
 
 /*!
  * @param geom_type the geometry type
- * @return returns true if the geometry type is a Polygon, otherwise false
+ * @return true if the geometry type is a Polygon, otherwise false
  *
  * @since 0.0.1
  */
@@ -384,7 +390,7 @@ bool is_polygon(GeometryType geom_type) noexcept
 
 /*!
  * @param geom_type the geometry type
- * @return returns true if the geometry type is a MultiPolygon, otherwise false
+ * @return true if the geometry type is a MultiPolygon, otherwise false
  *
  * @since 0.0.1
  */

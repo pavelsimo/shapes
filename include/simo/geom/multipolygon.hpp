@@ -23,14 +23,15 @@ class MultiPolygon : public BaseGeometry<MultiPolygon>
 {
   public:
     /*!
-     * @brief creates an empty MultiPolygon
+     * @brief Creates an empty MultiPolygon
      *
      * @since 0.0.1
      */
     MultiPolygon() = default;
 
     /*!
-     * @brief creates a MultiPolygon from a geojson string
+     * @brief Creates a MultiPolygon from a geojson string
+     *
      * @param json the geojson string
      * @return a MultiPolygon object
      * @sa https://tools.ietf.org/html/rfc7946
@@ -43,7 +44,8 @@ class MultiPolygon : public BaseGeometry<MultiPolygon>
     }
 
     /*!
-     * @brief dumps the geojson representation of the MultiPolygon
+     * @brief Dumps the geojson representation of the MultiPolygon
+     *
      * @return a geojson string
      * @sa https://tools.ietf.org/html/rfc7946
      *
@@ -55,7 +57,8 @@ class MultiPolygon : public BaseGeometry<MultiPolygon>
     }
 
     /*!
-     * @brief creates a MultiPolygon from a WKT string
+     * @brief Creates a MultiPolygon from a WKT string
+     *
      * @param wkt the WKT string
      * @return a MultiPolygon object
      * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
@@ -65,17 +68,18 @@ class MultiPolygon : public BaseGeometry<MultiPolygon>
     static MultiPolygon from_wkt(const std::string& wkt)
     {
         WktReader reader{};
-        auto result      = reader.read(wkt.c_str());
+        auto result      = reader.read(wkt);
         const auto& data = result.data;
         if (not utils::is_multipolygon(data.geom_type))
         {
             throw exceptions::ParseError("invalid wkt string");
         }
-        return MultiPolygon();
+        return {};
     }
 
     /*!
-     * @brief creates a MultiPolygon from a WKT string
+     * @brief Creates a MultiPolygon from a WKT string
+     *
      * @param wkt the WKT string
      * @return a MultiPolygon object
      * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry

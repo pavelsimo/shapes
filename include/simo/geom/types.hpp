@@ -6,7 +6,7 @@ namespace shapes
 {
 
 /*!
- * @brief geometry dimension type is (x, y), (x, y, z), (x, y, m) or (x, y, z, m)
+ * @brief Geometry dimension type is (x, y), (x, y, z), (x, y, m) or (x, y, z, m)
  *
  * @since 0.0.1
  */
@@ -19,7 +19,7 @@ enum class DimensionType : uint8_t
 };
 
 /*!
- * @brief element type for the geometry
+ * @brief Element type for the geometry
  *
  * @since 0.0.1
  */
@@ -31,7 +31,7 @@ enum class ElementType : uint8_t
 };
 
 /*!
- * @brief geometry types as defined by the OpenGIS "Consortium Simple Features for SQL" specification
+ * @brief Geometry types as defined by the OpenGIS "Consortium Simple Features for SQL" specification
  *
  * @since 0.0.1
  */

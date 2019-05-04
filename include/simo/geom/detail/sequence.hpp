@@ -11,7 +11,7 @@ namespace detail
 {
 
 /*!
- * @brief represents a geometry sequence
+ * @brief Represents a geometry sequence
  * @tparam T the geometry type (e.g. LineString, MultiPoint)
  *
  * @since 0.0.1
@@ -116,7 +116,8 @@ class GeometrySequence
 };
 
 /*!
- * @brief creates a Point sequence from a given initializer list
+ * @brief Creates a Point sequence from a given initializer list
+ *
  * @tparam T an arithmetic value (e.g. int, float, double)
  * @param init the initializer list
  * @param[out] seq the output Point sequence
@@ -152,7 +153,8 @@ void create_sequence(std::initializer_list<std::initializer_list<T>> init, std::
 }
 
 /*!
- * creates a Point sequence from another Point sequence
+ * @brief Creates a Point sequence from another Point sequence
+ *
  * @param points the reference Point sequence
  * @param[out] seq the output Point sequence
  * @param[out] bounds the bounding box for the Point sequence
@@ -173,7 +175,8 @@ void create_sequence(const std::vector<Point>& points, std::vector<Point>& seq, 
 }
 
 /*!
- * @brief creates a Point sequence from an arithmetic value sequence
+ * @brief Creates a Point sequence from an arithmetic value sequence
+ *
  * @tparam T an arithmetic value (e.g. int, float, double)
  * @param coords the arithmetic value sequence
  * @param input_dim the input dimension type
@@ -203,11 +206,10 @@ void create_sequence(const std::vector<T>& coords, const DimensionType input_dim
 }
 
 /*!
- * @brief returns true if both sequence are equal, otherwise false
  * @tparam T the sequence type (e.g. MultiPoint, LineString)
  * @param lhs a sequence
  * @param rhs another sequence
- * @return a bool with the result of the comparison
+ * @return returns true if both sequence are equal, otherwise false
  *
  * @since 0.0.1
  */

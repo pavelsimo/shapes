@@ -12,7 +12,7 @@ namespace shapes
 {
 
 /*!
- * @brief a Well-known text (WKT) markup language parser result data
+ * @brief A Well-known text (WKT) markup language parser result data
  * @ingroup wkt
  *
  * @since 0.0.1
@@ -30,7 +30,7 @@ struct WktData
 };
 
 /*!
- * @brief a Well-known text (WKT) markup language parser result
+ * @brief A Well-known text (WKT) markup language parser results
  *
  * @since 0.0.1
  */

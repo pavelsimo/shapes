@@ -17,7 +17,7 @@ namespace shapes
 {
 
 /*!
- * @brief a curve where each consecutive pair of points defines a line segment.
+ * @brief A curve where each consecutive pair of points defines a line segment.
  * @ingroup geometry
  *
  * @since 0.0.1
@@ -26,14 +26,15 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
 {
   public:
     /*!
-     * @brief creates an empty LineString
+     * @brief Creates an empty LineString
      *
      * @since 0.0.1
      */
     LineString() = default;
 
     /*!
-     * @brief creates a LineString from a given initializer list
+     * @brief Creates a LineString from a given initializer list
+     *
      * @tparam T an arithmetic value (e.g. int, float, double)
      * @param init the initializer list
      *
@@ -50,7 +51,8 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief creates a LineString from a given point vector
+     * @brief Creates a LineString from a given point vector
+     *
      * @param points the point list
      *
      * @throw GeometryError if the geometry contains only one point
@@ -65,7 +67,8 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief creates a LineString from a given arithmetic value sequence
+     * @brief Creates a LineString from a given arithmetic value sequence
+     *
      * @tparam T an arithmetic value (e.g. int, float, double)
      * @param coords the arithmetic value sequence
      * @param input_dim the dimension type for the LineString points
@@ -82,7 +85,8 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief creates a LineString from an iterator range
+     * @brief Creates a LineString from an iterator range
+     *
      * @tparam InputIt the iterator type
      * @param first the first element of the iterator
      * @param last the last element of the iterator
@@ -99,7 +103,7 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
         if (std::distance(first, last) > 0)
         {
             auto ndim = static_cast<size_t>(utils::get_ndim(input_dim));
-            seq.reserve(std::distance(first, last)  / ndim);
+            seq.reserve(std::distance(first, last) / ndim);
             dim = input_dim;
             Point p;
             p.dim = input_dim;
@@ -118,7 +122,8 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief creates a LineString from a geojson string
+     * @brief Creates a LineString from a geojson string
+     *
      * @param json the geojson string
      * @return a LineString object
      * @sa https://tools.ietf.org/html/rfc7946
@@ -154,7 +159,8 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief dumps the geojson representation of the LineString
+     * @brief Dumps the geojson representation of the LineString
+     *
      * @return a geojson string
      * @sa https://tools.ietf.org/html/rfc7946
      *
@@ -201,7 +207,8 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief creates a LineString from a WKT string
+     * @brief Creates a LineString from a WKT string
+     *
      * @param wkt the WKT string
      * @return a LineString object
      * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
@@ -222,7 +229,8 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief creates a LineString from a WKT string
+     * @brief Creates a LineString from a WKT string
+     *
      * @param wkt the WKT string
      * @return a LineString object
      * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
@@ -266,28 +274,22 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief returns true if all Point's are equal, otherwise false
-     * @param other the LineString to compare
+     * @param lhs a LineString
+     * @param rhs a LineString
      * @return true if all Point's are equal, otherwise false
      *
      * @since 0.0.1
      */
-    bool operator==(const LineString& other) const
-    {
-        return detail::is_equal_sequence(*this, other);
-    }
+    friend bool operator==(const LineString& lhs, const LineString& rhs);
 
     /*!
-     * @brief returns true if at least one Point is different, otherwise false
-     * @param other the LineString to compare
+     * @param lhs a LineString
+     * @param rhs a LineString
      * @return true if at least one Point is different, otherwise false
      *
      * @since 0.0.1
      */
-    bool operator!=(const LineString& other) const
-    {
-        return not(*this == other);
-    }
+    friend bool operator!=(const LineString& lhs, const LineString& rhs);
 
   private:
     /// for allow BaseGeometry to access LineString private members
@@ -398,6 +400,16 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
         return seq[0] == seq[last_index];
     }
 };
+
+bool operator==(const LineString& lhs, const LineString& rhs)
+{
+    return detail::is_equal_sequence(lhs, rhs);
+}
+
+bool operator!=(const LineString& lhs, const LineString& rhs)
+{
+    return not operator==(lhs, rhs);
+}
 
 }  // namespace shapes
 }  // namespace simo

@@ -17,6 +17,7 @@ namespace shapes
 /*!
  * @brief a LineString that is both closed and simple, in shapes this feature is implicitly closed,
  * there is no need to specify the last coordinate, it will always be identical to the first.
+ *
  * @ingroup geometry
  *
  * @since 0.0.1
@@ -28,14 +29,15 @@ class LinearRing : public BaseGeometry<LinearRing>, public detail::GeometrySeque
     bool clockwise = true;
 
     /*!
-     * @brief creates an empty LinearRing
+     * @brief Creates an empty LinearRing
      *
      * @since 0.0.1
      */
     LinearRing() = default;
 
     /*!
-      * @brief creates a LinearRing from a given initializer list
+      * @brief Creates a LinearRing from a given initializer list
+      *
       * @tparam T an arithmetic value (e.g. int, float, double)
       * @param init the initializer list
       *
@@ -58,7 +60,8 @@ class LinearRing : public BaseGeometry<LinearRing>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief creates a LinearRing from a given point vector
+     * @brief Creates a LinearRing from a given point vector
+     *
      * @param points the point list
      *
      * @throw GeometryError DOCUMENT ME!
