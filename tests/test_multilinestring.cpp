@@ -516,12 +516,54 @@ TEST_CASE("MultiLineString")
     {
         SECTION("xy - coords")
         {
-            /// @todo add test
+            auto ml = MultiLineString{
+                    {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
+                    {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}};
+            auto coords = ml.coords();
+            CHECK(coords.size() == 6);
+
+            double x, y;
+            x = coords[0][0];
+            y = coords[0][1];
+            CHECK(x == 1.0);
+            CHECK(y == 2.0);
+            x = coords[1][0];
+            y = coords[1][1];
+            CHECK(x == 4.0);
+            CHECK(y == 5.0);
+            x = coords[2][0];
+            y = coords[2][1];
+            CHECK(x == 7.0);
+            CHECK(y == 8.0);
         }
 
         SECTION("xyz - coords")
         {
-            /// @todo add test
+            auto ml = MultiLineString{
+                    {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+                    {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
+            auto coords = ml.coords();
+            CHECK(coords.size() == 6);
+
+            double x, y, z;
+            x = coords[0][0];
+            y = coords[0][1];
+            z = coords[0][2];
+            CHECK(x == 1.0);
+            CHECK(y == 2.0);
+            CHECK(z == 3.0);
+            x = coords[1][0];
+            y = coords[1][1];
+            z = coords[1][2];
+            CHECK(x == 4.0);
+            CHECK(y == 5.0);
+            CHECK(z == 6.0);
+            x = coords[2][0];
+            y = coords[2][1];
+            z = coords[2][2];
+            CHECK(x == 7.0);
+            CHECK(y == 8.0);
+            CHECK(z == 9.0);
         }
 
         SECTION("xym - coords")
@@ -531,7 +573,37 @@ TEST_CASE("MultiLineString")
 
         SECTION("xyzm - coords")
         {
-            /// @todo add test
+            auto ml = MultiLineString{
+                    {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
+                    {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}};
+            auto coords = ml.coords();
+            CHECK(coords.size() == 6);
+
+            double x, y, z, m;
+            x = coords[0][0];
+            y = coords[0][1];
+            z = coords[0][2];
+            m = coords[0][3];
+            CHECK(x == 1.0);
+            CHECK(y == 2.0);
+            CHECK(z == 3.0);
+            CHECK(m == -1.5);
+            x = coords[1][0];
+            y = coords[1][1];
+            z = coords[1][2];
+            m = coords[1][3];
+            CHECK(x == 4.0);
+            CHECK(y == 5.0);
+            CHECK(z == 6.0);
+            CHECK(m == -2.5);
+            x = coords[2][0];
+            y = coords[2][1];
+            z = coords[2][2];
+            m = coords[2][3];
+            CHECK(x == 7.0);
+            CHECK(y == 8.0);
+            CHECK(z == 9.0);
+            CHECK(m == -3.5);
         }
     }
 }
