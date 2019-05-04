@@ -45,7 +45,7 @@ std::cout << p.json() << std::endl;
 Iterating a `MultiPoint` is as simple as:
 
 ```cpp
-MultiPoint points({{0, 0, 1}, {1, 2, 3}, {4, 5, 6}, {7, 7, 7}});
+auto points = MultiPoint{{0, 0, 1}, {1, 2, 3}, {4, 5, 6}, {7, 7, 7}};
 for(const auto& point: points)
 {
     std::cout << point.x << " " << point.y << " " << point.z << std::endl;
@@ -55,13 +55,22 @@ for(const auto& point: points)
 WKT representation of a `MultiPoint`:
 
 ```cpp
-MultiPoint points = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+auto points = MultiPoint{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
 points.precision  = 1;
 std::cout << points.wkt() << std::endl;
 ```
 
 ```text
 MULTIPOINTZ((1.0 2.0 3.0),(4.0 5.0 6.0))
+```
+
+Building a `MultiLineString`
+
+```cpp
+auto ml = MultiLineString{
+    {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+    {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}
+};
 ```
 
 ## Third-party tools
