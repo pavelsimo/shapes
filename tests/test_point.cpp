@@ -532,42 +532,50 @@ TEST_CASE("Point")
         }
     }
 
-    SECTION("coordinates tuples")
+    SECTION("coords")
     {
-        SECTION("xy - tuples")
+        SECTION("xy - coords")
         {
-            Point p = {1.0, 2.0};
-            double x, y;
-            std::tie(x, y) = p.xy()[0];
+            auto p = Point{1.0, 2.0};
+            auto coords = p.coords();
+            double x = coords[0][0];
+            double y = coords[0][1];
             CHECK(x == 1.0);
             CHECK(y == 2.0);
         }
 
-        SECTION("xyz - tuples")
+        SECTION("xyz - coords")
         {
-            Point p = {1.0, 2.0, 3.0};
-            double x, y, z;
-            std::tie(x, y, z) = p.xyz()[0];
+            auto p = Point{1.0, 2.0, 3.0};
+            auto coords = p.coords();
+            double x = coords[0][0];
+            double y = coords[0][1];
+            double z = coords[0][2];
             CHECK(x == 1.0);
             CHECK(y == 2.0);
             CHECK(z == 3.0);
         }
 
-        SECTION("xym - tuples")
+        SECTION("xym - coords")
         {
-            Point p = Point::from_xym(1.0, 2.0, 3.0);
-            double x, y, m;
-            std::tie(x, y, m) = p.xym()[0];
+            auto p = Point::from_xym(1.0, 2.0, 3.0);
+            auto coords = p.coords();
+            double x = coords[0][0];
+            double y = coords[0][1];
+            double m = coords[0][2];
             CHECK(x == 1.0);
             CHECK(y == 2.0);
             CHECK(m == 3.0);
         }
 
-        SECTION("xyzm - tuples")
+        SECTION("xyzm - coords")
         {
-            Point p = {1.0, 2.0, 3.0, 4.0};
-            double x, y, z, m;
-            std::tie(x, y, z, m) = p.xyzm()[0];
+            auto p = Point{1.0, 2.0, 3.0, 4.0};
+            auto coords = p.coords();
+            double x = coords[0][0];
+            double y = coords[0][1];
+            double z = coords[0][2];
+            double m = coords[0][3];
             CHECK(x == 1.0);
             CHECK(y == 2.0);
             CHECK(z == 3.0);

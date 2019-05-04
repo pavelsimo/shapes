@@ -117,47 +117,9 @@ class LinearRing : public BaseGeometry<LinearRing>, public detail::GeometrySeque
     }
 
     /// @private
-    std::vector<std::tuple<double, double>> xy_() const
+    std::vector<std::vector<double>> coords_() const
     {
-        std::vector<std::tuple<double, double>> res;
-        for (const auto& point : seq)
-        {
-            res.emplace_back(point.x, point.y);
-        }
-        return res;
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xyz_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        for (const auto& point : seq)
-        {
-            res.emplace_back(point.x, point.y, point.z);
-        }
-        return res;
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xym_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        for (const auto& point : seq)
-        {
-            res.emplace_back(point.x, point.y, point.m);
-        }
-        return res;
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
-    {
-        std::vector<std::tuple<double, double, double, double>> res;
-        for (const auto& point : seq)
-        {
-            res.emplace_back(point.x, point.y, point.z, point.m);
-        }
-        return res;
+        throw exceptions::NotImplementedError();
     }
 
     /// @private

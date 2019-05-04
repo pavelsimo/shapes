@@ -99,51 +99,14 @@ class BaseGeometry
     }
 
     /*!
-     * @brief Returns the geometry (x, y) coordinates as a tuple
-     *
-     * @return a vector of (x, y) tuples
-     *
-     * @since 0.0.1
-     */
-    std::vector<std::tuple<double, double>> xy() const
-    {
-        return static_cast<const T*>(this)->xy_();
-    }
-
-    /*!
-     * @brief Returns the geometry (x, y, z) coordinates as a tuple
-     *
-     * @return a vector of (x, y, z) tuples
+     * @brief Returns the geometry coordinates
+     * @return a vector with the geometry coordinates
      *
      * @since 0.0.1
      */
-    std::vector<std::tuple<double, double, double>> xyz() const
+    std::vector<std::vector<double>> coords() const
     {
-        return static_cast<const T*>(this)->xyz_();
-    }
-
-    /*!
-     * @brief Returns the geometry (x, y, m) coordinates as a tuple
-     *
-     * @return a vector of (x, y, m) tuples
-     *
-     * @since 0.0.1
-     */
-    std::vector<std::tuple<double, double, double>> xym() const
-    {
-        return static_cast<const T*>(this)->xym_();
-    }
-
-    /*!
-     * @brief Returns the geometry (x, y, z, m) coordinates as a tuple
-     *
-     * @return a vector of (x, y, z, m) tuples
-     *
-     * @since 0.0.1
-     */
-    std::vector<std::tuple<double, double, double, double>> xyzm() const
-    {
-        return static_cast<const T*>(this)->xyzm_();
+        return static_cast<const T*>(this)->coords_();
     }
 
     /*!

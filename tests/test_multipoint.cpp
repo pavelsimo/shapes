@@ -587,90 +587,111 @@ TEST_CASE("MultiPoint")
         }
     }
 
-    SECTION("coordinates tuples")
+    SECTION("coords")
     {
-        SECTION("xy - tuples")
+        SECTION("xy - coords")
         {
             auto mp     = MultiPoint{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
-            auto coords = mp.xy();
+            auto coords = mp.coords();
             CHECK(mp.size() == coords.size());
-
             double x, y;
-            std::tie(x, y) = coords[0];
+            x = coords[0][0];
+            y = coords[0][1];
             CHECK(x == 1.0);
             CHECK(y == 2.0);
-            std::tie(x, y) = coords[1];
+            x = coords[1][0];
+            y = coords[1][1];
             CHECK(x == 3.0);
             CHECK(y == 4.0);
-            std::tie(x, y) = coords[2];
+            x = coords[2][0];
+            y = coords[2][1];
             CHECK(x == 5.0);
             CHECK(y == 6.0);
         }
 
-        SECTION("xyz - tuples")
+        SECTION("xyz - coords")
         {
             auto mp     = MultiPoint{{1.0, 2.0, -1.0}, {3.0, 4.0, -2.0}, {5.0, 6.0, -3.0}};
-            auto coords = mp.xyz();
+            auto coords = mp.coords();
             CHECK(mp.size() == coords.size());
-
             double x, y, z;
-            std::tie(x, y, z) = coords[0];
+            x = coords[0][0];
+            y = coords[0][1];
+            z = coords[0][2];
             CHECK(x == 1.0);
             CHECK(y == 2.0);
             CHECK(z == -1.0);
-            std::tie(x, y, z) = coords[1];
+            x = coords[1][0];
+            y = coords[1][1];
+            z = coords[1][2];
             CHECK(x == 3.0);
             CHECK(y == 4.0);
             CHECK(z == -2.0);
-            std::tie(x, y, z) = coords[2];
+            x = coords[2][0];
+            y = coords[2][1];
+            z = coords[2][2];
             CHECK(x == 5.0);
             CHECK(y == 6.0);
             CHECK(z == -3.0);
         }
 
-        SECTION("xym - tuples")
+        SECTION("xym - coords")
         {
             std::vector<Point> pts1;
             pts1.push_back(Point::from_xym(1.0, 2.0, -1.0));
             pts1.push_back(Point::from_xym(3.0, 4.0, -2.0));
             pts1.push_back(Point::from_xym(5.0, 6.0, -3.0));
             auto mp     = MultiPoint(pts1);
-            auto coords = mp.xym();
+            auto coords = mp.coords();
             CHECK(mp.size() == coords.size());
-
             double x, y, m;
-            std::tie(x, y, m) = coords[0];
+            x = coords[0][0];
+            y = coords[0][1];
+            m = coords[0][2];
             CHECK(x == 1.0);
             CHECK(y == 2.0);
             CHECK(m == -1.0);
-            std::tie(x, y, m) = coords[1];
+            x = coords[1][0];
+            y = coords[1][1];
+            m = coords[1][2];
             CHECK(x == 3.0);
             CHECK(y == 4.0);
             CHECK(m == -2.0);
-            std::tie(x, y, m) = coords[2];
+            x = coords[2][0];
+            y = coords[2][1];
+            m = coords[2][2];
             CHECK(x == 5.0);
             CHECK(y == 6.0);
             CHECK(m == -3.0);
         }
 
-        SECTION("xyzm - tuples")
+        SECTION("xyzm - coords")
         {
             auto mp     = MultiPoint{{1.0, 2.0, -1.0, -10.0}, {3.0, 4.0, -2.0, -20.0}, {5.0, 6.0, -3.0, -30.0}};
-            auto coords = mp.xyzm();
+            auto coords = mp.coords();
             CHECK(mp.size() == coords.size());
 
             double x, y, z, m;
-            std::tie(x, y, z, m) = coords[0];
+            x = coords[0][0];
+            y = coords[0][1];
+            z = coords[0][2];
+            m = coords[0][3];
             CHECK(x == 1.0);
             CHECK(y == 2.0);
             CHECK(z == -1.0);
             CHECK(m == -10.0);
-            std::tie(x, y, z, m) = coords[1];
+            x = coords[1][0];
+            y = coords[1][1];
+            z = coords[1][2];
+            m = coords[1][3];
             CHECK(x == 3.0);
             CHECK(y == 4.0);
             CHECK(z == -2.0);
             CHECK(m == -20.0);
-            std::tie(x, y, z, m) = coords[2];
+            x = coords[2][0];
+            y = coords[2][1];
+            z = coords[2][2];
+            m = coords[2][3];
             CHECK(x == 5.0);
             CHECK(y == 6.0);
             CHECK(z == -3.0);

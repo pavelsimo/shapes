@@ -455,30 +455,22 @@ class Point : public BaseGeometry<Point>
         return false;
     }
 
-    /*!
-     * @private
-     */
-    std::vector<std::tuple<double, double>> xy_() const
-    {
-        return {std::make_tuple(x, y)};
-    }
-
     /// @private
-    std::vector<std::tuple<double, double, double>> xyz_() const
+    std::vector<std::vector<double>> coords_() const
     {
-        return {std::make_tuple(x, y, z)};
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xym_() const
-    {
-        return {std::make_tuple(x, y, m)};
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
-    {
-        return {std::make_tuple(x, y, z, m)};
+        if (dim == DimensionType::XYZ)
+        {
+            return {{x, y, z}};
+        }
+        if (dim == DimensionType::XYM)
+        {
+            return {{x, y, m}};
+        }
+        if (dim == DimensionType::XYZM)
+        {
+            return {{x, y, z, m}};
+        }
+        return {{x, y}};
     }
 };
 

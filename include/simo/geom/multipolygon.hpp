@@ -108,25 +108,7 @@ class MultiPolygon : public BaseGeometry<MultiPolygon>
     }
 
     /// @private
-    std::vector<std::tuple<double, double>> xy_() const
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xyz_() const
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xym_() const
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
+    std::vector<std::vector<double>> coords_() const
     {
         throw exceptions::NotImplementedError();
     }

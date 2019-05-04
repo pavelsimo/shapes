@@ -512,24 +512,24 @@ TEST_CASE("MultiLineString")
         }
     }
 
-    SECTION("coordinates tuples")
+    SECTION("coords")
     {
-        SECTION("xy - tuples")
+        SECTION("xy - coords")
         {
             /// @todo add test
         }
 
-        SECTION("xyz - tuples")
+        SECTION("xyz - coords")
         {
             /// @todo add test
         }
 
-        SECTION("xym - tuples")
+        SECTION("xym - coords")
         {
             /// @todo add test
         }
 
-        SECTION("xyzm - tuples")
+        SECTION("xyzm - coords")
         {
             /// @todo add test
         }

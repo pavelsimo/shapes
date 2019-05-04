@@ -336,53 +336,15 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     }
 
     /// @private
-    std::vector<std::tuple<double, double>> xy_() const
+    std::vector<std::vector<double>> coords_() const
     {
-        std::vector<std::tuple<double, double>> res;
-        res.reserve(num_points());
-        for (const auto& l : seq)
+        std::vector<std::vector<double>> res;
+        res.reserve(seq.size());
+        for(const auto& ls: seq)
         {
-            auto xy = l.xy();
-            res.insert(res.end(), xy.begin(), xy.end());
-        }
-        return res;
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xyz_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        res.reserve(num_points());
-        for (const auto& l : seq)
-        {
-            auto xyz = l.xyz();
-            res.insert(res.end(), xyz.begin(), xyz.end());
-        }
-        return res;
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xym_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        res.reserve(num_points());
-        for (const auto& l : seq)
-        {
-            auto xym = l.xym();
-            res.insert(res.end(), xym.begin(), xym.end());
-        }
-        return res;
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
-    {
-        std::vector<std::tuple<double, double, double, double>> res;
-        res.reserve(num_points());
-        for (const auto& l : seq)
-        {
-            auto xyzm = l.xyzm();
-            res.insert(res.end(), xyzm.begin(), xyzm.end());
+            std::for_each(std::begin(ls), std::end(ls), [&res](const Point& p) {
+                res.push_back(std::move(p.coords()[0]));
+            });
         }
         return res;
     }

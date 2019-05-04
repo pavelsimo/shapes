@@ -330,50 +330,13 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     }
 
     /// @private
-    std::vector<std::tuple<double, double>> xy_() const
+    std::vector<std::vector<double>> coords_() const
     {
-        std::vector<std::tuple<double, double>> res;
+        std::vector<std::vector<double>> res;
         res.reserve(seq.size());
-        for (const auto& point : seq)
-        {
-            res.emplace_back(point.x, point.y);
-        }
-        return res;
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xyz_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        res.reserve(seq.size());
-        for (const auto& point : seq)
-        {
-            res.emplace_back(point.x, point.y, point.z);
-        }
-        return res;
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xym_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        res.reserve(seq.size());
-        for (const auto& point : seq)
-        {
-            res.emplace_back(point.x, point.y, point.m);
-        }
-        return res;
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
-    {
-        std::vector<std::tuple<double, double, double, double>> res;
-        res.reserve(seq.size());
-        for (const auto& point : seq)
-        {
-            res.emplace_back(point.x, point.y, point.z, point.m);
-        }
+        std::for_each(std::begin(seq), std::end(seq), [&res](const Point& p) {
+            res.push_back(std::move(p.coords()[0]));
+        });
         return res;
     }
 
