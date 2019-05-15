@@ -68,6 +68,35 @@ class Polygon : public BaseGeometry<Polygon>
     /*!
      * @brief Creates a Polygon
      *
+     * @param rings a LinearRing sequence with the shell and holes of the polygon
+     *
+     * @since 0.0.1
+     */
+    explicit Polygon(const std::vector<LinearRing>& rings)
+    {
+        /// @todo (pavel) deal with duplication
+        if (not rings.empty())
+        {
+            auto ring     = rings.begin();
+            Bounds& b     = bounds;
+            exterior      = LinearRing(*ring);
+            Bounds& b_ext = exterior.bounds;
+            b.extend(b_ext.minx, b_ext.miny);
+            b.extend(b_ext.maxx, b_ext.maxy);
+            ring++;
+            for (; ring != rings.end(); ++ring)
+            {
+                interiors.emplace_back(*ring);
+                Bounds& b_int = interiors[interiors.size() - 1].bounds;
+                b.extend(b_int.minx, b_int.miny);
+                b.extend(b_int.maxx, b_int.maxy);
+            }
+        }
+    }
+
+    /*!
+     * @brief Creates a Polygon
+     *
      * @param shell the shell of the polygon as a Point sequence
      *
      * @since 0.0.1
@@ -89,7 +118,7 @@ class Polygon : public BaseGeometry<Polygon>
      *
      * @since 0.0.1
      */
-    Polygon(const std::vector<Point>& shell, const std::vector<std::vector<Point>>& holes)
+    explicit Polygon(const std::vector<Point>& shell, const std::vector<std::vector<Point>>& holes)
         : exterior(shell)
     {
         Bounds& b     = bounds;
@@ -115,9 +144,43 @@ class Polygon : public BaseGeometry<Polygon>
      *
      * @since 0.0.1
      */
-    static Polygon from_json(const std::string& /*json*/)
+    static Polygon from_json(const std::string& json)
     {
-        throw exceptions::NotImplementedError();
+        try
+        {
+            auto j         = nlohmann::json::parse(json);
+            auto geom_type = j.at("type").get<std::string>();
+            if (geom_type != "Polygon")
+            {
+                throw exceptions::ParseError("invalid geometry type: " + std::string(geom_type));
+            }
+            const auto& linearrings = j.at("coordinates");
+            std::vector<LinearRing> res;
+            res.reserve(linearrings.size());
+            std::vector<Point> points;
+            for (const auto& linearring : linearrings)
+            {
+                if (not linearring.empty())
+                {
+                    const auto& coords = linearring.get<std::vector<std::vector<double>>>();
+                    points.reserve(coords.size());
+                    std::for_each(std::begin(coords), std::end(coords), [&points](const std::vector<double>& coord) {
+                        points.emplace_back(coord);
+                    });
+                    res.emplace_back(points);
+                }
+                points.clear();
+            }
+            return Polygon(res);
+        }
+        catch (const nlohmann::json::exception& e)
+        {
+            throw exceptions::ParseError("invalid json: " + std::string(e.what()));
+        }
+        catch (const exceptions::GeometryError& e)
+        {
+            throw exceptions::ParseError("invalid geometry: " + std::string(e.what()));
+        }
     }
 
     /*!
@@ -130,7 +193,55 @@ class Polygon : public BaseGeometry<Polygon>
      */
     std::string json()
     {
-        throw exceptions::NotImplementedError();
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(precision);
+        ss << "{\"type\":\"Polygon\",\"coordinates\":[";
+
+        auto print_ring = [&ss](const LinearRing& ring) {
+            for (size_t j = 0; j < ring.size(); ++j)
+            {
+                if (j > 0)
+                {
+                    ss << ",";
+                }
+                const auto& p = ring.at(j);
+                switch (p.dim)
+                {
+                    case DimensionType::XY:
+                    {
+                        ss << "[" << p.x << "," << p.y << "]";
+                        break;
+                    }
+                    case DimensionType::XYZ:
+                    {
+                        ss << "[" << p.x << "," << p.y << "," << p.z << "]";
+                        break;
+                    }
+                    case DimensionType::XYM:
+                    {
+                        ss << "[" << p.x << "," << p.y << "," << p.m << "]";
+                        break;
+                    }
+                    case DimensionType::XYZM:
+                    {
+                        ss << "[" << p.x << "," << p.y << "," << p.z << "," << p.m << "]";
+                        break;
+                    }
+                }
+            }
+        };
+        ss << "[";
+        print_ring(exterior);
+        ss << "]";
+        for (const auto& interior : interiors)
+        {
+            ss << ",";
+            ss << "[";
+            print_ring(interior);
+            ss << "]";
+        }
+        ss << "]}";
+        return ss.str();
     }
 
     /*!
