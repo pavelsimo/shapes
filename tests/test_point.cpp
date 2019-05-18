@@ -536,21 +536,21 @@ TEST_CASE("Point")
     {
         SECTION("xy - coords")
         {
-            auto p = Point{1.0, 2.0};
+            auto p      = Point{1.0, 2.0};
             auto coords = p.coords();
-            double x = coords[0][0];
-            double y = coords[0][1];
+            double x    = coords[0][0];
+            double y    = coords[0][1];
             CHECK(x == 1.0);
             CHECK(y == 2.0);
         }
 
         SECTION("xyz - coords")
         {
-            auto p = Point{1.0, 2.0, 3.0};
+            auto p      = Point{1.0, 2.0, 3.0};
             auto coords = p.coords();
-            double x = coords[0][0];
-            double y = coords[0][1];
-            double z = coords[0][2];
+            double x    = coords[0][0];
+            double y    = coords[0][1];
+            double z    = coords[0][2];
             CHECK(x == 1.0);
             CHECK(y == 2.0);
             CHECK(z == 3.0);
@@ -558,11 +558,11 @@ TEST_CASE("Point")
 
         SECTION("xym - coords")
         {
-            auto p = Point::from_xym(1.0, 2.0, 3.0);
+            auto p      = Point::from_xym(1.0, 2.0, 3.0);
             auto coords = p.coords();
-            double x = coords[0][0];
-            double y = coords[0][1];
-            double m = coords[0][2];
+            double x    = coords[0][0];
+            double y    = coords[0][1];
+            double m    = coords[0][2];
             CHECK(x == 1.0);
             CHECK(y == 2.0);
             CHECK(m == 3.0);
@@ -570,12 +570,12 @@ TEST_CASE("Point")
 
         SECTION("xyzm - coords")
         {
-            auto p = Point{1.0, 2.0, 3.0, 4.0};
+            auto p      = Point{1.0, 2.0, 3.0, 4.0};
             auto coords = p.coords();
-            double x = coords[0][0];
-            double y = coords[0][1];
-            double z = coords[0][2];
-            double m = coords[0][3];
+            double x    = coords[0][0];
+            double y    = coords[0][1];
+            double z    = coords[0][2];
+            double m    = coords[0][3];
             CHECK(x == 1.0);
             CHECK(y == 2.0);
             CHECK(z == 3.0);
