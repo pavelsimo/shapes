@@ -51,12 +51,14 @@ class Polygon : public BaseGeometry<Polygon>
             auto ring     = rings.begin();
             Bounds& b     = bounds;
             exterior      = LinearRing(*ring);
+            dim = exterior.dim;
             Bounds& b_ext = exterior.bounds;
             b.extend(b_ext.minx, b_ext.miny);
             b.extend(b_ext.maxx, b_ext.maxy);
             ring++;
             for (; ring != rings.end(); ++ring)
             {
+                /// @todo (pavel) check dim
                 interiors.emplace_back(*ring);
                 Bounds& b_int = interiors[interiors.size() - 1].bounds;
                 b.extend(b_int.minx, b_int.miny);
@@ -74,7 +76,7 @@ class Polygon : public BaseGeometry<Polygon>
      */
     explicit Polygon(const std::vector<LinearRing>& rings)
     {
-        /// @todo (pavel) deal with duplication
+        /// @todo (pavel) eliminate duplication
         if (not rings.empty())
         {
             auto ring     = rings.begin();
@@ -104,10 +106,15 @@ class Polygon : public BaseGeometry<Polygon>
     explicit Polygon(const std::vector<Point>& shell)
         : exterior(shell)
     {
-        Bounds& b     = bounds;
-        Bounds& b_ext = exterior.bounds;
-        b.extend(b_ext.minx, b_ext.miny);
-        b.extend(b_ext.maxx, b_ext.maxy);
+        if (not exterior.empty())
+        {
+            dim = exterior[0].dim;
+            /// @todo (pavel) check dim
+            Bounds& b     = bounds;
+            Bounds& b_ext = exterior.bounds;
+            b.extend(b_ext.minx, b_ext.miny);
+            b.extend(b_ext.maxx, b_ext.maxy);
+        }
     }
 
     /*!
@@ -121,17 +128,69 @@ class Polygon : public BaseGeometry<Polygon>
     explicit Polygon(const std::vector<Point>& shell, const std::vector<std::vector<Point>>& holes)
         : exterior(shell)
     {
-        Bounds& b     = bounds;
-        Bounds& b_ext = exterior.bounds;
-        b.extend(b_ext.minx, b_ext.miny);
-        b.extend(b_ext.maxx, b_ext.maxy);
-        interiors.reserve(holes.size());
-        for (const auto& hole : holes)
+        if (not exterior.empty())
         {
-            interiors.emplace_back(hole);
-            Bounds& b_int = interiors[interiors.size() - 1].bounds;
-            b.extend(b_int.minx, b_int.miny);
-            b.extend(b_int.maxx, b_int.maxy);
+            dim = exterior[0].dim;
+            /// @todo (pavel) check dim
+            Bounds& b     = bounds;
+            Bounds& b_ext = exterior.bounds;
+            b.extend(b_ext.minx, b_ext.miny);
+            b.extend(b_ext.maxx, b_ext.maxy);
+            interiors.reserve(holes.size());
+            for (const auto& hole : holes)
+            {
+                interiors.emplace_back(hole);
+                Bounds& b_int = interiors[interiors.size() - 1].bounds;
+                b.extend(b_int.minx, b_int.miny);
+                b.extend(b_int.maxx, b_int.maxy);
+            }
+        }
+    }
+
+    /*!
+     * @brief Creates a MultiLineString from two pair of iterators
+     *
+     * @tparam CoordInputIt the coordinate input iterator
+     * @tparam OffsetInputIt the offset input iterator
+     * @param coord_first the first coordinate iterator
+     * @param coord_last the second coordinate iterator
+     * @param offset_first the offset first iterator
+     * @param offset_last the offset last iterator
+     * @param input_dim the dimension type
+     *
+     * @since 0.0.1
+     */
+    template <typename CoordInputIt, typename OffsetInputIt>
+    Polygon(CoordInputIt coord_first, CoordInputIt coord_last, OffsetInputIt offset_first, OffsetInputIt offset_last, DimensionType input_dim)
+    {
+        dim = input_dim;
+        if (std::distance(coord_first, coord_last) > 0 and std::distance(offset_first, offset_last) > 0)
+        {
+            auto ndim = static_cast<size_t>(utils::get_ndim(input_dim));
+
+            /// set polygon exterior
+            size_t lo = 0;
+            size_t hi = *offset_first;
+            exterior  = LinearRing(coord_first + lo, coord_first + hi, input_dim);
+            lo        = hi;
+            offset_first++;
+
+            Bounds& b     = bounds;
+            Bounds& b_ext = exterior.bounds;
+            b.extend(b_ext.minx, b_ext.miny);
+            b.extend(b_ext.maxx, b_ext.maxy);
+
+            /// set polygon interiors
+            interiors.reserve((coord_last - coord_first) / ndim);
+            for (auto it = offset_first; it != offset_last; ++it)
+            {
+                hi = *it;
+                interiors.emplace_back(coord_first + lo, coord_first + hi, input_dim);
+                lo            = hi;
+                const auto& l = interiors[interiors.size() - 1];
+                bounds.extend(l.bounds.minx, l.bounds.miny);
+                bounds.extend(l.bounds.maxx, l.bounds.maxy);
+            }
         }
     }
 
@@ -196,8 +255,7 @@ class Polygon : public BaseGeometry<Polygon>
         std::stringstream ss;
         ss << std::fixed << std::setprecision(precision);
         ss << "{\"type\":\"Polygon\",\"coordinates\":[";
-
-        auto print_ring = [&ss](const LinearRing& ring) {
+        auto add_ring = [&ss](const LinearRing& ring) {
             for (size_t j = 0; j < ring.size(); ++j)
             {
                 if (j > 0)
@@ -231,13 +289,13 @@ class Polygon : public BaseGeometry<Polygon>
             }
         };
         ss << "[";
-        print_ring(exterior);
+        add_ring(exterior);
         ss << "]";
         for (const auto& interior : interiors)
         {
             ss << ",";
             ss << "[";
-            print_ring(interior);
+            add_ring(interior);
             ss << "]";
         }
         ss << "]}";
@@ -256,13 +314,13 @@ class Polygon : public BaseGeometry<Polygon>
     static Polygon from_wkt(const std::string& wkt)
     {
         WktReader reader{};
-        auto result      = reader.read(wkt.c_str());
+        auto result      = reader.read(wkt);
         const auto& data = result.data;
         if (not utils::is_polygon(data.geom_type))
         {
             throw exceptions::ParseError("invalid wkt string");
         }
-        return Polygon();
+        return {data.coords.begin(), data.coords.end(), data.offsets.begin(), data.offsets.end(), utils::get_dim(data.geom_type)};
     }
 
     /*!
@@ -276,7 +334,48 @@ class Polygon : public BaseGeometry<Polygon>
      */
     std::string wkt()
     {
-        throw exceptions::NotImplementedError();
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(precision);
+        ss << "POLYGON";
+        if (has_z())
+        {
+            ss << "Z";
+        }
+        if (has_m())
+        {
+            ss << "M";
+        }
+        auto add_ring = [this, &ss](const LinearRing& ring) {
+            ss << "(";
+            int i = 0;
+            for (const auto& p : ring)
+            {
+                if (i > 0)
+                {
+                    ss << ",";
+                }
+                ss << p.x << " " << p.y;
+                if (has_z())
+                {
+                    ss << " " << p.z;
+                }
+                if (has_m())
+                {
+                    ss << " " << p.m;
+                }
+                ++i;
+            }
+            ss << ")";
+        };
+        ss << "(";
+        add_ring(exterior);
+        for (const auto& ring : interiors)
+        {
+            ss << ",";
+            add_ring(ring);
+        }
+        ss << ")";
+        return ss.str();
     }
 
     /// @todo (pavel) add from_bounds method

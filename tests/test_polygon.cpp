@@ -40,7 +40,7 @@ TEST_CASE("Polygon")
 
         SECTION("xy shell - initializer list")
         {
-            Polygon p = {
+            auto p = Polygon{
                 {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}}  // shell
             };
             CHECK(p.exterior[0].x == 1);
@@ -53,7 +53,7 @@ TEST_CASE("Polygon")
 
         SECTION("xy shell, holes - initializer list")
         {
-            Polygon p = {
+            auto p = Polygon{
                 {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}},  // shell
                 {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}}   // hole #1
             };
@@ -131,43 +131,135 @@ TEST_CASE("Polygon")
             SECTION("xy - from wkt")
             {
                 auto p = Polygon::from_wkt("POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))");
+                CHECK(p.exterior.size() == 5);
+                CHECK(p.interiors.empty());
+                CHECK(p.dim == DimensionType::XY);
+                CHECK(p.geom_type() == GeometryType::POLYGON);
+                CHECK(p.geom_type_dim() == GeometryType::POLYGON);
+                CHECK(p.exterior[0].x == 30);
+                CHECK(p.exterior[0].y == 10);
+                CHECK(p.exterior[1].x == 40);
+                CHECK(p.exterior[1].y == 40);
+                CHECK(p.exterior[2].x == 20);
+                CHECK(p.exterior[2].y == 40);
+                CHECK(p.exterior[3].x == 10);
+                CHECK(p.exterior[3].y == 20);
+                CHECK(p.exterior[4].x == 30);
+                CHECK(p.exterior[4].y == 10);
             }
 
             SECTION("xyz - from wkt")
             {
-                auto p = Polygon::from_wkt("POLYGON Z ((30 10 -5, 40 40 -5, 20 40 -5, 10 20 -5, 30 10 -5))");
+                auto p = Polygon::from_wkt("POLYGON Z ((30 10 -5, 40 40 -15, 20 40 -25, 10 20 -35, 30 10 -45))");
+                CHECK(p.exterior.size() == 5);
+                CHECK(p.interiors.empty());
+                CHECK(p.dim == DimensionType::XYZ);
+                CHECK(p.geom_type() == GeometryType::POLYGON);
+                CHECK(p.geom_type_dim() == GeometryType::POLYGONZ);
+                CHECK(p.exterior[0].x == 30);
+                CHECK(p.exterior[0].y == 10);
+                CHECK(p.exterior[0].z == -5);
+                CHECK(p.exterior[1].x == 40);
+                CHECK(p.exterior[1].y == 40);
+                CHECK(p.exterior[1].z == -15);
+                CHECK(p.exterior[2].x == 20);
+                CHECK(p.exterior[2].y == 40);
+                CHECK(p.exterior[2].z == -25);
+                CHECK(p.exterior[3].x == 10);
+                CHECK(p.exterior[3].y == 20);
+                CHECK(p.exterior[3].z == -35);
+                CHECK(p.exterior[4].x == 30);
+                CHECK(p.exterior[4].y == 10);
+                CHECK(p.exterior[4].z == -45);
             }
 
             SECTION("xym - from wkt")
             {
-                auto p = Polygon::from_wkt("POLYGON M ((30 10 -5, 40 40 -5, 20 40 -5, 10 20 -5, 30 10 -5))");
+                auto p = Polygon::from_wkt("POLYGON M ((30 10 -5, 40 40 -15, 20 40 -25, 10 20 -35, 30 10 -45))");
+                CHECK(p.exterior.size() == 5);
+                CHECK(p.interiors.empty());
+                CHECK(p.dim == DimensionType::XYM);
+                CHECK(p.geom_type() == GeometryType::POLYGON);
+                CHECK(p.geom_type_dim() == GeometryType::POLYGONM);
+                CHECK(p.exterior[0].x == 30);
+                CHECK(p.exterior[0].y == 10);
+                CHECK(p.exterior[0].m == -5);
+                CHECK(p.exterior[1].x == 40);
+                CHECK(p.exterior[1].y == 40);
+                CHECK(p.exterior[1].m == -15);
+                CHECK(p.exterior[2].x == 20);
+                CHECK(p.exterior[2].y == 40);
+                CHECK(p.exterior[2].m == -25);
+                CHECK(p.exterior[3].x == 10);
+                CHECK(p.exterior[3].y == 20);
+                CHECK(p.exterior[3].m == -35);
+                CHECK(p.exterior[4].x == 30);
+                CHECK(p.exterior[4].y == 10);
+                CHECK(p.exterior[4].m == -45);
             }
 
             SECTION("xyzm - from wkt")
             {
-                auto p = Polygon::from_wkt("POLYGON ZM ((30 10 -5 2, 40 40 -5 2, 20 40 -5 2, 10 20 -5 2, 30 10 -5 2))");
+                auto p = Polygon::from_wkt("POLYGON ZM ((30 10 -5 20, 40 40 -15 200, 20 40 -25 2000, 10 20 -35 20000, 30 10 -45 200000))");
+                CHECK(p.exterior.size() == 5);
+                CHECK(p.interiors.empty());
+                CHECK(p.dim == DimensionType::XYZM);
+                CHECK(p.geom_type() == GeometryType::POLYGON);
+                CHECK(p.geom_type_dim() == GeometryType::POLYGONZM);
+                CHECK(p.exterior[0].x == 30);
+                CHECK(p.exterior[0].y == 10);
+                CHECK(p.exterior[0].z == -5);
+                CHECK(p.exterior[0].m == 20);
+                CHECK(p.exterior[1].x == 40);
+                CHECK(p.exterior[1].y == 40);
+                CHECK(p.exterior[1].z == -15);
+                CHECK(p.exterior[1].m == 200);
+                CHECK(p.exterior[2].x == 20);
+                CHECK(p.exterior[2].y == 40);
+                CHECK(p.exterior[2].z == -25);
+                CHECK(p.exterior[2].m == 2000);
+                CHECK(p.exterior[3].x == 10);
+                CHECK(p.exterior[3].y == 20);
+                CHECK(p.exterior[3].z == -35);
+                CHECK(p.exterior[3].m == 20000);
+                CHECK(p.exterior[4].x == 30);
+                CHECK(p.exterior[4].y == 10);
+                CHECK(p.exterior[4].z == -45);
+                CHECK(p.exterior[4].m == 200000);
             }
 
             SECTION("empty - from wkt")
             {
                 SECTION("empty - xy")
                 {
-                    /// @todo add test
+                    auto ml = Polygon::from_wkt("Polygon EMPTY");
+                    CHECK(ml.empty());
+                    CHECK(ml.geom_type_dim() == GeometryType::POLYGON);
+                    CHECK(ml.dim == DimensionType::XY);
                 }
 
                 SECTION("empty - xyz")
                 {
-                    /// @todo add test
+                    auto ml = Polygon::from_wkt("Polygon Z EMPTY");
+                    CHECK(ml.empty());
+                    CHECK(ml.geom_type_dim() == GeometryType::POLYGONZ);
+                    CHECK(ml.dim == DimensionType::XYZ);
                 }
 
                 SECTION("empty - xym")
                 {
-                    /// @todo add test
+                    auto ml = Polygon::from_wkt("Polygon M EMPTY");
+                    CHECK(ml.empty());
+                    CHECK(ml.geom_type_dim() == GeometryType::POLYGONM);
+                    CHECK(ml.dim == DimensionType::XYM);
                 }
 
                 SECTION("empty - xyzm")
                 {
-                    /// @todo add test
+                    auto ml = Polygon::from_wkt("Polygon ZM EMPTY");
+                    CHECK(ml.empty());
+                    CHECK(ml.geom_type_dim() == GeometryType::POLYGONZM);
+                    CHECK(ml.dim == DimensionType::XYZM);
                 }
             }
 
@@ -194,12 +286,20 @@ TEST_CASE("Polygon")
         {
             SECTION("xy - to json")
             {
-                /// @todo add test
+                auto p = Polygon{
+                        {{1, 2}, {4, 5}, {7, 8}, {1, 2}},  // shell
+                        {{1, 2}, {4, 5}, {7, 8}, {1, 2}}   // hole #1
+                };
+                CHECK(p.json() == R"({"type":"Polygon","coordinates":[[[1.0,2.0],[4.0,5.0],[7.0,8.0],[1.0,2.0]],[[1.0,2.0],[4.0,5.0],[7.0,8.0],[1.0,2.0]]]})");
             }
 
             SECTION("xyz - to json")
             {
-                /// @todo add test
+                auto p = Polygon{
+                        {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}},  // shell
+                        {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}}   // hole #1
+                };
+                CHECK(p.json() == R"({"type":"Polygon","coordinates":[[[1.0,2.0,3.0],[4.0,5.0,6.0],[7.0,8.0,9.0],[1.0,2.0,3.0]],[[1.0,2.0,3.0],[4.0,5.0,6.0],[7.0,8.0,9.0],[1.0,2.0,3.0]]]})");
             }
 
             SECTION("xym - to json")
@@ -209,7 +309,11 @@ TEST_CASE("Polygon")
 
             SECTION("xyzm - to json")
             {
-                /// @todo add test
+                auto p = Polygon{
+                        {{1, 2, 3, -1}, {4, 5, 6, -5}, {7, 8, 9, -5}, {1, 2, 3, -1}},  // shell
+                        {{1, 2, 3, -1}, {4, 5, 6, -5}, {7, 8, 9, -5}, {1, 2, 3, -1}}   // hole #1
+                };
+                CHECK(p.json() == R"({"type":"Polygon","coordinates":[[[1.0,2.0,3.0,-1.0],[4.0,5.0,6.0,-5.0],[7.0,8.0,9.0,-5.0],[1.0,2.0,3.0,-1.0]],[[1.0,2.0,3.0,-1.0],[4.0,5.0,6.0,-5.0],[7.0,8.0,9.0,-5.0],[1.0,2.0,3.0,-1.0]]]})");
             }
         }
 
@@ -217,12 +321,20 @@ TEST_CASE("Polygon")
         {
             SECTION("xy - to wkt")
             {
-                /// @todo add test
+                auto p = Polygon{
+                        {{1, 2}, {4, 5}, {7, 8}, {1, 2}},  // shell
+                        {{1, 2}, {4, 5}, {7, 8}, {1, 2}}   // hole #1
+                };
+                CHECK(p.wkt() == "POLYGON((1.0 2.0,4.0 5.0,7.0 8.0,1.0 2.0),(1.0 2.0,4.0 5.0,7.0 8.0,1.0 2.0))");
             }
 
             SECTION("xyz - to wkt")
             {
-                /// @todo add test
+                auto p = Polygon{
+                        {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}},  // shell
+                        {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}}   // hole #1
+                };
+                CHECK(p.wkt() == "POLYGONZ((1.0 2.0 3.0,4.0 5.0 6.0,7.0 8.0 9.0,1.0 2.0 3.0),(1.0 2.0 3.0,4.0 5.0 6.0,7.0 8.0 9.0,1.0 2.0 3.0))");
             }
 
             SECTION("xym - to wkt")
@@ -232,7 +344,11 @@ TEST_CASE("Polygon")
 
             SECTION("xyzm - to wkt")
             {
-                /// @todo add test
+                auto p = Polygon{
+                        {{1, 2, 3, -1}, {4, 5, 6, -5}, {7, 8, 9, -5}, {1, 2, 3, -1}},  // shell
+                        {{1, 2, 3, -1}, {4, 5, 6, -5}, {7, 8, 9, -5}, {1, 2, 3, -1}}   // hole #1
+                };
+                CHECK(p.wkt() == "POLYGONZM((1.0 2.0 3.0 -1.0,4.0 5.0 6.0 -5.0,7.0 8.0 9.0 -5.0,1.0 2.0 3.0 -1.0),(1.0 2.0 3.0 -1.0,4.0 5.0 6.0 -5.0,7.0 8.0 9.0 -5.0,1.0 2.0 3.0 -1.0))");
             }
         }
     }
