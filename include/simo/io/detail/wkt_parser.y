@@ -418,9 +418,24 @@ multilinestring_zm ::= WKT_MULTILINESTRING_ZM_TAGGED_TEXT multilinestring_text_z
 //==========
 
 ring_text ::= WKT_LPAREN coord_xy WKT_COMMA coord_xy WKT_COMMA coord_xy WKT_COMMA coord_xy coord_xy_repeated WKT_RPAREN.
+{
+    result->data.offsets.push_back(result->data.coords.size());
+}
+
 ring_text_z ::= WKT_LPAREN coord_xyz  WKT_COMMA coord_xyz WKT_COMMA coord_xyz WKT_COMMA coord_xyz coord_xyz_repeated WKT_RPAREN.
+{
+    result->data.offsets.push_back(result->data.coords.size());
+}
+
 ring_text_m ::= WKT_LPAREN coord_xym  WKT_COMMA coord_xym WKT_COMMA coord_xym WKT_COMMA coord_xym coord_xym_repeated WKT_RPAREN.
+{
+    result->data.offsets.push_back(result->data.coords.size());
+}
+
 ring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm WKT_COMMA coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN.
+{
+    result->data.offsets.push_back(result->data.coords.size());
+}
 
 ring_text_repeated ::= .
 ring_text_repeated ::= WKT_COMMA ring_text ring_text_repeated.
