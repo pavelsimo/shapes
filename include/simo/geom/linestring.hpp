@@ -25,6 +25,13 @@ namespace shapes
 class LineString : public BaseGeometry<LineString>, public detail::GeometrySequence<Point>
 {
   public:
+    /// two-dimensional rotation direction, counterclockwise=true, clockwise=false
+    bool ccw = true;
+
+    /// @todo is_ring
+    /// @todo is_ccw
+    /// @todo add ring=false attribute
+
     /*!
      * @brief Creates an empty LineString
      *
@@ -305,14 +312,14 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
 
         if (seq.size() < 2)
         {
-            throw exceptions::GeometryError("a linestring should be either empty or with 2 or more points");
+            throw exceptions::GeometryError("LineString should be either empty or with 2 or more points");
         }
 
         if (seq.size() == 2)
         {
             if (seq[0] == seq[1])
             {
-                throw exceptions::GeometryError("a linestring with exactly two equal points");
+                throw exceptions::GeometryError("LineString with exactly two equal points");
             }
         }
     }

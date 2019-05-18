@@ -340,7 +340,7 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     {
         std::vector<std::vector<double>> res;
         res.reserve(seq.size());
-        for(const auto& ls: seq)
+        for (const auto& ls : seq)
         {
             std::for_each(std::begin(ls), std::end(ls), [&res](const Point& p) {
                 res.push_back(std::move(p.coords()[0]));
