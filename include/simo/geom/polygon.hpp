@@ -51,7 +51,7 @@ class Polygon : public BaseGeometry<Polygon>
             auto ring     = rings.begin();
             Bounds& b     = bounds;
             exterior      = LinearRing(*ring);
-            dim = exterior.dim;
+            dim           = exterior.dim;
             Bounds& b_ext = exterior.bounds;
             b.extend(b_ext.minx, b_ext.miny);
             b.extend(b_ext.maxx, b_ext.maxy);
@@ -378,7 +378,81 @@ class Polygon : public BaseGeometry<Polygon>
         return ss.str();
     }
 
-    /// @todo (pavel) add from_bounds method
+    /*!
+     * @param lhs a Polygon
+     * @param rhs a Polygon
+     * @return true if all LinearRing's are equal, otherwise false
+     *
+     * @since 0.0.1
+     */
+    friend bool operator==(const Polygon& lhs, const Polygon& rhs);
+
+    /*!
+     * @param lhs a Polygon
+     * @param rhs a Polygon
+     * @return true if at least one LinearRing is different, otherwise false
+     *
+     * @since 0.0.1
+     */
+    friend bool operator!=(const Polygon& lhs, const Polygon& rhs);
+
+    /*!
+    * @param pos the element position
+    * @return returns a reference to the element at position n in T
+    *
+    * @since 0.0.1
+    */
+    LinearRing& operator[](size_t pos)
+    {
+        try
+        {
+            return (pos == 0) ? exterior : interiors.at(pos);
+        }
+        catch (std::out_of_range&)
+        {
+            throw exceptions::IndexError("index at " + std::to_string(pos) + " is out of range");
+        }
+    }
+
+    /*!
+     * @param pos the element position
+     * @return returns a reference to the element at position n in the LinearRing
+     *
+     * @throw IndexError if the index at pos is out of range
+     *
+     * @since 0.0.1
+     */
+    const LinearRing& at(size_t pos) const
+    {
+        try
+        {
+            return (pos == 0) ? exterior : interiors.at(pos);
+        }
+        catch (std::out_of_range&)
+        {
+            throw exceptions::IndexError("index at " + std::to_string(pos) + " is out of range");
+        }
+    }
+
+    /*!
+     * @param pos the element position
+     * @return returns a reference to the element at position n in the LinearRing
+     *
+     * @throw IndexError if the index at pos is out of range
+     *
+     * @since 0.0.1
+     */
+    LinearRing& at(size_t pos)
+    {
+        try
+        {
+            return (pos == 0) ? exterior : interiors.at(pos);
+        }
+        catch (std::out_of_range&)
+        {
+            throw exceptions::IndexError("index at " + std::to_string(pos) + " is out of range");
+        }
+    }
 
   private:
     /// for allow BaseGeometry to access Polygon private members
@@ -405,12 +479,15 @@ class Polygon : public BaseGeometry<Polygon>
     /// @private
     size_t size_() const
     {
-        size_t size = exterior.size();
-        for (const auto& interior : interiors)
+        if (exterior.empty())
         {
-            size += interior.size();
+            return 0;
         }
-        return size;
+        if (interiors.empty())
+        {
+            return 1;
+        }
+        return interiors.size() + 1;
     }
 
     /// @private
@@ -425,6 +502,49 @@ class Polygon : public BaseGeometry<Polygon>
         throw exceptions::NotImplementedError();
     }
 };
+
+bool operator==(const Polygon& lhs, const Polygon& rhs)
+{
+    if (lhs.exterior.size() != rhs.exterior.size())
+    {
+        return false;
+    }
+
+    if (lhs.interiors.size() != rhs.interiors.size())
+    {
+        return false;
+    }
+
+    for (size_t i = 0; i < lhs.exterior.size(); ++i)
+    {
+        if (lhs.exterior.at(i) != rhs.exterior.at(i))
+        {
+            return false;
+        }
+    }
+
+    for (size_t i = 0; i < lhs.interiors.size(); ++i)
+    {
+        if (lhs.interiors[i] != rhs.interiors[i])
+        {
+            return false;
+        }
+        for (size_t j = 0; j < lhs.interiors[i].size(); ++j)
+        {
+            if (lhs.interiors[i].at(j) != rhs.interiors[i].at(j))
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+bool operator!=(const Polygon& lhs, const Polygon& rhs)
+{
+    return not operator==(lhs, rhs);
+}
 
 }  // namespace shapes
 }  // namespace simo
