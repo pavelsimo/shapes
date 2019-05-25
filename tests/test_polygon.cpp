@@ -455,12 +455,28 @@ TEST_CASE("Polygon")
         {
             SECTION("xy - equal to")
             {
-                /// @todo add test
+                auto p1 = Polygon{
+                    {{1, 2}, {4, 5}, {7, 8}, {1, 2}},  // shell
+                    {{1, 2}, {4, 5}, {7, 8}, {1, 2}}   // hole #1
+                };
+                auto p2 = Polygon{
+                    {{1, 2}, {4, 5}, {7, 8}, {1, 2}},  // shell
+                    {{1, 2}, {4, 5}, {7, 8}, {1, 2}}   // hole #1
+                };
+                CHECK(p1 == p2);
             }
 
             SECTION("xyz - equal to")
             {
-                /// @todo add test
+                auto p1 = Polygon{
+                    {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}},  // shell
+                    {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}}   // hole #1
+                };
+                auto p2 = Polygon{
+                    {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}},  // shell
+                    {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}}   // hole #1
+                };
+                CHECK(p1 == p2);
             }
 
             SECTION("xym - equal to")
@@ -470,7 +486,15 @@ TEST_CASE("Polygon")
 
             SECTION("xyzm - equal to")
             {
-                /// @todo add test
+                auto p1 = Polygon{
+                    {{1, 2, 3, -1}, {4, 5, 6, -5}, {7, 8, 9, -5}, {1, 2, 3, -1}},  // shell
+                    {{1, 2, 3, -1}, {4, 5, 6, -5}, {7, 8, 9, -5}, {1, 2, 3, -1}}   // hole #1
+                };
+                auto p2 = Polygon{
+                    {{1, 2, 3, -1}, {4, 5, 6, -5}, {7, 8, 9, -5}, {1, 2, 3, -1}},  // shell
+                    {{1, 2, 3, -1}, {4, 5, 6, -5}, {7, 8, 9, -5}, {1, 2, 3, -1}}   // hole #1
+                };
+                CHECK(p1 == p2);
             }
         }
 
@@ -478,12 +502,28 @@ TEST_CASE("Polygon")
         {
             SECTION("xy - not equal to")
             {
-                /// @todo add test
+                auto p1 = Polygon{
+                        {{1, 2}, {4, 5}, {7, 8}, {100, 2}},  // shell
+                        {{1, 2}, {4, 5}, {7, 8}, {1, 2}}     // hole #1
+                };
+                auto p2 = Polygon{
+                        {{1, 2}, {4, 5}, {7, 8}, {1, 2}},    // shell
+                        {{1, 2}, {4, 5}, {700, 8}, {1, 2}}   // hole #1
+                };
+                CHECK(p1 != p2);
             }
 
             SECTION("xyz - not equal to")
             {
-                /// @todo add test
+                auto p1 = Polygon{
+                        {{1, 2, 3}, {4, 500, 6}, {7, 8, 9}, {1, 2, 3}},  // shell
+                        {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}}   // hole #1
+                };
+                auto p2 = Polygon{
+                        {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {1, 2, 3}},    // shell
+                        {{1, 2, 3}, {4, 5, 6}, {7, 800, 9}, {1, 2, 3}}   // hole #1
+                };
+                CHECK(p1 != p2);
             }
 
             SECTION("xym - not equal to")
@@ -493,7 +533,15 @@ TEST_CASE("Polygon")
 
             SECTION("xyzm - not equal to")
             {
-                /// @todo add test
+                auto p1 = Polygon{
+                        {{1, 2, 3, -1}, {4, 5, 6, -5}, {7, 8, 9, -5}, {1, 2, 3, -1}},  // shell
+                        {{1, 2, 3, -1}, {4, 6, 5, -5}, {7, 8, 9, -5}, {1, 2, 3, -1}}   // hole #1
+                };
+                auto p2 = Polygon{
+                        {{1, 2, 3, -1}, {4, 5, 6, -5}, {8, 7, 9, -5}, {1, 2, 3, -1}},  // shell
+                        {{1, 3, 2, -1}, {4, 5, 6, -5}, {7, 8, 9, -5}, {1, 2, 3, -1}}   // hole #1
+                };
+                CHECK(p1 != p2);
             }
         }
 
@@ -501,12 +549,42 @@ TEST_CASE("Polygon")
         {
             SECTION("xy - index operator")
             {
-                /// @todo add test
+                auto pg = Polygon{
+                        {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
+                        {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}};
+                auto& p1 = pg[0][0];
+                CHECK(p1.geom_type_dim() == GeometryType::POINT);
+                CHECK(p1.x == 1.0);
+                CHECK(p1.y == 2.0);
+
+                auto& p2 = pg[1][2];
+                CHECK(p2.geom_type_dim() == GeometryType::POINT);
+                CHECK(p2.x == 16.0);
+                CHECK(p2.y == 17.0);
             }
 
             SECTION("xyz - index operator")
             {
-                /// @todo add test
+                auto pg = Polygon{
+                        {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+                        {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
+                auto& p1 = pg[0][0];
+                CHECK(p1.geom_type_dim() == GeometryType::POINTZ);
+                CHECK(p1.x == 1.0);
+                CHECK(p1.y == 2.0);
+                CHECK(p1.z == 3.0);
+
+                auto& p2 = pg[0][2];
+                CHECK(p2.geom_type_dim() == GeometryType::POINTZ);
+                CHECK(p2.x == 7.0);
+                CHECK(p2.y == 8.0);
+                CHECK(p2.z == 9.0);
+
+                auto& p3 = pg[1][2];
+                CHECK(p3.geom_type_dim() == GeometryType::POINTZ);
+                CHECK(p3.x == 16.0);
+                CHECK(p3.y == 17.0);
+                CHECK(p3.z == 18.0);
             }
 
             SECTION("xym - index operator")
@@ -516,31 +594,176 @@ TEST_CASE("Polygon")
 
             SECTION("xyzm - index operator")
             {
-                /// @todo add test
+                auto pg = Polygon{
+                        {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
+                        {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}};
+                auto& p1 = pg[0][0];
+                CHECK(p1.geom_type_dim() == GeometryType::POINTZM);
+                CHECK(p1.x == 1.0);
+                CHECK(p1.y == 2.0);
+                CHECK(p1.z == 3.0);
+                CHECK(p1.m == -1.5);
+
+                auto& p2 = pg[0][2];
+                CHECK(p2.geom_type_dim() == GeometryType::POINTZM);
+                CHECK(p2.x == 7.0);
+                CHECK(p2.y == 8.0);
+                CHECK(p2.z == 9.0);
+                CHECK(p2.m == -3.5);
+
+                auto& p3 = pg[1][2];
+                CHECK(p3.geom_type_dim() == GeometryType::POINTZM);
+                CHECK(p3.x == 16.0);
+                CHECK(p3.y == 17.0);
+                CHECK(p3.z == 18.0);
+                CHECK(p3.m == -12.5);
             }
         }
     }
 
-    SECTION("coordinates tuples")
+    SECTION("coords")
     {
-        SECTION("xy - tuples")
+        SECTION("xy - coords")
+        {
+            auto p = Polygon{
+                    {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
+                    {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}};
+            auto coords = p.coords();
+            CHECK(coords.size() == 6);
+            double x, y;
+            x = coords[0][0];
+            y = coords[0][1];
+            CHECK(x == 1.0);
+            CHECK(y == 2.0);
+            x = coords[1][0];
+            y = coords[1][1];
+            CHECK(x == 4.0);
+            CHECK(y == 5.0);
+            x = coords[2][0];
+            y = coords[2][1];
+            CHECK(x == 7.0);
+            CHECK(y == 8.0);
+            x = coords[3][0];
+            y = coords[3][1];
+            CHECK(x == 11.0);
+            CHECK(y == 12.0);
+            x = coords[4][0];
+            y = coords[4][1];
+            CHECK(x == 13.0);
+            CHECK(y == 14.0);
+            x = coords[5][0];
+            y = coords[5][1];
+            CHECK(x == 16.0);
+            CHECK(y == 17.0);
+        }
+
+        SECTION("xyz - coords")
+        {
+            auto p = Polygon{
+                    {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+                    {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
+            auto coords = p.coords();
+            CHECK(coords.size() == 6);
+            double x, y, z;
+            x = coords[0][0];
+            y = coords[0][1];
+            z = coords[0][2];
+            CHECK(x == 1.0);
+            CHECK(y == 2.0);
+            CHECK(z == 3.0);
+            x = coords[1][0];
+            y = coords[1][1];
+            z = coords[1][2];
+            CHECK(x == 4.0);
+            CHECK(y == 5.0);
+            CHECK(z == 6.0);
+            x = coords[2][0];
+            y = coords[2][1];
+            z = coords[2][2];
+            CHECK(x == 7.0);
+            CHECK(y == 8.0);
+            CHECK(z == 9.0);
+            x = coords[3][0];
+            y = coords[3][1];
+            z = coords[3][2];
+            CHECK(x == 11.0);
+            CHECK(y == 12.0);
+            CHECK(z == 13.0);
+            x = coords[4][0];
+            y = coords[4][1];
+            z = coords[4][2];
+            CHECK(x == 13.0);
+            CHECK(y == 14.0);
+            CHECK(z == 15.0);
+            x = coords[5][0];
+            y = coords[5][1];
+            z = coords[5][2];
+            CHECK(x == 16.0);
+            CHECK(y == 17.0);
+            CHECK(z == 18.0);
+        }
+
+        SECTION("xym - coords")
         {
             /// @todo add test
         }
 
-        SECTION("xyz - tuples")
+        SECTION("xyzm - coords")
         {
-            /// @todo add test
-        }
-
-        SECTION("xym - tuples")
-        {
-            /// @todo add test
-        }
-
-        SECTION("xyzm - tuples")
-        {
-            /// @todo add test
+            auto ml = Polygon{
+                    {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
+                    {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}};
+            auto coords = ml.coords();
+            CHECK(coords.size() == 6);
+            double x, y, z, m;
+            x = coords[0][0];
+            y = coords[0][1];
+            z = coords[0][2];
+            m = coords[0][3];
+            CHECK(x == 1.0);
+            CHECK(y == 2.0);
+            CHECK(z == 3.0);
+            CHECK(m == -1.5);
+            x = coords[1][0];
+            y = coords[1][1];
+            z = coords[1][2];
+            m = coords[1][3];
+            CHECK(x == 4.0);
+            CHECK(y == 5.0);
+            CHECK(z == 6.0);
+            CHECK(m == -2.5);
+            x = coords[2][0];
+            y = coords[2][1];
+            z = coords[2][2];
+            m = coords[2][3];
+            CHECK(x == 7.0);
+            CHECK(y == 8.0);
+            CHECK(z == 9.0);
+            CHECK(m == -3.5);
+            x = coords[3][0];
+            y = coords[3][1];
+            z = coords[3][2];
+            m = coords[3][3];
+            CHECK(x == 11.0);
+            CHECK(y == 12.0);
+            CHECK(z == 13.0);
+            CHECK(m == -10.5);
+            x = coords[4][0];
+            y = coords[4][1];
+            z = coords[4][2];
+            m = coords[4][3];
+            CHECK(x == 13.0);
+            CHECK(y == 14.0);
+            CHECK(z == 15.0);
+            CHECK(m == -11.5);
+            x = coords[5][0];
+            y = coords[5][1];
+            z = coords[5][2];
+            m = coords[5][3];
+            CHECK(x == 16.0);
+            CHECK(y == 17.0);
+            CHECK(z == 18.0);
+            CHECK(m == -12.5);
         }
     }
 }
