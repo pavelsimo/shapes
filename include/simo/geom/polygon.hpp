@@ -79,16 +79,16 @@ class Polygon : public BaseGeometry<Polygon>
         /// @todo (pavel) eliminate duplication
         if (not rings.empty())
         {
-            auto ring     = rings.begin();
             Bounds& b     = bounds;
-            exterior      = LinearRing(*ring);
+            exterior      = rings[0];
+            dim           = exterior.dim;
             Bounds& b_ext = exterior.bounds;
             b.extend(b_ext.minx, b_ext.miny);
             b.extend(b_ext.maxx, b_ext.maxy);
-            ring++;
-            for (; ring != rings.end(); ++ring)
+            interiors.reserve(rings.size() - 1);
+            for (std::size_t i = 1; i < rings.size(); ++i)
             {
-                interiors.emplace_back(*ring);
+                interiors.push_back(rings[i]);
                 Bounds& b_int = interiors[interiors.size() - 1].bounds;
                 b.extend(b_int.minx, b_int.miny);
                 b.extend(b_int.maxx, b_int.maxy);
@@ -214,9 +214,10 @@ class Polygon : public BaseGeometry<Polygon>
                 throw exceptions::ParseError("invalid geometry type: " + std::string(geom_type));
             }
             const auto& linearrings = j.at("coordinates");
-            std::vector<LinearRing> res;
-            res.reserve(linearrings.size());
+            std::vector<LinearRing> rings;
+            rings.reserve(linearrings.size());
             std::vector<Point> points;
+            std::vector<std::size_t> offsets;
             for (const auto& linearring : linearrings)
             {
                 if (not linearring.empty())
@@ -226,11 +227,11 @@ class Polygon : public BaseGeometry<Polygon>
                     std::for_each(std::begin(coords), std::end(coords), [&points](const std::vector<double>& coord) {
                         points.emplace_back(coord);
                     });
-                    res.emplace_back(points);
+                    rings.emplace_back(points);
+                    points.clear();
                 }
-                points.clear();
             }
-            return Polygon(res);
+            return Polygon(rings);
         }
         catch (const nlohmann::json::exception& e)
         {
@@ -406,7 +407,7 @@ class Polygon : public BaseGeometry<Polygon>
     {
         try
         {
-            return (pos == 0) ? exterior : interiors.at(pos);
+            return (pos == 0) ? exterior : interiors[pos - 1];
         }
         catch (std::out_of_range&)
         {
@@ -426,7 +427,7 @@ class Polygon : public BaseGeometry<Polygon>
     {
         try
         {
-            return (pos == 0) ? exterior : interiors.at(pos);
+            return (pos == 0) ? exterior : interiors.at(pos - 1);
         }
         catch (std::out_of_range&)
         {
@@ -446,7 +447,7 @@ class Polygon : public BaseGeometry<Polygon>
     {
         try
         {
-            return (pos == 0) ? exterior : interiors.at(pos);
+            return (pos == 0) ? exterior : interiors.at(pos - 1);
         }
         catch (std::out_of_range&)
         {

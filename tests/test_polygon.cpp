@@ -118,28 +118,107 @@ TEST_CASE("Polygon")
                 )";
                 auto p           = Polygon::from_json(json);
                 CHECK(p.size() == 2);
+                CHECK(p[0].size() == 5);
+                CHECK(p[1].size() == 4);
+                CHECK(p.exterior.size() == 5);
+                CHECK(p.interiors.size() == 1);
+                CHECK(p.interiors[0].size() == 4);
                 CHECK(p.dim == DimensionType::XY);
                 CHECK(p.geom_type() == GeometryType::POLYGON);
                 CHECK(p.geom_type_dim() == GeometryType::POLYGON);
+
                 CHECK(p[0][0].x == 35.0);
                 CHECK(p[0][0].y == 10.0);
                 CHECK(p[1][3].x == 20.0);
                 CHECK(p[1][3].y == 30.0);
+
+                CHECK(p[0][0].x == p[0][4].x);
+                CHECK(p[0][0].y == p[0][4].y);
+                CHECK(p[1][0].x == p[1][3].x);
+                CHECK(p[1][0].y == p[1][3].y);
             }
 
             SECTION("xyz - from json")
             {
-                /// @todo add test
+                std::string json = R"(
+                    {
+                        "type": "Polygon",
+                        "coordinates": [
+                            [[35, 10, 1], [45, 45, 2], [15, 40, 3], [10, 20, 4], [35, 10, 1]],
+                            [[20, 30, 4], [35, 35, 3], [30, 20, 2], [20, 30, 4]]
+                        ]
+                    }
+                )";
+                auto p           = Polygon::from_json(json);
+                CHECK(p.size() == 2);
+                CHECK(p[0].size() == 5);
+                CHECK(p[1].size() == 4);
+                CHECK(p.exterior.size() == 5);
+                CHECK(p.interiors.size() == 1);
+                CHECK(p.interiors[0].size() == 4);
+                CHECK(p.dim == DimensionType::XYZ);
+                CHECK(p.geom_type() == GeometryType::POLYGON);
+                CHECK(p.geom_type_dim() == GeometryType::POLYGONZ);
+
+                CHECK(p[0][0].x == 35.0);
+                CHECK(p[0][0].y == 10.0);
+                CHECK(p[0][0].z == 1.0);
+                CHECK(p[1][3].x == 20.0);
+                CHECK(p[1][3].y == 30.0);
+                CHECK(p[1][3].z == 4.0);
+
+                CHECK(p[0][0].x == p[0][4].x);
+                CHECK(p[0][0].y == p[0][4].y);
+                CHECK(p[0][0].z == p[0][4].z);
+                CHECK(p[1][0].x == p[1][3].x);
+                CHECK(p[1][0].y == p[1][3].y);
+                CHECK(p[1][0].z == p[1][3].z);
             }
 
             SECTION("xym - from json")
             {
-                /// @todo (pavel) add test
+                // not supported
             }
 
             SECTION("xyzm - from json")
             {
-                /// @todo (pavel) add test
+                std::string json = R"(
+                    {
+                        "type": "Polygon",
+                        "coordinates": [
+                            [[35, 10, 1, 1], [45, 45, 2, 2], [15, 40, 3, 3], [10, 20, 4, 4], [35, 10, 1, 1]],
+                            [[20, 30, 4, 4], [35, 35, 3, 3], [30, 20, 2, 2], [20, 30, 4, 4]]
+                        ]
+                    }
+                )";
+                auto p           = Polygon::from_json(json);
+                CHECK(p.size() == 2);
+                CHECK(p[0].size() == 5);
+                CHECK(p[1].size() == 4);
+                CHECK(p.exterior.size() == 5);
+                CHECK(p.interiors.size() == 1);
+                CHECK(p.interiors[0].size() == 4);
+                CHECK(p.dim == DimensionType::XYZM);
+                CHECK(p.geom_type() == GeometryType::POLYGON);
+                CHECK(p.geom_type_dim() == GeometryType::POLYGONZM);
+
+                CHECK(p[0][0].x == 35.0);
+                CHECK(p[0][0].y == 10.0);
+                CHECK(p[0][0].z == 1.0);
+                CHECK(p[0][0].m == 1.0);
+                CHECK(p[1][3].x == 20.0);
+                CHECK(p[1][3].y == 30.0);
+                CHECK(p[1][3].z == 4.0);
+                CHECK(p[1][3].m == 4.0);
+
+                CHECK(p[0][0].x == p[0][4].x);
+                CHECK(p[0][0].y == p[0][4].y);
+                CHECK(p[0][0].z == p[0][4].z);
+                CHECK(p[0][0].m == p[0][4].m);
+                CHECK(p[1][0].x == p[1][3].x);
+                CHECK(p[1][0].y == p[1][3].y);
+                CHECK(p[1][0].z == p[1][3].z);
+                CHECK(p[1][0].m == p[1][3].m);
             }
         }
 
