@@ -119,7 +119,7 @@ add_custom_target(shapes_parser
 # coverage
 #
 if(SHAPES_ENABLE_COVERAGE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -g -O0 -fprofile-arcs -ftest-coverage")
+  add_compile_options(--coverage -O0)
 endif(SHAPES_ENABLE_COVERAGE)
 
 #
