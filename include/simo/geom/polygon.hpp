@@ -504,7 +504,7 @@ class Polygon : public BaseGeometry<Polygon>
         res.reserve(size());
         auto ext_coords = exterior.coords();
         res.insert(res.end(), ext_coords.begin(), ext_coords.end());
-        std::for_each(interiors.begin(), interiors.end(), [&res](const LinearRing& interior){
+        std::for_each(interiors.begin(), interiors.end(), [&res](const LinearRing& interior) {
             auto int_coords = interior.coords();
             res.insert(res.end(), int_coords.begin(), int_coords.end());
         });
