@@ -50,5 +50,6 @@ SOFTWARE.
 #include <simo/geom/polygon.hpp>
 #include <simo/geom/multipolygon.hpp>
 #include <simo/geom/linearring.hpp>
+#include <simo/io/polyline.hpp>
 
 #endif  // SIMO_SHAPES_HPP

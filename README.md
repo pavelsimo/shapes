@@ -80,6 +80,7 @@ This project would not have been possible without the following amazing tools, m
 - [JSON for Modern C++](https://github.com/nlohmann/json)
 - [amalgamate.py](https://github.com/edlund/amalgamate)
 - [Catch2](https://github.com/catchorg/Catch2)
+- [polyline](https://github.com/mapbox/polyline)
 
 ## License
 
