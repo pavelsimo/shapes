@@ -361,17 +361,19 @@ TEST_CASE("Polygon")
 
             SECTION("no throw - from wkt")
             {
-                /// @todo add test
+                CHECK_NOTHROW(Polygon::from_wkt("polygon ((35 10, 45 45, 15 40, 10 20, 35 10), (20 30, 35 35, 30 20, 20 30))"));
+                CHECK_NOTHROW(Polygon::from_wkt("polygon z ((35 10 -20, 45 45 -20, 15 40 -20, 10 20 -20, 35 10 -20), (20 30 -20, 35 35 -20, 30 20 -20, 20 30 -3010.5))"));
+                CHECK_NOTHROW(Polygon::from_wkt("polygon m ((35 10 -20, 45 45 -20, 15 40 -20, 10 20 -20, 35 10 -20), (20 30 -20, 35 35 -20, 30 20 -20, 20 30 -3010.5))"));
+                CHECK_NOTHROW(Polygon::from_wkt("polygon zm ((35 10 -20 -0.5, 45 45 -20 -0.5, 15 40 -20 -0.5, 10 20 -20 -0.5, 35 10 -20 -0.5), (20 30 -20 -0.5, 35 35 -20 -0.5, 30 20 -20 -0.5, 20 30 -3010.5 -0.5))"));
             }
 
             SECTION("throws - from wkt")
             {
-                /// @todo add test
-            }
-
-            SECTION("misc - from wkt")
-            {
-                /// @todo add test
+                CHECK_THROWS(Polygon::from_wkt("polygon ((35 10, 45 45, 15 40, 11.11.11 20, 35 10), (20 30, 35 35, 30 20, 20 30.2.2))"));
+                CHECK_THROWS(Polygon::from_wkt("polygon 35 10, 45 45, 15 40, 11.11.11 20, 35 10, 20 30, 35 35, 30 20, 20 30.2.2"));
+                CHECK_THROWS(Polygon::from_wkt("polygon z ((35 10 -20, 45 45 -20, 15 40 -20, 10 20 -20, 35 10 -20), (20 30 -20, 35 35 -20, 30 20 -20, 20 30 -3010.5)) @@"));
+                CHECK_THROWS(Polygon::from_wkt("polygon zm ((35 10, 45 45, 15 40, 10 20, 35 10), (20 30, 35 35, 30 20, 20 30))"));
+                CHECK_THROWS(Polygon::from_wkt("polygon z ((35 10, 45 45, 15 40, 10 20, 35 10), (20 30, 35 35, 30 20, 20 30))"));
             }
         }
     }
