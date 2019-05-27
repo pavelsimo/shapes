@@ -1,7 +1,6 @@
 #pragma once
 
 #include <ciso646>
-#include <simo/geom/point.hpp>
 #include <simo/exceptions.hpp>
 
 namespace simo
@@ -44,47 +43,56 @@ std::string encode(double coord, int32_t precision = 5)
 }
 
 /*!
+ * @brief DOCUMENT ME!
+ * @param str
+ * @param index
+ * @return
+ */
+int32_t advance(const std::string& str, size_t& index)
+{
+    int32_t res   = 0;
+    int32_t shift = 0;
+    char ch       = 0;
+    while (index < str.size())
+    {
+        ch = str[index++] - ASCII_OFFSET;
+        res |= (ch & CHUNK_MASK) << shift;
+        shift += CHUNK_SIZE;
+        if (ch < CHUNK_THRESHOLD)
+        {
+            break;
+        }
+    }
+    if (res & 1)
+    {
+        res = ~res;
+    }
+    res >>= 1;
+    return res;
+}
+
+/*!
  * @brief Decode a polyline string
  * @param str the polyline encoded string
  * @param precision the coordinates precision
  * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
  * @return the decoded coordinates
  */
-std::vector<std::vector<double>> decode(const std::string& str, int32_t precision = 5)
+std::vector<double> decode(const std::string& str, int32_t precision = 5)
 {
     assert(precision > 0);
-    double pow10    = std::pow(10, precision);
-    auto next_delta = [&str](size_t& index) {
-        int32_t res   = 0;
-        int32_t shift = 0;
-        char ch       = 0;
-        while (index < str.size())
-        {
-            ch = str[index++] - ASCII_OFFSET;
-            res |= (ch & CHUNK_MASK) << shift;
-            shift += CHUNK_SIZE;
-            if (ch < CHUNK_THRESHOLD)
-            {
-                break;
-            }
-        }
-        if (res & 1)
-        {
-            res = ~res;
-        }
-        res >>= 1;
-        return res;
-    };
-
-    std::vector<std::vector<double>> res;
+    double pow10 = std::pow(10, precision);
+    std::vector<double> res;
+    res.reserve(str.size() / 3);
     size_t index = 0;
-    int32_t y  = 0;
-    int32_t x  = 0;
+    int32_t y    = 0;
+    int32_t x    = 0;
     while (index < str.size())
     {
-        y += next_delta(index);
-        x += next_delta(index);
-        res.push_back({y / pow10, x / pow10});
+        y += advance(str, index);
+        x += advance(str, index);
+        res.push_back(x / pow10);
+        res.push_back(y / pow10);
     }
     return res;
 }

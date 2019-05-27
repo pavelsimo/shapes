@@ -21,12 +21,13 @@ TEST_CASE("Polyline")
 
     SECTION("decode")
     {
+        // (x1, y1, x2, y2, ..., xn, yn)
         auto coords = polyline::decode("_p~iF~ps|U_ulLnnqC_mqNvxq`@");
-        CHECK(coords[0][0] == 38.5);
-        CHECK(coords[0][1] == -120.2);
-        CHECK(coords[1][0] == 40.7);
-        CHECK(coords[1][1] == -120.95);
-        CHECK(coords[2][0] == 43.252);
-        CHECK(coords[2][1] == -126.453);
+        CHECK(coords[0] == -120.2);
+        CHECK(coords[1] == 38.5);
+        CHECK(coords[2] == -120.95);
+        CHECK(coords[3] == 40.7);
+        CHECK(coords[4] == -126.453);
+        CHECK(coords[5] == 43.252);
     }
 }

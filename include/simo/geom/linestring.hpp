@@ -25,6 +25,7 @@ namespace shapes
 class LineString : public BaseGeometry<LineString>, public detail::GeometrySequence<Point>
 {
   public:
+
     /// two-dimensional rotation direction, counterclockwise=true, clockwise=false
     bool ccw = true;
 
@@ -278,6 +279,47 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
         }
         ss << ")";
         return ss.str();
+    }
+
+    /*!
+     * @brief Creates a LineString from a polyline string
+     *
+     * @param polyline the polyline string
+     * @return a LineString object
+     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+     *
+     * @throw ParseError if a parser error occurs
+     *
+     * @since 0.0.1
+     */
+    static LineString from_polyline(const std::string& polyline)
+    {
+        auto coords = polyline::decode(polyline);
+        return {coords, DimensionType::XY};
+    }
+
+    /*!
+     * @brief Dumps the polyline representation of the LineString
+     *
+     * @return a polyline string
+     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+     *
+     * @since 0.0.1
+     */
+    std::string polyline()
+    {
+        std::string res;
+        res.reserve(seq.size() * 4);
+        double prev_x = 0;
+        double prev_y = 0;
+        for (const auto& p : seq)
+        {
+            res += polyline::encode(p.y - prev_y);
+            res += polyline::encode(p.x - prev_x);
+            prev_x = p.x;
+            prev_y = p.y;
+        }
+        return res;
     }
 
     /*!
