@@ -121,6 +121,27 @@ class Polygon : public BaseGeometry<Polygon>
      * @brief Creates a Polygon
      *
      * @param shell the shell of the polygon as a Point sequence
+     *
+     * @since 0.0.1
+     */
+    explicit Polygon(const LinearRing& shell)
+            : exterior(shell)
+    {
+        if (not exterior.empty())
+        {
+            dim = exterior[0].dim;
+            /// @todo (pavel) check dim
+            Bounds& b     = bounds;
+            Bounds& b_ext = exterior.bounds;
+            b.extend(b_ext.minx, b_ext.miny);
+            b.extend(b_ext.maxx, b_ext.maxy);
+        }
+    }
+
+    /*!
+     * @brief Creates a Polygon
+     *
+     * @param shell the shell of the polygon as a Point sequence
      * @param holes one or more collection of points, each representing a hole in the polygon
      *
      * @since 0.0.1
@@ -377,6 +398,65 @@ class Polygon : public BaseGeometry<Polygon>
         }
         ss << ")";
         return ss.str();
+    }
+
+    /*!
+     * @brief Creates a LineString from a polyline string
+     *
+     * @param polyline the polyline string
+     * @return a LineString object
+     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+     *
+     * @throw ParseError if a parser error occurs
+     *
+     * @since 0.0.1
+     */
+    static Polygon from_polyline(const std::string& polyline)
+    {
+        auto coords = polyline::decode(polyline);
+        auto ring = LinearRing{coords, DimensionType::XY};
+        return Polygon(ring);
+    }
+
+    /*!
+     * @brief Creates a Polygon from a polyline string
+     *
+     * @param polyline the polyline string
+     * @return a Polygon object
+     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+     *
+     * @throw ParseError if a parser error occurs
+     *
+     * @since 0.0.1
+     */
+    static Polygon from_polyline(const std::vector<std::string>& polylines)
+    {
+        std::vector<LineString> res;
+        res.reserve(polylines.size());
+        for (const auto& polyline : polylines)
+        {
+            res.emplace_back(polyline::decode(polyline), DimensionType::XY);
+        }
+        return Polygon(res);
+    }
+
+    /*!
+     * @brief Dumps the polyline representation of the Polygon
+     *
+     * @return a polyline string
+     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+     *
+     * @since 0.0.1
+     */
+    std::vector<std::string> polyline()
+    {
+        std::vector<std::string> res;
+        res.reserve(size());
+        res.push_back(exterior.polyline());
+        std::for_each(interiors.begin(), interiors.end(), [&res](const LinearRing& ring) {
+            res.push_back(ring.polyline());
+        });
+        return res;
     }
 
     /*!

@@ -302,6 +302,46 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     }
 
     /*!
+     * @brief Creates a MultiLineString from a polyline string
+     *
+     * @param polyline the polyline string
+     * @return a MultiLineString object
+     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+     *
+     * @throw ParseError if a parser error occurs
+     *
+     * @since 0.0.1
+     */
+    static MultiLineString from_polyline(const std::vector<std::string>& polylines)
+    {
+        std::vector<LineString> res;
+        res.reserve(polylines.size());
+        for (const auto& polyline : polylines)
+        {
+            res.emplace_back(polyline::decode(polyline), DimensionType::XY);
+        }
+        return MultiLineString(res);
+    }
+
+    /*!
+     * @brief Dumps the polyline representation of the MultiLineString
+     *
+     * @return a polyline string
+     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+     *
+     * @since 0.0.1
+     */
+    std::vector<std::string> polyline()
+    {
+        std::vector<std::string> res;
+        res.reserve(seq.size());
+        std::for_each(seq.begin(), seq.end(), [&res](const LineString& ls) {
+            res.push_back(ls.polyline());
+        });
+        return res;
+    }
+
+    /*!
      * @param lhs a MultiLinestring
      * @param rhs a MultiLinestring
      * @return true if all LineStrings are equal, otherwise false

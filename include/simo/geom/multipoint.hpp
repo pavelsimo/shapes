@@ -228,6 +228,47 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
     }
 
     /*!
+     * @brief Creates a MultiPoint from a polyline string
+     *
+     * @param polyline the polyline string
+     * @return a MultiPoint object
+     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+     *
+     * @throw ParseError if a parser error occurs
+     *
+     * @since 0.0.1
+     */
+    static MultiPoint from_polyline(const std::string& polyline)
+    {
+        auto coords = polyline::decode(polyline);
+        return {coords, DimensionType::XY};
+    }
+
+    /*!
+     * @brief Dumps the polyline representation of the MultiPoint
+     *
+     * @return a polyline string
+     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+     *
+     * @since 0.0.1
+     */
+    std::string polyline()
+    {
+        std::string res;
+        res.reserve(seq.size() * 4);
+        double prev_x = 0;
+        double prev_y = 0;
+        for (const auto& p : seq)
+        {
+            res += polyline::encode(p.y - prev_y);
+            res += polyline::encode(p.x - prev_x);
+            prev_x = p.x;
+            prev_y = p.y;
+        }
+        return res;
+    }
+
+    /*!
      * @param lhs a MultiPoint
      * @param rhs a MultiPoint
      * @return true if all Point's are equal, otherwise false

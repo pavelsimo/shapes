@@ -25,7 +25,6 @@ namespace shapes
 class LineString : public BaseGeometry<LineString>, public detail::GeometrySequence<Point>
 {
   public:
-
     /// two-dimensional rotation direction, counterclockwise=true, clockwise=false
     bool ccw = true;
 
@@ -306,7 +305,7 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
      *
      * @since 0.0.1
      */
-    std::string polyline()
+    std::string polyline() const
     {
         std::string res;
         res.reserve(seq.size() * 4);

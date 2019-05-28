@@ -15,6 +15,7 @@
 #include <simo/geom/geometry.hpp>
 #include <simo/exceptions.hpp>
 #include <simo/io/wkt_reader.hpp>
+#include <simo/io/polyline.hpp>
 
 namespace simo
 {
@@ -401,6 +402,40 @@ class Point : public BaseGeometry<Point>
         }
         ss << ")";
         return ss.str();
+    }
+
+    /*!
+     * @brief Creates a Point from a polyline string
+     *
+     * @param polyline the polyline string
+     * @return a Point object
+     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+     *
+     * @throw ParseError if a parser error occurs
+     *
+     * @since 0.0.1
+     */
+    static Point from_polyline(const std::string& polyline)
+    {
+        auto coords = polyline::decode(polyline);
+        if (coords.size() > 2)
+        {
+            throw exceptions::ParseError("too many points");
+        }
+        return {coords[0], coords[1]};
+    }
+
+    /*!
+     * @brief Dumps the polyline representation of the Point
+     *
+     * @return a polyline string
+     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+     *
+     * @since 0.0.1
+     */
+    std::string polyline() const
+    {
+        return polyline::encode(y) + polyline::encode(x);
     }
 
     /*!
