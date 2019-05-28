@@ -376,6 +376,17 @@ TEST_CASE("Polygon")
                 CHECK_THROWS(Polygon::from_wkt("polygon z ((35 10, 45 45, 15 40, 10 20, 35 10), (20 30, 35 35, 30 20, 20 30))"));
             }
         }
+
+        SECTION("polyline")
+        {
+            SECTION("xy - from polyline")
+            {
+                std::string polyline = "_p~iF~ps|U_ulLnnqC_mqNvxq`@";
+                auto p              = Polygon::from_polyline(polyline);
+                p.precision         = 5;
+                CHECK(p.wkt() == "POLYGON((-120.20000 38.50000,-120.95000 40.70000,-126.45300 43.25200))");
+            }
+        }
     }
 
     SECTION("to_... methods")
@@ -447,6 +458,20 @@ TEST_CASE("Polygon")
                     {{1, 2, 3, -1}, {4, 5, 6, -5}, {7, 8, 9, -5}, {1, 2, 3, -1}}   // hole #1
                 };
                 CHECK(p.wkt() == "POLYGONZM((1.0 2.0 3.0 -1.0,4.0 5.0 6.0 -5.0,7.0 8.0 9.0 -5.0,1.0 2.0 3.0 -1.0),(1.0 2.0 3.0 -1.0,4.0 5.0 6.0 -5.0,7.0 8.0 9.0 -5.0,1.0 2.0 3.0 -1.0))");
+            }
+        }
+
+        SECTION("polyline")
+        {
+            SECTION("xy - to polyline")
+            {
+                auto p = Polygon{{{-120.2, 38.5}, {-120.95, 40.7}, {-126.453, 43.252}},  // shell
+                                 {{-105.2, 54.5}, {-107.95, 40.7}, {-105.453, 43.252}}   // hole #1
+                };
+                CHECK(p.polyline()[0] == "_p~iF~ps|U_ulLnnqC_mqNvxq`@"); // exterior
+                CHECK(p.polyline()[1] == "_pskI~zaaS~hfsAnbxO_mqNgufN"); // interior #1
+                CHECK(p.polyline()[0] == p.exterior.polyline());
+                CHECK(p.polyline()[1] == p.interiors[0].polyline());
             }
         }
     }
