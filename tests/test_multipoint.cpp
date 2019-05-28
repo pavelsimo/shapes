@@ -351,6 +351,18 @@ TEST_CASE("MultiPoint")
                 CHECK_THROWS(MultiPoint::from_wkt("MultiPointZM((1.4.3 2.3.3 1.1.1 1.1.1), (3.2.1 4.1.1 2.2.1 2.2.3))"));
             }
         }
+
+        SECTION("polyline")
+        {
+            SECTION("xy - from polyline")
+            {
+                std::string polyline = "_p~iF~ps|U_ulLnnqC_mqNvxq`@";
+                auto mp              = MultiPoint::from_polyline(polyline);
+                mp.precision         = 5;
+                CHECK(mp.wkt() == "MULTIPOINT((-120.20000 38.50000),(-120.95000 40.70000),(-126.45300 43.25200))");
+            }
+        }
+
     }
 
     SECTION("to_... methods")
@@ -414,6 +426,15 @@ TEST_CASE("MultiPoint")
                 auto mp      = MultiPoint{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
                 mp.precision = 1;
                 CHECK(mp.wkt() == R"(MULTIPOINTZM((1.0 2.0 3.0 4.0),(5.0 6.0 7.0 8.0)))");
+            }
+        }
+
+        SECTION("polyline")
+        {
+            SECTION("xy - to polyline")
+            {
+                MultiPoint mp = {{-120.2, 38.5}, {-120.95, 40.7}, {-126.453, 43.252}};
+                CHECK(mp.polyline() == "_p~iF~ps|U_ulLnnqC_mqNvxq`@");
             }
         }
     }
