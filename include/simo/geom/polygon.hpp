@@ -125,7 +125,7 @@ class Polygon : public BaseGeometry<Polygon>
      * @since 0.0.1
      */
     explicit Polygon(const LinearRing& shell)
-            : exterior(shell)
+        : exterior(shell)
     {
         if (not exterior.empty())
         {
@@ -414,7 +414,7 @@ class Polygon : public BaseGeometry<Polygon>
     static Polygon from_polyline(const std::string& polyline)
     {
         auto coords = polyline::decode(polyline);
-        auto ring = LinearRing{coords, DimensionType::XY};
+        auto ring   = LinearRing{coords, DimensionType::XY};
         return Polygon(ring);
     }
 
