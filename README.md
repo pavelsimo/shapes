@@ -6,7 +6,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/022c774e43264ec4a04c4ccdeda9ae27)](https://www.codacy.com/app/pavelsimo/shapes?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=pavelsimo/shapes&amp;utm_campaign=Badge_Grade)
 [![](https://img.shields.io/github/license/pavelsimo/shapes.svg)](https://github.com/pavelsimo/shapes/blob/master/LICENSE)
 
-A lightweight header-only planar geometry library for Modern C++
+A lightweight header-only geometry library for Modern C++
 
 - Inspired by python [shapely](https://pypi.org/project/Shapely/)
 - Based on OGC [Simple Features](https://en.wikipedia.org/wiki/Simple_Features)
@@ -27,7 +27,7 @@ Building a `Point` from GeoJSON:
 
 ```cpp
 auto p = Point::from_json(R"({"type": "Point", "coordinates": [1.0, 2.0, 3.0]})");
-std::cout << p.x << " " << p.y << " " << p.z << std::endl;
+std::cout << p.x << " " << p.y << " " << p.z << '\n';
 ```
 
 GeoJSON representation of the `Point`:
@@ -35,7 +35,7 @@ GeoJSON representation of the `Point`:
 ```cpp
 auto p = Point{1, 2, 3};
 p.precision = 1;
-std::cout << p.json() << std::endl;
+std::cout << p.json() << '\n';
 ```
 
 ```json
@@ -48,7 +48,7 @@ Iterating a `MultiPoint` is as simple as:
 auto points = MultiPoint{{0, 0, 1}, {1, 2, 3}, {4, 5, 6}, {7, 7, 7}};
 for(const auto& point: points)
 {
-    std::cout << point.x << " " << point.y << " " << point.z << std::endl;
+    std::cout << point.x << " " << point.y << " " << point.z << '\n';
 } 
 ```
 
@@ -57,14 +57,38 @@ WKT representation of a `MultiPoint`:
 ```cpp
 auto points = MultiPoint{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
 points.precision  = 1;
-std::cout << points.wkt() << std::endl;
+std::cout << points.wkt() << '\n';
 ```
 
 ```text
 MULTIPOINTZ((1.0 2.0 3.0),(4.0 5.0 6.0))
 ```
 
-Building a `MultiLineString`
+Creating a `LineString` from a google polyline:
+
+```cpp
+std::string polyline = "_p~iF~ps|U_ulLnnqC_mqNvxq`@";
+auto ls = LineString::from_polyline(polyline);
+ls.precision = 5;
+std::cout << points.wkt() << '\n';
+```
+
+```text
+LINESTRING(-120.20000 38.50000,-120.95000 40.70000,-126.45300 43.25200)
+```
+
+Google Polyline representation of a `LineString`:
+
+```cpp
+auto ls = LineString{{-120.2, 38.5}, {-120.95, 40.7}, {-126.453, 43.252}};
+std::cout << ls.polyline() << '\n';
+```
+
+```text
+_p~iF~ps|U_ulLnnqC_mqNvxq`@
+```
+
+Building a `MultiLineString`:
 
 ```cpp
 auto ml = MultiLineString{
