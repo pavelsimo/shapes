@@ -10,10 +10,17 @@ namespace shapes
 namespace polyline
 {
 
-constexpr static const int32_t CHUNK_SIZE      = 5;
-constexpr static const int32_t CHUNK_MASK      = 0x1f;
+/// the polyline chunk size
+constexpr static const int32_t CHUNK_SIZE = 5;
+
+/// a mask to extract the chunks
+constexpr static const int32_t CHUNK_MASK = 0x1f;
+
+/// threshold used to signal another value follows or not
 constexpr static const int32_t CHUNK_THRESHOLD = 0x20;
-constexpr static const int32_t ASCII_OFFSET    = 63;
+
+/// the polyline ascii offset to apply
+constexpr static const int32_t ASCII_OFFSET = 63;
 
 /*!
  * @brief Encode a polyline coordinate
