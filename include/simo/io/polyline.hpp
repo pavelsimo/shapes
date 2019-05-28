@@ -10,7 +10,7 @@ namespace shapes
 namespace polyline
 {
 
-/// the polyline chunk size
+/// the chunk size
 constexpr static const int32_t CHUNK_SIZE = 5;
 
 /// a mask to extract the chunks
@@ -19,7 +19,7 @@ constexpr static const int32_t CHUNK_MASK = 0x1f;
 /// threshold used to signal another value follows or not
 constexpr static const int32_t CHUNK_THRESHOLD = 0x20;
 
-/// the polyline ascii offset to apply
+/// the ascii offset to apply
 constexpr static const int32_t ASCII_OFFSET = 63;
 
 /*!
@@ -27,6 +27,8 @@ constexpr static const int32_t ASCII_OFFSET = 63;
  * @param coord the coordinate value
  * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
  * @return the encoded coordinate
+ *
+ * @since 0.0.1
  */
 std::string encode(double coord, int32_t precision = 5)
 {
@@ -50,10 +52,12 @@ std::string encode(double coord, int32_t precision = 5)
 }
 
 /*!
- * @brief DOCUMENT ME!
- * @param str
- * @param index
- * @return
+ * @brief Decode a section of the polyline string
+ * @param str the polyline encoded string
+ * @param index the current reading position
+ * @return an integer with the decoded delta value
+ *
+ * @since 0.0.1
  */
 int32_t advance(const std::string& str, size_t& index)
 {
@@ -84,6 +88,8 @@ int32_t advance(const std::string& str, size_t& index)
  * @param precision the coordinates precision
  * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
  * @return the decoded coordinates
+ *
+ * @since 0.0.1
  */
 std::vector<double> decode(const std::string& str, int32_t precision = 5)
 {
