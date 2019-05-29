@@ -288,32 +288,31 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
     }
 
     /*!
-     * @brief Creates a LineString from a polyline string
+     * @brief Creates a LineString from a encoded polyline string
      *
-     * @param polyline the polyline string
+     * @param polyline the encoded polyline string
+     * @param precision the decoded precision
      * @return a LineString object
      * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
      *
-     * @throw ParseError if a parser error occurs
-     *
      * @since 0.0.1
      */
-    static LineString from_polyline(const std::string& polyline)
+    static LineString from_polyline(const std::string& polyline, std::int32_t precision = 5)
     {
-        /// @todo (pavel) add precision
-        auto coords = polyline::decode(polyline);
+        auto coords = polyline::decode(polyline, precision);
         return {coords, DimensionType::XY};
     }
 
     /*!
      * @brief Dumps the polyline representation of the LineString
      *
+     * @param precision the encoded precision
      * @return a polyline string
      * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
      *
      * @since 0.0.1
      */
-    std::string polyline() const
+    std::string polyline(std::int32_t precision = 5) const
     {
         std::string res;
         res.reserve(seq.size() * 4);
@@ -321,8 +320,8 @@ class LineString : public BaseGeometry<LineString>, public detail::GeometrySeque
         double prev_y = 0;
         for (const auto& p : seq)
         {
-            res += polyline::encode(p.y - prev_y);
-            res += polyline::encode(p.x - prev_x);
+            res += polyline::encode(p.y - prev_y, precision);
+            res += polyline::encode(p.x - prev_x, precision);
             prev_x = p.x;
             prev_y = p.y;
         }

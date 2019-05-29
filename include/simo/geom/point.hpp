@@ -416,6 +416,7 @@ class Point : public BaseGeometry<Point>
      * @brief Creates a Point from a polyline string
      *
      * @param polyline the polyline string
+     * @param precision the decoded precision
      * @return a Point object
      * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
      *
@@ -423,9 +424,9 @@ class Point : public BaseGeometry<Point>
      *
      * @since 0.0.1
      */
-    static Point from_polyline(const std::string& polyline)
+    static Point from_polyline(const std::string& polyline, std::int32_t precision = 5)
     {
-        auto coords = polyline::decode(polyline);
+        auto coords = polyline::decode(polyline, precision);
         if (coords.size() > 2)
         {
             throw exceptions::ParseError("too many points");
@@ -436,14 +437,15 @@ class Point : public BaseGeometry<Point>
     /*!
      * @brief Dumps the polyline representation of the Point
      *
+     * @param precision the encoded precision
      * @return a polyline string
      * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
      *
      * @since 0.0.1
      */
-    std::string polyline() const
+    std::string polyline(std::int32_t precision = 5) const
     {
-        return polyline::encode(y) + polyline::encode(x);
+        return polyline::encode(y, precision) + polyline::encode(x, precision);
     }
 
     /*!

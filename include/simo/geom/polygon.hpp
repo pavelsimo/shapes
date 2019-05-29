@@ -408,9 +408,10 @@ class Polygon : public BaseGeometry<Polygon>
     }
 
     /*!
-     * @brief Creates a LineString from a polyline string
+     * @brief Creates a Polygon from a polyline string
      *
      * @param polyline the polyline string
+     * @param text the encoded polyline string
      * @return a LineString object
      * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
      *
@@ -418,18 +419,18 @@ class Polygon : public BaseGeometry<Polygon>
      *
      * @since 0.0.1
      */
-    static Polygon from_polyline(const std::string& polyline)
+    static Polygon from_polyline(const std::string& polyline, std::int32_t precision = 5)
     {
-        /// @todo (pavel) add precision
-        auto coords = polyline::decode(polyline);
+        auto coords = polyline::decode(polyline, precision);
         auto ring   = LinearRing{coords, DimensionType::XY};
         return Polygon(ring);
     }
 
     /*!
-     * @brief Creates a Polygon from a polyline string
+     * @brief Creates a Polygon from a collection of polyline strings
      *
-     * @param polyline the polyline string
+     * @param polylines a collection of polyline strings
+     * @param text the encoded polyline string
      * @return a Polygon object
      * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
      *
@@ -437,13 +438,13 @@ class Polygon : public BaseGeometry<Polygon>
      *
      * @since 0.0.1
      */
-    static Polygon from_polyline(const std::vector<std::string>& polylines)
+    static Polygon from_polyline(const std::vector<std::string>& polylines, std::int32_t precision = 5)
     {
         std::vector<LineString> res;
         res.reserve(polylines.size());
         for (const auto& polyline : polylines)
         {
-            res.emplace_back(polyline::decode(polyline), DimensionType::XY);
+            res.emplace_back(polyline::decode(polyline, precision), DimensionType::XY);
         }
         return Polygon(res);
     }
@@ -451,18 +452,19 @@ class Polygon : public BaseGeometry<Polygon>
     /*!
      * @brief Dumps the polyline representation of the Polygon
      *
+     * @param precision the encoded precision
      * @return a polyline string
      * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
      *
      * @since 0.0.1
      */
-    std::vector<std::string> polyline()
+    std::vector<std::string> polyline(std::int32_t precision = 5)
     {
         std::vector<std::string> res;
         res.reserve(size());
         res.push_back(exterior.polyline());
-        std::for_each(interiors.begin(), interiors.end(), [&res](const LinearRing& ring) {
-            res.push_back(ring.polyline());
+        std::for_each(interiors.begin(), interiors.end(), [&res, &precision](const LinearRing& ring) {
+            res.push_back(ring.polyline(precision));
         });
         return res;
     }

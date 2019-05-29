@@ -309,24 +309,23 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     }
 
     /*!
-     * @brief Creates a MultiLineString from a polyline string
+     * @brief Creates a MultiLineString from a encoded polyline string collection
      *
-     * @param polyline the polyline string
+     * @param polylines the polyline string collection
+     * @param precision the decoded precision
      * @return a MultiLineString object
      * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
      *
-     * @throw ParseError if a parser error occurs
-     *
      * @since 0.0.1
      */
-    static MultiLineString from_polyline(const std::vector<std::string>& polylines)
+    static MultiLineString from_polyline(const std::vector<std::string>& polylines, std::int32_t precision = 5)
     {
         /// @todo (pavel) add precision
         std::vector<LineString> res;
         res.reserve(polylines.size());
         for (const auto& polyline : polylines)
         {
-            res.emplace_back(polyline::decode(polyline), DimensionType::XY);
+            res.emplace_back(polyline::decode(polyline, precision), DimensionType::XY);
         }
         return MultiLineString(res);
     }
@@ -334,17 +333,18 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     /*!
      * @brief Dumps the polyline representation of the MultiLineString
      *
+     * @param precision the encoded precision
      * @return a polyline string
      * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
      *
      * @since 0.0.1
      */
-    std::vector<std::string> polyline()
+    std::vector<std::string> polyline(std::int32_t precision = 5)
     {
         std::vector<std::string> res;
         res.reserve(seq.size());
-        std::for_each(seq.begin(), seq.end(), [&res](const LineString& ls) {
-            res.push_back(ls.polyline());
+        std::for_each(seq.begin(), seq.end(), [&res, &precision](const LineString& ls) {
+            res.push_back(ls.polyline(precision));
         });
         return res;
     }

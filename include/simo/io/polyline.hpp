@@ -32,7 +32,7 @@ constexpr static const int32_t ASCII_OFFSET = 63;
  */
 std::string encode(double coord, int32_t precision = 5)
 {
-    assert(precision > 0);
+    assert(precision >= 0);
     double pow10 = std::pow(10, precision);
     auto value   = static_cast<int32_t>(std::round(coord * pow10));
     value <<= 1;
@@ -53,20 +53,20 @@ std::string encode(double coord, int32_t precision = 5)
 
 /*!
  * @brief Decode a section of the polyline string
- * @param str the polyline encoded string
+ * @param text the polyline encoded string
  * @param index the current reading position
  * @return an integer with the decoded delta value
  *
  * @since 0.0.1
  */
-int32_t advance(const std::string& str, size_t& index)
+int32_t advance(const std::string& text, size_t& index)
 {
     int32_t res   = 0;
     int32_t shift = 0;
     char ch       = 0;
-    while (index < str.size())
+    while (index < text.size())
     {
-        ch = str[index++] - ASCII_OFFSET;
+        ch = text[index++] - ASCII_OFFSET;
         res |= (ch & CHUNK_MASK) << shift;
         shift += CHUNK_SIZE;
         if (ch < CHUNK_THRESHOLD)
@@ -84,26 +84,26 @@ int32_t advance(const std::string& str, size_t& index)
 
 /*!
  * @brief Decode a polyline string
- * @param str the polyline encoded string
+ * @param text the polyline encoded string
  * @param precision the coordinates precision
  * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
  * @return the decoded coordinates
  *
  * @since 0.0.1
  */
-std::vector<double> decode(const std::string& str, int32_t precision = 5)
+std::vector<double> decode(const std::string& text, int32_t precision = 5)
 {
-    assert(precision > 0);
+    assert(precision >= 0);
     double pow10 = std::pow(10, precision);
     std::vector<double> res;
-    res.reserve(str.size() / 3);
+    res.reserve(text.size() / 3);
     size_t index = 0;
     int32_t y    = 0;
     int32_t x    = 0;
-    while (index < str.size())
+    while (index < text.size())
     {
-        y += advance(str, index);
-        x += advance(str, index);
+        y += advance(text, index);
+        x += advance(text, index);
         res.push_back(x / pow10);
         res.push_back(y / pow10);
     }
