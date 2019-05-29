@@ -358,8 +358,7 @@ TEST_CASE("MultiPoint")
             {
                 std::string polyline = "_p~iF~ps|U_ulLnnqC_mqNvxq`@";
                 auto mp              = MultiPoint::from_polyline(polyline);
-                mp.precision         = 5;
-                CHECK(mp.wkt() == "MULTIPOINT((-120.20000 38.50000),(-120.95000 40.70000),(-126.45300 43.25200))");
+                CHECK(mp.wkt() == "MULTIPOINT((-120.2 38.5),(-120.95 40.7),(-126.453 43.252))");
             }
         }
 
@@ -372,15 +371,13 @@ TEST_CASE("MultiPoint")
             SECTION("xy - to json")
             {
                 auto mp      = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
-                mp.precision = 1;
-                CHECK(mp.json() == R"({"type":"MultiPoint","coordinates":[[1.0,2.0],[3.0,4.0]]})");
+                CHECK(mp.json() == R"({"type":"MultiPoint","coordinates":[[1,2],[3,4]]})");
             }
 
             SECTION("xyz - to json")
             {
                 auto mp      = MultiPoint{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
-                mp.precision = 1;
-                CHECK(mp.json() == R"({"type":"MultiPoint","coordinates":[[1.0,2.0,3.0],[4.0,5.0,6.0]]})");
+                CHECK(mp.json() == R"({"type":"MultiPoint","coordinates":[[1,2,3],[4,5,6]]})");
             }
 
             SECTION("xym - to json")
@@ -391,8 +388,7 @@ TEST_CASE("MultiPoint")
             SECTION("xyzm - to json")
             {
                 auto mp      = MultiPoint{{1.0, 2.0, 3.0, -10.0}, {4.0, 5.0, 6.0, -10.0}};
-                mp.precision = 1;
-                CHECK(mp.json() == R"({"type":"MultiPoint","coordinates":[[1.0,2.0,3.0,-10.0],[4.0,5.0,6.0,-10.0]]})");
+                CHECK(mp.json() == R"({"type":"MultiPoint","coordinates":[[1,2,3,-10],[4,5,6,-10]]})");
             }
         }
 
@@ -401,15 +397,13 @@ TEST_CASE("MultiPoint")
             SECTION("xy - to wkt")
             {
                 auto mp      = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
-                mp.precision = 1;
-                CHECK(mp.wkt() == R"(MULTIPOINT((1.0 2.0),(3.0 4.0)))");
+                CHECK(mp.wkt() == R"(MULTIPOINT((1 2),(3 4)))");
             }
 
             SECTION("xyz - to wkt")
             {
                 auto mp      = MultiPoint{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
-                mp.precision = 1;
-                CHECK(mp.wkt() == R"(MULTIPOINTZ((1.0 2.0 3.0),(4.0 5.0 6.0)))");
+                CHECK(mp.wkt() == R"(MULTIPOINTZ((1 2 3),(4 5 6)))");
             }
 
             SECTION("xym - to wkt")
@@ -418,14 +412,13 @@ TEST_CASE("MultiPoint")
                 points.push_back(Point::from_xym(1.0, 2.0, 3.0));
                 points.push_back(Point::from_xym(-4.0, -5.0, -6.0));
                 MultiPoint mp(points);
-                CHECK(mp.wkt() == R"(MULTIPOINTM((1.0 2.0 3.0),(-4.0 -5.0 -6.0)))");
+                CHECK(mp.wkt() == R"(MULTIPOINTM((1 2 3),(-4 -5 -6)))");
             }
 
             SECTION("xyzm - to wkt")
             {
                 auto mp      = MultiPoint{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
-                mp.precision = 1;
-                CHECK(mp.wkt() == R"(MULTIPOINTZM((1.0 2.0 3.0 4.0),(5.0 6.0 7.0 8.0)))");
+                CHECK(mp.wkt() == R"(MULTIPOINTZM((1 2 3 4),(5 6 7 8)))");
             }
         }
 
