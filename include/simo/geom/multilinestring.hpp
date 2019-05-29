@@ -171,15 +171,19 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     /*!
      * @brief Dumps the geojson representation of the MultiLineString
      *
+     * @param precision the output precision
      * @return a geojson string
      * @sa https://tools.ietf.org/html/rfc7946
      *
      * @since 0.0.1
      */
-    std::string json()
+    std::string json(std::int32_t precision = -1)
     {
         std::stringstream ss;
-        ss << std::fixed << std::setprecision(precision);
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
         ss << "{\"type\":\"MultiLineString\",\"coordinates\":[";
         for (size_t i = 0; i < seq.size(); ++i)
         {
@@ -248,18 +252,21 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
     }
 
     /*!
-     * @brief Creates a MultiLineString from a WKT string
+     * @brief Dumps the WKT representation of the MultiLineString
      *
-     * @param wkt the WKT string
-     * @return a MultiLineString object
+     * @param precision the output precision
+     * @return a WKT string
      * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
      * @since 0.0.1
      */
-    std::string wkt()
+    std::string wkt(std::int32_t precision = -1)
     {
         std::stringstream ss;
-        ss << std::fixed << std::setprecision(precision);
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
         ss << "MULTILINESTRING";
         if (has_z())
         {
@@ -314,6 +321,7 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
      */
     static MultiLineString from_polyline(const std::vector<std::string>& polylines)
     {
+        /// @todo (pavel) add precision
         std::vector<LineString> res;
         res.reserve(polylines.size());
         for (const auto& polyline : polylines)

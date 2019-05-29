@@ -267,15 +267,19 @@ class Polygon : public BaseGeometry<Polygon>
     /*!
      * @brief Dumps the geojson representation of the Polygon
      *
+     * @param precision the output precision
      * @return a geojson string
      * @sa https://tools.ietf.org/html/rfc7946
      *
      * @since 0.0.1
      */
-    std::string json()
+    std::string json(std::int32_t precision = -1)
     {
         std::stringstream ss;
-        ss << std::fixed << std::setprecision(precision);
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
         ss << "{\"type\":\"Polygon\",\"coordinates\":[";
         auto add_ring = [&ss](const LinearRing& ring) {
             for (size_t j = 0; j < ring.size(); ++j)
@@ -346,18 +350,21 @@ class Polygon : public BaseGeometry<Polygon>
     }
 
     /*!
-     * @brief Creates a Polygon from a WKT string
+     * @brief Dumps the WKT representation of the Polygon
      *
-     * @param wkt the WKT string
-     * @return a Polygon object
+     * @param precision the output precision
+     * @return a WKT string
      * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
      *
      * @since 0.0.1
      */
-    std::string wkt()
+    std::string wkt(std::int32_t precision = -1)
     {
         std::stringstream ss;
-        ss << std::fixed << std::setprecision(precision);
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
         ss << "POLYGON";
         if (has_z())
         {
@@ -413,6 +420,7 @@ class Polygon : public BaseGeometry<Polygon>
      */
     static Polygon from_polyline(const std::string& polyline)
     {
+        /// @todo (pavel) add precision
         auto coords = polyline::decode(polyline);
         auto ring   = LinearRing{coords, DimensionType::XY};
         return Polygon(ring);

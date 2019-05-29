@@ -358,8 +358,7 @@ TEST_CASE("LineString")
             {
                 std::string polyline = "_p~iF~ps|U_ulLnnqC_mqNvxq`@";
                 auto ls              = LineString::from_polyline(polyline);
-                ls.precision         = 5;
-                CHECK(ls.wkt() == "LINESTRING(-120.20000 38.50000,-120.95000 40.70000,-126.45300 43.25200)");
+                CHECK(ls.wkt() == "LINESTRING(-120.2 38.5,-120.95 40.7,-126.453 43.252)");
             }
         }
     }
@@ -371,15 +370,13 @@ TEST_CASE("LineString")
             SECTION("xy - to json")
             {
                 LineString ls = {{1.0, 2.0}, {3.0, 4.0}};
-                ls.precision  = 1;
-                CHECK(ls.json() == R"({"type":"LineString","coordinates":[[1.0,2.0],[3.0,4.0]]})");
+                CHECK(ls.json() == R"({"type":"LineString","coordinates":[[1,2],[3,4]]})");
             }
 
             SECTION("xyz - to json")
             {
                 LineString ls = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
-                ls.precision  = 1;
-                CHECK(ls.json() == R"({"type":"LineString","coordinates":[[1.0,2.0,3.0],[4.0,5.0,6.0]]})");
+                CHECK(ls.json() == R"({"type":"LineString","coordinates":[[1,2,3],[4,5,6]]})");
             }
 
             SECTION("xym - to json")
@@ -390,8 +387,7 @@ TEST_CASE("LineString")
             SECTION("xyzm - to json")
             {
                 LineString ls = {{1.0, 2.0, 3.0, -10.0}, {4.0, 5.0, 6.0, -10.0}};
-                ls.precision  = 1;
-                CHECK(ls.json() == R"({"type":"LineString","coordinates":[[1.0,2.0,3.0,-10.0],[4.0,5.0,6.0,-10.0]]})");
+                CHECK(ls.json() == R"({"type":"LineString","coordinates":[[1,2,3,-10],[4,5,6,-10]]})");
             }
         }
 
@@ -400,15 +396,13 @@ TEST_CASE("LineString")
             SECTION("xy - to wkt")
             {
                 LineString ls = {{1.0, 2.0}, {3.0, 4.0}};
-                ls.precision  = 1;
-                CHECK(ls.wkt() == R"(LINESTRING(1.0 2.0,3.0 4.0))");
+                CHECK(ls.wkt() == R"(LINESTRING(1 2,3 4))");
             }
 
             SECTION("xyz - to wkt")
             {
                 LineString ls = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
-                ls.precision  = 1;
-                CHECK(ls.wkt() == R"(LINESTRINGZ(1.0 2.0 3.0,4.0 5.0 6.0))");
+                CHECK(ls.wkt() == R"(LINESTRINGZ(1 2 3,4 5 6))");
             }
 
             SECTION("xym - to wkt")
@@ -417,14 +411,13 @@ TEST_CASE("LineString")
                 points.push_back(Point::from_xym(1.0, 2.0, 3.0));
                 points.push_back(Point::from_xym(-4.0, -5.0, -6.0));
                 LineString ls(points);
-                CHECK(ls.wkt() == R"(LINESTRINGM(1.0 2.0 3.0,-4.0 -5.0 -6.0))");
+                CHECK(ls.wkt() == R"(LINESTRINGM(1 2 3,-4 -5 -6))");
             }
 
             SECTION("xyzm - to wkt")
             {
                 LineString ls = {{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
-                ls.precision  = 1;
-                CHECK(ls.wkt() == R"(LINESTRINGZM(1.0 2.0 3.0 4.0,5.0 6.0 7.0 8.0))");
+                CHECK(ls.wkt() == R"(LINESTRINGZM(1 2 3 4,5 6 7 8))");
             }
         }
 

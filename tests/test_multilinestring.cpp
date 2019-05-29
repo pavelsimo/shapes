@@ -335,8 +335,7 @@ TEST_CASE("MultiLineString")
                 auto ml = MultiLineString{
                     {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
                     {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}};
-                ml.precision = 1;
-                CHECK(ml.json() == R"({"type":"MultiLineString","coordinates":[[[1.0,2.0],[4.0,5.0],[7.0,8.0]],[[11.0,12.0],[13.0,14.0],[16.0,17.0]]]})");
+                CHECK(ml.json() == R"({"type":"MultiLineString","coordinates":[[[1,2],[4,5],[7,8]],[[11,12],[13,14],[16,17]]]})");
             }
 
             SECTION("xyz - to json")
@@ -344,8 +343,7 @@ TEST_CASE("MultiLineString")
                 auto ml = MultiLineString{
                     {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
                     {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
-                ml.precision = 1;
-                CHECK(ml.json() == R"({"type":"MultiLineString","coordinates":[[[1.0,2.0,3.0],[4.0,5.0,6.0],[7.0,8.0,9.0]],[[11.0,12.0,13.0],[13.0,14.0,15.0],[16.0,17.0,18.0]]]})");
+                CHECK(ml.json() == R"({"type":"MultiLineString","coordinates":[[[1,2,3],[4,5,6],[7,8,9]],[[11,12,13],[13,14,15],[16,17,18]]]})");
             }
 
             SECTION("xym - to json")
@@ -358,8 +356,7 @@ TEST_CASE("MultiLineString")
                 auto ml = MultiLineString{
                     {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
                     {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}};
-                ml.precision = 1;
-                CHECK(ml.json() == R"({"type":"MultiLineString","coordinates":[[[1.0,2.0,3.0,-1.5],[4.0,5.0,6.0,-2.5],[7.0,8.0,9.0,-3.5]],[[11.0,12.0,13.0,-10.5],[13.0,14.0,15.0,-11.5],[16.0,17.0,18.0,-12.5]]]})");
+                CHECK(ml.json() == R"({"type":"MultiLineString","coordinates":[[[1,2,3,-1.5],[4,5,6,-2.5],[7,8,9,-3.5]],[[11,12,13,-10.5],[13,14,15,-11.5],[16,17,18,-12.5]]]})");
             }
         }
 
@@ -370,8 +367,7 @@ TEST_CASE("MultiLineString")
                 auto ml = MultiLineString{
                     {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
                     {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}};
-                ml.precision = 1;
-                CHECK(ml.wkt() == "MULTILINESTRING((1.0 2.0,4.0 5.0,7.0 8.0),(11.0 12.0,13.0 14.0,16.0 17.0))");
+                CHECK(ml.wkt() == "MULTILINESTRING((1 2,4 5,7 8),(11 12,13 14,16 17))");
             }
 
             SECTION("xyz - to wkt")
@@ -379,16 +375,12 @@ TEST_CASE("MultiLineString")
                 auto ml = MultiLineString{
                     {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
                     {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
-                ml.precision = 1;
-                CHECK(ml.wkt() == "MULTILINESTRINGZ((1.0 2.0 3.0,4.0 5.0 6.0,7.0 8.0 9.0),(11.0 12.0 13.0,13.0 14.0 15.0,16.0 17.0 18.0))");
+                CHECK(ml.wkt() == "MULTILINESTRINGZ((1 2 3,4 5 6,7 8 9),(11 12 13,13 14 15,16 17 18))");
             }
 
             SECTION("xym - to wkt")
             {
-                auto ml = MultiLineString{
-                    {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
-                    {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
-                ml.precision = 1;
+                /// @todo add test
             }
 
             SECTION("xyzm - to wkt")
@@ -396,8 +388,7 @@ TEST_CASE("MultiLineString")
                 auto ml = MultiLineString{
                     {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
                     {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}};
-                ml.precision = 1;
-                CHECK(ml.wkt() == "MULTILINESTRINGZM((1.0 2.0 3.0 -1.5,4.0 5.0 6.0 -2.5,7.0 8.0 9.0 -3.5),(11.0 12.0 13.0 -10.5,13.0 14.0 15.0 -11.5,16.0 17.0 18.0 -12.5))");
+                CHECK(ml.wkt() == "MULTILINESTRINGZM((1 2 3 -1.5,4 5 6 -2.5,7 8 9 -3.5),(11 12 13 -10.5,13 14 15 -11.5,16 17 18 -12.5))");
             }
         }
     }

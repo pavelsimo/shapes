@@ -346,15 +346,13 @@ TEST_CASE("Point")
             SECTION("xy - to json")
             {
                 auto p      = Point{1, 2};
-                p.precision = 1;
-                CHECK(p.json() == R"({"type":"Point","coordinates":[1.0,2.0]})");
+                CHECK(p.json() == R"({"type":"Point","coordinates":[1,2]})");
             }
 
             SECTION("xyz - to json")
             {
                 auto p      = Point{1, 2, 3};
-                p.precision = 1;
-                CHECK(p.json() == R"({"type":"Point","coordinates":[1.0,2.0,3.0]})");
+                CHECK(p.json() == R"({"type":"Point","coordinates":[1,2,3]})");
             }
 
             SECTION("xym - to json")
@@ -372,30 +370,26 @@ TEST_CASE("Point")
         {
             SECTION("xy - to wkt")
             {
-                Point p     = {1.0, 2.0};
-                p.precision = 1;
-                CHECK(p.wkt() == "POINT (1.0 2.0)");
+                Point p     = {1, 2};
+                CHECK(p.wkt() == "POINT (1 2)");
             }
 
             SECTION("xyz - to wkt")
             {
-                Point p     = {1.0, 2.0, 3.0};
-                p.precision = 1;
-                CHECK(p.wkt() == "POINT Z (1.0 2.0 3.0)");
+                Point p     = {1, 2, 3};
+                CHECK(p.wkt() == "POINT Z (1 2 3)");
             }
 
             SECTION("xym - to wkt")
             {
-                Point p     = Point::from_xym(1.0, 2.0, 3.0);
-                p.precision = 1;
-                CHECK(p.wkt() == "POINT M (1.0 2.0 3.0)");
+                Point p     = Point::from_xym(1, 2, 3);
+                CHECK(p.wkt() == "POINT M (1 2 3)");
             }
 
             SECTION("xyzm - to wkt")
             {
-                Point p     = {1.0, 2.0, 3.0, 4.0};
-                p.precision = 1;
-                CHECK(p.wkt() == "POINT ZM (1.0 2.0 3.0 4.0)");
+                Point p     = {1, 2, 3, 4};
+                CHECK(p.wkt() == "POINT ZM (1 2 3 4)");
             }
         }
     }

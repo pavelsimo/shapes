@@ -34,9 +34,6 @@ class BaseGeometry
     /// the dimension type is either 2D (x, y), 3D (x, y, z), 4D (x, y, z, m) or 2D with measure-coordinate (x, y, m)
     DimensionType dim = DimensionType::XY;
 
-    /// serialization precision
-    int8_t precision = 1;
-
     /*!
      * @brief Returns the geometry type (e.g. GeometryType::Point, GeometryType::MultiPoint)
      *
