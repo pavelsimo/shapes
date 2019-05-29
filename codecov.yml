@@ -1,4 +1,3 @@
 ignore:
   - "thirdparty"
-  - "include/simo/io/wkt_parser.hpp"
-  - "include/simo/io/wkt_lexer.hpp"
+
