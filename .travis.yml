@@ -26,8 +26,12 @@ matrix:
 
       after_success:
         - cd build
-        - for filename in `find "${PWD}" -type f -name '*.gcno'`; do echo $filename; gcov-8 $filename; done
-        - bash <(curl -s https://codecov.io/bash)
+        # codecov
+        - lcov --gcov-tool $(which gcov-8) --directory . --capture --no-external --exclude "*tests*" --quiet --output-file coverage.info
+        - lcov --gcov-tool $(which gcov-8) --list coverage.info
+        - bash <(curl -s https://codecov.io/bash) -f coverage.info || echo "Codecov did not collect coverage reports"
+
+        # doxygen
         - cmake --build . --target shapes_documentation
         - mv docs/html docs/shapes
         - rm -rf docs/latex
@@ -218,6 +222,12 @@ install:
     mkdir -p /tmp/cmake
     sudo sh cmake.sh --skip-license --exclude-subdir --prefix=/tmp/cmake
     export PATH=/tmp/cmake/bin:$PATH
+
+    # installing lcov
+    wget https://github.com/linux-test-project/lcov/releases/download/v1.14/lcov-1.14.tar.gz
+    tar xvfz lcov-1.14.tar.gz;
+    sudo make install -C lcov-1.14
+    lcov --version
   fi
 
 - if [[ "${SHAPES_CXX}" != "" ]]; then export CXX=${SHAPES_CXX}; export CC=${SHAPES_CC}; fi

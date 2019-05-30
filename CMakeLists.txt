@@ -116,13 +116,6 @@ add_custom_target(shapes_parser
                   COMMAND mv wkt_token.hpp ${PROJECT_SOURCE_DIR}/include/simo/io)
 
 #
-# coverage
-#
-if(SHAPES_ENABLE_COVERAGE)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -g -O0 -fprofile-arcs -ftest-coverage")
-endif(SHAPES_ENABLE_COVERAGE)
-
-#
 # doxygen
 #
 find_package(Doxygen)
