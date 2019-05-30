@@ -27,7 +27,7 @@ matrix:
       after_success:
         - cd build
         # codecov
-        - lcov --gcov-tool $(which gcov-8) --directory . --capture --no-external --exclude "*tests*" --quiet --output-file coverage.info
+        - lcov --gcov-tool $(which gcov-8) --directory . --capture --no-external --exclude "*tests*" --output-file coverage.info
         - lcov --gcov-tool $(which gcov-8) --list coverage.info
         - bash <(curl -s https://codecov.io/bash) -f coverage.info || echo "Codecov did not collect coverage reports"
 
@@ -240,5 +240,6 @@ script:
 - cmake .. -GNinja -DSHAPES_ENABLE_COVERAGE:BOOL=${SHAPES_ENABLE_COVERAGE}
 - cmake --build . -- -j2
 - ctest -j2 --output-on-failure --verbose
+- find . -name '*.gcda'
 - cd ..
 
