@@ -26,15 +26,14 @@ using namespace simo::shapes;
 Building a `Point` from GeoJSON:
 
 ```cpp
-auto p = Point::from_json(R"({"type": "Point", "coordinates": [1.0, 2.0, 3.0]})");
-std::cout << p.x << " " << p.y << " " << p.z << '\n';
+auto p = Point::from_json(R"({"type": "Point", "coordinates": [1.0, 2.0]})");
+std::cout << p.x << " " << p.y << " " << '\n';
 ```
 
-GeoJSON representation of the `Point`:
+GeoJSON representation of a 3d `Point`:
 
 ```cpp
 auto p = Point{1, 2, 3};
-p.precision = 1;
 std::cout << p.json() << '\n';
 ```
 
@@ -45,10 +44,10 @@ std::cout << p.json() << '\n';
 Iterating a `MultiPoint` is as simple as:
 
 ```cpp
-auto points = MultiPoint{{0, 0, 1}, {1, 2, 3}, {4, 5, 6}, {7, 7, 7}};
+auto points = MultiPoint{{0, 0}, {1, 2}, {4, 5}, {7, 7}};
 for(const auto& point: points)
 {
-    std::cout << point.x << " " << point.y << " " << point.z << '\n';
+    std::cout << point.x << " " << point.y << '\n';
 } 
 ```
 
@@ -56,7 +55,6 @@ WKT representation of a `MultiPoint`:
 
 ```cpp
 auto points = MultiPoint{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
-points.precision  = 1;
 std::cout << points.wkt() << '\n';
 ```
 
@@ -69,12 +67,11 @@ Creating a `LineString` from a google polyline:
 ```cpp
 std::string polyline = "_p~iF~ps|U_ulLnnqC_mqNvxq`@";
 auto ls = LineString::from_polyline(polyline);
-ls.precision = 5;
 std::cout << points.wkt() << '\n';
 ```
 
 ```text
-LINESTRING(-120.20000 38.50000,-120.95000 40.70000,-126.45300 43.25200)
+LINESTRING(-120.2 38.5,-120.95 40.7,-126.453 43.252)
 ```
 
 Google Polyline representation of a `LineString`:
@@ -92,8 +89,8 @@ Building a `MultiLineString`:
 
 ```cpp
 auto ml = MultiLineString{
-    {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
-    {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}
+    {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
+    {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}
 };
 ```
 

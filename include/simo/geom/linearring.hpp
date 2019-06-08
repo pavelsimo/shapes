@@ -22,7 +22,22 @@ namespace shapes
  *
  * @since 0.0.1
  */
-using LinearRing = LineString;
+template <class T = double>
+using linearring = basic_linestring<basic_point<T>>;
+
+template <class T = double>
+using linearring_z = basic_linestring<basic_point_z<T>>;
+
+template <class T = double>
+using linearring_m = basic_linestring<basic_point_m<T>>;
+
+template <class T = double>
+using linearring_zm = basic_linestring<basic_point_zm<T>>;
+
+using LinearRing   = linearring<double>;
+using LinearRingZ  = linearring_z<double>;
+using LinearRingM  = linearring_m<double>;
+using LinearRingZM = linearring_zm<double>;
 
 /// @todo (pavel) LinearRing is not closed, first and last point are different
 /// @todo (pavel) LinearRing should be either empty or with 4 or more points

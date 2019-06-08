@@ -16,7 +16,7 @@ namespace shapes
  *
  * @since 0.0.1
  */
-class WktLexer
+class wkt_lexer
 {
   public:
 
@@ -26,7 +26,7 @@ class WktLexer
      *
      * @since 0.0.1
      */
-    WktLexer(const std::string& source)
+    wkt_lexer(const std::string& source)
             : content(source)
     {
         start = cursor = source.c_str();

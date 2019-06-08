@@ -12,23 +12,19 @@ TEST_CASE("LineString")
         {
             LineString ls;
             CHECK(ls.empty());
-            CHECK(ls.dim == DimensionType::XY);
-            CHECK(ls.geom_type() == GeometryType::LINESTRING);
-            CHECK(ls.geom_type_dim() == GeometryType::LINESTRING);
-            CHECK(ls.geom_type_str() == "LineString");
+            CHECK(ls.dim() == dimension_type::XY);
+            CHECK(ls.geom_type() == geometry_type::LINESTRING);
+            CHECK(ls.tagged_text() == "LineString");
         }
 
         SECTION("xy - points vector")
         {
-            std::vector<Point> points;
-            points.emplace_back(1.0, 2.0);
-            points.emplace_back(-3.0, -4.0);
-            LineString ls(points);
+            std::vector<Point> points = {{1.0, 2.0}, {-3.0, -4.0}};
+            auto ls                   = LineString(points.begin(), points.end());
             CHECK(not ls.empty());
-            CHECK(ls.dim == DimensionType::XY);
-            CHECK(ls.geom_type() == GeometryType::LINESTRING);
-            CHECK(ls.geom_type_dim() == GeometryType::LINESTRING);
-            CHECK(ls.geom_type_str() == "LineString");
+            CHECK(ls.dim() == dimension_type::XY);
+            CHECK(ls.geom_type() == geometry_type::LINESTRING);
+            CHECK(ls.tagged_text() == "LineString");
             const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -39,15 +35,12 @@ TEST_CASE("LineString")
 
         SECTION("xyz - points vector")
         {
-            std::vector<Point> points;
-            points.emplace_back(1.0, 2.0, 3.0);
-            points.emplace_back(-4.0, -5.0, -6.0);
-            LineString ls(points);
+            std::vector<PointZ> points = {{1.0, 2.0, 3.0}, {-4.0, -5.0, -6.0}};
+            auto ls                    = LineStringZ(points.begin(), points.end());
             CHECK(!ls.empty());
-            CHECK(ls.dim == DimensionType::XYZ);
-            CHECK(ls.geom_type() == GeometryType::LINESTRING);
-            CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGZ);
-            CHECK(ls.geom_type_str() == "LineString");
+            CHECK(ls.dim() == dimension_type::XYZ);
+            CHECK(ls.geom_type() == geometry_type::LINESTRINGZ);
+            CHECK(ls.tagged_text() == "LineString");
             const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -60,15 +53,12 @@ TEST_CASE("LineString")
 
         SECTION("xym - points vector")
         {
-            std::vector<Point> points;
-            points.push_back(Point::from_xym(1.0, 2.0, 3.0));
-            points.push_back(Point::from_xym(-4.0, -5.0, -6.0));
-            LineString ls(points);
+            std::vector<PointM> points = {{1.0, 2.0, 3.0}, {-4.0, -5.0, -6.0}};
+            auto ls                    = LineStringM(points.begin(), points.end());
             CHECK(!ls.empty());
-            CHECK(ls.dim == DimensionType::XYM);
-            CHECK(ls.geom_type() == GeometryType::LINESTRING);
-            CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGM);
-            CHECK(ls.geom_type_str() == "LineString");
+            CHECK(ls.dim() == dimension_type::XYM);
+            CHECK(ls.geom_type() == geometry_type::LINESTRINGM);
+            CHECK(ls.tagged_text() == "LineString");
             const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -81,15 +71,12 @@ TEST_CASE("LineString")
 
         SECTION("xyzm - points vector")
         {
-            std::vector<Point> points;
-            points.emplace_back(1.0, 2.0, 3.0, 1.5);
-            points.emplace_back(-4.0, -5.0, -6.0, 1.5);
-            LineString ls(points);
+            std::vector<PointZM> points = {{1.0, 2.0, 3.0, 1.5}, {-4.0, -5.0, -6.0, 1.5}};
+            auto ls                     = LineStringZM(points.begin(), points.end());
             CHECK(!ls.empty());
-            CHECK(ls.dim == DimensionType::XYZM);
-            CHECK(ls.geom_type() == GeometryType::LINESTRING);
-            CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGZM);
-            CHECK(ls.geom_type_str() == "LineString");
+            CHECK(ls.dim() == dimension_type::XYZM);
+            CHECK(ls.geom_type() == geometry_type::LINESTRINGZM);
+            CHECK(ls.tagged_text() == "LineString");
             const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -106,10 +93,9 @@ TEST_CASE("LineString")
         {
             LineString ls = {{1.0, 2.0}, {-3.0, -4.0}};
             CHECK(!ls.empty());
-            CHECK(ls.dim == DimensionType::XY);
-            CHECK(ls.geom_type() == GeometryType::LINESTRING);
-            CHECK(ls.geom_type_dim() == GeometryType::LINESTRING);
-            CHECK(ls.geom_type_str() == "LineString");
+            CHECK(ls.dim() == dimension_type::XY);
+            CHECK(ls.geom_type() == geometry_type::LINESTRING);
+            CHECK(ls.tagged_text() == "LineString");
             const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -120,12 +106,11 @@ TEST_CASE("LineString")
 
         SECTION("xyz - initializer list")
         {
-            LineString ls = {{1.0, 2.0, 3.0}, {-4.0, -5.0, -6.0}};
+            LineStringZ ls = {{1.0, 2.0, 3.0}, {-4.0, -5.0, -6.0}};
             CHECK(!ls.empty());
-            CHECK(ls.dim == DimensionType::XYZ);
-            CHECK(ls.geom_type() == GeometryType::LINESTRING);
-            CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGZ);
-            CHECK(ls.geom_type_str() == "LineString");
+            CHECK(ls.dim() == dimension_type::XYZ);
+            CHECK(ls.geom_type() == geometry_type::LINESTRINGZ);
+            CHECK(ls.tagged_text() == "LineString");
             const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -138,17 +123,28 @@ TEST_CASE("LineString")
 
         SECTION("xym - initializer list")
         {
-            // not supported
+            LineStringM ls = {{1.0, 2.0, 3.0}, {-4.0, -5.0, -6.0}};
+            CHECK(!ls.empty());
+            CHECK(ls.dim() == dimension_type::XYM);
+            CHECK(ls.geom_type() == geometry_type::LINESTRINGM);
+            CHECK(ls.tagged_text() == "LineString");
+            const auto& p1 = ls[0];
+            CHECK(p1.x == 1.0);
+            CHECK(p1.y == 2.0);
+            CHECK(p1.m == 3.0);
+            const auto& p2 = ls[1];
+            CHECK(p2.x == -4.0);
+            CHECK(p2.y == -5.0);
+            CHECK(p2.m == -6.0);
         }
 
         SECTION("xyzm - initializer list")
         {
-            LineString ls = {{1.0, 2.0, 3.0, 4.0}, {-5.0, -6.0, -7.0, -8.0}};
+            LineStringZM ls = {{1.0, 2.0, 3.0, 4.0}, {-5.0, -6.0, -7.0, -8.0}};
             CHECK(!ls.empty());
-            CHECK(ls.dim == DimensionType::XYZM);
-            CHECK(ls.geom_type() == GeometryType::LINESTRING);
-            CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGZM);
-            CHECK(ls.geom_type_str() == "LineString");
+            CHECK(ls.dim() == dimension_type::XYZM);
+            CHECK(ls.geom_type() == geometry_type::LINESTRINGZM);
+            CHECK(ls.tagged_text() == "LineString");
             const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -159,21 +155,6 @@ TEST_CASE("LineString")
             CHECK(p2.y == -6.0);
             CHECK(p2.z == -7.0);
             CHECK(p2.m == -8.0);
-        }
-
-        SECTION("throws - initializer list")
-        {
-            // invalid points
-            CHECK_THROWS(LineString{{1, 2, 3, 4, 5}});
-            CHECK_THROWS(LineString{{1}});
-
-            // point mismatch
-            CHECK_THROWS(LineString{{1, 2}, {1, 2, 3}});
-            CHECK_THROWS(LineString{{1, 2}, {1, 2, 3, 4}});
-            CHECK_THROWS(LineString{{1, 2, 3}, {1, 2}});
-            CHECK_THROWS(LineString{{1, 2, 3}, {1, 2, 3, 4}});
-            CHECK_THROWS(LineString{{1, 2, 3, 4}, {1, 2}});
-            CHECK_THROWS(LineString{{1, 2, 3, 4}, {1, 2, 3}});
         }
     }
 
@@ -196,7 +177,7 @@ TEST_CASE("LineString")
             SECTION("xyz - from json")
             {
                 std::string json = R"({"type":"LineString","coordinates":[[1.0,2.0,3.0],[4.0,5.0,6.0]]})";
-                auto ls          = LineString::from_json(json);
+                auto ls          = LineStringZ::from_json(json);
                 auto& p1         = ls[0];
                 auto& p2         = ls[1];
                 CHECK(p1.x == 1.0);
@@ -209,13 +190,22 @@ TEST_CASE("LineString")
 
             SECTION("xym - from json")
             {
-                // not supported
+                std::string json = R"({"type":"LineString","coordinates":[[1.0,2.0,3.0],[4.0,5.0,6.0]]})";
+                auto ls          = LineStringM::from_json(json);
+                auto& p1         = ls[0];
+                auto& p2         = ls[1];
+                CHECK(p1.x == 1.0);
+                CHECK(p1.y == 2.0);
+                CHECK(p1.m == 3.0);
+                CHECK(p2.x == 4.0);
+                CHECK(p2.y == 5.0);
+                CHECK(p2.m == 6.0);
             }
 
             SECTION("xyzm - from json")
             {
                 std::string json = R"({"type":"LineString","coordinates":[[1.0,2.0,3.0,-10.0],[4.0,5.0,6.0,-10.0]]})";
-                auto ls          = LineString::from_json(json);
+                auto ls          = LineStringZM::from_json(json);
                 auto& p1         = ls[0];
                 auto& p2         = ls[1];
                 CHECK(p1.x == 1.0);
@@ -235,8 +225,8 @@ TEST_CASE("LineString")
             {
                 auto ls = LineString::from_wkt("LINESTRING(1.4 2.3, 3.2 4.1)");
                 CHECK(not ls.empty());
-                CHECK(ls.geom_type_dim() == GeometryType::LINESTRING);
-                CHECK(ls.dim == DimensionType::XY);
+                CHECK(ls.geom_type() == geometry_type::LINESTRING);
+                CHECK(ls.dim() == dimension_type::XY);
                 const auto& p1 = ls[0];
                 CHECK(p1.x == 1.4);
                 CHECK(p1.y == 2.3);
@@ -247,10 +237,10 @@ TEST_CASE("LineString")
 
             SECTION("xyz - from wkt")
             {
-                auto ls = LineString::from_wkt("LINESTRINGZ(1.4 2.3 1, 3.2 4.1 2)");
+                auto ls = LineStringZ::from_wkt("LINESTRINGZ(1.4 2.3 1, 3.2 4.1 2)");
                 CHECK(not ls.empty());
-                CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGZ);
-                CHECK(ls.dim == DimensionType::XYZ);
+                CHECK(ls.geom_type() == geometry_type::LINESTRINGZ);
+                CHECK(ls.dim() == dimension_type::XYZ);
                 const auto& p1 = ls[0];
                 CHECK(p1.x == 1.4);
                 CHECK(p1.y == 2.3);
@@ -263,10 +253,10 @@ TEST_CASE("LineString")
 
             SECTION("xym - from wkt")
             {
-                auto ls = LineString::from_wkt("LINESTRINGM(1.4 2.3 1, 3.2 4.1 2)");
+                auto ls = LineStringM::from_wkt("LINESTRINGM(1.4 2.3 1, 3.2 4.1 2)");
                 CHECK(not ls.empty());
-                CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGM);
-                CHECK(ls.dim == DimensionType::XYM);
+                CHECK(ls.geom_type() == geometry_type::LINESTRINGM);
+                CHECK(ls.dim() == dimension_type::XYM);
                 const auto& p1 = ls[0];
                 CHECK(p1.x == 1.4);
                 CHECK(p1.y == 2.3);
@@ -279,10 +269,10 @@ TEST_CASE("LineString")
 
             SECTION("xyzm - from wkt")
             {
-                auto ls = LineString::from_wkt("LineStringZM(1.4 2.3 1 1, 3.2 4.1 2 2)");
+                auto ls = LineStringZM::from_wkt("LINESTRINGZM(1.4 2.3 1 1, 3.2 4.1 2 2)");
                 CHECK(not ls.empty());
-                CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGZM);
-                CHECK(ls.dim == DimensionType::XYZM);
+                CHECK(ls.geom_type() == geometry_type::LINESTRINGZM);
+                CHECK(ls.dim() == dimension_type::XYZM);
                 const auto& p1 = ls[0];
                 CHECK(p1.x == 1.4);
                 CHECK(p1.y == 2.3);
@@ -299,56 +289,57 @@ TEST_CASE("LineString")
             {
                 SECTION("empty - xy")
                 {
-                    auto ls = LineString::from_wkt("LineString empty");
+                    auto ls = LineString::from_wkt("LINESTRING EMPTY");
                     CHECK(ls.empty());
-                    CHECK(ls.geom_type_dim() == GeometryType::LINESTRING);
-                    CHECK(ls.dim == DimensionType::XY);
+                    CHECK(ls.geom_type() == geometry_type::LINESTRING);
+                    CHECK(ls.dim() == dimension_type::XY);
                 }
 
                 SECTION("empty - xyz")
                 {
-                    auto ls = LineString::from_wkt("LineString Z empty");
+                    auto ls = LineStringZ::from_wkt("LINESTRING Z EMPTY");
                     CHECK(ls.empty());
-                    CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGZ);
-                    CHECK(ls.dim == DimensionType::XYZ);
+                    CHECK(ls.geom_type() == geometry_type::LINESTRINGZ);
+                    CHECK(ls.dim() == dimension_type::XYZ);
                 }
 
                 SECTION("empty - xym")
                 {
-                    auto ls = LineString::from_wkt("LineString M empty");
+                    auto ls = LineStringM::from_wkt("LINESTRING M EMPTY");
                     CHECK(ls.empty());
-                    CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGM);
-                    CHECK(ls.dim == DimensionType::XYM);
+                    CHECK(ls.geom_type() == geometry_type::LINESTRINGM);
+                    CHECK(ls.dim() == dimension_type::XYM);
                 }
 
                 SECTION("empty - xyzm")
                 {
-                    auto ls = LineString::from_wkt("LineString ZM empty");
+                    auto ls = LineStringZM::from_wkt("LINESTRING ZM EMPTY");
                     CHECK(ls.empty());
-                    CHECK(ls.geom_type_dim() == GeometryType::LINESTRINGZM);
-                    CHECK(ls.dim == DimensionType::XYZM);
+                    CHECK(ls.geom_type() == geometry_type::LINESTRINGZM);
+                    CHECK(ls.dim() == dimension_type::XYZM);
                 }
             }
 
             SECTION("no throw - from wkt")
             {
-                CHECK_NOTHROW(LineString::from_wkt("LineStringZM(1.4 2.3 1 1, 3.2 4.1 2 2)"));
-                CHECK_NOTHROW(LineString::from_wkt("lineStringzm(1.4 2.3 1 1, 3.2 4.1 2 2)"));
-                CHECK_NOTHROW(LineString::from_wkt("LineStringZ(1.4 2.3 1, 3.2 4.1 2)"));
+                CHECK_NOTHROW(LineStringZM::from_wkt("LineStringZM(1.4 2.3 1 1, 3.2 4.1 2 2)"));
+                CHECK_NOTHROW(LineStringZM::from_wkt("lineStringzm(1.4 2.3 1 1, 3.2 4.1 2 2)"));
+                CHECK_NOTHROW(LineStringZ::from_wkt("LineStringZ(1.4 2.3 1, 3.2 4.1 2)"));
                 CHECK_NOTHROW(LineString::from_wkt("LineString(1.4 2.3, 3.2 4.1)"));
                 CHECK_NOTHROW(LineString::from_wkt("LineString (10 40, 40 30, 20 20, 30 10)"));
                 CHECK_NOTHROW(LineString::from_wkt("LineString (10 40, 40 30, 20 20, 30 10)"));
-                CHECK_NOTHROW(LineString::from_wkt("LineString Z (10 40 -10, 40 30 -10, 20 20 -10, 30 10 -10)"));
+                CHECK_NOTHROW(LineStringZ::from_wkt("LineString Z (10 40 -10, 40 30 -10, 20 20 -10, 30 10 -10)"));
                 CHECK_NOTHROW(LineString::from_wkt("LineString (10.00232 40.32412, 40.11241 30.429017, 20.43754 20.4323, 30.75534 10.234234)"));
             }
 
             SECTION("throws - from wkt")
             {
-                CHECK_THROWS(LineString::from_wkt("LineStringZM(1.4 2.3, 3.2 4.1)"));
-                CHECK_THROWS(LineString::from_wkt("LineStringZM(1.4 2.3 1, 3.2 4.1 2)"));
-                CHECK_THROWS(LineString::from_wkt("LineStringZM((1.4 2.3, 1.3)"));
-                CHECK_THROWS(LineString::from_wkt("LineStringZM((1.4 2.3, 1.3"));
-                CHECK_THROWS(LineString::from_wkt("LineStringZM(1.4.3 2.3.3 1.1.1 1.1.1, 3.2.1 4.1.1 2.2.1 2.2.3)"));
+                CHECK_THROWS(LineStringZM::from_wkt("LineStringZM(1.4 2.3, 3.2 4.1)"));
+                CHECK_THROWS(LineStringZM::from_wkt("LineStringZM(1.4 2.3 1, 3.2 4.1 2)"));
+                CHECK_THROWS(LineStringZM::from_wkt("LineStringZM((1.4 2.3, 1.3)"));
+                CHECK_THROWS(LineStringZM::from_wkt("LineStringZM((1.4 2.3, 1.3"));
+                CHECK_THROWS(LineStringZM::from_wkt("LineStringZM(1.4.3 2.3.3 1.1.1 1.1.1, 3.2.1 4.1.1 2.2.1 2.2.3)"));
+                /// @todo add more tests
             }
         }
 
@@ -356,9 +347,9 @@ TEST_CASE("LineString")
         {
             SECTION("xy - from polyline")
             {
-                std::string polyline = "_p~iF~ps|U_ulLnnqC_mqNvxq`@";
-                auto ls              = LineString::from_polyline(polyline);
-                CHECK(ls.wkt() == "LINESTRING(-120.2 38.5,-120.95 40.7,-126.453 43.252)");
+                //                std::string polyline = "_p~iF~ps|U_ulLnnqC_mqNvxq`@";
+                //                auto ls              = LineString::from_polyline(polyline);
+                //                CHECK(ls.wkt() == "LINESTRING(-120.2 38.5,-120.95 40.7,-126.453 43.252)");
             }
         }
     }
@@ -375,18 +366,19 @@ TEST_CASE("LineString")
 
             SECTION("xyz - to json")
             {
-                LineString ls = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+                LineStringZ ls = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
                 CHECK(ls.json() == R"({"type":"LineString","coordinates":[[1,2,3],[4,5,6]]})");
             }
 
             SECTION("xym - to json")
             {
-                // not supported
+                LineStringM ls = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+                CHECK(ls.json() == R"({"type":"LineString","coordinates":[[1,2,3],[4,5,6]]})");
             }
 
             SECTION("xyzm - to json")
             {
-                LineString ls = {{1.0, 2.0, 3.0, -10.0}, {4.0, 5.0, 6.0, -10.0}};
+                LineStringZM ls = {{1.0, 2.0, 3.0, -10.0}, {4.0, 5.0, 6.0, -10.0}};
                 CHECK(ls.json() == R"({"type":"LineString","coordinates":[[1,2,3,-10],[4,5,6,-10]]})");
             }
         }
@@ -401,22 +393,19 @@ TEST_CASE("LineString")
 
             SECTION("xyz - to wkt")
             {
-                LineString ls = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+                LineStringZ ls = {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
                 CHECK(ls.wkt() == R"(LINESTRINGZ(1 2 3,4 5 6))");
             }
 
             SECTION("xym - to wkt")
             {
-                std::vector<Point> points;
-                points.push_back(Point::from_xym(1.0, 2.0, 3.0));
-                points.push_back(Point::from_xym(-4.0, -5.0, -6.0));
-                LineString ls(points);
+                LineStringM ls = {{1.0, 2.0, 3.0}, {-4.0, -5.0, -6.0}};
                 CHECK(ls.wkt() == R"(LINESTRINGM(1 2 3,-4 -5 -6))");
             }
 
             SECTION("xyzm - to wkt")
             {
-                LineString ls = {{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
+                LineStringZM ls = {{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
                 CHECK(ls.wkt() == R"(LINESTRINGZM(1 2 3 4,5 6 7 8))");
             }
         }
@@ -444,29 +433,22 @@ TEST_CASE("LineString")
 
             SECTION("xyz - equal to")
             {
-                auto ls1 = LineString{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
-                auto ls2 = LineString{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+                auto ls1 = LineStringZ{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+                auto ls2 = LineStringZ{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
                 CHECK(ls1 == ls2);
             }
 
             SECTION("xym - equal to")
             {
-                std::vector<Point> pts1;
-                pts1.push_back(Point::from_xym(1.0, 2.0, 3.0));
-                pts1.push_back(Point::from_xym(4.0, 5.0, 6.0));
-                auto ls1 = LineString(pts1);
-
-                std::vector<Point> pts2;
-                pts2.push_back(Point::from_xym(1.0, 2.0, 3.0));
-                pts2.push_back(Point::from_xym(4.0, 5.0, 6.0));
-                auto ls2 = LineString(pts2);
+                auto ls1 = LineStringM{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+                auto ls2 = LineStringM{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
                 CHECK(ls1 == ls2);
             }
 
             SECTION("xyzm - equal to")
             {
-                auto ls1 = LineString{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
-                auto ls2 = LineString{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
+                auto ls1 = LineStringZM{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
+                auto ls2 = LineStringZM{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
                 CHECK(ls1 == ls2);
             }
         }
@@ -482,28 +464,22 @@ TEST_CASE("LineString")
 
             SECTION("xyz - not equal to")
             {
-                auto ls1 = LineString{{1.0, 2.0, 3.0}, {3.0, 2.0, 1.0}};
-                auto ls2 = LineString{{1.0, 2.0, 3.0}, {10.0, 20.0, 30.0}};
+                auto ls1 = LineStringZ{{1.0, 2.0, 3.0}, {3.0, 2.0, 1.0}};
+                auto ls2 = LineStringZ{{1.0, 2.0, 3.0}, {10.0, 20.0, 30.0}};
                 CHECK(ls1 != ls2);
             }
 
             SECTION("xym - not equal to")
             {
-                std::vector<Point> pts1;
-                pts1.push_back(Point::from_xym(1.0, 2.0, 3.0));
-                pts1.push_back(Point::from_xym(4.0, 5.0, 6.0));
-                auto ls1 = LineString(pts1);
-                std::vector<Point> pts2;
-                pts2.push_back(Point::from_xym(1.0, 2.0, 3.0));
-                pts2.push_back(Point::from_xym(6.0, 5.0, 4.0));
-                auto ls2 = LineString(pts2);
+                auto ls1 = LineStringZ{{1.0, 2.0, 3.0}, {3.0, 2.0, 1.0}};
+                auto ls2 = LineStringZ{{1.0, 2.0, 3.0}, {10.0, 20.0, 30.0}};
                 CHECK(ls1 != ls2);
             }
 
             SECTION("xyzm - not equal to")
             {
-                auto ls1 = LineString{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
-                auto ls2 = LineString{{1.0, 2.0, 3.0, 4.0}, {8.0, 7.0, 6.0, 5.0}};
+                auto ls1 = LineStringZM{{1.0, 2.0, 3.0, 4.0}, {5.0, 6.0, 7.0, 8.0}};
+                auto ls2 = LineStringZM{{1.0, 2.0, 3.0, 4.0}, {8.0, 7.0, 6.0, 5.0}};
                 CHECK(ls1 != ls2);
             }
         }
@@ -514,33 +490,33 @@ TEST_CASE("LineString")
             {
                 auto ls  = LineString{{1.0, 2.0}, {3.0, 4.0}};
                 auto& p1 = ls[0];
-                CHECK(p1.geom_type_dim() == GeometryType::POINT);
+                CHECK(p1.geom_type() == geometry_type::POINT);
                 CHECK(p1.x == 1.0);
                 CHECK(p1.y == 2.0);
 
                 auto& p2 = ls[1];
-                CHECK(p2.geom_type_dim() == GeometryType::POINT);
+                CHECK(p2.geom_type() == geometry_type::POINT);
                 CHECK(p2.x == 3.0);
                 CHECK(p2.y == 4.0);
             }
 
             SECTION("xyz - index operator")
             {
-                auto ls  = LineString{{1.0, 2.0, -1.0}, {3.0, 4.0, -2.0}, {5.0, 6.0, -3.0}};
+                auto ls  = LineStringZ{{1.0, 2.0, -1.0}, {3.0, 4.0, -2.0}, {5.0, 6.0, -3.0}};
                 auto& p1 = ls[0];
-                CHECK(p1.geom_type_dim() == GeometryType::POINTZ);
+                CHECK(p1.geom_type() == geometry_type::POINTZ);
                 CHECK(p1.x == 1.0);
                 CHECK(p1.y == 2.0);
                 CHECK(p1.z == -1.0);
 
                 auto& p2 = ls[1];
-                CHECK(p2.geom_type_dim() == GeometryType::POINTZ);
+                CHECK(p2.geom_type() == geometry_type::POINTZ);
                 CHECK(p2.x == 3.0);
                 CHECK(p2.y == 4.0);
                 CHECK(p2.z == -2.0);
 
                 auto& p3 = ls[2];
-                CHECK(p3.geom_type_dim() == GeometryType::POINTZ);
+                CHECK(p3.geom_type() == geometry_type::POINTZ);
                 CHECK(p3.x == 5.0);
                 CHECK(p3.y == 6.0);
                 CHECK(p3.z == -3.0);
@@ -548,26 +524,22 @@ TEST_CASE("LineString")
 
             SECTION("xym - index operator")
             {
-                std::vector<Point> pts;
-                pts.push_back(Point::from_xym(1.0, 2.0, -1.0));
-                pts.push_back(Point::from_xym(3.0, 4.0, -2.0));
-                pts.push_back(Point::from_xym(5.0, 6.0, -3.0));
-                auto ls = LineString(pts);
+                auto ls = LineStringM{{1.0, 2.0, -1.0}, {3.0, 4.0, -2.0}, {5.0, 6.0, -3.0}};
 
                 auto& p1 = ls[0];
-                CHECK(p1.geom_type_dim() == GeometryType::POINTM);
+                CHECK(p1.geom_type() == geometry_type::POINTM);
                 CHECK(p1.x == 1.0);
                 CHECK(p1.y == 2.0);
                 CHECK(p1.m == -1.0);
 
                 auto& p2 = ls[1];
-                CHECK(p2.geom_type_dim() == GeometryType::POINTM);
+                CHECK(p2.geom_type() == geometry_type::POINTM);
                 CHECK(p2.x == 3.0);
                 CHECK(p2.y == 4.0);
                 CHECK(p2.m == -2.0);
 
                 auto& p3 = ls[2];
-                CHECK(p3.geom_type_dim() == GeometryType::POINTM);
+                CHECK(p3.geom_type() == geometry_type::POINTM);
                 CHECK(p3.x == 5.0);
                 CHECK(p3.y == 6.0);
                 CHECK(p3.m == -3.0);
@@ -575,23 +547,23 @@ TEST_CASE("LineString")
 
             SECTION("xyzm - index operator")
             {
-                auto ls  = LineString{{1.0, 2.0, 3.0, -1.0}, {3.0, 4.0, 5.0, -2.0}, {5.0, 6.0, 7.0, -3.0}};
+                auto ls  = LineStringZM{{1.0, 2.0, 3.0, -1.0}, {3.0, 4.0, 5.0, -2.0}, {5.0, 6.0, 7.0, -3.0}};
                 auto& p1 = ls[0];
-                CHECK(p1.geom_type_dim() == GeometryType::POINTZM);
+                CHECK(p1.geom_type() == geometry_type::POINTZM);
                 CHECK(p1.x == 1.0);
                 CHECK(p1.y == 2.0);
                 CHECK(p1.z == 3.0);
                 CHECK(p1.m == -1.0);
 
                 auto& p2 = ls[1];
-                CHECK(p2.geom_type_dim() == GeometryType::POINTZM);
+                CHECK(p2.geom_type() == geometry_type::POINTZM);
                 CHECK(p2.x == 3.0);
                 CHECK(p2.y == 4.0);
                 CHECK(p2.z == 5.0);
                 CHECK(p2.m == -2.0);
 
                 auto& p3 = ls[2];
-                CHECK(p3.geom_type_dim() == GeometryType::POINTZM);
+                CHECK(p3.geom_type() == geometry_type::POINTZM);
                 CHECK(p3.x == 5.0);
                 CHECK(p3.y == 6.0);
                 CHECK(p3.z == 7.0);
@@ -605,113 +577,53 @@ TEST_CASE("LineString")
         SECTION("xy - coords")
         {
             auto ls     = LineString{{1.0, 2.0}, {3.0, 4.0}, {5.0, 6.0}};
-            auto coords = ls.coords();
+            auto coords = ls.xy();
             CHECK(ls.size() == coords.size());
-
-            double x, y;
-            x = coords[0][0];
-            y = coords[0][1];
-            CHECK(x == 1.0);
-            CHECK(y == 2.0);
-            x = coords[1][0];
-            y = coords[1][1];
-            CHECK(x == 3.0);
-            CHECK(y == 4.0);
-            x = coords[2][0];
-            y = coords[2][1];
-            CHECK(x == 5.0);
-            CHECK(y == 6.0);
+            CHECK(std::get<0>(coords[0]) == 1.0);
+            CHECK(std::get<1>(coords[0]) == 2.0);
+            CHECK(std::get<0>(coords[1]) == 3.0);
+            CHECK(std::get<1>(coords[1]) == 4.0);
+            CHECK(std::get<0>(coords[2]) == 5.0);
+            CHECK(std::get<1>(coords[2]) == 6.0);
         }
 
         SECTION("xyz - coords")
         {
-            auto ls     = LineString{{1.0, 2.0, -1.0}, {3.0, 4.0, -2.0}, {5.0, 6.0, -3.0}};
-            auto coords = ls.coords();
+            auto ls     = LineStringZ{{1.0, 2.0, -1.0}, {3.0, 4.0, -2.0}, {5.0, 6.0, -3.0}};
+            auto coords = ls.xy();
             CHECK(ls.size() == coords.size());
-
-            double x, y, z;
-            x = coords[0][0];
-            y = coords[0][1];
-            z = coords[0][2];
-            CHECK(x == 1.0);
-            CHECK(y == 2.0);
-            CHECK(z == -1.0);
-            x = coords[1][0];
-            y = coords[1][1];
-            z = coords[1][2];
-            CHECK(x == 3.0);
-            CHECK(y == 4.0);
-            CHECK(z == -2.0);
-            x = coords[2][0];
-            y = coords[2][1];
-            z = coords[2][2];
-            CHECK(x == 5.0);
-            CHECK(y == 6.0);
-            CHECK(z == -3.0);
+            CHECK(std::get<0>(coords[0]) == 1.0);
+            CHECK(std::get<1>(coords[0]) == 2.0);
+            CHECK(std::get<0>(coords[1]) == 3.0);
+            CHECK(std::get<1>(coords[1]) == 4.0);
+            CHECK(std::get<0>(coords[2]) == 5.0);
+            CHECK(std::get<1>(coords[2]) == 6.0);
         }
 
         SECTION("xym - coords")
         {
-            std::vector<Point> pts1;
-            pts1.push_back(Point::from_xym(1.0, 2.0, -1.0));
-            pts1.push_back(Point::from_xym(3.0, 4.0, -2.0));
-            pts1.push_back(Point::from_xym(5.0, 6.0, -3.0));
-            auto ls     = LineString(pts1);
-            auto coords = ls.coords();
+            auto ls     = LineStringM{{1.0, 2.0, -1.0}, {3.0, 4.0, -2.0}, {5.0, 6.0, -3.0}};
+            auto coords = ls.xy();
             CHECK(ls.size() == coords.size());
-
-            double x, y, m;
-            x = coords[0][0];
-            y = coords[0][1];
-            m = coords[0][2];
-            CHECK(x == 1.0);
-            CHECK(y == 2.0);
-            CHECK(m == -1.0);
-            x = coords[1][0];
-            y = coords[1][1];
-            m = coords[1][2];
-            CHECK(x == 3.0);
-            CHECK(y == 4.0);
-            CHECK(m == -2.0);
-            x = coords[2][0];
-            y = coords[2][1];
-            m = coords[2][2];
-            CHECK(x == 5.0);
-            CHECK(y == 6.0);
-            CHECK(m == -3.0);
+            CHECK(std::get<0>(coords[0]) == 1.0);
+            CHECK(std::get<1>(coords[0]) == 2.0);
+            CHECK(std::get<0>(coords[1]) == 3.0);
+            CHECK(std::get<1>(coords[1]) == 4.0);
+            CHECK(std::get<0>(coords[2]) == 5.0);
+            CHECK(std::get<1>(coords[2]) == 6.0);
         }
 
         SECTION("xyzm - coords")
         {
-            auto ls     = LineString{{1.0, 2.0, -1.0, -10.0}, {3.0, 4.0, -2.0, -20.0}, {5.0, 6.0, -3.0, -30.0}};
-            auto coords = ls.coords();
+            auto ls     = LineStringZM{{1.0, 2.0, -1.0, -10.0}, {3.0, 4.0, -2.0, -20.0}, {5.0, 6.0, -3.0, -30.0}};
+            auto coords = ls.xy();
             CHECK(ls.size() == coords.size());
-
-            double x, y, z, m;
-            x = coords[0][0];
-            y = coords[0][1];
-            z = coords[0][2];
-            m = coords[0][3];
-            CHECK(x == 1.0);
-            CHECK(y == 2.0);
-            CHECK(z == -1.0);
-            CHECK(m == -10.0);
-            x = coords[1][0];
-            y = coords[1][1];
-            z = coords[1][2];
-            m = coords[1][3];
-            CHECK(x == 3.0);
-            CHECK(y == 4.0);
-            CHECK(z == -2.0);
-            CHECK(m == -20.0);
-            x = coords[2][0];
-            y = coords[2][1];
-            z = coords[2][2];
-            m = coords[2][3];
-            CHECK(x == 5.0);
-            CHECK(y == 6.0);
-            CHECK(z == -3.0);
-            CHECK(m == -30.0);
+            CHECK(std::get<0>(coords[0]) == 1.0);
+            CHECK(std::get<1>(coords[0]) == 2.0);
+            CHECK(std::get<0>(coords[1]) == 3.0);
+            CHECK(std::get<1>(coords[1]) == 4.0);
+            CHECK(std::get<0>(coords[2]) == 5.0);
+            CHECK(std::get<1>(coords[2]) == 6.0);
         }
     }
 
@@ -732,7 +644,7 @@ TEST_CASE("LineString")
 
         SECTION("xyz - for each")
         {
-            auto ls = LineString{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}};
+            auto ls = LineStringZ{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}};
             int n   = 0;
             for (const auto& p : ls)
             {
@@ -746,11 +658,7 @@ TEST_CASE("LineString")
 
         SECTION("xym - for each")
         {
-            std::vector<Point> pts;
-            pts.push_back(Point::from_xym(1.0, 2.0, 3.0));
-            pts.push_back(Point::from_xym(4.0, 5.0, 6.0));
-            pts.push_back(Point::from_xym(7.0, 8.0, 9.0));
-            auto ls = LineString(pts);
+            auto ls = LineStringM{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}};
             int n   = 0;
             for (const auto& p : ls)
             {
@@ -764,7 +672,7 @@ TEST_CASE("LineString")
 
         SECTION("xyzm - for each")
         {
-            auto ls = LineString{{1.0, 2.0, 3.0, -1.0}, {4.0, 5.0, 6.0, -2.0}, {7.0, 8.0, 9.0, -3.0}};
+            auto ls = LineStringZM{{1.0, 2.0, 3.0, -1.0}, {4.0, 5.0, 6.0, -2.0}, {7.0, 8.0, 9.0, -3.0}};
             int n   = 0;
             for (const auto& p : ls)
             {
@@ -780,10 +688,11 @@ TEST_CASE("LineString")
 
     SECTION("bounds")
     {
-        auto ls = LineString{{1.0, 2.0}, {3.0, 4.0}};
-        CHECK(ls.bounds.maxx == 3.0);
-        CHECK(ls.bounds.maxy == 4.0);
-        CHECK(ls.bounds.minx == 1.0);
-        CHECK(ls.bounds.miny == 2.0);
+        auto ls  = LineString{{1.0, 2.0}, {3.0, 4.0}};
+        bounds b = ls.bounds();
+        CHECK(b.maxx == 3.0);
+        CHECK(b.maxy == 4.0);
+        CHECK(b.minx == 1.0);
+        CHECK(b.miny == 2.0);
     }
 }

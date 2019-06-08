@@ -23,511 +23,1090 @@ namespace shapes
 {
 
 /*!
- * @brief Represents a point
+ * @brief DOCUMENT ME!
+ * @tparam T
  * @ingroup geometry
  *
  * @since 0.0.1
  */
-class Point : public BaseGeometry<Point>
+template <class T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+class basic_point : public basic_geometry<basic_point<T>>
 {
   public:
-    /// the x-coordinate value for this Point
-    double x = 0;
+    /// DOCUMENT ME!
+    using point_type = basic_point;
+    /// DOCUMENT ME!
+    using coord_type = T;
+    /// DOCUMENT ME!
+    using coord_iterator = typename std::vector<coord_type>::iterator;
+    /// DOCUMENT ME!
+    using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
 
-    /// the y-coordinate value for this Point
-    double y = 0;
-
-    /// the z-coordinate value for this Point, if it has one.
-    double z = 0;
-
-    /// the m-coordinate value for this Point, if it has one.
-    double m = 0;
-
-    /*!
-     * @brief Creates a Point
-     *
-     * @note the default behaviour is to create a 2-dimensional point with coordinates (0, 0)
-     *
-     * @since 0.0.1
-     */
-    Point() = default;
-
-    /*!
-     * @brief Creates a Point from coordinates (x, y)
-     *
-     * @param x the x-coordinate value
-     * @param y the y-coordinate value
-     *
-     * @since 0.0.1
-     */
-    Point(double x, double y)
-        : x(x), y(y)
+    union
     {
-        dim = DimensionType::XY;
-    }
+        struct
+        {
+            T x;
+            T y;
+        };
+
+        struct
+        {
+            T lng;
+            T lat;
+        };
+
+        T coords[2];
+    };
 
     /*!
-     * @brief Creates a Point from coordinates (x, y, z)
-     *
-     * @param x the x-coordinate value
-     * @param y the y-coordinate value
-     * @param z the z-coordinate value
-     *
-     * @since 0.0.1
+     * @brief Creates a empty point
      */
-    Point(double x, double y, double z)
-        : x(x), y(y), z(z)
-    {
-        dim = DimensionType::XYZ;
-    }
+    basic_point()
+        : x(0), y(0) {}
 
     /*!
-     * @brief Creates a Point from coordinates (x, y, z, m)
-     *
-     * @param x the x-coordinate value
-     * @param y the y-coordinate value
-     * @param z the z-coordinate value
-     * @param m the m-coordinate (measure) value
-     *
-     * @since 0.0.1
+     * @brief Creates a point from the given coordinates
+     * @param x the x-coordinate
+     * @param y the y-coordinate
      */
-    Point(double x, double y, double z, double m)
-        : x(x), y(y), z(z), m(m)
-    {
-        dim = DimensionType::XYZM;
-    }
+    basic_point(T x, T y)
+        : x(x), y(y) {}
 
     /*!
-     * @brief Creates a Point from coordinates
-     *
-     * @param coords the coordinates
-     *
-     * @throw GeometryError DOCUMENT ME!
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param begin
+     * @param end
      */
-    explicit Point(const std::vector<double>& coords)
+    explicit basic_point(coord_iterator begin, coord_iterator end)
     {
-        if (coords.size() == 2)
+        /// @todo (pavel) deal with repetition
+        assert(std::distance(begin, end) == 2);
+        size_t i = 0;
+        for (auto it = begin; it != end; ++it)
         {
-            x   = coords[0];
-            y   = coords[1];
-            dim = DimensionType::XY;
-        }
-        else if (coords.size() == 3)
-        {
-            x   = coords[0];
-            y   = coords[1];
-            z   = coords[2];
-            dim = DimensionType::XYZ;
-        }
-        else if (coords.size() == 4)
-        {
-            x   = coords[0];
-            y   = coords[1];
-            z   = coords[2];
-            m   = coords[3];
-            dim = DimensionType::XYZM;
-        }
-        else
-        {
-            throw exceptions::GeometryError("invalid number of dimensions " + std::to_string(coords.size()));
-        }
-    }
-    /*!
-     * @brief Creates a Point
-     *
-     * @tparam T an arithmetic value (e.g. int, float, double)
-     * @param init the coordinates list
-     * @throw exception if the given number of coordinates is either less than two or greater than four
-     *
-     * @throw GeometryError DOCUMENT ME!
-     *
-     * @since 0.0.1
-     */
-    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-    Point(std::initializer_list<T> init)
-    {
-        if (init.size() == 2)
-        {
-            x   = *init.begin();
-            y   = *(init.begin() + 1);
-            dim = DimensionType::XY;
-        }
-        else if (init.size() == 3)
-        {
-            x   = *init.begin();
-            y   = *(init.begin() + 1);
-            z   = *(init.begin() + 2);
-            dim = DimensionType::XYZ;
-        }
-        else if (init.size() == 4)
-        {
-            x   = *init.begin();
-            y   = *(init.begin() + 1);
-            z   = *(init.begin() + 2);
-            m   = *(init.begin() + 3);
-            dim = DimensionType::XYZM;
-        }
-        else
-        {
-            throw exceptions::GeometryError("invalid number of dimensions " + std::to_string(init.size()));
+            coords[i++] = *it;
         }
     }
 
     /*!
-     * @brief Creates a Point from coordinates (x, y)
-     *
-     * @param x the x-coordinate value
-     * @param y the y-coordinate value
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param begin
+     * @param end
      */
-    static Point from_xy(double x, double y)
+    explicit basic_point(coord_const_iterator begin, coord_const_iterator end)
     {
-        return {x, y};
-    }
-
-    /*!
-     * @brief Creates a Point from coordinates (x, y, z)
-     *
-     * @param x the x-coordinate value
-     * @param y the y-coordinate value
-     * @param z the z-coordinate value
-     *
-     * @since 0.0.1
-     */
-    static Point from_xyz(double x, double y, double z)
-    {
-        return {x, y, z};
-    }
-
-    /*!
-     * @brief Creates a Point from coordinates (x, y, m)
-     *
-     * @param x the x-coordinate value
-     * @param y the y-coordinate value
-     * @param m the m-coordinate value
-     *
-     * @since 0.0.1
-     */
-    static Point from_xym(double x, double y, double m)
-    {
-        Point p;
-        p.x   = x;
-        p.y   = y;
-        p.m   = m;
-        p.dim = DimensionType::XYM;
-        return p;
-    }
-
-    /*!
-     * @brief Creates a Point from coordinates (x, y, z, m)
-     *
-     * @param x the x-coordinate value
-     * @param y the y-coordinate value
-     * @param z the z-coordinate value
-     * @param m the m-coordinate value
-     *
-     * @since 0.0.1
-     */
-    static Point from_xyzm(double x, double y, double z, double m)
-    {
-        return {x, y, z, m};
-    }
-
-    /*!
-     * @brief Returns the coordinate at the given index
-     *
-     * @param pos the coordinate position
-     * @return a double with the coordinate value
-     *
-     * @throw IndexError if the index at pos is out of range
-     *
-     * @since 0.0.1
-     */
-    double& at(size_t pos)
-    {
-        if (pos >= size_())
+        /// @todo (pavel) deal with repetition
+        assert(std::distance(begin, end) == 2);
+        size_t i = 0;
+        for (auto it = begin; it != end; ++it)
         {
-            throw exceptions::IndexError("index at " + std::to_string(pos) + " is out of range");
+            coords[i++] = *it;
         }
-        if (pos == 0)
-        {
-            return x;
-        }
-        if (pos == 1)
-        {
-            return y;
-        }
-        if (pos == 2)
-        {
-            return dim == DimensionType::XYM ? m : z;
-        }
-        return m;
     }
-
-    /// @copydoc Point::at()
-    double& operator[](size_t pos)
-    {
-        return at(pos);
-    }
-
-    /// @todo (pavel) implement operator std::ostream & operator<<
 
     /*!
-     * @brief Creates a Point from a geojson string
-     *
-     * @param json the geojson string
-     * @return a Point object
-     * @sa https://tools.ietf.org/html/rfc7946
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @return
      */
-    static Point from_json(const std::string& json)
+    std::size_t size() const noexcept
     {
+        return static_cast<std::size_t>(ndim_());
+    }
+
+    // operators
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param pos
+     * @return
+     */
+    T& operator[](size_t pos)
+    {
+        assert(pos < 2);
+        return coords[pos];
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator==(const basic_point<T>& lhs, const basic_point<T>& rhs)
+    {
+        return lhs.x == rhs.x and lhs.y == rhs.y;
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator!=(const basic_point<T>& lhs, const basic_point<T>& rhs)
+    {
+        return not operator==(lhs, rhs);
+    }
+
+    // polyline
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param polyline
+     * @param precision
+     * @return
+     */
+    static basic_point<T> from_polyline(const std::string& polyline, std::int32_t precision = 5)
+    {
+        auto coords = polyline::decode(polyline, precision);
+        if (coords.size() > 2)
+        {
+            throw exceptions::parse_error("too many points");
+        }
+        return {coords[0], coords[1]};
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param precision
+     * @return
+     */
+    std::string polyline(std::int32_t precision = 5) const
+    {
+        return polyline::encode(lat, precision) + polyline::encode(lng, precision);
+    }
+
+  private:
+    /// for allow basic_geometry to access basic_point private members
+    friend class basic_geometry<basic_point<T>>;
+
+    /// @private
+    geometry_type geom_type_() const noexcept
+    {
+        return geometry_type::POINT;
+    }
+
+    /// @private
+    std::string tagged_text_() const noexcept
+    {
+        return "Point";
+    }
+
+    /// @private
+    dimension_type dim_() const noexcept
+    {
+        return dimension_type::XY;
+    }
+
+    /// @private
+    int32_t ndim_() const noexcept
+    {
+        return 2;
+    }
+
+    /// @private
+    bool is_closed_() const noexcept
+    {
+        return true;
+    }
+
+    /// @private
+    void throw_for_invalid_() const
+    {
+        // do nothing
+    }
+
+    /// @private
+    bounds bounds_() const
+    {
+        return {x, y, x, y};
+    }
+
+    /// @private
+    bool has_z_() const noexcept
+    {
+        return false;
+    }
+
+    /// @private
+    bool has_m_() const noexcept
+    {
+        return false;
+    }
+
+    // json
+
+    /// @private
+    static basic_point<T> from_json_(const std::string& json)
+    {
+        /// @todo (pavel) deal with repeated code
         try
         {
             auto j         = nlohmann::json::parse(json);
             auto geom_type = j.at("type").get<std::string>();
             if (geom_type != "Point")
             {
-                throw exceptions::ParseError("invalid geometry type");
+                throw exceptions::parse_error("invalid geometry type");
             }
             auto coords = j.at("coordinates").get<std::vector<double>>();
-            return Point(coords);
+            return {coords.at(0), coords.at(1)};
+        }
+        catch (const std::out_of_range& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
         catch (const nlohmann::json::exception& e)
         {
-            throw exceptions::ParseError("invalid json: " + std::string(e.what()));
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
-        catch (const exceptions::GeometryError& e)
+        catch (const exceptions::geometry_error& e)
         {
-            throw exceptions::ParseError("invalid geometry: " + std::string(e.what()));
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
         }
     }
 
-    /*!
-     * @brief Dumps the geojson representation of the Point
-     *
-     * @param precision the output precision
-     * @return a geojson string
-     * @sa https://tools.ietf.org/html/rfc7946
-     *
-     * @since 0.0.1
-     */
-    std::string json(std::int32_t precision = -1)
+    /// @private
+    std::string json_(std::int32_t precision = -1) const
     {
-        /// @todo (pavel) add properties to specify z, m and zm
         std::stringstream ss;
         if (precision >= 0)
         {
             ss << std::setprecision(precision);
         }
-        ss << "{\"type\":\"Point\",\"coordinates\":";
-        ss << "[" << x << "," << y;
-        if (has_z())
-        {
-            ss << "," << z;
-        }
-        if (has_m())
-        {
-            ss << "," << m;
-        }
-        ss << "]}";
+        ss << "{\"type\":\"Point\",\"coordinates\":"
+           << "[" << x << "," << y << "]}";
         return ss.str();
     }
 
-    /*!
-     * @brief Creates a Point from a WKT string
-     *
-     * @param wkt the WKT string
-     * @return a Point object
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @throw ParseError if a parser error occurs
-     *
-     * @since 0.0.1
-     */
-    static Point from_wkt(const std::string& wkt)
+    // wkt
+
+    /// @private
+    static basic_point<T> from_wkt_(const std::string& wkt)
     {
-        WktReader reader{};
+        wkt_reader reader{};
         auto result = reader.read(wkt);
         auto data   = result.data;
-        switch (data.geom_type)
+        if (data.geom_type != geometry_type::POINT)
         {
-            case GeometryType::POINT:
-                return {data.coords[0], data.coords[1]};
-            case GeometryType::POINTZ:
-                return {data.coords[0], data.coords[1], data.coords[2]};
-            case GeometryType::POINTM:
-                return Point::from_xym(data.coords[0], data.coords[1], data.coords[2]);
-            case GeometryType::POINTZM:
-                return {data.coords[0], data.coords[1], data.coords[2], data.coords[3]};
-            default:
-                throw exceptions::ParseError("invalid wkt string");
+            throw exceptions::parse_error("invalid wkt string");
         }
+        return {data.coords[0], data.coords[1]};
     }
 
-    /*!
-     * @brief Dumps the WKT representation of the point
-     *
-     * @param precision the output precision
-     * @return a WKT string
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @since 0.0.1
-     */
-    std::string wkt(std::int32_t precision = -1)
+    /// @private
+    std::string wkt_(std::int32_t precision = -1) const
     {
         std::stringstream ss;
         if (precision >= 0)
         {
             ss << std::setprecision(precision);
         }
-        ss << "POINT ";
-        if (has_z())
-        {
-            ss << "Z";
-        }
-        if (has_m())
-        {
-            ss << "M";
-        }
-        if (has_z() or has_m())
-        {
-            ss << " ";
-        }
-        ss << "(";
-        ss << x << " " << y;
-        if (has_z())
-        {
-            ss << " " << z;
-        }
-        if (has_m())
-        {
-            ss << " " << m;
-        }
-        ss << ")";
+        ss << "POINT "
+           << "(" << x << " " << y << ")";
         return ss.str();
     }
+};
 
-    /*!
-     * @brief Creates a Point from a polyline string
-     *
-     * @param polyline the polyline string
-     * @param precision the decoded precision
-     * @return a Point object
-     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
-     *
-     * @throw ParseError if a parser error occurs
-     *
-     * @since 0.0.1
-     */
-    static Point from_polyline(const std::string& polyline, std::int32_t precision = 5)
+// xyz
+
+/*!
+ * @brief DOCUMENT ME!
+ * @tparam T
+ * @ingroup geometry
+ *
+ * @since 0.0.1
+ */
+template <class T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+class basic_point_z : public basic_geometry<basic_point_z<T>>
+{
+  public:
+    /// DOCUMENT ME!
+    using point_type = basic_point_z;
+    /// DOCUMENT ME!
+    using coord_type = T;
+    /// DOCUMENT ME!
+    using coord_iterator = typename std::vector<coord_type>::iterator;
+    /// DOCUMENT ME!
+    using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
+
+    union
     {
-        auto coords = polyline::decode(polyline, precision);
-        if (coords.size() > 2)
+        struct
         {
-            throw exceptions::ParseError("too many points");
-        }
-        return {coords[0], coords[1]};
-    }
+            T x;
+            T y;
+            T z;
+        };
+
+        struct
+        {
+            T lng;
+            T lat;
+            T height;
+        };
+
+        T coords[3];
+    };
 
     /*!
-     * @brief Dumps the polyline representation of the Point
-     *
-     * @param precision the encoded precision
-     * @return a polyline string
-     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
      */
-    std::string polyline(std::int32_t precision = 5) const
+    basic_point_z()
+        : x(0), y(0), z(0) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param x
+     * @param y
+     * @param z
+     */
+    basic_point_z(T x, T y, T z)
+        : x(x), y(y), z(z) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param begin
+     * @param end
+     */
+    explicit basic_point_z(coord_iterator begin, coord_iterator end)
     {
-        return polyline::encode(y, precision) + polyline::encode(x, precision);
+        assert(std::distance(begin, end) == 3);
+        size_t i = 0;
+        for (auto it = begin; it != end; ++it)
+        {
+            coords[i++] = *it;
+        }
     }
 
     /*!
-     * @param lhs a Point
-     * @param rhs a Point
-     * @return true if all coordinates are equal, otherwise false
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param begin
+     * @param end
      */
-    friend bool operator==(const Point& lhs, const Point& rhs);
+    explicit basic_point_z(coord_const_iterator begin, coord_const_iterator end)
+    {
+        assert(std::distance(begin, end) == 3);
+        size_t i = 0;
+        for (auto it = begin; it != end; ++it)
+        {
+            coords[i++] = *it;
+        }
+    }
 
     /*!
-     * @param lhs a Point
-     * @param rhs a Point
-     * @return true if at least one coordinate is different, otherwise false
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @return
      */
-    friend bool operator!=(const Point& lhs, const Point& rhs);
+    std::size_t size() const noexcept
+    {
+        return static_cast<std::size_t>(ndim_());
+    }
+
+    // operators
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param pos
+     * @return
+     */
+    T& operator[](size_t pos)
+    {
+        assert(pos < 3);
+        return coords[pos];
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator==(const basic_point_z<T>& lhs, const basic_point_z<T>& rhs)
+    {
+        return lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z;
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator!=(const basic_point_z<T>& lhs, const basic_point_z<T>& rhs)
+    {
+        return not operator==(lhs, rhs);
+    }
 
   private:
-    /// for allow BaseGeometry to access Point private members
-    friend class BaseGeometry<Point>;
+    /// for allow basic_geometry to access basic_point_z private members
+    friend class basic_geometry<basic_point_z<T>>;
 
     /// @private
-    GeometryType geom_type_() const
+    geometry_type geom_type_() const noexcept
     {
-        return GeometryType::POINT;
+        return geometry_type::POINTZ;
     }
 
     /// @private
-    std::string geom_type_str_() const
+    std::string tagged_text_() const noexcept
     {
         return "Point";
     }
 
     /// @private
-    bool empty_() const
+    dimension_type dim_() const noexcept
+    {
+        return dimension_type::XYZ;
+    }
+
+    /// @private
+    int32_t ndim_() const noexcept
+    {
+        return 3;
+    }
+
+    /// @private
+    bool is_closed_() const noexcept
+    {
+        return true;
+    }
+
+    /// @private
+    void throw_for_invalid_() const
+    {
+        // do nothing
+    }
+
+    /// @private
+    bounds bounds_() const
+    {
+        return {x, y, x, y};
+    }
+
+    /// @private
+    bool has_z_() const noexcept
+    {
+        return true;
+    }
+
+    /// @private
+    bool has_m_() const noexcept
     {
         return false;
     }
 
+    // json
+
     /// @private
-    size_t size_() const
+    static basic_point_z<T> from_json_(const std::string& json)
     {
-        return static_cast<size_t>(ndim());
+        /// @todo (pavel) deal with repeated code
+        try
+        {
+            auto j         = nlohmann::json::parse(json);
+            auto geom_type = j.at("type").get<std::string>();
+            if (geom_type != "Point")
+            {
+                throw exceptions::parse_error("invalid geometry type");
+            }
+            auto coords = j.at("coordinates").get<std::vector<double>>();
+            return {coords.at(0), coords.at(1), coords.at(2)};
+        }
+        catch (const std::out_of_range& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const nlohmann::json::exception& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const exceptions::geometry_error& e)
+        {
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
+        }
     }
 
     /// @private
-    bool is_closed_() const
+    std::string json_(std::int32_t precision = -1) const
     {
-        return false;
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "{\"type\":\"Point\",\"coordinates\":"
+           << "[" << x << "," << y << "," << z << "]}";
+        return ss.str();
+    }
+
+    // wkt
+
+    /// @private
+    static basic_point_z<T> from_wkt_(const std::string& wkt)
+    {
+        wkt_reader reader{};
+        auto result = reader.read(wkt);
+        auto data   = result.data;
+        if (data.geom_type != geometry_type::POINTZ)
+        {
+            throw exceptions::parse_error("invalid wkt string");
+        }
+        return {data.coords[0], data.coords[1], data.coords[2]};
     }
 
     /// @private
-    std::vector<std::vector<double>> coords_() const
+    std::string wkt_(std::int32_t precision = -1) const
     {
-        if (dim == DimensionType::XYZ)
+        std::stringstream ss;
+        if (precision >= 0)
         {
-            return {{x, y, z}};
+            ss << std::setprecision(precision);
         }
-        if (dim == DimensionType::XYM)
-        {
-            return {{x, y, m}};
-        }
-        if (dim == DimensionType::XYZM)
-        {
-            return {{x, y, z, m}};
-        }
-        return {{x, y}};
+        ss << "POINT Z "
+           << "(" << x << " " << y << " " << z << ")";
+        return ss.str();
     }
 };
 
-bool operator==(const Point& lhs, const Point& rhs)
-{
-    return lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z and lhs.m == rhs.m;
-}
+// xym
 
-bool operator!=(const Point& lhs, const Point& rhs)
+/*!
+ * @brief DOCUMENT ME!
+ * @tparam T
+ * @ingroup geometry
+ */
+template <class T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+class basic_point_m : public basic_geometry<basic_point_m<T>>
 {
-    return not operator==(lhs, rhs);
-}
+  public:
+    /// DOCUMENT ME!
+    using point_type = basic_point_m;
+    /// DOCUMENT ME!
+    using coord_type = T;
+    /// DOCUMENT ME!
+    using coord_iterator = typename std::vector<coord_type>::iterator;
+    /// DOCUMENT ME!
+    using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
+
+    union
+    {
+        struct
+        {
+            T x;
+            T y;
+            T m;
+        };
+
+        struct
+        {
+            T lng;
+            T lat;
+            T measure;
+        };
+
+        T coords[3];
+    };
+
+    /*!
+     * @brief DOCUMENT ME!
+     */
+    basic_point_m()
+        : x(0), y(0), m(0) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param x
+     * @param y
+     * @param m
+     */
+    basic_point_m(T x, T y, T m)
+        : x(x), y(y), m(m) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param begin
+     * @param end
+     */
+    explicit basic_point_m(coord_iterator begin, coord_iterator end)
+    {
+        assert(std::distance(begin, end) == 3);
+        size_t i = 0;
+        for (auto it = begin; it != end; ++it)
+        {
+            coords[i++] = *it;
+        }
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param begin
+     * @param end
+     */
+    explicit basic_point_m(coord_const_iterator begin, coord_const_iterator end)
+    {
+        assert(std::distance(begin, end) == 3);
+        size_t i = 0;
+        for (auto it = begin; it != end; ++it)
+        {
+            coords[i++] = *it;
+        }
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @return
+     */
+    std::size_t size() const noexcept
+    {
+        return static_cast<std::size_t>(ndim_());
+    }
+
+    // operators
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param pos
+     * @return
+     */
+    T& operator[](size_t pos)
+    {
+        assert(pos < 3);
+        return coords[pos];
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator==(const basic_point_m<T>& lhs, const basic_point_m<T>& rhs)
+    {
+        return lhs.x == rhs.x and lhs.y == rhs.y and lhs.m == rhs.m;
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator!=(const basic_point_m<T>& lhs, const basic_point_m<T>& rhs)
+    {
+        return not operator==(lhs, rhs);
+    }
+
+  private:
+    /// for allow basic_geometry to access basic_point_m private members
+    friend class basic_geometry<basic_point_m<T>>;
+
+    /// @private
+    geometry_type geom_type_() const noexcept
+    {
+        return geometry_type::POINTM;
+    }
+
+    /// @private
+    std::string tagged_text_() const noexcept
+    {
+        return "Point";
+    }
+
+    /// @private
+    dimension_type dim_() const noexcept
+    {
+        return dimension_type::XYM;
+    }
+
+    /// @private
+    int32_t ndim_() const noexcept
+    {
+        return 3;
+    }
+
+    /// @private
+    bool is_closed_() const noexcept
+    {
+        return true;
+    }
+
+    /// @private
+    void throw_for_invalid_() const
+    {
+        // do nothing
+    }
+
+    /// @private
+    bounds bounds_() const
+    {
+        return {x, y, x, y};
+    }
+
+    /// @private
+    bool has_z_() const noexcept
+    {
+        return false;
+    }
+
+    /// @private
+    bool has_m_() const noexcept
+    {
+        return true;
+    }
+
+    // json
+
+    /// @private
+    static basic_point_m<T> from_json_(const std::string& json)
+    {
+        /// @todo (pavel) deal with repeated code
+        try
+        {
+            auto j         = nlohmann::json::parse(json);
+            auto geom_type = j.at("type").get<std::string>();
+            if (geom_type != "Point")
+            {
+                throw exceptions::parse_error("invalid geometry type");
+            }
+            auto coords = j.at("coordinates").get<std::vector<double>>();
+            return {coords.at(0), coords.at(1), coords.at(2)};
+        }
+        catch (const std::out_of_range& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const nlohmann::json::exception& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const exceptions::geometry_error& e)
+        {
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
+        }
+    }
+
+    /// @private
+    std::string json_(std::int32_t precision = -1) const
+    {
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "{\"type\":\"Point\",\"coordinates\":"
+           << "[" << x << "," << y << "," << m << "]}";
+        return ss.str();
+    }
+
+    // wkt
+
+    /// @private
+    static basic_point_m<T> from_wkt_(const std::string& wkt)
+    {
+        wkt_reader reader{};
+        auto result = reader.read(wkt);
+        auto data   = result.data;
+        if (data.geom_type != geometry_type::POINTM)
+        {
+            throw exceptions::parse_error("invalid wkt string");
+        }
+        return {data.coords[0], data.coords[1], data.coords[2]};
+    }
+
+    std::string wkt_(std::int32_t precision = -1) const
+    {
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "POINT M "
+           << "(" << x << " " << y << " " << m << ")";
+        return ss.str();
+    }
+};
+
+// xyzm
+
+/*!
+ * @brief DOCUMENT ME!
+ * @tparam T
+ * @ingroup geometry
+ */
+template <class T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+class basic_point_zm : public basic_geometry<basic_point_zm<T>>
+{
+  public:
+    /// DOCUMENT ME!
+    using point_type = basic_point_zm;
+    /// DOCUMENT ME!
+    using coord_type = T;
+    /// DOCUMENT ME!
+    using coord_iterator = typename std::vector<coord_type>::iterator;
+    /// DOCUMENT ME!
+    using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
+
+    union
+    {
+        struct
+        {
+            T x;
+            T y;
+            T z;
+            T m;
+        };
+
+        struct
+        {
+            T lng;
+            T lat;
+            T height;
+            T measure;
+        };
+
+        T coords[4];
+    };
+
+    /*!
+     * @brief DOCUMENT ME!
+     */
+    basic_point_zm()
+        : x(0), y(0), z(0), m(0) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param x
+     * @param y
+     * @param z
+     * @param m
+     */
+    basic_point_zm(T x, T y, T z, T m)
+        : x(x), y(y), z(z), m(m) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param begin
+     * @param end
+     */
+    explicit basic_point_zm(coord_iterator begin, coord_iterator end)
+    {
+        assert(std::distance(begin, end) == 4);
+        size_t i = 0;
+        for (auto it = begin; it != end; ++it)
+        {
+            coords[i++] = *it;
+        }
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param begin
+     * @param end
+     */
+    explicit basic_point_zm(coord_const_iterator begin, coord_const_iterator end)
+    {
+        assert(std::distance(begin, end) == 4);
+        size_t i = 0;
+        for (auto it = begin; it != end; ++it)
+        {
+            coords[i++] = *it;
+        }
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @return
+     */
+    std::size_t size() const noexcept
+    {
+        return static_cast<std::size_t>(ndim_());
+    }
+
+    // operators
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param pos
+     * @return
+     */
+    T& operator[](size_t pos)
+    {
+        assert(pos < 4);
+        return coords[pos];
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator==(const basic_point_zm<T>& lhs, const basic_point_zm<T>& rhs)
+    {
+        return lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z and lhs.m == rhs.m;
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator!=(const basic_point_zm<T>& lhs, const basic_point_zm<T>& rhs)
+    {
+        return not operator==(lhs, rhs);
+    }
+
+  private:
+    /// for allow basic_geometry to access basic_point_zm private members
+    friend class basic_geometry<basic_point_zm<T>>;
+
+    /// @private
+    geometry_type geom_type_() const noexcept
+    {
+        return geometry_type::POINTZM;
+    }
+
+    /// @private
+    std::string tagged_text_() const noexcept
+    {
+        return "Point";
+    }
+
+    /// @private
+    dimension_type dim_() const noexcept
+    {
+        return dimension_type::XYZM;
+    }
+
+    /// @private
+    int32_t ndim_() const noexcept
+    {
+        return 4;
+    }
+
+    /// @private
+    bool is_closed_() const noexcept
+    {
+        return true;
+    }
+
+    /// @private
+    void throw_for_invalid_() const
+    {
+        // do nothing
+    }
+
+    /// @private
+    bounds bounds_() const
+    {
+        return {x, y, x, y};
+    }
+
+    /// @private
+    bool has_z_() const noexcept
+    {
+        return true;
+    }
+
+    /// @private
+    bool has_m_() const noexcept
+    {
+        return true;
+    }
+
+    // json
+
+    /// @private
+    static basic_point_zm<T> from_json_(const std::string& json)
+    {
+        /// @todo (pavel) deal with repeated code
+        try
+        {
+            auto j         = nlohmann::json::parse(json);
+            auto geom_type = j.at("type").get<std::string>();
+            if (geom_type != "Point")
+            {
+                throw exceptions::parse_error("invalid geometry type");
+            }
+            auto coords = j.at("coordinates").get<std::vector<double>>();
+            return {coords.at(0), coords.at(1), coords.at(2), coords.at(3)};
+        }
+        catch (const std::out_of_range& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const nlohmann::json::exception& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const exceptions::geometry_error& e)
+        {
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
+        }
+    }
+
+    /// @private
+    std::string json_(std::int32_t precision = -1) const
+    {
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "{\"type\":\"Point\",\"coordinates\":"
+           << "[" << x << "," << y << "," << z << "," << m << "]}";
+        return ss.str();
+    }
+
+    // wkt
+
+    /// @private
+    static basic_point_zm<T> from_wkt_(const std::string& wkt)
+    {
+        wkt_reader reader{};
+        auto result = reader.read(wkt);
+        auto data   = result.data;
+        if (data.geom_type != geometry_type::POINTZM)
+        {
+            throw exceptions::parse_error("invalid wkt string");
+        }
+        return {data.coords[0], data.coords[1], data.coords[2], data.coords[3]};
+    }
+
+    /// @private
+    std::string wkt_(std::int32_t precision = -1) const
+    {
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "POINT ZM "
+           << "(" << x << " " << y << " " << z << " " << m << ")";
+        return ss.str();
+    }
+};
+
+// xy
+
+template <class T = double>
+using point = basic_point<T>;
+
+template <class T = double>
+using point_z = basic_point_z<T>;
+
+template <class T = double>
+using point_m = basic_point_m<T>;
+
+template <class T = double>
+using point_zm = basic_point_zm<T>;
+
+using Point   = point<double>;
+using PointZ  = point_z<double>;
+using PointM  = point_m<double>;
+using PointZM = point_zm<double>;
 
 }  // namespace shapes
 }  // namespace simo

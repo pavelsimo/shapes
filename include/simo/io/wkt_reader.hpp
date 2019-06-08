@@ -17,7 +17,7 @@ namespace shapes
  *
  * @since 0.0.1
  */
-class WktReader
+class wkt_reader
 {
   public:
     /*!
@@ -25,13 +25,13 @@ class WktReader
      *
      * @since 0.0.1
      */
-    WktReader()
+    wkt_reader()
         : m_parser(ParseAlloc(malloc))
     {
     }
 
     /// destructor
-    ~WktReader()
+    ~wkt_reader()
     {
         ParseFree(m_parser, free);
     }
@@ -44,10 +44,10 @@ class WktReader
      *
      * @since 0.0.1
      */
-    WktResult read(const std::string& wkt)
+    wkt_result read(const std::string& wkt)
     {
-        WktLexer lexer(wkt);
-        WktResult result{};
+        wkt_lexer lexer(wkt);
+        wkt_result result{};
 
 #ifdef SHAPES_VERBOSE
         ParseTrace(stdout, "[shapes] ");
@@ -66,7 +66,7 @@ class WktReader
             if (token == WKT_PARSE_ERROR)
             {
                 /// @todo (pavel) add position to the error message
-                throw exceptions::ParseError("wkt lexer error");
+                throw exceptions::parse_error("wkt lexer error");
             }
 
             if (token == WKT_NUM)
@@ -81,7 +81,7 @@ class WktReader
             if (result.parser_error)
             {
                 /// @todo (pavel) add position to the error message
-                throw exceptions::ParseError("wkt parser error");
+                throw exceptions::parse_error("wkt parser error");
             }
         }
         Parse(m_parser, 0, 0, &result);

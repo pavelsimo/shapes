@@ -16,215 +16,274 @@ namespace shapes
 {
 
 /*!
- * @brief Represents a polygon
- * @ingroup geometry
+ * @brief DOCUMENT ME!
+ * @tparam T
+ * @tparam AllocatorType
  *
  * @since 0.0.1
  */
-class Polygon : public BaseGeometry<Polygon>
+template <typename T, typename AllocatorType = std::allocator<T>>
+class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometry<basic_polygon<T>>
 {
   public:
-    /// linear ring that represents the shell of the polygon
-    LinearRing exterior;
-
-    /// collection of linear rings that represent the holes of the polygon
-    std::vector<LinearRing> interiors;
+    /// DOCUMENT ME!
+    using base_type = std::vector<T, AllocatorType>;
+    /// DOCUMENT ME!
+    using point_type = typename T::point_type;
+    /// DOCUMENT ME!
+    using point_iterator = typename std::vector<T>::iterator;
+    /// DOCUMENT ME!
+    using point_const_iterator = typename std::vector<T>::const_iterator;
+    /// DOCUMENT ME!
+    using coord_type = typename T::coord_type;
+    /// DOCUMENT ME!
+    using coord_iterator = typename std::vector<coord_type>::iterator;
+    /// DOCUMENT ME!
+    using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
 
     /*!
-     * @brief Creates an empty Polygon
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
      */
-    Polygon() = default;
+    basic_polygon()
+        : base_type() {}
 
     /*!
-     * @brief Creates a Polygon
-     *
-     * @param rings a LinearRing sequence with the shell and holes of the polygon
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
      */
-    Polygon(std::initializer_list<LinearRing> rings)
+    basic_polygon(point_iterator first, point_iterator last)
+        : base_type(first, last)
     {
-        if (rings.size() > 0)
-        {
-            auto ring     = rings.begin();
-            Bounds& b     = bounds;
-            exterior      = LinearRing(*ring);
-            dim           = exterior.dim;
-            Bounds& b_ext = exterior.bounds;
-            b.extend(b_ext.minx, b_ext.miny);
-            b.extend(b_ext.maxx, b_ext.maxy);
-            ring++;
-            for (; ring != rings.end(); ++ring)
-            {
-                /// @todo (pavel) check dim
-                interiors.emplace_back(*ring);
-                Bounds& b_int = interiors[interiors.size() - 1].bounds;
-                b.extend(b_int.minx, b_int.miny);
-                b.extend(b_int.maxx, b_int.maxy);
-            }
-        }
     }
 
     /*!
-     * @brief Creates a Polygon
-     *
-     * @param rings a LinearRing sequence with the shell and holes of the polygon
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
      */
-    explicit Polygon(const std::vector<LinearRing>& rings)
+    basic_polygon(point_const_iterator first, point_const_iterator last)
+        : base_type(first, last)
     {
-        /// @todo (pavel) eliminate duplication
-        if (not rings.empty())
-        {
-            Bounds& b     = bounds;
-            exterior      = rings[0];
-            dim           = exterior.dim;
-            Bounds& b_ext = exterior.bounds;
-            b.extend(b_ext.minx, b_ext.miny);
-            b.extend(b_ext.maxx, b_ext.maxy);
-            interiors.reserve(rings.size() - 1);
-            for (std::size_t i = 1; i < rings.size(); ++i)
-            {
-                interiors.push_back(rings[i]);
-                Bounds& b_int = interiors[interiors.size() - 1].bounds;
-                b.extend(b_int.minx, b_int.miny);
-                b.extend(b_int.maxx, b_int.maxy);
-            }
-        }
     }
 
     /*!
-     * @brief Creates a Polygon
-     *
-     * @param shell the shell of the polygon as a Point sequence
-     *
-     * @since 0.0.1
+     * DOCUMENT ME!
+     * @param init
      */
-    explicit Polygon(const std::vector<Point>& shell)
-        : exterior(shell)
-    {
-        if (not exterior.empty())
-        {
-            dim = exterior[0].dim;
-            /// @todo (pavel) check dim
-            Bounds& b     = bounds;
-            Bounds& b_ext = exterior.bounds;
-            b.extend(b_ext.minx, b_ext.miny);
-            b.extend(b_ext.maxx, b_ext.maxy);
-        }
-    }
+    basic_polygon(std::initializer_list<T> init)
+        : base_type(init.begin(), init.end()) {}
 
     /*!
-     * @brief Creates a Polygon
-     *
-     * @param shell the shell of the polygon as a Point sequence
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @tparam CoordIterator
+     * @tparam OffsetIterator
+     * @param coord_first
+     * @param coord_last
+     * @param offset_first
+     * @param offset_last
      */
-    explicit Polygon(const LinearRing& shell)
-        : exterior(shell)
+    template <typename CoordIterator, typename OffsetIterator>
+    basic_polygon(CoordIterator coord_first, CoordIterator coord_last, OffsetIterator offset_first, OffsetIterator offset_last)
     {
-        if (not exterior.empty())
+        if (std::distance(coord_first, coord_last) > 0)
         {
-            dim = exterior[0].dim;
-            /// @todo (pavel) check dim
-            Bounds& b     = bounds;
-            Bounds& b_ext = exterior.bounds;
-            b.extend(b_ext.minx, b_ext.miny);
-            b.extend(b_ext.maxx, b_ext.maxy);
-        }
-    }
-
-    /*!
-     * @brief Creates a Polygon
-     *
-     * @param shell the shell of the polygon as a Point sequence
-     * @param holes one or more collection of points, each representing a hole in the polygon
-     *
-     * @since 0.0.1
-     */
-    explicit Polygon(const std::vector<Point>& shell, const std::vector<std::vector<Point>>& holes)
-        : exterior(shell)
-    {
-        if (not exterior.empty())
-        {
-            dim = exterior[0].dim;
-            /// @todo (pavel) check dim
-            Bounds& b     = bounds;
-            Bounds& b_ext = exterior.bounds;
-            b.extend(b_ext.minx, b_ext.miny);
-            b.extend(b_ext.maxx, b_ext.maxy);
-            interiors.reserve(holes.size());
-            for (const auto& hole : holes)
-            {
-                interiors.emplace_back(hole);
-                Bounds& b_int = interiors[interiors.size() - 1].bounds;
-                b.extend(b_int.minx, b_int.miny);
-                b.extend(b_int.maxx, b_int.maxy);
-            }
-        }
-    }
-
-    /*!
-     * @brief Creates a MultiLineString from two pair of iterators
-     *
-     * @tparam CoordInputIt the coordinate input iterator
-     * @tparam OffsetInputIt the offset input iterator
-     * @param coord_first the first coordinate iterator
-     * @param coord_last the second coordinate iterator
-     * @param offset_first the offset first iterator
-     * @param offset_last the offset last iterator
-     * @param input_dim the dimension type
-     *
-     * @since 0.0.1
-     */
-    template <typename CoordInputIt, typename OffsetInputIt>
-    Polygon(CoordInputIt coord_first, CoordInputIt coord_last, OffsetInputIt offset_first, OffsetInputIt offset_last, DimensionType input_dim)
-    {
-        dim = input_dim;
-        if (std::distance(coord_first, coord_last) > 0 and std::distance(offset_first, offset_last) > 0)
-        {
-            auto ndim = static_cast<size_t>(utils::get_ndim(input_dim));
-
-            /// set polygon exterior
+            auto n = ndim_();
+            this->reserve((coord_last - coord_first) / n);
             size_t lo = 0;
-            size_t hi = *offset_first;
-            exterior  = LinearRing(coord_first + lo, coord_first + hi, input_dim);
-            lo        = hi;
-            offset_first++;
-
-            Bounds& b     = bounds;
-            Bounds& b_ext = exterior.bounds;
-            b.extend(b_ext.minx, b_ext.miny);
-            b.extend(b_ext.maxx, b_ext.maxy);
-
-            /// set polygon interiors
-            interiors.reserve((coord_last - coord_first) / ndim);
             for (auto it = offset_first; it != offset_last; ++it)
             {
-                hi = *it;
-                interiors.emplace_back(coord_first + lo, coord_first + hi, input_dim);
-                lo            = hi;
-                const auto& l = interiors[interiors.size() - 1];
-                bounds.extend(l.bounds.minx, l.bounds.miny);
-                bounds.extend(l.bounds.maxx, l.bounds.maxy);
+                size_t hi = *it;
+                this->emplace_back(coord_first + lo, coord_first + hi);
+                lo = hi;
             }
         }
     }
 
+    // operators
+
     /*!
-     * @brief Creates a Polygon from a geojson string
-     *
-     * @param json the geojson string
-     * @return a Polygon object
-     * @sa https://tools.ietf.org/html/rfc7946
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator==(const basic_polygon<T>& lhs, const basic_polygon<T>& rhs)
+    {
+        if (lhs.size() != rhs.size())
+        {
+            return false;
+        }
+        for (size_t i = 0; i < lhs.size(); ++i)
+        {
+            if (lhs[i] != rhs[i])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator!=(const basic_polygon<T>& lhs, const basic_polygon<T>& rhs)
+    {
+        return not operator==(lhs, rhs);
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @return
      *
      * @since 0.0.1
      */
-    static Polygon from_json(const std::string& json)
+    std::vector<std::tuple<double, double>> xy() const
+    {
+        std::vector<std::tuple<double, double>> res;
+        res.reserve(this->size());
+        for (const auto& p : *this)
+        {
+            res.emplace_back(p.x, p.y);
+        }
+        return res;
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @return
+     *
+     * @since 0.0.1
+     */
+    T& exterior()
+    {
+        return *this->begin();
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param pos
+     * @return
+     *
+     * @since 0.0.1
+     */
+    T& interiors(size_t pos)
+    {
+        assert(this->begin() + pos + 1 < this->end());
+        return *(this->begin() + pos + 1);
+    }
+
+  private:
+    /// for allow basic_geometry to access basic_polygon private members
+    friend class basic_geometry<basic_polygon<T>>;
+
+    /// @private
+    geometry_type geom_type_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return geometry_type::POLYGONZ;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return geometry_type::POLYGONM;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return geometry_type::POLYGONZM;
+        }
+        return geometry_type::POLYGON;
+    }
+
+    /// @private
+    dimension_type dim_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return dimension_type::XYZ;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return dimension_type::XYM;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return dimension_type::XYZM;
+        }
+        return dimension_type::XY;
+    }
+
+    /// @private
+    int32_t ndim_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return 3;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return 3;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return 4;
+        }
+        return 2;
+    }
+
+    /// @private
+    bool is_closed_() const noexcept
+    {
+        if (this->empty())
+        {
+            return true;
+        }
+        return *this[0] == *this[this->size() - 1];
+    }
+
+    /// @private
+    void throw_for_invalid_() const
+    {
+        /// @todo (pavel) add checks
+    }
+
+    /// @private
+    bounds bounds_() const
+    {
+        bounds res{};
+        for (const auto& r : *this)
+        {
+            auto r_bound = r.bounds();
+            res.extend(r_bound);
+        }
+        return res;
+    }
+
+    /// @private
+    bool has_z_() const noexcept
+    {
+        return std::is_same<point_type, PointZ::point_type>::value or std::is_same<point_type, PointZM::point_type>::value;
+    }
+
+    /// @private
+    bool has_m_() const noexcept
+    {
+        return std::is_same<point_type, PointM::point_type>::value or std::is_same<point_type, PointZM::point_type>::value;
+    }
+
+    /// @private
+    std::string tagged_text_() const noexcept
+    {
+        return "Polygon";
+    }
+
+    // json
+
+    /// @private
+    static basic_polygon<T> from_json_(const std::string& json)
     {
         try
         {
@@ -232,48 +291,39 @@ class Polygon : public BaseGeometry<Polygon>
             auto geom_type = j.at("type").get<std::string>();
             if (geom_type != "Polygon")
             {
-                throw exceptions::ParseError("invalid geometry type: " + std::string(geom_type));
+                throw exceptions::parse_error("invalid geometry type: " + std::string(geom_type));
             }
-            const auto& linearrings = j.at("coordinates");
-            std::vector<LinearRing> rings;
-            rings.reserve(linearrings.size());
-            std::vector<Point> points;
-            std::vector<std::size_t> offsets;
-            for (const auto& linearring : linearrings)
+            const auto& rings = j.at("coordinates");
+            std::vector<T> res;
+            res.reserve(rings.size());
+            std::vector<point_type> points;
+            for (const auto& ring : rings)
             {
-                if (not linearring.empty())
+                if (not ring.empty())
                 {
-                    const auto& coords = linearring.get<std::vector<std::vector<double>>>();
+                    const auto& coords = ring.get<std::vector<std::vector<double>>>();
                     points.reserve(coords.size());
                     std::for_each(std::begin(coords), std::end(coords), [&points](const std::vector<double>& coord) {
-                        points.emplace_back(coord);
+                        points.emplace_back(coord.begin(), coord.end());
                     });
-                    rings.emplace_back(points);
-                    points.clear();
+                    res.emplace_back(points.begin(), points.end());
                 }
+                points.clear();
             }
-            return Polygon(rings);
+            return basic_polygon<T>(res.begin(), res.end());
         }
         catch (const nlohmann::json::exception& e)
         {
-            throw exceptions::ParseError("invalid json: " + std::string(e.what()));
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
-        catch (const exceptions::GeometryError& e)
+        catch (const exceptions::geometry_error& e)
         {
-            throw exceptions::ParseError("invalid geometry: " + std::string(e.what()));
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
         }
     }
 
-    /*!
-     * @brief Dumps the geojson representation of the Polygon
-     *
-     * @param precision the output precision
-     * @return a geojson string
-     * @sa https://tools.ietf.org/html/rfc7946
-     *
-     * @since 0.0.1
-     */
-    std::string json(std::int32_t precision = -1)
+    /// @private
+    std::string json_(std::int32_t precision = -1) const
     {
         std::stringstream ss;
         if (precision >= 0)
@@ -281,84 +331,57 @@ class Polygon : public BaseGeometry<Polygon>
             ss << std::setprecision(precision);
         }
         ss << "{\"type\":\"Polygon\",\"coordinates\":[";
-        auto add_ring = [&ss](const LinearRing& ring) {
-            for (size_t j = 0; j < ring.size(); ++j)
+        int i = 0;
+        for (const auto& ls : *this)
+        {
+            if (i > 0)
+            {
+                ss << ",";
+            }
+            ss << "[";
+            for (size_t j = 0; j < ls.size(); ++j)
             {
                 if (j > 0)
                 {
                     ss << ",";
                 }
-                const auto& p = ring.at(j);
-                switch (p.dim)
+                ss << "[";
+                const auto& p = ls[j];
+                for (int k = 0; k < p.ndim(); ++k)
                 {
-                    case DimensionType::XY:
+                    if (k > 0)
                     {
-                        ss << "[" << p.x << "," << p.y << "]";
-                        break;
+                        ss << ",";
                     }
-                    case DimensionType::XYZ:
-                    {
-                        ss << "[" << p.x << "," << p.y << "," << p.z << "]";
-                        break;
-                    }
-                    case DimensionType::XYM:
-                    {
-                        ss << "[" << p.x << "," << p.y << "," << p.m << "]";
-                        break;
-                    }
-                    case DimensionType::XYZM:
-                    {
-                        ss << "[" << p.x << "," << p.y << "," << p.z << "," << p.m << "]";
-                        break;
-                    }
+                    ss << p.coords[k];
                 }
+                ss << "]";
+                ++i;
             }
-        };
-        ss << "[";
-        add_ring(exterior);
-        ss << "]";
-        for (const auto& interior : interiors)
-        {
-            ss << ",";
-            ss << "[";
-            add_ring(interior);
             ss << "]";
+            ++i;
         }
         ss << "]}";
         return ss.str();
     }
 
-    /*!
-     * @brief Creates a Polygon from a WKT string
-     *
-     * @param wkt the WKT string
-     * @return a Polygon object
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @since 0.0.1
-     */
-    static Polygon from_wkt(const std::string& wkt)
+    // wkt
+
+    /// @private
+    static basic_polygon<T> from_wkt_(const std::string& wkt)
     {
-        WktReader reader{};
+        wkt_reader reader{};
         auto result      = reader.read(wkt);
         const auto& data = result.data;
         if (not utils::is_polygon(data.geom_type))
         {
-            throw exceptions::ParseError("invalid wkt string");
+            throw exceptions::parse_error("invalid wkt string");
         }
-        return {data.coords.begin(), data.coords.end(), data.offsets.begin(), data.offsets.end(), utils::get_dim(data.geom_type)};
+        return basic_polygon<T>(result.data.coords.begin(), result.data.coords.end(), result.data.offsets.begin(), result.data.offsets.end());
     }
 
-    /*!
-     * @brief Dumps the WKT representation of the Polygon
-     *
-     * @param precision the output precision
-     * @return a WKT string
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @since 0.0.1
-     */
-    std::string wkt(std::int32_t precision = -1)
+    /// @private
+    std::string wkt_(std::int32_t precision = -1) const
     {
         std::stringstream ss;
         if (precision >= 0)
@@ -366,284 +389,63 @@ class Polygon : public BaseGeometry<Polygon>
             ss << std::setprecision(precision);
         }
         ss << "POLYGON";
-        if (has_z())
+        if (has_z_())
         {
             ss << "Z";
         }
-        if (has_m())
+        if (has_m_())
         {
             ss << "M";
         }
-        auto add_ring = [this, &ss](const LinearRing& ring) {
-            ss << "(";
-            int i = 0;
-            for (const auto& p : ring)
+        ss << "(";
+        int i = 0;
+        for (const auto& ls : *this)
+        {
+            if (i > 0)
             {
-                if (i > 0)
+                ss << ",";
+            }
+            ss << "(";
+            for (size_t j = 0; j < ls.size(); ++j)
+            {
+                if (j > 0)
                 {
                     ss << ",";
                 }
-                ss << p.x << " " << p.y;
-                if (has_z())
+                const auto& p = ls[j];
+                for (int32_t k = 0; k < p.ndim(); ++k)
                 {
-                    ss << " " << p.z;
+                    if (k > 0)
+                    {
+                        ss << " ";
+                    }
+                    ss << p.coords[k];
                 }
-                if (has_m())
-                {
-                    ss << " " << p.m;
-                }
-                ++i;
             }
             ss << ")";
-        };
-        ss << "(";
-        add_ring(exterior);
-        for (const auto& ring : interiors)
-        {
-            ss << ",";
-            add_ring(ring);
+            ++i;
         }
         ss << ")";
         return ss.str();
     }
-
-    /*!
-     * @brief Creates a Polygon from a polyline string
-     *
-     * @param polyline the polyline string
-     * @param text the encoded polyline string
-     * @return a LineString object
-     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
-     *
-     * @throw ParseError if a parser error occurs
-     *
-     * @since 0.0.1
-     */
-    static Polygon from_polyline(const std::string& polyline, std::int32_t precision = 5)
-    {
-        auto coords = polyline::decode(polyline, precision);
-        auto ring   = LinearRing{coords, DimensionType::XY};
-        return Polygon(ring);
-    }
-
-    /*!
-     * @brief Creates a Polygon from a collection of polyline strings
-     *
-     * @param polylines a collection of polyline strings
-     * @param text the encoded polyline string
-     * @return a Polygon object
-     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
-     *
-     * @throw ParseError if a parser error occurs
-     *
-     * @since 0.0.1
-     */
-    static Polygon from_polyline(const std::vector<std::string>& polylines, std::int32_t precision = 5)
-    {
-        std::vector<LineString> res;
-        res.reserve(polylines.size());
-        for (const auto& polyline : polylines)
-        {
-            res.emplace_back(polyline::decode(polyline, precision), DimensionType::XY);
-        }
-        return Polygon(res);
-    }
-
-    /*!
-     * @brief Dumps the polyline representation of the Polygon
-     *
-     * @param precision the encoded precision
-     * @return a polyline string
-     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
-     *
-     * @since 0.0.1
-     */
-    std::vector<std::string> polyline(std::int32_t precision = 5)
-    {
-        std::vector<std::string> res;
-        res.reserve(size());
-        res.push_back(exterior.polyline());
-        std::for_each(interiors.begin(), interiors.end(), [&res, &precision](const LinearRing& ring) {
-            res.push_back(ring.polyline(precision));
-        });
-        return res;
-    }
-
-    /*!
-     * @param lhs a Polygon
-     * @param rhs a Polygon
-     * @return true if all LinearRing's are equal, otherwise false
-     *
-     * @since 0.0.1
-     */
-    friend bool operator==(const Polygon& lhs, const Polygon& rhs);
-
-    /*!
-     * @param lhs a Polygon
-     * @param rhs a Polygon
-     * @return true if at least one LinearRing is different, otherwise false
-     *
-     * @since 0.0.1
-     */
-    friend bool operator!=(const Polygon& lhs, const Polygon& rhs);
-
-    /*!
-    * @param pos the element position
-    * @return returns a reference to the element at position n in T
-    *
-    * @since 0.0.1
-    */
-    LinearRing& operator[](size_t pos)
-    {
-        try
-        {
-            return (pos == 0) ? exterior : interiors[pos - 1];
-        }
-        catch (std::out_of_range&)
-        {
-            throw exceptions::IndexError("index at " + std::to_string(pos) + " is out of range");
-        }
-    }
-
-    /*!
-     * @param pos the element position
-     * @return returns a reference to the element at position n in the LinearRing
-     *
-     * @throw IndexError if the index at pos is out of range
-     *
-     * @since 0.0.1
-     */
-    const LinearRing& at(size_t pos) const
-    {
-        try
-        {
-            return (pos == 0) ? exterior : interiors.at(pos - 1);
-        }
-        catch (std::out_of_range&)
-        {
-            throw exceptions::IndexError("index at " + std::to_string(pos) + " is out of range");
-        }
-    }
-
-    /*!
-     * @param pos the element position
-     * @return returns a reference to the element at position n in the LinearRing
-     *
-     * @throw IndexError if the index at pos is out of range
-     *
-     * @since 0.0.1
-     */
-    LinearRing& at(size_t pos)
-    {
-        try
-        {
-            return (pos == 0) ? exterior : interiors.at(pos - 1);
-        }
-        catch (std::out_of_range&)
-        {
-            throw exceptions::IndexError("index at " + std::to_string(pos) + " is out of range");
-        }
-    }
-
-  private:
-    /// for allow BaseGeometry to access Polygon private members
-    friend class BaseGeometry<Polygon>;
-
-    /// @private
-    GeometryType geom_type_() const
-    {
-        return GeometryType::POLYGON;
-    }
-
-    /// @private
-    std::string geom_type_str_() const
-    {
-        return "Polygon";
-    }
-
-    /// @private
-    bool empty_() const
-    {
-        return size_() == 0;
-    }
-
-    /// @private
-    size_t size_() const
-    {
-        if (exterior.empty())
-        {
-            return 0;
-        }
-        if (interiors.empty())
-        {
-            return 1;
-        }
-        return interiors.size() + 1;
-    }
-
-    /// @private
-    bool is_closed_() const
-    {
-        return true;
-    }
-
-    /// @private
-    std::vector<std::vector<double>> coords_() const
-    {
-        std::vector<std::vector<double>> res;
-        res.reserve(size());
-        auto ext_coords = exterior.coords();
-        res.insert(res.end(), ext_coords.begin(), ext_coords.end());
-        std::for_each(interiors.begin(), interiors.end(), [&res](const LinearRing& interior) {
-            auto int_coords = interior.coords();
-            res.insert(res.end(), int_coords.begin(), int_coords.end());
-        });
-        return res;
-    }
 };
 
-bool operator==(const Polygon& lhs, const Polygon& rhs)
-{
-    if (lhs.exterior.size() != rhs.exterior.size())
-    {
-        return false;
-    }
+template <class T = double>
+using polygon = basic_polygon<linearring<T>>;
 
-    if (lhs.interiors.size() != rhs.interiors.size())
-    {
-        return false;
-    }
+template <class T = double>
+using polygon_z = basic_polygon<linearring_z<T>>;
 
-    for (size_t i = 0; i < lhs.exterior.size(); ++i)
-    {
-        if (lhs.exterior.at(i) != rhs.exterior.at(i))
-        {
-            return false;
-        }
-    }
+template <class T = double>
+using polygon_m = basic_polygon<linearring_m<T>>;
 
-    for (size_t i = 0; i < lhs.interiors.size(); ++i)
-    {
-        if (lhs.interiors[i] != rhs.interiors[i])
-        {
-            return false;
-        }
-        for (size_t j = 0; j < lhs.interiors[i].size(); ++j)
-        {
-            if (lhs.interiors[i].at(j) != rhs.interiors[i].at(j))
-            {
-                return false;
-            }
-        }
-    }
+template <class T = double>
+using polygon_zm = basic_polygon<linearring_zm<T>>;
 
-    return true;
-}
-
-bool operator!=(const Polygon& lhs, const Polygon& rhs)
-{
-    return not operator==(lhs, rhs);
-}
+using Polygon   = polygon<double>;
+using PolygonZ  = polygon_z<double>;
+using PolygonM  = polygon_m<double>;
+using PolygonZM = polygon_zm<double>;
 
 }  // namespace shapes
 }  // namespace simo

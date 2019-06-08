@@ -15,7 +15,7 @@ namespace shapes
  *
  * @since 0.0.1
  */
-class Bounds
+class bounds
 {
   public:
     /// the minimum x-coordinate
@@ -31,11 +31,11 @@ class Bounds
     double maxy;
 
     /*!
-     * @brief Creates a Bounds object
+     * @brief Creates a bounds object
      *
      * @since 0.0.1
      */
-    Bounds()
+    bounds()
         : minx(std::numeric_limits<double>::max()),
           miny(std::numeric_limits<double>::max()),
           maxx(std::numeric_limits<double>::min()),
@@ -44,7 +44,7 @@ class Bounds
     }
 
     /*!
-     * @brief Creates a Bounds object from the given coordinates
+     * @brief Creates a bounds object from the given coordinates
      *
      * @param minx the x-coordinate of the first corner
      * @param miny the y-coordinate of the first corner
@@ -53,7 +53,7 @@ class Bounds
      *
      * @since 0.0.1
      */
-    Bounds(double minx, double miny, double maxx, double maxy)
+    bounds(double minx, double miny, double maxx, double maxy)
         : minx(minx), miny(miny), maxx(maxx), maxy(maxy)
     {
     }
@@ -63,16 +63,34 @@ class Bounds
      *
      * @param x the x-coordinate of the point
      * @param y the y-coordinate of the point
-     * @return the Bounds object
+     * @return the bounds object
      *
      * @since 0.0.1
      */
-    Bounds& extend(double x, double y)
+    bounds& extend(double x, double y)
     {
         minx = std::min(x, minx);
         maxx = std::max(x, maxx);
         miny = std::min(y, miny);
         maxy = std::max(y, maxy);
+        return *this;
+    }
+
+    /*!
+     * @brief Extends the bounds to contain the given bounds
+     *
+     * @param x the x-coordinate of the point
+     * @param y the y-coordinate of the point
+     * @return the bounds object
+     *
+     * @since 0.0.1
+     */
+    bounds& extend(const bounds& b)
+    {
+        minx = std::min(b.minx, minx);
+        maxx = std::max(b.maxx, maxx);
+        miny = std::min(b.miny, miny);
+        maxy = std::max(b.maxy, maxy);
         return *this;
     }
 
@@ -129,7 +147,7 @@ class Bounds
     /*!
      * @param x the x-coordinate of the point
      * @param y the y-coordinate of the point
-     * @return true if the Bounds contains the given point, otherwise false
+     * @return true if the bounds contains the given point, otherwise false
      *
      * @since 0.0.1
      */
@@ -140,33 +158,33 @@ class Bounds
 
     /*!
      * @param other the bounds
-     * @return true if the Bounds contain the given one, otherwise false
+     * @return true if the bounds contain the given one, otherwise false
      *
      * @since 0.0.1
      */
-    bool contains(const Bounds& other)
+    bool contains(const bounds& other)
     {
         return contains(other.minx, other.miny) && contains(other.maxx, other.maxy);
     }
 
     /*!
      * @param other the bounds
-     * @return true if the Bounds intersect the given one, otherwise false
+     * @return true if the bounds intersect the given one, otherwise false
      *
      * @since 0.0.1
      */
-    bool intersects(const Bounds& other)
+    bool intersects(const bounds& other)
     {
         return (other.maxx >= minx) && (other.minx <= maxx) && (other.maxy >= miny) && (other.miny <= maxy);
     }
 
     /*!
      * @param other the bounds
-     * @return true if the Bounds overlaps the given one, otherwise false
+     * @return true if the bounds overlaps the given one, otherwise false
      *
      * @since 0.0.1
      */
-    bool overlaps(const Bounds& other)
+    bool overlaps(const bounds& other)
     {
         return (other.maxx > minx) && (other.minx < maxx) && (other.maxy > miny) && (other.miny < maxy);
     }

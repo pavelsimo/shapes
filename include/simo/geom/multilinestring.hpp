@@ -16,120 +16,245 @@ namespace shapes
 {
 
 /*!
- * @brief A LineString collection
- *
- * @ingroup geometry
- *
- * @since 0.0.1
+ * @brief DOCUMENT ME!
+ * @tparam T
+ * @tparam AllocatorType
  */
-class MultiLineString : public BaseGeometry<MultiLineString>, public detail::GeometrySequence<LineString>
+template <typename T, typename AllocatorType = std::allocator<T>>
+class basic_multilinestring : public std::vector<T, AllocatorType>, public basic_geometry<basic_multilinestring<T>>
 {
   public:
-    /*!
-     * @brief Creates an empty MultiLineString
-     *
-     * @since 0.0.1
-     */
-    MultiLineString() = default;
+    /// DOCUMENT ME!
+    using base_type = std::vector<T, AllocatorType>;
+    /// DOCUMENT ME!
+    using point_type = typename T::point_type;
+    /// DOCUMENT ME!
+    using point_iterator = typename std::vector<T>::iterator;
+    /// DOCUMENT ME!
+    using point_const_iterator = typename std::vector<T>::const_iterator;
+    /// DOCUMENT ME!
+    using coord_type = typename T::coord_type;
+    /// DOCUMENT ME!
+    using coord_iterator = typename std::vector<coord_type>::iterator;
+    /// DOCUMENT ME!
+    using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
+
+    basic_multilinestring()
+        : base_type() {}
 
     /*!
-     * @brief Creates a MultiLineString from a given a LineString initializer list
-     *
-     * @param init the initializer list
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
      */
-    MultiLineString(std::initializer_list<LineString> init)
+    basic_multilinestring(point_iterator first, point_iterator last)
+        : base_type(first, last)
     {
-        if (init.size() > 0)
-        {
-            const auto& head = *init.begin();
-            dim              = head.dim;
-            seq.reserve(init.size());
-            for (auto it = init.begin(); it != init.end(); ++it)
-            {
-                const auto& l = *it;
-                if (l.dim != dim)
-                {
-                    throw exceptions::GeometryError("dimension mismatch at index " + std::to_string(it - init.begin()));
-                }
-                bounds.extend(l.bounds.minx, l.bounds.miny);
-                bounds.extend(l.bounds.maxx, l.bounds.maxy);
-                seq.push_back(l);
-            }
-        }
     }
 
     /*!
-     * @brief Creates a MultiLineString from a given LineString vector
-     *
-     * @param linestrings the LineString vector
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
      */
-    explicit MultiLineString(const std::vector<LineString>& linestrings)
+    basic_multilinestring(point_const_iterator first, point_const_iterator last)
+        : base_type(first, last)
     {
-        if (not linestrings.empty())
-        {
-            seq = linestrings;
-            dim = linestrings[0].dim;
-            for (auto it = linestrings.begin(); it != linestrings.end(); ++it)
-            {
-                const auto& linestring = *it;
-                if (linestring.dim != dim)
-                {
-                    throw exceptions::GeometryError("dimension mismatch at index " + std::to_string(it - linestrings.begin()));
-                }
-                bounds.extend(linestring.bounds.minx, linestring.bounds.miny);
-                bounds.extend(linestring.bounds.maxx, linestring.bounds.maxy);
-            }
-        }
     }
 
     /*!
-     * @brief Creates a MultiLineString from two pair of iterators
-     *
-     * @tparam CoordInputIt the coordinate input iterator
-     * @tparam OffsetInputIt the offset input iterator
-     * @param coord_first the first coordinate iterator
-     * @param coord_last the second coordinate iterator
-     * @param offset_first the offset first iterator
-     * @param offset_last the offset last iterator
-     * @param input_dim the dimension type
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param init
      */
-    template <typename CoordInputIt, typename OffsetInputIt>
-    MultiLineString(CoordInputIt coord_first, CoordInputIt coord_last, OffsetInputIt offset_first, OffsetInputIt offset_last, DimensionType input_dim)
+    basic_multilinestring(std::initializer_list<T> init)
+        : base_type(init.begin(), init.end()) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @tparam CoordIterator
+     * @tparam OffsetIterator
+     * @param coord_first
+     * @param coord_last
+     * @param offset_first
+     * @param offset_last
+     */
+    template <typename CoordIterator, typename OffsetIterator>
+    basic_multilinestring(CoordIterator coord_first, CoordIterator coord_last, OffsetIterator offset_first, OffsetIterator offset_last)
     {
-        dim = input_dim;
         if (std::distance(coord_first, coord_last) > 0)
         {
-            auto ndim = static_cast<size_t>(utils::get_ndim(input_dim));
-            seq.reserve((coord_last - coord_first) / ndim);
+            auto n = ndim_();
+            this->reserve((coord_last - coord_first) / n);
             size_t lo = 0;
             for (auto it = offset_first; it != offset_last; ++it)
             {
                 size_t hi = *it;
-                seq.emplace_back(coord_first + lo, coord_first + hi, input_dim);
-                lo            = hi;
-                const auto& l = seq[seq.size() - 1];
-                bounds.extend(l.bounds.minx, l.bounds.miny);
-                bounds.extend(l.bounds.maxx, l.bounds.maxy);
+                this->emplace_back(coord_first + lo, coord_first + hi);
+                lo = hi;
             }
         }
     }
 
+    // operators
+
     /*!
-     * @brief Creates a MultiLineString from a geojson string
-     *
-     * @param json the geojson string
-     * @return a MultiLineString object
-     * @sa https://tools.ietf.org/html/rfc7946
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
      */
-    static MultiLineString from_json(const std::string& json)
+    friend bool operator==(const basic_multilinestring<T>& lhs, const basic_multilinestring<T>& rhs)
+    {
+        if (lhs.size() != rhs.size())
+        {
+            return false;
+        }
+        for (size_t i = 0; i < lhs.size(); ++i)
+        {
+            if (lhs[i] != rhs[i])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator!=(const basic_multilinestring<T>& lhs, const basic_multilinestring<T>& rhs)
+    {
+        return not operator==(lhs, rhs);
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @return
+     */
+    std::vector<std::tuple<double, double>> xy() const
+    {
+        std::vector<std::tuple<double, double>> res;
+        res.reserve(this->size());
+        for (const auto& p : *this)
+        {
+            res.emplace_back(p.x, p.y);
+        }
+        return res;
+    }
+
+  private:
+    /// for allow basic_geometry to access basic_multipoint private members
+    friend class basic_geometry<basic_multilinestring<T>>;
+
+    /// @private
+    geometry_type geom_type_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return geometry_type::MULTILINESTRINGZ;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return geometry_type::MULTILINESTRINGM;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return geometry_type::MULTILINESTRINGZM;
+        }
+        return geometry_type::MULTILINESTRING;
+    }
+
+    /// @private
+    dimension_type dim_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return dimension_type::XYZ;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return dimension_type::XYM;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return dimension_type::XYZM;
+        }
+        return dimension_type::XY;
+    }
+
+    /// @private
+    int32_t ndim_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return 3;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return 3;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return 4;
+        }
+        return 2;
+    }
+
+    /// @private
+    bool is_closed_() const noexcept
+    {
+        if (this->empty())
+        {
+            return true;
+        }
+        return *this[0] == *this[this->size() - 1];
+    }
+
+    /// @private
+    void throw_for_invalid_() const
+    {
+        for (const auto& ls : *this)
+        {
+            ls.throw_for_invalid();
+        }
+    }
+
+    /// @private
+    bounds bounds_() const
+    {
+        bounds res{};
+        for (const auto& p : *this)
+        {
+            res.extend(p.x, p.y);
+        }
+        return res;
+    }
+
+    /// @private
+    bool has_z_() const noexcept
+    {
+        return std::is_same<point_type, PointZ::point_type>::value or std::is_same<point_type, PointZM::point_type>::value;
+    }
+
+    /// @private
+    bool has_m_() const noexcept
+    {
+        return std::is_same<point_type, PointM::point_type>::value or std::is_same<point_type, PointZM::point_type>::value;
+    }
+
+    /// @private
+    std::string tagged_text_() const noexcept
+    {
+        return "MultiLineString";
+    }
+
+    // json
+
+    /// @private
+    static basic_multilinestring<T> from_json_(const std::string& json)
     {
         try
         {
@@ -137,12 +262,12 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
             auto geom_type = j.at("type").get<std::string>();
             if (geom_type != "MultiLineString")
             {
-                throw exceptions::ParseError("invalid geometry type: " + std::string(geom_type));
+                throw exceptions::parse_error("invalid geometry type: " + std::string(geom_type));
             }
             const auto& linestrings = j.at("coordinates");
-            std::vector<LineString> res;
+            std::vector<T> res;
             res.reserve(linestrings.size());
-            std::vector<Point> points;
+            std::vector<point_type> points;
             for (const auto& linestring : linestrings)
             {
                 if (not linestring.empty())
@@ -150,34 +275,26 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
                     const auto& coords = linestring.get<std::vector<std::vector<double>>>();
                     points.reserve(coords.size());
                     std::for_each(std::begin(coords), std::end(coords), [&points](const std::vector<double>& coord) {
-                        points.emplace_back(coord);
+                        points.emplace_back(coord.begin(), coord.end());
                     });
-                    res.emplace_back(points);
+                    res.emplace_back(points.begin(), points.end());
                 }
                 points.clear();
             }
-            return MultiLineString(res);
+            return basic_multilinestring<T>(res.begin(), res.end());
         }
         catch (const nlohmann::json::exception& e)
         {
-            throw exceptions::ParseError("invalid json: " + std::string(e.what()));
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
-        catch (const exceptions::GeometryError& e)
+        catch (const exceptions::geometry_error& e)
         {
-            throw exceptions::ParseError("invalid geometry: " + std::string(e.what()));
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
         }
     }
 
-    /*!
-     * @brief Dumps the geojson representation of the MultiLineString
-     *
-     * @param precision the output precision
-     * @return a geojson string
-     * @sa https://tools.ietf.org/html/rfc7946
-     *
-     * @since 0.0.1
-     */
-    std::string json(std::int32_t precision = -1)
+    /// @private
+    std::string json_(std::int32_t precision = -1) const
     {
         std::stringstream ss;
         if (precision >= 0)
@@ -185,82 +302,57 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
             ss << std::setprecision(precision);
         }
         ss << "{\"type\":\"MultiLineString\",\"coordinates\":[";
-        for (size_t i = 0; i < seq.size(); ++i)
+        int i = 0;
+        for (const auto& ls : *this)
         {
             if (i > 0)
             {
                 ss << ",";
             }
             ss << "[";
-            const auto& linestring = seq.at(i);
-            for (size_t j = 0; j < linestring.size(); ++j)
+            for (size_t j = 0; j < ls.size(); ++j)
             {
                 if (j > 0)
                 {
                     ss << ",";
                 }
-                const auto& p = linestring.at(j);
-                switch (p.dim)
+                ss << "[";
+                const auto& p = ls[j];
+                for (int k = 0; k < p.ndim(); ++k)
                 {
-                    case DimensionType::XY:
+                    if (k > 0)
                     {
-                        ss << "[" << p.x << "," << p.y << "]";
-                        break;
+                        ss << ",";
                     }
-                    case DimensionType::XYZ:
-                    {
-                        ss << "[" << p.x << "," << p.y << "," << p.z << "]";
-                        break;
-                    }
-                    case DimensionType::XYM:
-                    {
-                        ss << "[" << p.x << "," << p.y << "," << p.m << "]";
-                        break;
-                    }
-                    case DimensionType::XYZM:
-                    {
-                        ss << "[" << p.x << "," << p.y << "," << p.z << "," << p.m << "]";
-                        break;
-                    }
+                    ss << p.coords[k];
                 }
+                ss << "]";
+                ++i;
             }
             ss << "]";
+            ++i;
         }
         ss << "]}";
         return ss.str();
     }
 
-    /*!
-     * @brief Creates a MultiLineString from a WKT string
-     *
-     * @param wkt the WKT string
-     * @return a MultiLineString object
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @since 0.0.1
-     */
-    static MultiLineString from_wkt(const std::string& wkt)
+    // wkt
+
+    /// @private
+    static basic_multilinestring<T> from_wkt_(const std::string& wkt)
     {
-        WktReader reader{};
+        wkt_reader reader{};
         auto result      = reader.read(wkt);
         const auto& data = result.data;
         if (not utils::is_multilinestring(data.geom_type))
         {
-            throw exceptions::ParseError("invalid wkt string");
+            throw exceptions::parse_error("invalid wkt string");
         }
-        return {data.coords.begin(), data.coords.end(), data.offsets.begin(), data.offsets.end(), utils::get_dim(data.geom_type)};
+        return basic_multilinestring<T>(result.data.coords.begin(), result.data.coords.end(), result.data.offsets.begin(), result.data.offsets.end());
     }
 
-    /*!
-     * @brief Dumps the WKT representation of the MultiLineString
-     *
-     * @param precision the output precision
-     * @return a WKT string
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @since 0.0.1
-     */
-    std::string wkt(std::int32_t precision = -1)
+    /// @private
+    std::string wkt_(std::int32_t precision = -1) const
     {
         std::stringstream ss;
         if (precision >= 0)
@@ -268,174 +360,63 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public detail::Geo
             ss << std::setprecision(precision);
         }
         ss << "MULTILINESTRING";
-        if (has_z())
+        if (has_z_())
         {
             ss << "Z";
         }
-        if (has_m())
+        if (has_m_())
         {
             ss << "M";
         }
         ss << "(";
-        for (size_t i = 0; i < seq.size(); ++i)
+        int i = 0;
+        for (const auto& ls : *this)
         {
-            const auto& linestring = seq.at(i);
             if (i > 0)
             {
                 ss << ",";
             }
             ss << "(";
-            for (size_t j = 0; j < linestring.size(); ++j)
+            for (size_t j = 0; j < ls.size(); ++j)
             {
-                const auto& p = linestring.at(j);
                 if (j > 0)
                 {
                     ss << ",";
                 }
-                ss << p.x << " " << p.y;
-                if (has_z())
+                const auto& p = ls[j];
+                for (int32_t k = 0; k < p.ndim(); ++k)
                 {
-                    ss << " " << p.z;
-                }
-                if (has_m())
-                {
-                    ss << " " << p.m;
+                    if (k > 0)
+                    {
+                        ss << " ";
+                    }
+                    ss << p.coords[k];
                 }
             }
             ss << ")";
+            ++i;
         }
         ss << ")";
         return ss.str();
     }
-
-    /*!
-     * @brief Creates a MultiLineString from a encoded polyline string collection
-     *
-     * @param polylines the polyline string collection
-     * @param precision the decoded precision
-     * @return a MultiLineString object
-     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
-     *
-     * @since 0.0.1
-     */
-    static MultiLineString from_polyline(const std::vector<std::string>& polylines, std::int32_t precision = 5)
-    {
-        /// @todo (pavel) add precision
-        std::vector<LineString> res;
-        res.reserve(polylines.size());
-        for (const auto& polyline : polylines)
-        {
-            res.emplace_back(polyline::decode(polyline, precision), DimensionType::XY);
-        }
-        return MultiLineString(res);
-    }
-
-    /*!
-     * @brief Dumps the polyline representation of the MultiLineString
-     *
-     * @param precision the encoded precision
-     * @return a polyline string
-     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
-     *
-     * @since 0.0.1
-     */
-    std::vector<std::string> polyline(std::int32_t precision = 5)
-    {
-        std::vector<std::string> res;
-        res.reserve(seq.size());
-        std::for_each(seq.begin(), seq.end(), [&res, &precision](const LineString& ls) {
-            res.push_back(ls.polyline(precision));
-        });
-        return res;
-    }
-
-    /*!
-     * @param lhs a MultiLinestring
-     * @param rhs a MultiLinestring
-     * @return true if all LineStrings are equal, otherwise false
-     *
-     * @since 0.0.1
-     */
-    friend bool operator==(const MultiLineString& lhs, const MultiLineString& rhs);
-
-    /*!
-     * @param lhs a MultiLinestring
-     * @param rhs a MultiLinestring
-     * @return true if at least one LineString is different, otherwise false
-     *
-     * @since 0.0.1
-     */
-    friend bool operator!=(const MultiLineString& lhs, const MultiLineString& rhs);
-
-  private:
-    /// for allow BaseGeometry to access MultiLineString private members
-    friend class BaseGeometry<MultiLineString>;
-
-    /// @private
-    GeometryType geom_type_() const
-    {
-        return GeometryType::MULTILINESTRING;
-    }
-
-    /// @private
-    std::string geom_type_str_() const
-    {
-        return "MultiLineString";
-    }
-
-    /// @private
-    std::vector<std::vector<double>> coords_() const
-    {
-        std::vector<std::vector<double>> res;
-        res.reserve(seq.size());
-        for (const auto& ls : seq)
-        {
-            std::for_each(std::begin(ls), std::end(ls), [&res](const Point& p) {
-                res.push_back(std::move(p.coords()[0]));
-            });
-        }
-        return res;
-    }
-
-    /// @private
-    bool empty_() const
-    {
-        return seq.empty();
-    }
-
-    /// @private
-    size_t size_() const
-    {
-        return seq.size();
-    }
-
-    /// @private
-    size_t num_points() const
-    {
-        size_t n = 0;
-        for (const auto& linestring : seq)
-        {
-            n += linestring.size();
-        }
-        return n;
-    };
-
-    /// @private
-    bool is_closed_() const
-    {
-        throw exceptions::NotImplementedError();
-    }
 };
 
-bool operator==(const MultiLineString& lhs, const MultiLineString& rhs)
-{
-    return detail::is_equal_sequence(lhs, rhs);
-}
+template <class T = double>
+using multilinestring = basic_multilinestring<basic_linestring<basic_point<T>>>;
 
-bool operator!=(const MultiLineString& lhs, const MultiLineString& rhs)
-{
-    return not operator==(lhs, rhs);
-}
+template <class T = double>
+using multilinestring_z = basic_multilinestring<basic_linestring<basic_point_z<T>>>;
+
+template <class T = double>
+using multilinestring_m = basic_multilinestring<basic_linestring<basic_point_m<T>>>;
+
+template <class T = double>
+using multilinestring_zm = basic_multilinestring<basic_linestring<basic_point_zm<T>>>;
+
+using MultiLineString   = multilinestring<double>;
+using MultiLineStringZ  = multilinestring_z<double>;
+using MultiLineStringM  = multilinestring_m<double>;
+using MultiLineStringZM = multilinestring_zm<double>;
 
 }  // namespace shapes
 }  // namespace simo

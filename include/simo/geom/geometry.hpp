@@ -7,6 +7,7 @@
 #include <simo/geom/bounds.hpp>
 #include <simo/geom/types.hpp>
 #include <simo/geom/utils.hpp>
+#include <simo/exceptions.hpp>
 
 namespace simo
 {
@@ -14,7 +15,7 @@ namespace shapes
 {
 
 /*!
- * @brief Abstract class for all geometries
+ * @brief Base class for all geometries
  *
  * @tparam T the geometry type (e.g. Point, Polygon, LineString)
  * @ingroup geometry
@@ -22,155 +23,201 @@ namespace shapes
  * @since 0.0.1
  */
 template <typename T>
-class BaseGeometry
+class basic_geometry
 {
   public:
-    /// a spatial reference identifier (SRID) is a unique identifier associated with a specific coordinate system
-    int32_t srid = -1;
-
-    /// the geometry bounds
-    Bounds bounds{};
-
-    /// the dimension type is either 2D (x, y), 3D (x, y, z), 4D (x, y, z, m) or 2D with measure-coordinate (x, y, m)
-    DimensionType dim = DimensionType::XY;
-
     /*!
-     * @brief Returns the geometry type (e.g. GeometryType::Point, GeometryType::MultiPoint)
-     *
+     * @brief Returns the geometry type
      * @return the geometry type
      *
      * @since 0.0.1
      */
-    GeometryType geom_type() const
+    geometry_type geom_type() const noexcept
     {
         return static_cast<const T*>(this)->geom_type_();
     }
 
     /*!
-     * @brief Returns the geometry type with dimension (e.g. GeometryType::PointZ, GeometryType::MultiPointZM)
-     *
-     * @return the geometry type with dimension
-     *
-     * @since 0.0.1
-     */
-    GeometryType geom_type_dim() const
-    {
-        auto geom_type = static_cast<const T*>(this)->geom_type_();
-        return utils::get_geom_type_dim(geom_type, dim);
-    }
-
-    /*!
-     * @brief Returns the geometry type as a string (e.g. Point, LineString)
-     *
+     * @brief Returns the geometry type as a string
      * @return the geometry type as a string
      *
      * @since 0.0.1
      */
-    std::string geom_type_str() const
+    std::string tagged_text() const noexcept
     {
-        return static_cast<const T*>(this)->geom_type_str_();
+        return static_cast<const T*>(this)->tagged_text_();
     }
 
     /*!
-     * @brief Returns true if the geometry is empty
-     *
-     * @return true if the the geometry is empty, otherwise false
-     *
-     * @since 0.0.1
-     */
-    bool empty() const
-    {
-        return static_cast<const T*>(this)->empty_();
-    }
-
-    /*!
-     * @brief Returns the geometry size
-     *
-     * @return the size of the geometry
+     * @brief Returns the dimension type for the geometry
+     * @return the dimension type
      *
      * @since 0.0.1
      */
-    size_t size() const
+    dimension_type dim() const noexcept
     {
-        return static_cast<const T*>(this)->size_();
-    }
-
-    /*!
-     * @brief Returns the geometry coordinates
-     * @return a vector with the geometry coordinates
-     *
-     * @since 0.0.1
-     */
-    std::vector<std::vector<double>> coords() const
-    {
-        return static_cast<const T*>(this)->coords_();
-    }
-
-    /*!
-     * @brief Whether the geometry has the z-coordinate
-     *
-     * @return true if the geometry has z-coordinate, otherwise false
-     *
-     * @since 0.0.1
-     */
-    bool has_z() const
-    {
-        return dim == DimensionType::XYZ or dim == DimensionType::XYZM;
-    }
-
-    /*!
-     * @brief Whether the geometry has the m-coordinate (measurement coordinate)
-     *
-     * @return true if the geometry has m-coordinate, otherwise false
-     *
-     * @since 0.0.1
-     */
-    bool has_m() const
-    {
-        return dim == DimensionType::XYM or dim == DimensionType::XYZM;
-    }
-
-    /*!
-     * @brief Whether the geometry is closed
-     *
-     * @return true if the geometry is closed, otherwise false
-     *
-     * @since 0.0.1
-     */
-    bool is_closed() const
-    {
-        return static_cast<const T*>(this)->is_closed_();
+        return static_cast<const T*>(this)->dim_();
     }
 
     /*!
      * @brief Returns the number of dimensions of the geometry
-     *
      * @return the number of dimensions
      * @note the number of dimensions is (x, y) = 2, (x, y, z) = 3, (x, y, m) = 3 and (x, y, z, m) = 4
      *
      * @since 0.0.1
      */
-    int8_t ndim() const
+    int32_t ndim() const noexcept
     {
-        return utils::get_ndim(dim);
+        return static_cast<const T*>(this)->ndim_();
+    }
+
+    /*!
+     * @brief Raise an error if the geometry is invalid
+     * @throw geometry_error the geometry error
+     *
+     * @since 0.0.1
+     */
+    void throw_for_invalid() const
+    {
+        return static_cast<const T*>(this)->throw_for_invalid_();
+    }
+
+    /*!
+     * @brief Whether the geometry is closed
+     * @return true if the geometry is closed, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool is_closed() const noexcept
+    {
+        return static_cast<const T*>(this)->is_closed_();
+    }
+
+    /*!
+     * @brief Whether the geometry is valid
+     * @return true if the geometry is valid, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool is_valid() const noexcept
+    {
+        try
+        {
+            throw_for_invalid();
+        }
+        catch (const exceptions::geometry_error& e)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /*!
+     * @brief Returns the bounding box of the geometry
+     * @return a bounds object
+     *
+     * @since 0.0.1
+     */
+    bounds bounds() const
+    {
+        return static_cast<const T*>(this)->bounds_();
+    }
+
+    /*!
+     * @brief Whether the geometry has the z-coordinate
+     * @return true if the geometry has z-coordinate, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool has_z() const noexcept
+    {
+        return static_cast<const T*>(this)->has_z_();
+    }
+
+    /*!
+     * @brief Whether the geometry has the m-coordinate (measurement coordinate)
+     * @return true if the geometry has m-coordinate, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool has_m() const noexcept
+    {
+        return static_cast<const T*>(this)->has_m_();
+    }
+
+    // json
+
+    /*!
+     * @brief Creates a geometry from a geojson string
+     * @param json the geojson string
+     * @return a Geometry object
+     * @sa https://tools.ietf.org/html/rfc7946
+     *
+     * @since 0.0.1
+     */
+    static T from_json(const std::string& json)
+    {
+        return T::from_json_(json);
+    }
+
+    /*!
+     * @brief Dumps the geojson representation of the geometry
+     * @param precision the output precision
+     * @return a geojson string
+     * @sa https://tools.ietf.org/html/rfc7946
+     *
+     * @since 0.0.1
+     */
+    std::string json(std::int32_t precision = -1) const
+    {
+        return static_cast<const T*>(this)->json_(precision);
+    }
+
+    // wkt
+
+    /*!
+     * @brief Creates a Geometry from a wkt string
+     * @param wkt the wkt string
+     * @return a Geometry object
+     * @sa https://tools.ietf.org/html/rfc7946
+     *
+     * @since 0.0.1
+     */
+    static T from_wkt(const std::string& wkt)
+    {
+        return T::from_wkt_(wkt);
+    }
+
+    /*!
+     * @brief Dumps the wkt representation of the geometry
+     * @param precision the output precision
+     * @return a wkt string
+     * @sa https://tools.ietf.org/html/rfc7946
+     *
+     * @since 0.0.1
+     */
+    std::string wkt(std::int32_t precision = -1) const
+    {
+        return static_cast<const T*>(this)->wkt_(precision);
     }
 };
 
-/*!
- * @brief The geometry type
- *
- * @since 0.0.1
- */
-typedef union Geometry
-{
-    Point* point;                            ///< Point value
-    MultiPoint* multipoint;                  ///< MultiPoint value
-    LineString* linestring;                  ///< LineString value
-    MultiLineString* multilinestring;        ///< MultiLineString value
-    Polygon* polygon;                        ///< Polygon value
-    MultiPolygon* multipolygon;              ///< MultiPolygon value
-    GeometryCollection* geometrycollection;  ///< GeometryCollection value
-} Geometry;
+///*
+// * @brief The geometry type
+// *
+// * @since 0.0.1
+// */
+//typedef union Geometry
+//{
+//    Point* point;                            ///< Point value
+//    MultiPoint* multipoint;                  ///< MultiPoint value
+//    LineString* linestring;                  ///< LineString value
+//    MultiLineString* multilinestring;        ///< MultiLineString value
+//    Polygon* polygon;                        ///< Polygon value
+//    MultiPolygon* multipolygon;              ///< MultiPolygon value
+//    GeometryCollection* geometrycollection;  ///< GeometryCollection value
+//} Geometry;
 
 }  // namespace shapes
 }  // namespace simo

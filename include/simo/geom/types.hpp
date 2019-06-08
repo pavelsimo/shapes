@@ -10,7 +10,7 @@ namespace shapes
  *
  * @since 0.0.1
  */
-enum class DimensionType : uint8_t
+enum class dimension_type : uint8_t
 {
     XY   = 1,
     XYZ  = 2,
@@ -23,7 +23,7 @@ enum class DimensionType : uint8_t
  *
  * @since 0.0.1
  */
-enum class ElementType : uint8_t
+enum class element_type : uint8_t
 {
     POINT      = 1,
     LINESTRING = 2,
@@ -35,7 +35,7 @@ enum class ElementType : uint8_t
  *
  * @since 0.0.1
  */
-enum class GeometryType : uint16_t
+enum class geometry_type : uint16_t
 {
     GEOMETRY             = 0,
     POINT                = 1,

@@ -16,7 +16,7 @@ namespace exceptions
  *
  * @since 0.0.1
  */
-class ShapesException : public std::exception
+class shapes_exception : public std::exception
 {
   public:
     /*!
@@ -26,7 +26,7 @@ class ShapesException : public std::exception
      *
      * @since 0.0.1
      */
-    explicit ShapesException(const char* reason)
+    explicit shapes_exception(const char* reason)
         : m_reason(reason) {}
 
     /*!
@@ -64,7 +64,7 @@ class ShapesException : public std::exception
  *
  * @since 0.0.1
  */
-class ParseError : public ShapesException
+class parse_error : public shapes_exception
 {
   public:
     /*!
@@ -74,8 +74,8 @@ class ParseError : public ShapesException
      *
      * @since 0.0.1
      */
-    explicit ParseError(const std::string& reason)
-        : ShapesException("parse error")
+    explicit parse_error(const std::string& reason)
+        : shapes_exception("parse error")
     {
         set_reason(reason);
     }
@@ -86,7 +86,7 @@ class ParseError : public ShapesException
  *
  * @since 0.0.1
  */
-class NotImplementedError : public ShapesException
+class not_implemented_error : public shapes_exception
 {
   public:
     /*!
@@ -94,8 +94,8 @@ class NotImplementedError : public ShapesException
      *
      * @since 0.0.1
      */
-    NotImplementedError()
-        : ShapesException("not implemented error")
+    not_implemented_error()
+        : shapes_exception("not implemented error")
     {
     }
 
@@ -106,8 +106,8 @@ class NotImplementedError : public ShapesException
      *
      * @since 0.0.1
      */
-    explicit NotImplementedError(const std::string& reason)
-        : ShapesException("not implemented error")
+    explicit not_implemented_error(const std::string& reason)
+        : shapes_exception("not implemented error")
     {
         set_reason(reason);
     }
@@ -118,7 +118,7 @@ class NotImplementedError : public ShapesException
  *
  * @since 0.0.1
  */
-class GeometryError : public ShapesException
+class geometry_error : public shapes_exception
 {
   public:
     /*!
@@ -128,8 +128,8 @@ class GeometryError : public ShapesException
      *
      * @since 0.0.1
      */
-    explicit GeometryError(const std::string& reason)
-        : ShapesException("geometry error")
+    explicit geometry_error(const std::string& reason)
+        : shapes_exception("geometry error")
     {
         set_reason(reason);
     }
@@ -140,7 +140,7 @@ class GeometryError : public ShapesException
  *
  * @since 0.0.1
  */
-class IndexError : public ShapesException
+class index_error : public shapes_exception
 {
   public:
     /*!
@@ -150,8 +150,8 @@ class IndexError : public ShapesException
      *
      * @since 0.0.1
      */
-    explicit IndexError(const std::string& reason)
-        : ShapesException("index error")
+    explicit index_error(const std::string& reason)
+        : shapes_exception("index error")
     {
         set_reason(reason);
     }

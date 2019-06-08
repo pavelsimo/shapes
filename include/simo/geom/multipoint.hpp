@@ -15,73 +15,309 @@ namespace shapes
 {
 
 /*!
- * @brief Point collection
- *
- * @ingroup geometry
+ * @brief DOCUMENT ME!
+ * @tparam T
+ * @tparam AllocatorType
  *
  * @since 0.0.1
  */
-class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySequence<Point>
+template <typename T, typename AllocatorType = std::allocator<T>>
+class basic_multipoint : public std::vector<T, AllocatorType>, public basic_geometry<basic_multipoint<T>>
 {
   public:
+    /// DOCUMENT ME!
+    using base_type = std::vector<T, AllocatorType>;
+    /// DOCUMENT ME!
+    using point_type = typename T::point_type;
+    /// DOCUMENT ME!
+    using point_iterator = typename std::vector<T>::iterator;
+    /// DOCUMENT ME!
+    using point_const_iterator = typename std::vector<T>::const_iterator;
+    /// DOCUMENT ME!
+    using coord_type = typename T::coord_type;
+    /// DOCUMENT ME!
+    using coord_iterator = typename std::vector<coord_type>::iterator;
+    /// DOCUMENT ME!
+    using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
+
     /*!
-     * @brief Creates an empty MultiPoint
+     * @brief DOCUMENT ME!
      *
      * @since 0.0.1
      */
-    MultiPoint() = default;
+    inline basic_multipoint()
+        : base_type() {}
 
     /*!
-      * @brief Creates a MultiPoint from a given initializer list
-      *
-      * @tparam T an arithmetic value (e.g. int, float, double)
-      * @param init the initializer list
-      *
-      * @since 0.0.1
-      */
-    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-    MultiPoint(std::initializer_list<std::initializer_list<T>> init)
+     * @brief DOCUMENT ME!
+     * @param init
+     *
+     * @since 0.0.1
+     */
+    basic_multipoint(std::initializer_list<T> init)
+        : base_type(init.begin(), init.end()) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
+     *
+     * @since 0.0.1
+     */
+    explicit basic_multipoint(coord_const_iterator first, coord_const_iterator last)
     {
-        detail::create_sequence(init, seq, bounds, dim);
+        /// @todo deal with repetition
+        size_t n = ndim_();
+        this->reserve(std::distance(first, last));
+        for (auto it = first; it != last; it += n)
+        {
+            this->emplace_back(it, it + n);
+        }
     }
 
     /*!
-     * @brief Creates a MultiPoint from a given point vector
-     *
-     * @param points the Point sequence
+     * @brief DOCUMENT ME!
+     * @param first
      *
      * @since 0.0.1
      */
-    explicit MultiPoint(const std::vector<Point>& points)
+    explicit basic_multipoint(coord_iterator first, coord_iterator last)
     {
-        detail::create_sequence(points, seq, bounds, dim);
+        /// @todo deal with repetition
+        size_t n = ndim_();
+        this->reserve(std::distance(first, last));
+        for (auto it = first; it != last; it += n)
+        {
+            this->emplace_back(it, it + n);
+        }
     }
 
     /*!
-     * @brief Creates a MultiPoint from a given arithmetic value sequence
-     *
-     * @tparam T an arithmetic value (e.g. int, float, double)
-     * @param coords the arithmetic value sequence
-     * @param coords_dim the dimension of the points
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
      *
      * @since 0.0.1
      */
-    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-    MultiPoint(const std::vector<T>& coords, DimensionType coords_dim)
+    basic_multipoint(point_iterator first, point_iterator last)
+        : base_type(first, last)
     {
-        detail::create_sequence(coords, coords_dim, seq, bounds, dim);
     }
 
     /*!
-     * @brief Creates a MultiPoint from a geojson string
-     *
-     * @param json the geojson string
-     * @return a MultiPoint object
-     * @sa https://tools.ietf.org/html/rfc7946
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
+     */
+    basic_multipoint(point_const_iterator first, point_const_iterator last)
+        : base_type(first, last)
+    {
+    }
+
+    // operators
+
+    /*!
+     * @param lhs a mulipoint
+     * @param rhs a mulipoint
+     * @return true if all Point's are equal, otherwise false
      *
      * @since 0.0.1
      */
-    static MultiPoint from_json(const std::string& json)
+    friend bool operator==(const basic_multipoint<T>& lhs, const basic_multipoint<T>& rhs)
+    {
+        if (lhs.size() != rhs.size())
+        {
+            return false;
+        }
+        for (size_t i = 0; i < lhs.size(); ++i)
+        {
+            if (lhs[i] != rhs[i])
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /*!
+     * @param lhs a mulipoint
+     * @param rhs a mulipoint
+     * @return true if at least one Point is different, otherwise false
+     *
+     * @since 0.0.1
+     */
+    friend bool operator!=(const basic_multipoint<T>& lhs, const basic_multipoint<T>& rhs)
+    {
+        return not operator==(lhs, rhs);
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @return
+     *
+     * @since 0.0.1
+     */
+    std::vector<std::tuple<double, double>> xy() const
+    {
+        std::vector<std::tuple<double, double>> res;
+        res.reserve(this->size());
+        for (const auto& p : *this)
+        {
+            res.emplace_back(p.x, p.y);
+        }
+        return res;
+    }
+
+    // polyline
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param polyline
+     * @param precision
+     * @return
+     *
+     * @since 0.0.1
+     */
+    static basic_multipoint<T> from_polyline(const std::string& polyline, std::int32_t precision = 5)
+    {
+        static_assert(std::is_same<point_type, Point::point_type>::value, "must contain XY points");
+
+        auto coords = polyline::decode(polyline, precision);
+        return {coords.begin(), coords.end()};
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param precision
+     * @return
+     *
+     * @since 0.0.1
+     */
+    std::string polyline(std::int32_t precision = 5) const
+    {
+        static_assert(std::is_same<point_type, Point::point_type>::value, "must contain XY points");
+
+        std::string res;
+        res.reserve(this->size() * 6);
+        double prev_lng = 0;
+        double prev_lat = 0;
+        for (const auto& p : *this)
+        {
+            res += polyline::encode(p.lat - prev_lat, precision);
+            res += polyline::encode(p.lng - prev_lng, precision);
+            prev_lat = p.lat;
+            prev_lng = p.lng;
+        }
+        return res;
+    }
+
+  private:
+    /// for allow basic_geometry to access basic_multipoint private members
+    friend class basic_geometry<basic_multipoint<T>>;
+
+    /// @private
+    geometry_type geom_type_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return geometry_type::MULTIPOINTZ;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return geometry_type::MULTIPOINTM;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return geometry_type::MULTIPOINTZM;
+        }
+        return geometry_type::MULTIPOINT;
+    }
+
+    /// @private
+    dimension_type dim_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return dimension_type::XYZ;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return dimension_type::XYM;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return dimension_type::XYZM;
+        }
+        return dimension_type::XY;
+    }
+
+    /// @private
+    int32_t ndim_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return 3;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return 3;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return 4;
+        }
+        return 2;
+    }
+
+    /// @private
+    bool is_closed_() const noexcept
+    {
+        if (this->empty())
+        {
+            return true;
+        }
+        return *this[0] == *this[this->size() - 1];
+    }
+
+    /// @private
+    void throw_for_invalid_() const
+    {
+        // do nothing
+    }
+
+    /// @private
+    bounds bounds_() const
+    {
+        bounds res{};
+        for (const auto& p : *this)
+        {
+            res.extend(p.x, p.y);
+        }
+        return res;
+    }
+
+    /// @private
+    bool has_z_() const noexcept
+    {
+        return std::is_same<point_type, PointZ::point_type>::value or std::is_same<point_type, PointZM::point_type>::value;
+    }
+
+    /// @private
+    bool has_m_() const noexcept
+    {
+        return std::is_same<point_type, PointM::point_type>::value or std::is_same<point_type, PointZM::point_type>::value;
+    }
+
+    /// @private
+    std::string tagged_text_() const noexcept
+    {
+        return "MultiPoint";
+    }
+
+    // json
+
+    /// @private
+    static basic_multipoint<T> from_json_(const std::string& json)
     {
         try
         {
@@ -89,36 +325,28 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
             auto geom_type = j.at("type").get<std::string>();
             if (geom_type != "MultiPoint")
             {
-                throw exceptions::ParseError("invalid geometry type: " + std::string(geom_type));
+                throw exceptions::parse_error("invalid geometry type: " + std::string(geom_type));
             }
             const auto& coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
-            std::vector<Point> res;
+            std::vector<point_type> res;
             res.reserve(coords.size());
             std::for_each(std::begin(coords), std::end(coords), [&](const std::vector<double>& coord) {
-                res.emplace_back(coord);
+                res.emplace_back(coord.begin(), coord.end());
             });
-            return MultiPoint(res);
+            return basic_multipoint<T>(res.begin(), res.end());
         }
         catch (const nlohmann::json::exception& e)
         {
-            throw exceptions::ParseError("invalid json: " + std::string(e.what()));
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
-        catch (const exceptions::GeometryError& e)
+        catch (const exceptions::geometry_error& e)
         {
-            throw exceptions::ParseError("invalid geometry: " + std::string(e.what()));
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
         }
     }
 
-    /*!
-     * @brief Dumps the geojson representation of the MultiPoint
-     *
-     * @param precision the output precision
-     * @return a geojson string
-     * @sa https://tools.ietf.org/html/rfc7946
-     *
-     * @since 0.0.1
-     */
-    std::string json(std::int32_t precision = -1)
+    /// @private
+    std::string json_(std::int32_t precision = -1) const
     {
         std::stringstream ss;
         if (precision >= 0)
@@ -126,75 +354,46 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
             ss << std::setprecision(precision);
         }
         ss << "{\"type\":\"MultiPoint\",\"coordinates\":[";
-        for (size_t i = 0; i < seq.size(); ++i)
+        int i = 0;
+        for (const auto& p : *this)
         {
             if (i > 0)
             {
                 ss << ",";
             }
-            const auto& p = seq[i];
-            switch (p.dim)
+            ss << "[";
+            for (int j = 0; j < p.ndim(); ++j)
             {
-                case DimensionType::XY:
+                if (j > 0)
                 {
-                    ss << "[" << p.x << "," << p.y << "]";
-                    break;
+                    ss << ",";
                 }
-                case DimensionType::XYZ:
-                {
-                    ss << "[" << p.x << "," << p.y << "," << p.z << "]";
-                    break;
-                }
-                case DimensionType::XYM:
-                {
-                    ss << "[" << p.x << "," << p.y << "," << p.m << "]";
-                    break;
-                }
-                case DimensionType::XYZM:
-                {
-                    ss << "[" << p.x << "," << p.y << "," << p.z << "," << p.m << "]";
-                    break;
-                }
+                ss << p.coords[j];
             }
+            ss << "]";
+            ++i;
         }
         ss << "]}";
         return ss.str();
     }
 
-    /*!
-     * @brief Creates a MultiPoint from a WKT string
-     *
-     * @param wkt the WKT string
-     * @return a MultiPoint object
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @throw ParseError if a parser error occurs
-     *
-     * @since 0.0.1
-     */
-    static MultiPoint from_wkt(const std::string& wkt)
+    // wkt
+
+    /// @private
+    static basic_multipoint<T> from_wkt_(const std::string& wkt)
     {
-        WktReader reader{};
+        wkt_reader reader{};
         auto result      = reader.read(wkt);
         const auto& data = result.data;
         if (not utils::is_multipoint(data.geom_type))
         {
-            throw exceptions::ParseError("invalid wkt string");
+            throw exceptions::parse_error("invalid wkt string");
         }
-        auto dim = utils::get_dim(data.geom_type);
-        return MultiPoint(result.data.coords, dim);
+        return basic_multipoint<T>(result.data.coords.begin(), result.data.coords.end());
     }
 
-    /*!
-     * @brief Dumps the WKT representation of the MultiPoint
-     *
-     * @param precision the output precision
-     * @return a WKT string
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @since 0.0.1
-     */
-    std::string wkt(std::int32_t precision = -1)
+    /// @private
+    std::string wkt_(std::int32_t precision = -1) const
     {
         std::stringstream ss;
         if (precision >= 0)
@@ -202,157 +401,55 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public detail::GeometrySeque
             ss << std::setprecision(precision);
         }
         ss << "MULTIPOINT";
-        if (has_z())
+        if (has_z_())
         {
             ss << "Z";
         }
-        if (has_m())
+        if (has_m_())
         {
             ss << "M";
         }
-
         ss << "(";
-        for (size_t i = 0; i < seq.size(); ++i)
+        int i = 0;
+        for (const auto& p : *this)
         {
-            const Point& p = seq[i];
             if (i > 0)
             {
                 ss << ",";
             }
-            ss << "(" << p.x << " " << p.y;
-            if (has_z())
+            ss << "(";
+            for (int32_t j = 0; j < p.ndim(); ++j)
             {
-                ss << " " << p.z;
-            }
-            if (has_m())
-            {
-                ss << " " << p.m;
+                if (j > 0)
+                {
+                    ss << " ";
+                }
+                ss << p.coords[j];
             }
             ss << ")";
+            ++i;
         }
         ss << ")";
         return ss.str();
     }
-
-    /*!
-     * @brief Creates a MultiPoint from a encoded polyline string
-     *
-     * @param polyline the encoded polyline string
-     * @param precision the decoded precision
-     * @return a LineString object
-     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
-     *
-     * @since 0.0.1
-     */
-    static MultiPoint from_polyline(const std::string& polyline, std::int32_t precision = 5)
-    {
-        auto coords = polyline::decode(polyline, precision);
-        return {coords, DimensionType::XY};
-    }
-
-    /*!
-     * @brief Dumps the polyline representation of a MultiPoint
-     *
-     * @param precision the encoded precision
-     * @return a polyline string
-     * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
-     *
-     * @since 0.0.1
-     */
-    std::string polyline(std::int32_t precision = 5) const
-    {
-        std::string res;
-        res.reserve(seq.size() * 4);
-        double prev_x = 0;
-        double prev_y = 0;
-        for (const auto& p : seq)
-        {
-            res += polyline::encode(p.y - prev_y, precision);
-            res += polyline::encode(p.x - prev_x, precision);
-            prev_x = p.x;
-            prev_y = p.y;
-        }
-        return res;
-    }
-
-    /*!
-     * @param lhs a MultiPoint
-     * @param rhs a MultiPoint
-     * @return true if all Point's are equal, otherwise false
-     *
-     * @since 0.0.1
-     */
-    friend bool operator==(const MultiPoint& lhs, const MultiPoint& rhs);
-
-    /*!
-     * @param lhs a MultiPoint
-     * @param rhs a MultiPoint
-     * @return true if at least one Point is different, otherwise false
-     *
-     * @since 0.0.1
-     */
-    friend bool operator!=(const MultiPoint& lhs, const MultiPoint& rhs);
-
-  private:
-    /// for allow BaseGeometry to access MultiPoint private members
-    friend class BaseGeometry<MultiPoint>;
-
-    /// @private
-    GeometryType geom_type_() const
-    {
-        return GeometryType::MULTIPOINT;
-    }
-
-    /// @private
-    std::string geom_type_str_() const
-    {
-        return "MultiPoint";
-    }
-
-    /// @private
-    std::vector<std::vector<double>> coords_() const
-    {
-        std::vector<std::vector<double>> res;
-        res.reserve(seq.size());
-        std::for_each(std::begin(seq), std::end(seq), [&res](const Point& p) {
-            res.push_back(std::move(p.coords()[0]));
-        });
-        return res;
-    }
-
-    /// @private
-    bool empty_() const
-    {
-        return seq.empty();
-    }
-
-    /// @private
-    size_t size_() const
-    {
-        return seq.size();
-    }
-
-    /// @private
-    bool is_closed_() const
-    {
-        if (seq.size() < 2)
-        {
-            return false;
-        }
-        size_t last_index = seq.size() - 1;
-        return seq[0] == seq[last_index];
-    }
 };
 
-bool operator==(const MultiPoint& lhs, const MultiPoint& rhs)
-{
-    return detail::is_equal_sequence(lhs, rhs);
-}
+template <class T = double>
+using multipoint = basic_multipoint<basic_point<T>>;
 
-bool operator!=(const MultiPoint& lhs, const MultiPoint& rhs)
-{
-    return not operator==(lhs, rhs);
-}
+template <class T = double>
+using multipoint_z = basic_multipoint<basic_point_z<T>>;
+
+template <class T = double>
+using multipoint_m = basic_multipoint<basic_point_m<T>>;
+
+template <class T = double>
+using multipoint_zm = basic_multipoint<basic_point_zm<T>>;
+
+using MultiPoint   = multipoint<double>;
+using MultiPointZ  = multipoint_z<double>;
+using MultiPointM  = multipoint_m<double>;
+using MultiPointZM = multipoint_zm<double>;
 
 }  // namespace shapes
 }  // namespace simo

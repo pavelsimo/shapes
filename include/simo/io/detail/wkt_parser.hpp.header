@@ -17,10 +17,10 @@ namespace shapes
  *
  * @since 0.0.1
  */
-struct WktData
+struct wkt_data
 {
     /// the dimension type of the geometry
-    GeometryType geom_type;
+    geometry_type geom_type;
 
     /// the coordinates as a sequence of numbers
     std::vector<double> coords;
@@ -31,15 +31,16 @@ struct WktData
 
 /*!
  * @brief A Well-known text (WKT) markup language parser results
+ * @ingroup wkt
  *
  * @since 0.0.1
  */
-struct WktResult
+struct wkt_result
 {
     /// whether there is a parser error
     bool parser_error = false;
 
     /// the parser result data
-    WktData data;
+    wkt_data data;
 };
 

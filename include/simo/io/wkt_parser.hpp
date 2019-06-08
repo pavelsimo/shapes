@@ -17,10 +17,10 @@ namespace shapes
  *
  * @since 0.0.1
  */
-struct WktData
+struct wkt_data
 {
     /// the dimension type of the geometry
-    GeometryType geom_type;
+    geometry_type geom_type;
 
     /// the coordinates as a sequence of numbers
     std::vector<double> coords;
@@ -31,16 +31,17 @@ struct WktData
 
 /*!
  * @brief A Well-known text (WKT) markup language parser results
+ * @ingroup wkt
  *
  * @since 0.0.1
  */
-struct WktResult
+struct wkt_result
 {
     /// whether there is a parser error
     bool parser_error = false;
 
     /// the parser result data
-    WktData data;
+    wkt_data data;
 };
 
 /* Driver template for the LEMON parser generator.
@@ -111,9 +112,9 @@ typedef union
 #ifndef YYSTACKDEPTH
 #    define YYSTACKDEPTH 1048576
 #endif
-#define ParseARG_SDECL struct WktResult* result;
-#define ParseARG_PDECL , struct WktResult* result
-#define ParseARG_FETCH struct WktResult* result = yypParser->result
+#define ParseARG_SDECL struct wkt_result* result;
+#define ParseARG_PDECL , struct wkt_result* result
+#define ParseARG_FETCH struct wkt_result* result = yypParser->result
 #define ParseARG_STORE yypParser->result = result
 #define YYNSTATE 399
 #define YYNRULE 202
@@ -3055,12 +3056,12 @@ static void yy_reduce(
         {
             result->data.coords.push_back(0);
             result->data.coords.push_back(0);
-            result->data.geom_type = GeometryType::POINT;
+            result->data.geom_type = geometry_type::POINT;
         }
         break;
         case 31: /* point ::= WKT_POINT_TAGGED_TEXT point_text */
         {
-            result->data.geom_type = GeometryType::POINT;
+            result->data.geom_type = geometry_type::POINT;
         }
         break;
         case 32: /* point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_EMPTY_SET */
@@ -3068,12 +3069,12 @@ static void yy_reduce(
             result->data.coords.push_back(0);
             result->data.coords.push_back(0);
             result->data.coords.push_back(0);
-            result->data.geom_type = GeometryType::POINTZ;
+            result->data.geom_type = geometry_type::POINTZ;
         }
         break;
         case 33: /* point_z ::= WKT_POINT_Z_TAGGED_TEXT point_text_z */
         {
-            result->data.geom_type = GeometryType::POINTZ;
+            result->data.geom_type = geometry_type::POINTZ;
         }
         break;
         case 34: /* point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_EMPTY_SET */
@@ -3081,12 +3082,12 @@ static void yy_reduce(
             result->data.coords.push_back(0);
             result->data.coords.push_back(0);
             result->data.coords.push_back(0);
-            result->data.geom_type = GeometryType::POINTM;
+            result->data.geom_type = geometry_type::POINTM;
         }
         break;
         case 35: /* point_m ::= WKT_POINT_M_TAGGED_TEXT point_text_m */
         {
-            result->data.geom_type = GeometryType::POINTM;
+            result->data.geom_type = geometry_type::POINTM;
         }
         break;
         case 36: /* point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_EMPTY_SET */
@@ -3095,12 +3096,12 @@ static void yy_reduce(
             result->data.coords.push_back(0);
             result->data.coords.push_back(0);
             result->data.coords.push_back(0);
-            result->data.geom_type = GeometryType::POINTZM;
+            result->data.geom_type = geometry_type::POINTZM;
         }
         break;
         case 37: /* point_zm ::= WKT_POINT_ZM_TAGGED_TEXT point_text_zm */
         {
-            result->data.geom_type = GeometryType::POINTZM;
+            result->data.geom_type = geometry_type::POINTZM;
         }
         break;
         case 38: /* coord_xy ::= coord coord */
@@ -3132,7 +3133,7 @@ static void yy_reduce(
         case 72: /* multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN coord_xy multipoint_text_2 WKT_RPAREN */
             yytestcase(yyruleno == 72);
             {
-                result->data.geom_type = GeometryType::MULTIPOINT;
+                result->data.geom_type = geometry_type::MULTIPOINT;
             }
             break;
         case 73: /* multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_EMPTY_SET */
@@ -3141,7 +3142,7 @@ static void yy_reduce(
         case 75: /* multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_LPAREN coord_xyz multipoint_text_z_2 WKT_RPAREN */
             yytestcase(yyruleno == 75);
             {
-                result->data.geom_type = GeometryType::MULTIPOINTZ;
+                result->data.geom_type = geometry_type::MULTIPOINTZ;
             }
             break;
         case 76: /* multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_EMPTY_SET */
@@ -3150,7 +3151,7 @@ static void yy_reduce(
         case 78: /* multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_LPAREN coord_xym multipoint_text_m_2 WKT_RPAREN */
             yytestcase(yyruleno == 78);
             {
-                result->data.geom_type = GeometryType::MULTIPOINTM;
+                result->data.geom_type = geometry_type::MULTIPOINTM;
             }
             break;
         case 79: /* multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_EMPTY_SET */
@@ -3159,7 +3160,7 @@ static void yy_reduce(
         case 81: /* multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN coord_xyzm multipoint_text_zm_2 WKT_RPAREN */
             yytestcase(yyruleno == 81);
             {
-                result->data.geom_type = GeometryType::MULTIPOINTZM;
+                result->data.geom_type = geometry_type::MULTIPOINTZM;
             }
             break;
         case 82: /* linestring_text ::= WKT_LPAREN coord_xy WKT_COMMA coord_xy coord_xy_repeated WKT_RPAREN */
@@ -3185,140 +3186,140 @@ static void yy_reduce(
         case 95: /* linestring ::= WKT_LINESTRING_TAGGED_TEXT linestring_text */
             yytestcase(yyruleno == 95);
             {
-                result->data.geom_type = GeometryType::LINESTRING;
+                result->data.geom_type = geometry_type::LINESTRING;
             }
             break;
         case 96: /* linestring_z ::= WKT_LINESTRING_Z_TAGGED_TEXT WKT_EMPTY_SET */
         case 97: /* linestring_z ::= WKT_LINESTRING_Z_TAGGED_TEXT linestring_text_z */
             yytestcase(yyruleno == 97);
             {
-                result->data.geom_type = GeometryType::LINESTRINGZ;
+                result->data.geom_type = geometry_type::LINESTRINGZ;
             }
             break;
         case 98: /* linestring_m ::= WKT_LINESTRING_M_TAGGED_TEXT WKT_EMPTY_SET */
         case 99: /* linestring_m ::= WKT_LINESTRING_M_TAGGED_TEXT linestring_text_m */
             yytestcase(yyruleno == 99);
             {
-                result->data.geom_type = GeometryType::LINESTRINGM;
+                result->data.geom_type = geometry_type::LINESTRINGM;
             }
             break;
         case 100: /* linestring_zm ::= WKT_LINESTRING_ZM_TAGGED_TEXT WKT_EMPTY_SET */
         case 101: /* linestring_zm ::= WKT_LINESTRING_ZM_TAGGED_TEXT linestring_text_zm */
             yytestcase(yyruleno == 101);
             {
-                result->data.geom_type = GeometryType::LINESTRINGZM;
+                result->data.geom_type = geometry_type::LINESTRINGZM;
             }
             break;
         case 106: /* multilinestring ::= WKT_MULTILINESTRING_TAGGED_TEXT WKT_EMPTY_SET */
         case 107: /* multilinestring ::= WKT_MULTILINESTRING_TAGGED_TEXT multilinestring_text */
             yytestcase(yyruleno == 107);
             {
-                result->data.geom_type = GeometryType::MULTILINESTRING;
+                result->data.geom_type = geometry_type::MULTILINESTRING;
             }
             break;
         case 108: /* multilinestring_z ::= WKT_MULTILINESTRING_Z_TAGGED_TEXT WKT_EMPTY_SET */
         case 109: /* multilinestring_z ::= WKT_MULTILINESTRING_Z_TAGGED_TEXT multilinestring_text_z */
             yytestcase(yyruleno == 109);
             {
-                result->data.geom_type = GeometryType::MULTILINESTRINGZ;
+                result->data.geom_type = geometry_type::MULTILINESTRINGZ;
             }
             break;
         case 110: /* multilinestring_m ::= WKT_MULTILINESTRING_M_TAGGED_TEXT WKT_EMPTY_SET */
         case 111: /* multilinestring_m ::= WKT_MULTILINESTRING_M_TAGGED_TEXT multilinestring_text_m */
             yytestcase(yyruleno == 111);
             {
-                result->data.geom_type = GeometryType::MULTILINESTRINGM;
+                result->data.geom_type = geometry_type::MULTILINESTRINGM;
             }
             break;
         case 112: /* multilinestring_zm ::= WKT_MULTILINESTRING_ZM_TAGGED_TEXT WKT_EMPTY_SET */
         case 113: /* multilinestring_zm ::= WKT_MULTILINESTRING_ZM_TAGGED_TEXT multilinestring_text_zm */
             yytestcase(yyruleno == 113);
             {
-                result->data.geom_type = GeometryType::MULTILINESTRINGZM;
+                result->data.geom_type = geometry_type::MULTILINESTRINGZM;
             }
             break;
         case 138: /* polygon ::= WKT_POLYGON_TAGGED_TEXT WKT_EMPTY_SET */
         case 139: /* polygon ::= WKT_POLYGON_TAGGED_TEXT polygon_text */
             yytestcase(yyruleno == 139);
             {
-                result->data.geom_type = GeometryType::POLYGON;
+                result->data.geom_type = geometry_type::POLYGON;
             }
             break;
         case 140: /* polygon_z ::= WKT_POLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET */
         case 141: /* polygon_z ::= WKT_POLYGON_Z_TAGGED_TEXT polygon_text_z */
             yytestcase(yyruleno == 141);
             {
-                result->data.geom_type = GeometryType::POLYGONZ;
+                result->data.geom_type = geometry_type::POLYGONZ;
             }
             break;
         case 142: /* polygon_m ::= WKT_POLYGON_M_TAGGED_TEXT WKT_EMPTY_SET */
         case 143: /* polygon_m ::= WKT_POLYGON_M_TAGGED_TEXT polygon_text_m */
             yytestcase(yyruleno == 143);
             {
-                result->data.geom_type = GeometryType::POLYGONM;
+                result->data.geom_type = geometry_type::POLYGONM;
             }
             break;
         case 144: /* polygon_zm ::= WKT_POLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET */
         case 145: /* polygon_zm ::= WKT_POLYGON_ZM_TAGGED_TEXT polygon_text_zm */
             yytestcase(yyruleno == 145);
             {
-                result->data.geom_type = GeometryType::POLYGONZM;
+                result->data.geom_type = geometry_type::POLYGONZM;
             }
             break;
         case 150: /* multipolygon ::= WKT_MULTIPOLYGON_TAGGED_TEXT WKT_EMPTY_SET */
         case 151: /* multipolygon ::= WKT_MULTIPOLYGON_TAGGED_TEXT multipolygon_text */
             yytestcase(yyruleno == 151);
             {
-                result->data.geom_type = GeometryType::MULTIPOLYGON;
+                result->data.geom_type = geometry_type::MULTIPOLYGON;
             }
             break;
         case 152: /* multipolygon_z ::= WKT_MULTIPOLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET */
         case 153: /* multipolygon_z ::= WKT_MULTIPOLYGON_Z_TAGGED_TEXT multipolygon_text_z */
             yytestcase(yyruleno == 153);
             {
-                result->data.geom_type = GeometryType::MULTIPOLYGONZ;
+                result->data.geom_type = geometry_type::MULTIPOLYGONZ;
             }
             break;
         case 154: /* multipolygon_m ::= WKT_MULTIPOLYGON_M_TAGGED_TEXT WKT_EMPTY_SET */
         case 155: /* multipolygon_m ::= WKT_MULTIPOLYGON_M_TAGGED_TEXT multipolygon_text_m */
             yytestcase(yyruleno == 155);
             {
-                result->data.geom_type = GeometryType::MULTIPOLYGONM;
+                result->data.geom_type = geometry_type::MULTIPOLYGONM;
             }
             break;
         case 156: /* multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET */
         case 157: /* multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT multipolygon_text_zm */
             yytestcase(yyruleno == 157);
             {
-                result->data.geom_type = GeometryType::MULTIPOLYGONZM;
+                result->data.geom_type = geometry_type::MULTIPOLYGONZM;
             }
             break;
         case 194: /* geometrycollection ::= WKT_GEOMETRYCOLLECTION_TAGGED_TEXT WKT_EMPTY_SET */
         case 195: /* geometrycollection ::= WKT_GEOMETRYCOLLECTION_TAGGED_TEXT geometrycollection_text */
             yytestcase(yyruleno == 195);
             {
-                result->data.geom_type = GeometryType::GEOMETRYCOLLECTION;
+                result->data.geom_type = geometry_type::GEOMETRYCOLLECTION;
             }
             break;
         case 196: /* geometrycollection_z ::= WKT_GEOMETRYCOLLECTION_Z_TAGGED_TEXT WKT_EMPTY_SET */
         case 197: /* geometrycollection_z ::= WKT_GEOMETRYCOLLECTION_Z_TAGGED_TEXT geometrycollection_text_z */
             yytestcase(yyruleno == 197);
             {
-                result->data.geom_type = GeometryType::GEOMETRYCOLLECTIONZ;
+                result->data.geom_type = geometry_type::GEOMETRYCOLLECTIONZ;
             }
             break;
         case 198: /* geometrycollection_m ::= WKT_GEOMETRYCOLLECTION_M_TAGGED_TEXT WKT_EMPTY_SET */
         case 199: /* geometrycollection_m ::= WKT_GEOMETRYCOLLECTION_M_TAGGED_TEXT geometrycollection_text_m */
             yytestcase(yyruleno == 199);
             {
-                result->data.geom_type = GeometryType::GEOMETRYCOLLECTIONM;
+                result->data.geom_type = geometry_type::GEOMETRYCOLLECTIONM;
             }
             break;
         case 200: /* geometrycollection_zm ::= WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT WKT_EMPTY_SET */
         case 201: /* geometrycollection_zm ::= WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT geometrycollection_text_zm */
             yytestcase(yyruleno == 201);
             {
-                result->data.geom_type = GeometryType::GEOMETRYCOLLECTIONZM;
+                result->data.geom_type = geometry_type::GEOMETRYCOLLECTIONZM;
             }
             break;
         default:
