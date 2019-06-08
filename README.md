@@ -33,7 +33,7 @@ std::cout << p.x << " " << p.y << " " << '\n';
 GeoJSON representation of a 3d `Point`:
 
 ```cpp
-auto p = Point{1, 2, 3};
+auto p = PointZ{1, 2, 3};
 std::cout << p.json() << '\n';
 ```
 
