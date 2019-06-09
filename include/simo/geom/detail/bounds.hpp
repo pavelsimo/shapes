@@ -8,16 +8,16 @@ namespace simo
 {
 namespace shapes
 {
-
+namespace detail
+{
 /*!
- * @brief Represents a bounding box
+ * @brief Represents an axis-aligned bounding box
  * @ingroup geometry
  *
  * @since 0.0.1
  */
-class bounds
+struct bounds
 {
-  public:
     /// the minimum x-coordinate
     double minx;
 
@@ -31,10 +31,10 @@ class bounds
     double maxy;
 
     /*!
-     * @brief Creates a bounds object
-     *
-     * @since 0.0.1
-     */
+         * @brief Creates a bounds object
+         *
+         * @since 0.0.1
+         */
     bounds()
         : minx(std::numeric_limits<double>::max()),
           miny(std::numeric_limits<double>::max()),
@@ -190,5 +190,6 @@ class bounds
     }
 };
 
+}  // namespace detail
 }  // namespace shapes
 }  // namespace simo

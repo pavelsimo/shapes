@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 #include <simo/shapes_fwd.hpp>
-#include <simo/geom/bounds.hpp>
+#include <simo/geom/detail/bounds.hpp>
 #include <simo/geom/types.hpp>
 #include <simo/geom/utils.hpp>
 #include <simo/exceptions.hpp>
@@ -119,7 +119,7 @@ class basic_geometry
      *
      * @since 0.0.1
      */
-    bounds bounds() const
+    detail::bounds bounds() const
     {
         return static_cast<const T*>(this)->bounds_();
     }

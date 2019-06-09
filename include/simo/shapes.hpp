@@ -42,7 +42,7 @@ SOFTWARE.
 #include <simo/shapes_fwd.hpp>
 #include <simo/geom/utils.hpp>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/bounds.hpp>
+#include <simo/geom/detail/bounds.hpp>
 #include <simo/geom/point.hpp>
 #include <simo/geom/multipoint.hpp>
 #include <simo/geom/linestring.hpp>

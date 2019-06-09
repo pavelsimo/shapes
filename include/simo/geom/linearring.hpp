@@ -6,8 +6,7 @@
 #include <sstream>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/detail/sequence.hpp>
-#include <simo/geom/bounds.hpp>
+#include <simo/geom/detail/bounds.hpp>
 
 namespace simo
 {

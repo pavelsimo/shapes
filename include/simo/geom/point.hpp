@@ -218,7 +218,7 @@ class basic_point : public basic_geometry<basic_point<T>>
     }
 
     /// @private
-    bounds bounds_() const
+    detail::bounds bounds_() const
     {
         return {x, y, x, y};
     }
@@ -479,7 +479,7 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
     }
 
     /// @private
-    bounds bounds_() const
+    detail::bounds bounds_() const
     {
         return {x, y, x, y};
     }
@@ -738,7 +738,7 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
     }
 
     /// @private
-    bounds bounds_() const
+    detail::bounds bounds_() const
     {
         return {x, y, x, y};
     }
@@ -999,7 +999,7 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
     }
 
     /// @private
-    bounds bounds_() const
+    detail::bounds bounds_() const
     {
         return {x, y, x, y};
     }

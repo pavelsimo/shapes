@@ -7,8 +7,7 @@
 #include <iterator>
 #include <iomanip>
 #include <simo/geom/geometry.hpp>
-#include <simo/geom/detail/sequence.hpp>
-#include <simo/geom/bounds.hpp>
+#include <simo/geom/detail/bounds.hpp>
 
 namespace simo
 {
@@ -223,9 +222,9 @@ class basic_multilinestring : public std::vector<T, AllocatorType>, public basic
     }
 
     /// @private
-    bounds bounds_() const
+    detail::bounds bounds_() const
     {
-        bounds res{};
+        detail::bounds res{};
         for (const auto& p : *this)
         {
             res.extend(p.x, p.y);
