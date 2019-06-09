@@ -31,7 +31,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-  add_compile_options(/W4 /w44265 /w44061 /w44062)
+  add_compile_options(/W4 /w44265 /w44061 /w44062 /wd4068 /wd4061 /wd4577)
 endif()
 
 #

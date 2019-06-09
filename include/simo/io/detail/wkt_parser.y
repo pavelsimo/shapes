@@ -5,6 +5,9 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
 #pragma clang diagnostic ignored "-Wunused-variable"
+#pragma warning(push)
+#pragma warning(disable: 4100)
+#pragma warning(disable: 4189)
 }
 
 %extra_argument { struct wkt_result *result }
@@ -652,4 +655,5 @@ geometrycollection_zm ::= WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT geometrycollecti
 %code {
 #pragma clang diagnostic pop
 #pragma GCC diagnostic pop
+#pragma warning(pop)
 }
