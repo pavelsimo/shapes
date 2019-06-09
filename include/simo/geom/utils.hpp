@@ -74,7 +74,7 @@ int8_t get_ndim(dimension_type dim_type) noexcept
         case dimension_type::XYZ:
         case dimension_type::XYM:
             return 3;
-        case dimension_type::XY:
+        default:
             return 2;
     }
 }
@@ -104,11 +104,6 @@ geometry_type get_geom_type(geometry_type geom_type) noexcept
 {
     switch (geom_type)
     {
-        case geometry_type::GEOMETRY:
-        case geometry_type::GEOMETRYZ:
-        case geometry_type::GEOMETRYM:
-        case geometry_type::GEOMETRYZM:
-            return geometry_type::GEOMETRY;
         case geometry_type::POINT:
         case geometry_type::POINTZ:
         case geometry_type::POINTM:
@@ -189,6 +184,8 @@ geometry_type get_geom_type(geometry_type geom_type) noexcept
         case geometry_type::TINM:
         case geometry_type::TINZM:
             return geometry_type::TIN;
+        default:
+            return geometry_type::GEOMETRY;
     }
 }
 
