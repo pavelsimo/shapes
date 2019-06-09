@@ -78,38 +78,6 @@ TEST_CASE("Utils")
         CHECK(utils::get_ndim(geometry_type::GEOMETRYCOLLECTIONZM) == 4);
     }
 
-    SECTION("get_geom_type_dim()")
-    {
-        CHECK(utils::get_geom_type_dim(geometry_type::POINT, dimension_type::XY) == geometry_type::POINT);
-        CHECK(utils::get_geom_type_dim(geometry_type::POINT, dimension_type::XYZ) == geometry_type::POINTZ);
-        CHECK(utils::get_geom_type_dim(geometry_type::POINT, dimension_type::XYM) == geometry_type::POINTM);
-        CHECK(utils::get_geom_type_dim(geometry_type::POINT, dimension_type::XYZM) == geometry_type::POINTZM);
-        CHECK(utils::get_geom_type_dim(geometry_type::MULTIPOINT, dimension_type::XY) == geometry_type::MULTIPOINT);
-        CHECK(utils::get_geom_type_dim(geometry_type::MULTIPOINT, dimension_type::XYZ) == geometry_type::MULTIPOINTZ);
-        CHECK(utils::get_geom_type_dim(geometry_type::MULTIPOINT, dimension_type::XYM) == geometry_type::MULTIPOINTM);
-        CHECK(utils::get_geom_type_dim(geometry_type::MULTIPOINT, dimension_type::XYZM) == geometry_type::MULTIPOINTZM);
-        CHECK(utils::get_geom_type_dim(geometry_type::LINESTRING, dimension_type::XY) == geometry_type::LINESTRING);
-        CHECK(utils::get_geom_type_dim(geometry_type::LINESTRING, dimension_type::XYZ) == geometry_type::LINESTRINGZ);
-        CHECK(utils::get_geom_type_dim(geometry_type::LINESTRING, dimension_type::XYM) == geometry_type::LINESTRINGM);
-        CHECK(utils::get_geom_type_dim(geometry_type::LINESTRING, dimension_type::XYZM) == geometry_type::LINESTRINGZM);
-        CHECK(utils::get_geom_type_dim(geometry_type::MULTILINESTRING, dimension_type::XY) == geometry_type::MULTILINESTRING);
-        CHECK(utils::get_geom_type_dim(geometry_type::MULTILINESTRING, dimension_type::XYZ) == geometry_type::MULTILINESTRINGZ);
-        CHECK(utils::get_geom_type_dim(geometry_type::MULTILINESTRING, dimension_type::XYM) == geometry_type::MULTILINESTRINGM);
-        CHECK(utils::get_geom_type_dim(geometry_type::MULTILINESTRING, dimension_type::XYZM) == geometry_type::MULTILINESTRINGZM);
-        CHECK(utils::get_geom_type_dim(geometry_type::POLYGON, dimension_type::XY) == geometry_type::POLYGON);
-        CHECK(utils::get_geom_type_dim(geometry_type::POLYGON, dimension_type::XYZ) == geometry_type::POLYGONZ);
-        CHECK(utils::get_geom_type_dim(geometry_type::POLYGON, dimension_type::XYM) == geometry_type::POLYGONM);
-        CHECK(utils::get_geom_type_dim(geometry_type::POLYGON, dimension_type::XYZM) == geometry_type::POLYGONZM);
-        CHECK(utils::get_geom_type_dim(geometry_type::MULTIPOLYGON, dimension_type::XY) == geometry_type::MULTIPOLYGON);
-        CHECK(utils::get_geom_type_dim(geometry_type::MULTIPOLYGON, dimension_type::XYZ) == geometry_type::MULTIPOLYGONZ);
-        CHECK(utils::get_geom_type_dim(geometry_type::MULTIPOLYGON, dimension_type::XYM) == geometry_type::MULTIPOLYGONM);
-        CHECK(utils::get_geom_type_dim(geometry_type::MULTIPOLYGON, dimension_type::XYZM) == geometry_type::MULTIPOLYGONZM);
-        CHECK(utils::get_geom_type_dim(geometry_type::GEOMETRYCOLLECTION, dimension_type::XY) == geometry_type::GEOMETRYCOLLECTION);
-        CHECK(utils::get_geom_type_dim(geometry_type::GEOMETRYCOLLECTION, dimension_type::XYZ) == geometry_type::GEOMETRYCOLLECTIONZ);
-        CHECK(utils::get_geom_type_dim(geometry_type::GEOMETRYCOLLECTION, dimension_type::XYM) == geometry_type::GEOMETRYCOLLECTIONM);
-        CHECK(utils::get_geom_type_dim(geometry_type::GEOMETRYCOLLECTION, dimension_type::XYZM) == geometry_type::GEOMETRYCOLLECTIONZM);
-    }
-
     SECTION("get_geom_type()")
     {
         CHECK(utils::get_geom_type(geometry_type::POINT) == geometry_type::POINT);
