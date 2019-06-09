@@ -466,4 +466,24 @@ TEST_CASE("Point")
             }
         }
     }
+
+    SECTION("sizes")
+    {
+        CHECK(sizeof(point<double>) == 2 * sizeof(double));
+        CHECK(sizeof(point<float>) == 2 * sizeof(float));
+        CHECK(sizeof(point<int>) == 2 * sizeof(int));
+        CHECK(sizeof(point<char>) == 2 * sizeof(char));
+        CHECK(sizeof(point_z<double>) == 3 * sizeof(double));
+        CHECK(sizeof(point_z<float>) == 3 * sizeof(float));
+        CHECK(sizeof(point_z<int>) == 3 * sizeof(int));
+        CHECK(sizeof(point_z<char>) == 3 * sizeof(char));
+        CHECK(sizeof(point_m<double>) == 3 * sizeof(double));
+        CHECK(sizeof(point_m<float>) == 3 * sizeof(float));
+        CHECK(sizeof(point_m<int>) == 3 * sizeof(int));
+        CHECK(sizeof(point_m<char>) == 3 * sizeof(char));
+        CHECK(sizeof(point_zm<double>) == 4 * sizeof(double));
+        CHECK(sizeof(point_zm<float>) == 4 * sizeof(float));
+        CHECK(sizeof(point_zm<int>) == 4 * sizeof(int));
+        CHECK(sizeof(point_zm<char>) == 4 * sizeof(char));
+    }
 }
