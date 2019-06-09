@@ -22,14 +22,21 @@ namespace simo
 namespace shapes
 {
 
-/// disable anonymous union and structs warnings
+#ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
+#endif
+
+#ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wgnu-anonymous-struct"
 #pragma clang diagnostic ignored "-Wnested-anon-types"
+#endif
+
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable: 4201)
+#endif
 
 /*!
  * @brief DOCUMENT ME!
@@ -1098,9 +1105,17 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
     }
 };
 
+#ifdef __GNUC__
 #pragma GCC diagnostic pop
+#endif
+
+#ifdef __clang__
 #pragma clang diagnostic pop
+#endif
+
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 
 template <class T = double>
 using point = basic_point<T>;

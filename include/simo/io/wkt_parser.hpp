@@ -51,12 +51,25 @@ struct wkt_result
 ** in the input grammar file. */
 #include <stdio.h>
 
+
+#ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-variable"
+#endif
+
+#ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
 #pragma clang diagnostic ignored "-Wunused-variable"
+#endif
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4100)
+#pragma warning(disable: 4189)
+#endif
+
 /* Next is all token values, in a form suitable for use by makeheaders.
 ** This section will be null unless lemon is run with the -m switch.
 */
@@ -1911,8 +1924,19 @@ void Parse(
   return;
 }
 
-#pragma clang diagnostic pop
+
+#ifdef __GNUC__
 #pragma GCC diagnostic pop
+#endif
+
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
 
 }  // namespace shapes
 }  // namespace simo

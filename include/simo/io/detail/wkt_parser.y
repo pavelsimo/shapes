@@ -1,13 +1,23 @@
 %include {
+
+#ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wunused-variable"
+#endif
+
+#ifdef __clang__
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
 #pragma clang diagnostic ignored "-Wunused-variable"
+#endif
+
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable: 4100)
 #pragma warning(disable: 4189)
+#endif
+
 }
 
 %extra_argument { struct wkt_result *result }
@@ -653,7 +663,17 @@ geometrycollection_zm ::= WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT geometrycollecti
 }
 
 %code {
-#pragma clang diagnostic pop
+
+#ifdef __GNUC__
 #pragma GCC diagnostic pop
+#endif
+
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
+
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
+
 }
