@@ -10,6 +10,7 @@ A lightweight header-only geometry library for Modern C++
 
 - Inspired by python [shapely](https://pypi.org/project/Shapely/)
 - Based on OGC [Simple Features](https://en.wikipedia.org/wiki/Simple_Features)
+- Built on top of STL containers
 
 ## Installation
 
@@ -92,6 +93,20 @@ auto ml = MultiLineString{
     {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
     {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}
 };
+```
+
+Applying a basic transformation to a `MultiPoint`:
+
+```cpp
+auto mp  = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
+std::transform(mp.begin(), mp.end(), mp.begin(), [](const Point& p) -> Point {
+  return {p.x + 10, p.y + 10};
+});
+std::cout << mp.wkt() << '\n';
+```
+
+```text
+MULTIPOINT((11 12),(13 14))
 ```
 
 ## Third-party tools
