@@ -5,32 +5,32 @@ environment:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       platform: x86
       SHAPES_CXX: Visual Studio 14 2015
-      SHAPES_CXX_FLAGS: "-DNOGDI"
+      SHAPES_CXX_FLAGS: ""
 
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       platform: x86
       SHAPES_CXX: Visual Studio 15 2017
-      SHAPES_CXX_FLAGS: "-DNOGDI"
+      SHAPES_CXX_FLAGS: ""
 
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       platform: x86
       SHAPES_CXX: Visual Studio 15 2017
-      SHAPES_CXX_FLAGS: "/permissive- /std:c++latest /utf-8 -DNOGDI"
+      SHAPES_CXX_FLAGS: "/permissive- /std:c++latest /utf-8"
 
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       platform: x64
       SHAPES_CXX: Visual Studio 14 2015
-      SHAPES_CXX_FLAGS: "-DNOGDI"
+      SHAPES_CXX_FLAGS: ""
 
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       platform: x64
       SHAPES_CXX: Visual Studio 15 2017
-      SHAPES_CXX_FLAGS: "-DNOGDI"
+      SHAPES_CXX_FLAGS: ""
 
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
       platform: x64
       SHAPES_CXX: Visual Studio 15 2017
-      SHAPES_CXX_FLAGS: "/permissive- /std:c++latest /utf-8 -DNOGDI"
+      SHAPES_CXX_FLAGS: "/permissive- /std:c++latest /utf-8"
 
 init:
   - cmake --version

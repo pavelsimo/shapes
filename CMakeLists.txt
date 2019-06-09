@@ -32,6 +32,7 @@ endif()
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
   add_compile_options(/W4 /EHsc /wd4065 /wd4061 /wd4577)
+  add_definitions(-DNOGDI)
 endif()
 
 #
