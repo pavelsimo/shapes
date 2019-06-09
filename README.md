@@ -44,18 +44,18 @@ std::cout << p.json() << '\n';
 Iterating a `MultiPoint` is as simple as:
 
 ```cpp
-auto points = MultiPoint{{0, 0}, {1, 2}, {4, 5}, {7, 7}};
-for(const auto& point: points)
+auto mp = MultiPoint{{0, 0}, {1, 2}, {4, 5}, {7, 7}};
+for(const auto& p: mp)
 {
-    std::cout << point.x << " " << point.y << '\n';
+    std::cout << p.x << " " << p.y << '\n';
 } 
 ```
 
 WKT representation of a `MultiPoint`:
 
 ```cpp
-auto points = MultiPoint{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
-std::cout << points.wkt() << '\n';
+auto mp = MultiPointZ{{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}};
+std::cout << mp.wkt() << '\n';
 ```
 
 ```text
