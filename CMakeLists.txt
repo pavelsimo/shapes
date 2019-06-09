@@ -23,7 +23,7 @@ option(SHAPES_VERBOSE "whether to enable verbose output" OFF)
 # warning settings
 #
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
-  add_compile_options(-Wall -Wextra -Wunreachable-code -Wpedantic)
+  add_compile_options(-Wall -Wextra -Wunreachable-code -Wpedantic -Wno-unknown-pragmas)
 endif()
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")

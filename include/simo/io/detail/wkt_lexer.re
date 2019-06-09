@@ -6,7 +6,6 @@
 
 namespace simo
 {
-
 namespace shapes
 {
 

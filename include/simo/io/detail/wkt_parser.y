@@ -1,5 +1,10 @@
 %include {
-
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#pragma clang diagnostic ignored "-Wunused-variable"
 }
 
 %extra_argument { struct wkt_result *result }
@@ -642,4 +647,9 @@ geometrycollection_zm ::= WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT WKT_EMPTY_SET.
 geometrycollection_zm ::= WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT geometrycollection_text_zm.
 {
     result->data.geom_type = geometry_type::GEOMETRYCOLLECTIONZM;
+}
+
+%code {
+#pragma clang diagnostic pop
+#pragma GCC diagnostic pop
 }

@@ -109,7 +109,6 @@ class basic_geometry
         {
             return false;
         }
-
         return true;
     }
 

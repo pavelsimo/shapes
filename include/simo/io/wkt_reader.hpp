@@ -11,6 +11,10 @@ namespace simo
 namespace shapes
 {
 
+#ifdef SHAPES_VERBOSE
+static char WKT_TRACE_PREFIX[] = "[shapes] ";
+#endif
+
 /*!
  * @brief a Well-known text (WKT) markup language reader
  * @ingroup wkt
@@ -50,7 +54,7 @@ class wkt_reader
         wkt_result result{};
 
 #ifdef SHAPES_VERBOSE
-        ParseTrace(stdout, "[shapes] ");
+        ParseTrace(stdout, WKT_TRACE_PREFIX);
 #endif
         while (true)
         {
