@@ -9,21 +9,21 @@ namespace shapes
 {
 
 template <class T = double>
-using linestring = basic_linestring<basic_point<T>>;
+using linestring_t = basic_linestring<basic_point<T>>;
 
 template <class T = double>
-using linestring_z = basic_linestring<basic_point_z<T>>;
+using linestring_z_t = basic_linestring<basic_point_z<T>>;
 
 template <class T = double>
-using linestring_m = basic_linestring<basic_point_m<T>>;
+using linestring_m_t = basic_linestring<basic_point_m<T>>;
 
 template <class T = double>
-using linestring_zm = basic_linestring<basic_point_zm<T>>;
+using linestring_zm_t = basic_linestring<basic_point_zm<T>>;
 
-using LineString   = linestring<double>;
-using LineStringZ  = linestring_z<double>;
-using LineStringM  = linestring_m<double>;
-using LineStringZM = linestring_zm<double>;
+using LineString   = linestring_t<double>;
+using LineStringZ  = linestring_z_t<double>;
+using LineStringM  = linestring_m_t<double>;
+using LineStringZM = linestring_zm_t<double>;
 
 }  // namespace shapes
 }  // namespace simo

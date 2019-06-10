@@ -9,21 +9,21 @@ namespace shapes
 {
 
 template <class T = double>
-using linearring = basic_linestring<basic_point<T>>;
+using linearring_t = basic_linestring<basic_point<T>>;
 
 template <class T = double>
-using linearring_z = basic_linestring<basic_point_z<T>>;
+using linearring_z_t = basic_linestring<basic_point_z<T>>;
 
 template <class T = double>
-using linearring_m = basic_linestring<basic_point_m<T>>;
+using linearring_m_t = basic_linestring<basic_point_m<T>>;
 
 template <class T = double>
-using linearring_zm = basic_linestring<basic_point_zm<T>>;
+using linearring_zm_t = basic_linestring<basic_point_zm<T>>;
 
-using LinearRing   = linearring<double>;
-using LinearRingZ  = linearring_z<double>;
-using LinearRingM  = linearring_m<double>;
-using LinearRingZM = linearring_zm<double>;
+using LinearRing   = linearring_t<double>;
+using LinearRingZ  = linearring_z_t<double>;
+using LinearRingM  = linearring_m_t<double>;
+using LinearRingZM = linearring_zm_t<double>;
 
 /// @todo (pavel) LinearRing is not closed, first and last point are different
 /// @todo (pavel) LinearRing should be either empty or with 4 or more points

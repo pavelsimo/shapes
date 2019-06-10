@@ -3,7 +3,7 @@
 #include <ciso646>
 #include <iostream>
 #include <cassert>
-#include <simo/geom/types.hpp>
+#include <simo/geom/detail/types.hpp>
 #include <simo/io/wkt_token.hpp>
 
 namespace simo

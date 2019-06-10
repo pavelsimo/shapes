@@ -9,21 +9,21 @@ namespace shapes
 {
 
 template <class T = double>
-using point = basic_point<T>;
+using point_t = basic_point<T>;
 
 template <class T = double>
-using point_z = basic_point_z<T>;
+using point_z_t = basic_point_z<T>;
 
 template <class T = double>
-using point_m = basic_point_m<T>;
+using point_m_t = basic_point_m<T>;
 
 template <class T = double>
-using point_zm = basic_point_zm<T>;
+using point_zm_t = basic_point_zm<T>;
 
-using Point   = point<double>;
-using PointZ  = point_z<double>;
-using PointM  = point_m<double>;
-using PointZM = point_zm<double>;
+using Point   = point_t<double>;
+using PointZ  = point_z_t<double>;
+using PointM  = point_m_t<double>;
+using PointZM = point_zm_t<double>;
 
 }  // namespace shapes
 }  // namespace simo

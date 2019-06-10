@@ -202,21 +202,5 @@ class basic_geometry
     }
 };
 
-///*
-// * @brief The geometry type
-// *
-// * @since 0.0.1
-// */
-//typedef union Geometry
-//{
-//    Point* point;                            ///< Point value
-//    MultiPoint* multipoint;                  ///< MultiPoint value
-//    LineString* linestring;                  ///< LineString value
-//    MultiLineString* multilinestring;        ///< MultiLineString value
-//    Polygon* polygon;                        ///< Polygon value
-//    MultiPolygon* multipolygon;              ///< MultiPolygon value
-//    GeometryCollection* geometrycollection;  ///< GeometryCollection value
-//} Geometry;
-
 }  // namespace shapes
 }  // namespace simo

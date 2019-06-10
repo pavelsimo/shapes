@@ -9,21 +9,21 @@ namespace shapes
 {
 
 template <class T = double>
-using polygon = basic_polygon<linearring<T>>;
+using polygon_t = basic_polygon<linearring_t<T>>;
 
 template <class T = double>
-using polygon_z = basic_polygon<linearring_z<T>>;
+using polygon_z_t = basic_polygon<linearring_z_t<T>>;
 
 template <class T = double>
-using polygon_m = basic_polygon<linearring_m<T>>;
+using polygon_m_t = basic_polygon<linearring_m_t<T>>;
 
 template <class T = double>
-using polygon_zm = basic_polygon<linearring_zm<T>>;
+using polygon_zm_t = basic_polygon<linearring_zm_t<T>>;
 
-using Polygon   = polygon<double>;
-using PolygonZ  = polygon_z<double>;
-using PolygonM  = polygon_m<double>;
-using PolygonZM = polygon_zm<double>;
+using Polygon   = polygon_t<double>;
+using PolygonZ  = polygon_z_t<double>;
+using PolygonM  = polygon_m_t<double>;
+using PolygonZM = polygon_zm_t<double>;
 
 }  // namespace shapes
 }  // namespace simo
