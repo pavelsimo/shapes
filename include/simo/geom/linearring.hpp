@@ -8,14 +8,6 @@ namespace simo
 namespace shapes
 {
 
-/*!
- * @brief a LineString that is both closed and simple, in shapes this feature is implicitly closed,
- * there is no need to specify the last coordinate, it will always be identical to the first.
- *
- * @ingroup geometry
- *
- * @since 0.0.1
- */
 template <class T = double>
 using linearring = basic_linestring<basic_point<T>>;
 
