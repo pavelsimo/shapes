@@ -689,8 +689,8 @@ TEST_CASE("MultiPoint")
 
     SECTION("bounds")
     {
-        auto mp  = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
-        auto b = mp.bounds();
+        auto mp = MultiPoint{{1.0, 2.0}, {3.0, 4.0}};
+        auto b  = mp.bounds();
         CHECK(b.maxx == 3.0);
         CHECK(b.maxy == 4.0);
         CHECK(b.minx == 1.0);

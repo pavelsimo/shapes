@@ -1,12 +1,7 @@
 #pragma once
 
 #include <ciso646>
-#include <vector>
-#include <set>
-#include <sstream>
-#include <iomanip>
-#include <simo/geom/geometry.hpp>
-#include <simo/geom/detail/bounds.hpp>
+#include <simo/geom/detail/multipolygon.hpp>
 
 namespace simo
 {

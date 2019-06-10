@@ -688,8 +688,8 @@ TEST_CASE("LineString")
 
     SECTION("bounds")
     {
-        auto ls  = LineString{{1.0, 2.0}, {3.0, 4.0}};
-        auto b = ls.bounds();
+        auto ls = LineString{{1.0, 2.0}, {3.0, 4.0}};
+        auto b  = ls.bounds();
         CHECK(b.maxx == 3.0);
         CHECK(b.maxy == 4.0);
         CHECK(b.minx == 1.0);

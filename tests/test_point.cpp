@@ -467,7 +467,7 @@ TEST_CASE("Point")
         }
     }
 
-    SECTION("sizes")
+    SECTION("sizeof")
     {
         CHECK(sizeof(point<double>) == 2 * sizeof(double));
         CHECK(sizeof(point<float>) == 2 * sizeof(float));

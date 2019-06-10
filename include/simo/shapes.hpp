@@ -40,7 +40,6 @@ SOFTWARE.
 #include <tuple>
 
 #include <simo/shapes_fwd.hpp>
-#include <simo/geom/utils.hpp>
 #include <simo/geom/geometry.hpp>
 #include <simo/geom/detail/bounds.hpp>
 #include <simo/geom/point.hpp>

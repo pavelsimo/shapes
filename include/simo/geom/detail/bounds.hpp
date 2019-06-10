@@ -8,15 +8,14 @@ namespace simo
 {
 namespace shapes
 {
-namespace detail
-{
+
 /*!
  * @brief Represents an axis-aligned bounding box
  * @ingroup geometry
  *
  * @since 0.0.1
  */
-struct bounds
+struct bounds_t
 {
     /// the minimum x-coordinate
     double minx;
@@ -35,7 +34,7 @@ struct bounds
          *
          * @since 0.0.1
          */
-    bounds()
+    bounds_t()
         : minx(std::numeric_limits<double>::max()),
           miny(std::numeric_limits<double>::max()),
           maxx(std::numeric_limits<double>::min()),
@@ -53,7 +52,7 @@ struct bounds
      *
      * @since 0.0.1
      */
-    bounds(double minx, double miny, double maxx, double maxy)
+    bounds_t(double minx, double miny, double maxx, double maxy)
         : minx(minx), miny(miny), maxx(maxx), maxy(maxy)
     {
     }
@@ -67,7 +66,7 @@ struct bounds
      *
      * @since 0.0.1
      */
-    bounds& extend(double x, double y)
+    bounds_t& extend(double x, double y)
     {
         minx = std::min(x, minx);
         maxx = std::max(x, maxx);
@@ -85,7 +84,7 @@ struct bounds
      *
      * @since 0.0.1
      */
-    bounds& extend(const bounds& b)
+    bounds_t& extend(const bounds_t& b)
     {
         minx = std::min(b.minx, minx);
         maxx = std::max(b.maxx, maxx);
@@ -162,7 +161,7 @@ struct bounds
      *
      * @since 0.0.1
      */
-    bool contains(const bounds& other)
+    bool contains(const bounds_t& other)
     {
         return contains(other.minx, other.miny) && contains(other.maxx, other.maxy);
     }
@@ -173,7 +172,7 @@ struct bounds
      *
      * @since 0.0.1
      */
-    bool intersects(const bounds& other)
+    bool intersects(const bounds_t& other)
     {
         return (other.maxx >= minx) && (other.minx <= maxx) && (other.maxy >= miny) && (other.miny <= maxy);
     }
@@ -184,12 +183,11 @@ struct bounds
      *
      * @since 0.0.1
      */
-    bool overlaps(const bounds& other)
+    bool overlaps(const bounds_t& other)
     {
         return (other.maxx > minx) && (other.minx < maxx) && (other.maxy > miny) && (other.miny < maxy);
     }
 };
 
-}  // namespace detail
 }  // namespace shapes
 }  // namespace simo

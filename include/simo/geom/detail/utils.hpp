@@ -1,7 +1,7 @@
 #pragma once
 
 #include <ciso646>
-#include <simo/geom/types.hpp>
+#include <simo/geom/detail/types.hpp>
 
 namespace simo
 {
