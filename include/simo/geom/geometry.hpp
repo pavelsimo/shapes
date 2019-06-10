@@ -37,8 +37,8 @@ class geometry_t : basic_geometry<geometry_t<T>>
     geometry_t(geometry_t&& other) noexcept
         : m_value(std::move(other.m_value)), m_geom_type(std::move(other.m_geom_type))
     {
-        other.m_type = geometry_type::GEOMETRY;
-        other.m_value = {};
+        //other.m_type = geometry_type::GEOMETRY;
+        //other.m_value = {};
     }
     // move assignment
     geometry_t& operator=(geometry_t&&) noexcept
