@@ -8,43 +8,59 @@ TEST_CASE("Geometry")
 {
     SECTION("Point")
     {
+        SECTION("xy")
         {
             Geometry geom(Point(1, 2));
+            CHECK(geom.is_point());
             auto p = geom.get<Point>();
-            std::cout << p->x << std::endl;
-            std::cout << p->y << std::endl;
+            CHECK(p->x == 1);
+            CHECK(p->y == 2);
         }
 
+        SECTION("xyz")
         {
             Geometry geom(PointZ(1, 2, 3));
+            CHECK(geom.is_point_z());
             auto p = geom.get<PointZ>();
-            std::cout << p->x << std::endl;
-            std::cout << p->y << std::endl;
-            std::cout << p->z << std::endl;
+            CHECK(p->x == 1);
+            CHECK(p->y == 2);
+            CHECK(p->z == 3);
         }
 
+        SECTION("xym")
         {
             Geometry geom(PointM(1, 2, 3));
+            CHECK(geom.is_point_m());
             auto p = geom.get<PointM>();
-            std::cout << p->x << std::endl;
-            std::cout << p->y << std::endl;
-            std::cout << p->m << std::endl;
+            CHECK(p->x == 1);
+            CHECK(p->y == 2);
+            CHECK(p->m == 3);
         }
 
+        SECTION("xyzm")
         {
             Geometry geom(PointZM(1, 2, 3, 4));
+            CHECK(geom.is_point_zm());
             auto p = geom.get<PointZM>();
-            std::cout << p->x << std::endl;
-            std::cout << p->y << std::endl;
-            std::cout << p->z << std::endl;
-            std::cout << p->m << std::endl;
+            CHECK(p->x == 1);
+            CHECK(p->y == 2);
+            CHECK(p->z == 3);
+            CHECK(p->m == 4);
         }
 
+        SECTION("wkt")
         {
-            Geometry geom(Point(1.0, 2.0));
-            auto p = geom.get<Point>();
-            std::cout << p->x << std::endl;
-            std::cout << p->y << std::endl;
+            std::vector<Geometry> geoms;
+            std::cout << sizeof(Geometry) << std::endl;
+            geoms.reserve(10);
+            geoms.emplace_back(Point(1, 2));
+            geoms.emplace_back(PointZ(1, 2, 3));
+            geoms.emplace_back(PointM(1, 2, 3));
+            geoms.emplace_back(PointZM(1, 2, 3, 4));
+            std::cout << geoms[0].get<Point>()->wkt() << std::endl;
+            std::cout << geoms[1].get<PointZ>()->wkt() << std::endl;
+            std::cout << geoms[2].get<PointM>()->wkt() << std::endl;
+            std::cout << geoms[3].get<PointZM>()->wkt() << std::endl;
         }
     }
 }

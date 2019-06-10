@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ciso646>
+#include <simo/geom/detail/geometry.hpp>
 #include <simo/geom/point.hpp>
 #include <simo/geom/multipoint.hpp>
 #include <simo/geom/linestring.hpp>
@@ -14,63 +15,89 @@ namespace shapes
 {
 
 template <typename T>
-class geometry
+class geometry_t : basic_geometry<geometry_t<T>>
 {
   public:
-    geometry()
-        : m_geom_type(geometry_type::GEOMETRY)
+    // default constructor
+    geometry_t()
     {
     }
 
-    geometry(const point_t<T>& p)
-        : m_point(new point_t<T>(p)), m_geom_type(geometry_type::POINT)
+    // copy constructor:
+    geometry_t(const geometry_t& other)
+    {
+        m_value = other.m_value;
+    }
+    // copy assignment:
+    geometry_t& operator=(const geometry_t& other)
     {
     }
 
-    geometry(const point_z_t<T>& p)
-        : m_point_z(new point_z_t<T>(p)), m_geom_type(geometry_type::POINTZ)
+    // move constructor:
+    geometry_t(geometry_t&& other) noexcept
+        : m_value(std::move(other.m_value)), m_geom_type(std::move(other.m_geom_type))
+    {
+        other.m_type = geometry_type::GEOMETRY;
+        other.m_value = {};
+    }
+    // move assignment
+    geometry_t& operator=(geometry_t&&) noexcept
     {
     }
 
-    geometry(const point_m_t<T>& p)
-        : m_point_m(new point_m_t<T>(p)), m_geom_type(geometry_type::POINTM)
+    geometry_t(const point_t<T>& p)
+        : m_geom_type(geometry_type::POINT)
     {
+        m_value.m_point = new point_t<T>(p);
     }
 
-    geometry(const point_zm_t<T>& p)
-        : m_point_zm(new point_zm_t<T>(p)), m_geom_type(geometry_type::POINTZM)
+    geometry_t(const point_z_t<T>& p)
+        : m_geom_type(geometry_type::POINTZ)
     {
+        m_value.m_point_z = new point_z_t<T>(p);
     }
 
-    ~geometry()
+    geometry_t(const point_m_t<T>& p)
+        : m_geom_type(geometry_type::POINTM)
+    {
+        m_value.m_point_m = new point_m_t<T>(p);
+    }
+
+    geometry_t(const point_zm_t<T>& p)
+        : m_geom_type(geometry_type::POINTZM)
+    {
+        m_value.m_point_zm = new point_zm_t<T>(p);
+    }
+
+    ~geometry_t()
     {
         switch (m_geom_type)
         {
             case geometry_type::POINT:
             {
-                delete m_point;
-                m_point = nullptr;
+                delete m_value.m_point;
+                m_value.m_point = nullptr;
                 std::cout << "DELETE POINT" << std::endl;
                 break;
             }
             case geometry_type::POINTZ:
             {
-                delete m_point_z;
-                m_point_z = nullptr;
+                delete m_value.m_point_z;
+                m_value.m_point_z = nullptr;
                 std::cout << "DELETE POINT Z" << std::endl;
                 break;
             }
             case geometry_type::POINTM:
             {
-                delete m_point_m;
-                m_point_m = nullptr;
+                delete m_value.m_point_m;
+                m_value.m_point_m = nullptr;
                 std::cout << "DELETE POINT M" << std::endl;
                 break;
             }
             case geometry_type::POINTZM:
             {
-                delete m_point_zm;
-                m_point_zm = nullptr;
+                delete m_value.m_point_zm;
+                m_value.m_point_zm = nullptr;
                 std::cout << "DELETE POINT ZM" << std::endl;
                 break;
             }
@@ -137,33 +164,33 @@ class geometry
     point_t<T>* get_point()
     {
         assert(m_geom_type == geometry_type::POINT);
-        return m_point;
+        return m_value.m_point;
     }
 
     /// @private
     point_z_t<T>* get_point_z()
     {
         assert(m_geom_type == geometry_type::POINTZ);
-        return m_point_z;
+        return m_value.m_point_z;
     }
 
     /// @private
     point_m_t<T>* get_point_m()
     {
         assert(m_geom_type == geometry_type::POINTM);
-        return m_point_m;
+        return m_value.m_point_m;
     }
 
     /// @private
     point_zm_t<T>* get_point_zm()
     {
         assert(m_geom_type == geometry_type::POINTZM);
-        return m_point_zm;
+        return m_value.m_point_zm;
     }
 
     geometry_type m_geom_type;
 
-    union
+    union geom_value
     {
         point_t<T>* m_point;
         point_z_t<T>* m_point_z;
@@ -185,14 +212,55 @@ class geometry
         polygon_z_t<T>* m_polygon_z;
         polygon_m_t<T>* m_polygon_m;
         polygon_zm_t<T>* m_polygon_zm;
-        //multipolygon<T>* m_multipolygon;
-        //multipolygon_z<T>* m_multipolygon_z;
-        //multipolygon_m<T>* m_multipolygon_m;
-        //multipolygon_zm<T>* m_multipolygon_zm;
-    };
+        multipolygon_t<T>* m_multipolygon;
+        multipolygon_z_t<T>* m_multipolygon_z;
+        multipolygon_m_t<T>* m_multipolygon_m;
+        multipolygon_zm_t<T>* m_multipolygon_zm;
+
+        // default constructor
+        geom_value() = default;
+
+        // copy constructor:
+        geom_value(const geom_value&)
+        {
+        }
+        // copy assignment:
+        geom_value& operator=(const geom_value&)
+        {
+        }
+
+        // move constructor:
+        geom_value(geom_value&&) noexcept
+        {
+        }
+        // move assignment
+        geom_value& operator=(geom_value&&) noexcept
+        {
+        }
+
+        geom_value(const point_t<T>& p)
+            : m_point(new point_t<T>(p))
+        {
+        }
+
+        geom_value(const point_z_t<T>& p)
+            : m_point_z(new point_z_t<T>(p))
+        {
+        }
+
+        geom_value(const point_m_t<T>& p)
+            : m_point_m(new point_m_t<T>(p))
+        {
+        }
+
+        geom_value(const point_zm_t<T>& p)
+            : m_point_zm(new point_zm_t<T>(p))
+        {
+        }
+    } m_value;
 };
 
-using Geometry = geometry<double>;
+using Geometry = geometry_t<double>;
 
 }  // namespace shapes
 }  // namespace simo
