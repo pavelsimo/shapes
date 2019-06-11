@@ -19,73 +19,83 @@ class geometry_t : public basic_geometry<geometry_t<T>>
 {
   public:
     // default constructor
-    geometry_t()
-        : m_geom_type(geometry_type::GEOMETRY), m_value(nullptr)
-    {
+    geometry_t() {
+        std::cout << "DEFAULT CONSTRUCTOR" << std::endl;
     }
 
     // copy constructor:
     geometry_t(const geometry_t& other)
     {
+        std::cout << "COPY CONSTRUCTOR" << std::endl;
         m_geom_type = other.point()->geom_type();
         switch (other.geom_type())
         {
             case geometry_type::POINT:
             {
-                m_value.m_point = geom_value(*other.point());
+                m_value = geom_value(*other.point());
                 break;
             }
             case geometry_type::POINTZ:
             {
-                m_value.m_point_z = geom_value(*other.point_z());
+                m_value = geom_value(*other.point_z());
                 break;
             }
             case geometry_type::POINTM:
             {
-                m_value.m_point_m = geom_value(*other.point_m());
+                m_value = geom_value(*other.point_m());
                 break;
             }
             case geometry_type::POINTZM:
             {
-                m_value.m_point_zm = geom_value(*other.point_zm());
+                m_value = geom_value(*other.point_zm());
                 break;
             }
         }
     }
-    // copy assignment:
+    // copy assignment
     geometry_t& operator=(const geometry_t& other)
     {
+        std::cout << "COPY ASSIGNMENT" << std::endl;
+        geometry_t temp(other);
+        swap(*this, temp);
+        return *this;
     }
 
-    // move constructor:
+    // move constructor
     geometry_t(geometry_t&& other) noexcept
-        : m_value(std::move(other.m_value)), m_geom_type(std::move(other.m_geom_type))
+        : geometry_t()
     {
+        std::cout << "MOVE CONSTRUCTOR" << std::endl;
+        swap(*this, other);
     }
-    // move assignment
-    geometry_t& operator=(geometry_t&&) noexcept
+
+    friend void swap(geometry_t& lhs, geometry_t& rhs) // nothrow
     {
+        // enable ADL (not necessary in our case, but good practice)
+        using std::swap;
+        swap(lhs.m_value, rhs.m_value);
+        swap(lhs.m_geom_type, rhs.m_geom_type);
     }
 
     explicit geometry_t(const point_t<T>& p)
-        : m_geom_type(geometry_type::POINT), m_value(p)
+        : m_value(p), m_geom_type(geometry_type::POINT)
     {
 
     }
 
     explicit geometry_t(const point_z_t<T>& p)
-        : m_geom_type(geometry_type::POINTZ), m_value(p)
+        : m_value(p), m_geom_type(geometry_type::POINTZ)
     {
 
     }
 
     explicit geometry_t(const point_m_t<T>& p)
-        : m_geom_type(geometry_type::POINTM), m_value(p)
+        : m_value(p), m_geom_type(geometry_type::POINTM)
     {
     }
 
     explicit geometry_t(const point_zm_t<T>& p)
-        : m_geom_type(geometry_type::POINTZM), m_value(p)
+        : m_value(p), m_geom_type(geometry_type::POINTZM)
     {
     }
 
@@ -97,28 +107,28 @@ class geometry_t : public basic_geometry<geometry_t<T>>
             {
                 delete m_value.m_point;
                 m_value.m_point = nullptr;
-                //std::cout << "DELETE POINT" << std::endl;
+                std::cout << "DELETE POINT" << std::endl;
                 break;
             }
             case geometry_type::POINTZ:
             {
                 delete m_value.m_point_z;
                 m_value.m_point_z = nullptr;
-                //std::cout << "DELETE POINT Z" << std::endl;
+                std::cout << "DELETE POINT Z" << std::endl;
                 break;
             }
             case geometry_type::POINTM:
             {
                 delete m_value.m_point_m;
                 m_value.m_point_m = nullptr;
-                //std::cout << "DELETE POINT M" << std::endl;
+                std::cout << "DELETE POINT M" << std::endl;
                 break;
             }
             case geometry_type::POINTZM:
             {
                 delete m_value.m_point_zm;
                 m_value.m_point_zm = nullptr;
-                //std::cout << "DELETE POINT ZM" << std::endl;
+                std::cout << "DELETE POINT ZM" << std::endl;
                 break;
             }
             default:
@@ -200,8 +210,6 @@ class geometry_t : public basic_geometry<geometry_t<T>>
     /// for allow basic_geometry to access basic_point_zm private members
     friend class basic_geometry<geometry_t<T>>;
 
-    geometry_type m_geom_type;
-
     union geom_value
     {
         point_t<T>* m_point;
@@ -232,24 +240,6 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         // default constructor
         geom_value() = default;
 
-        // copy constructor:
-        geom_value(const geom_value&)
-        {
-        }
-        // copy assignment:
-        geom_value& operator=(const geom_value&)
-        {
-        }
-
-        // move constructor:
-        geom_value(geom_value&&) noexcept
-        {
-        }
-        // move assignment
-        geom_value& operator=(geom_value&&) noexcept
-        {
-        }
-
         explicit geom_value(const point_t<T>& p)
             : m_point(new point_t<T>(p))
         {
@@ -269,9 +259,10 @@ class geometry_t : public basic_geometry<geometry_t<T>>
             : m_point_zm(new point_zm_t<T>(p))
         {
         }
-    } m_value;
+    };
 
-
+    geom_value m_value = {};
+    geometry_type m_geom_type = geometry_type::GEOMETRY;
 
     /// @private
     geometry_type geom_type_() const noexcept

@@ -50,13 +50,21 @@ TEST_CASE("Geometry")
 
         SECTION("wkt")
         {
+            std::cout << "WKT EXAMPLE" << std::endl;
             std::vector<Geometry> geoms;
-            std::cout << sizeof(Geometry) << std::endl;
+            std::cout << "SIZEOF=" << sizeof(Geometry) << std::endl;
             geoms.reserve(10);
+            std::cout << "- CAPACITY=" << geoms.capacity() << std::endl;
             geoms.emplace_back(Point(1, 2));
+            std::cout << "- CAPACITY=" << geoms.capacity() << std::endl;
             geoms.emplace_back(PointZ(1, 2, 3));
+            std::cout << "- CAPACITY=" << geoms.capacity() << std::endl;
             geoms.emplace_back(PointM(1, 2, 3));
+            std::cout << "- CAPACITY=" << geoms.capacity() << std::endl;
             geoms.emplace_back(PointZM(1, 2, 3, 4));
+            std::cout << "- CAPACITY=" << geoms.capacity() << std::endl;
+            geoms.emplace_back(PointZM(8, 9, 10, 11));
+            std::cout << "- CAPACITY=" << geoms.capacity() << std::endl;
             for (const auto& p : geoms)
             {
                 std::cout << p.wkt() << std::endl;
