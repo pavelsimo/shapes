@@ -15,18 +15,42 @@ namespace shapes
 {
 
 template <typename T>
-class geometry_t : basic_geometry<geometry_t<T>>
+class geometry_t : public basic_geometry<geometry_t<T>>
 {
   public:
     // default constructor
     geometry_t()
+        : m_geom_type(geometry_type::GEOMETRY), m_value(nullptr)
     {
     }
 
     // copy constructor:
     geometry_t(const geometry_t& other)
     {
-        m_value = other.m_value;
+        m_geom_type = other.point()->geom_type();
+        switch (other.geom_type())
+        {
+            case geometry_type::POINT:
+            {
+                m_value.m_point = geom_value(*other.point());
+                break;
+            }
+            case geometry_type::POINTZ:
+            {
+                m_value.m_point_z = geom_value(*other.point_z());
+                break;
+            }
+            case geometry_type::POINTM:
+            {
+                m_value.m_point_m = geom_value(*other.point_m());
+                break;
+            }
+            case geometry_type::POINTZM:
+            {
+                m_value.m_point_zm = geom_value(*other.point_zm());
+                break;
+            }
+        }
     }
     // copy assignment:
     geometry_t& operator=(const geometry_t& other)
@@ -37,36 +61,32 @@ class geometry_t : basic_geometry<geometry_t<T>>
     geometry_t(geometry_t&& other) noexcept
         : m_value(std::move(other.m_value)), m_geom_type(std::move(other.m_geom_type))
     {
-        //other.m_type = geometry_type::GEOMETRY;
-        //other.m_value = {};
     }
     // move assignment
     geometry_t& operator=(geometry_t&&) noexcept
     {
     }
 
-    geometry_t(const point_t<T>& p)
-        : m_geom_type(geometry_type::POINT)
+    explicit geometry_t(const point_t<T>& p)
+        : m_geom_type(geometry_type::POINT), m_value(p)
     {
-        m_value.m_point = new point_t<T>(p);
+
     }
 
-    geometry_t(const point_z_t<T>& p)
-        : m_geom_type(geometry_type::POINTZ)
+    explicit geometry_t(const point_z_t<T>& p)
+        : m_geom_type(geometry_type::POINTZ), m_value(p)
     {
-        m_value.m_point_z = new point_z_t<T>(p);
+
     }
 
-    geometry_t(const point_m_t<T>& p)
-        : m_geom_type(geometry_type::POINTM)
+    explicit geometry_t(const point_m_t<T>& p)
+        : m_geom_type(geometry_type::POINTM), m_value(p)
     {
-        m_value.m_point_m = new point_m_t<T>(p);
     }
 
-    geometry_t(const point_zm_t<T>& p)
-        : m_geom_type(geometry_type::POINTZM)
+    explicit geometry_t(const point_zm_t<T>& p)
+        : m_geom_type(geometry_type::POINTZM), m_value(p)
     {
-        m_value.m_point_zm = new point_zm_t<T>(p);
     }
 
     ~geometry_t()
@@ -77,28 +97,28 @@ class geometry_t : basic_geometry<geometry_t<T>>
             {
                 delete m_value.m_point;
                 m_value.m_point = nullptr;
-                std::cout << "DELETE POINT" << std::endl;
+                //std::cout << "DELETE POINT" << std::endl;
                 break;
             }
             case geometry_type::POINTZ:
             {
                 delete m_value.m_point_z;
                 m_value.m_point_z = nullptr;
-                std::cout << "DELETE POINT Z" << std::endl;
+                //std::cout << "DELETE POINT Z" << std::endl;
                 break;
             }
             case geometry_type::POINTM:
             {
                 delete m_value.m_point_m;
                 m_value.m_point_m = nullptr;
-                std::cout << "DELETE POINT M" << std::endl;
+                //std::cout << "DELETE POINT M" << std::endl;
                 break;
             }
             case geometry_type::POINTZM:
             {
                 delete m_value.m_point_zm;
                 m_value.m_point_zm = nullptr;
-                std::cout << "DELETE POINT ZM" << std::endl;
+                //std::cout << "DELETE POINT ZM" << std::endl;
                 break;
             }
             default:
@@ -111,82 +131,74 @@ class geometry_t : basic_geometry<geometry_t<T>>
     // getters
 
     template <typename ReturnType>
-    ReturnType* get();
-
-    template <>
-    point_t<T>* get()
+    ReturnType* get()
     {
-        return get_point();
+        if (is_basic_point<ReturnType>::value)
+        {
+            return reinterpret_cast<ReturnType*>(point());
+        }
+        if (is_basic_point_z<ReturnType>::value)
+        {
+            return reinterpret_cast<ReturnType*>(point_z());
+        }
+        if (is_basic_point_m<ReturnType>::value)
+        {
+            return reinterpret_cast<ReturnType*>(point_m());
+        }
+        if (is_basic_point_zm<ReturnType>::value)
+        {
+            return reinterpret_cast<ReturnType*>(point_zm());
+        }
+        return nullptr;
     }
 
-    template <>
-    point_z_t<T>* get()
-    {
-        return get_point_z();
-    }
-
-    template <>
-    point_m_t<T>* get()
-    {
-        return get_point_m();
-    }
-
-    template <>
-    point_zm_t<T>* get()
-    {
-        return get_point_zm();
-    }
-
-    //
-
-    bool is_point()
+    inline bool is_point()
     {
         return m_geom_type == geometry_type::POINT;
     }
 
-    bool is_point_z()
+    inline bool is_point_z()
     {
         return m_geom_type == geometry_type::POINTZ;
     }
 
-    bool is_point_m()
+    inline bool is_point_m()
     {
         return m_geom_type == geometry_type::POINTM;
     }
 
-    bool is_point_zm()
+    inline bool is_point_zm()
     {
         return m_geom_type == geometry_type::POINTZM;
     }
 
-  private:
-    /// @private
-    point_t<T>* get_point()
+    point_t<T>* point()
     {
-        assert(m_geom_type == geometry_type::POINT);
+        assert(is_point());
         return m_value.m_point;
     }
 
-    /// @private
-    point_z_t<T>* get_point_z()
+    point_z_t<T>* point_z()
     {
-        assert(m_geom_type == geometry_type::POINTZ);
+        assert(is_point_z());
         return m_value.m_point_z;
     }
 
-    /// @private
-    point_m_t<T>* get_point_m()
+    point_m_t<T>* point_m()
     {
-        assert(m_geom_type == geometry_type::POINTM);
+        assert(is_point_m());
         return m_value.m_point_m;
     }
 
-    /// @private
-    point_zm_t<T>* get_point_zm()
+    point_zm_t<T>* point_zm()
     {
-        assert(m_geom_type == geometry_type::POINTZM);
+        assert(is_point_zm());
         return m_value.m_point_zm;
     }
+
+  private:
+    /// for allow basic_geometry to access basic_point_zm private members
+    friend class basic_geometry<geometry_t<T>>;
 
     geometry_type m_geom_type;
 
@@ -238,26 +250,154 @@ class geometry_t : basic_geometry<geometry_t<T>>
         {
         }
 
-        geom_value(const point_t<T>& p)
+        explicit geom_value(const point_t<T>& p)
             : m_point(new point_t<T>(p))
         {
         }
 
-        geom_value(const point_z_t<T>& p)
+        explicit geom_value(const point_z_t<T>& p)
             : m_point_z(new point_z_t<T>(p))
         {
         }
 
-        geom_value(const point_m_t<T>& p)
+        explicit geom_value(const point_m_t<T>& p)
             : m_point_m(new point_m_t<T>(p))
         {
         }
 
-        geom_value(const point_zm_t<T>& p)
+        explicit geom_value(const point_zm_t<T>& p)
             : m_point_zm(new point_zm_t<T>(p))
         {
         }
     } m_value;
+
+
+
+    /// @private
+    geometry_type geom_type_() const noexcept
+    {
+        return m_geom_type;
+    }
+
+    /// @private
+    std::string tagged_text_() const noexcept
+    {
+        return "Geometry";
+    }
+
+    /// @private
+    dimension_type dim_() const noexcept
+    {
+        return dimension_type::XY;
+    }
+
+    /// @private
+    int32_t ndim_() const noexcept
+    {
+        return 2;
+    }
+
+    /// @private
+    bool is_closed_() const noexcept
+    {
+        return true;
+    }
+
+    /// @private
+    void throw_for_invalid_() const
+    {
+        // do nothing
+    }
+
+    /// @private
+    bounds_t bounds_() const
+    {
+        return {};
+    }
+
+    /// @private
+    bool has_z_() const noexcept
+    {
+        return true;
+    }
+
+    /// @private
+    bool has_m_() const noexcept
+    {
+        return true;
+    }
+
+    // json
+
+    /// @private
+    static geometry_t<T> from_json_(const std::string& json)
+    {
+        return {};
+    }
+
+    /// @private
+    std::string json_(std::int32_t precision = -1) const
+    {
+        switch (m_geom_type)
+        {
+            case geometry_type::POINT:
+            {
+                return m_value.m_point->json(precision);
+            }
+            case geometry_type::POINTZ:
+            {
+                return m_value.m_point_z->json(precision);
+            }
+            case geometry_type::POINTM:
+            {
+                return m_value.m_point_m->json(precision);
+            }
+            case geometry_type::POINTZM:
+            {
+                return m_value.m_point_zm->json(precision);
+            }
+            default:
+            {
+                return "";
+            }
+        }
+    }
+
+    // wkt
+
+    /// @private
+    static geometry_t<T> from_wkt_(const std::string& wkt)
+    {
+        return {};
+    }
+
+    /// @private
+    std::string wkt_(std::int32_t precision = -1) const
+    {
+        switch (m_geom_type)
+        {
+            case geometry_type::POINT:
+            {
+                return m_value.m_point->wkt(precision);
+            }
+            case geometry_type::POINTZ:
+            {
+                return m_value.m_point_z->wkt(precision);
+            }
+            case geometry_type::POINTM:
+            {
+                return m_value.m_point_m->wkt(precision);
+            }
+            case geometry_type::POINTZM:
+            {
+                return m_value.m_point_zm->wkt(precision);
+            }
+            default:
+            {
+                return "";
+            }
+        }
+    }
 };
 
 using Geometry = geometry_t<double>;

@@ -57,10 +57,11 @@ TEST_CASE("Geometry")
             geoms.emplace_back(PointZ(1, 2, 3));
             geoms.emplace_back(PointM(1, 2, 3));
             geoms.emplace_back(PointZM(1, 2, 3, 4));
-            std::cout << geoms[0].get<Point>()->wkt() << std::endl;
-            std::cout << geoms[1].get<PointZ>()->wkt() << std::endl;
-            std::cout << geoms[2].get<PointM>()->wkt() << std::endl;
-            std::cout << geoms[3].get<PointZM>()->wkt() << std::endl;
+            for (const auto& p : geoms)
+            {
+                std::cout << p.wkt() << std::endl;
+                std::cout << p.json() << std::endl;
+            }
         }
     }
 }
