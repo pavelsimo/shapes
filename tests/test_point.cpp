@@ -36,7 +36,7 @@ TEST_CASE("Point")
             CHECK(p.z == 3);
             CHECK(p.dim() == dimension_type::XYZ);
             CHECK(p.geom_type() == geometry_type::POINTZ);
-            CHECK(p.tagged_text() == "Point");
+            CHECK(p.tagged_text() == "Point Z");
         }
 
         SECTION("xym - constructor")
@@ -53,7 +53,7 @@ TEST_CASE("Point")
             CHECK(p.m == 4);
             CHECK(p.dim() == dimension_type::XYZM);
             CHECK(p.geom_type() == geometry_type::POINTZM);
-            CHECK(p.tagged_text() == "Point");
+            CHECK(p.tagged_text() == "Point ZM");
         }
 
         SECTION("xy - initializer list")
@@ -74,7 +74,7 @@ TEST_CASE("Point")
             CHECK(p.z == 3);
             CHECK(p.dim() == dimension_type::XYZ);
             CHECK(p.geom_type() == geometry_type::POINTZ);
-            CHECK(p.tagged_text() == "Point");
+            CHECK(p.tagged_text() == "Point Z");
         }
 
         SECTION("xym - initializer list")
@@ -85,7 +85,7 @@ TEST_CASE("Point")
             CHECK(p.m == 3);
             CHECK(p.dim() == dimension_type::XYM);
             CHECK(p.geom_type() == geometry_type::POINTM);
-            CHECK(p.tagged_text() == "Point");
+            CHECK(p.tagged_text() == "Point M");
         }
 
         SECTION("xyzm - initializer list")
@@ -97,7 +97,7 @@ TEST_CASE("Point")
             CHECK(p.m == 4);
             CHECK(p.dim() == dimension_type::XYZM);
             CHECK(p.geom_type() == geometry_type::POINTZM);
-            CHECK(p.tagged_text() == "Point");
+            CHECK(p.tagged_text() == "Point ZM");
         }
     }
 
@@ -123,7 +123,7 @@ TEST_CASE("Point")
                 CHECK(p.z == 3.0);
                 CHECK(p.dim() == dimension_type::XYZ);
                 CHECK(p.geom_type() == geometry_type::POINTZ);
-                CHECK(p.tagged_text() == "Point");
+                CHECK(p.tagged_text() == "Point Z");
             }
 
             SECTION("xym - from json")
@@ -134,7 +134,7 @@ TEST_CASE("Point")
                 CHECK(p.m == 3.0);
                 CHECK(p.dim() == dimension_type::XYM);
                 CHECK(p.geom_type() == geometry_type::POINTM);
-                CHECK(p.tagged_text() == "Point");
+                CHECK(p.tagged_text() == "Point M");
             }
 
             SECTION("xyzm - from json")
@@ -146,7 +146,7 @@ TEST_CASE("Point")
                 CHECK(p.m == 4.0);
                 CHECK(p.dim() == dimension_type::XYZM);
                 CHECK(p.geom_type() == geometry_type::POINTZM);
-                CHECK(p.tagged_text() == "Point");
+                CHECK(p.tagged_text() == "Point ZM");
             }
         }
 
@@ -170,7 +170,7 @@ TEST_CASE("Point")
                 CHECK(p.z == 3.0);
                 CHECK(p.dim() == dimension_type::XYZ);
                 CHECK(p.geom_type() == geometry_type::POINTZ);
-                CHECK(p.tagged_text() == "Point");
+                CHECK(p.tagged_text() == "Point Z");
             }
 
             SECTION("xyzm - from wkt")
@@ -182,7 +182,7 @@ TEST_CASE("Point")
                 CHECK(p.m == 4.0);
                 CHECK(p.dim() == dimension_type::XYZM);
                 CHECK(p.geom_type() == geometry_type::POINTZM);
-                CHECK(p.tagged_text() == "Point");
+                CHECK(p.tagged_text() == "Point ZM");
             }
 
             SECTION("empty - from wkt")

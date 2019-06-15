@@ -13,60 +13,30 @@ namespace simo
 namespace shapes
 {
 
-/*!
- * @brief DOCUMENT ME!
- * @tparam T
- * @tparam AllocatorType
- *
- * @since 0.0.1
- */
 template <typename T, typename AllocatorType = std::allocator<T>>
 class basic_multipoint : public std::vector<T, AllocatorType>, public basic_geometry<basic_multipoint<T>>
 {
   public:
-    /// DOCUMENT ME!
     using base_type = std::vector<T, AllocatorType>;
-    /// DOCUMENT ME!
-    using point_type = typename T::point_type;
-    /// DOCUMENT ME!
-    using point_iterator = typename std::vector<T>::iterator;
-    /// DOCUMENT ME!
+
+    using point_type           = typename T::point_type;
+    using point_iterator       = typename std::vector<T>::iterator;
     using point_const_iterator = typename std::vector<T>::const_iterator;
-    /// DOCUMENT ME!
-    using coord_type = typename T::coord_type;
-    /// DOCUMENT ME!
-    using coord_iterator = typename std::vector<coord_type>::iterator;
-    /// DOCUMENT ME!
+
+    using coord_type           = typename T::coord_type;
+    using coord_iterator       = typename std::vector<coord_type>::iterator;
     using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
 
-    /*!
-         * @brief DOCUMENT ME!
-         *
-         * @since 0.0.1
-         */
     inline basic_multipoint()
         : base_type() {}
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param init
-     *
-     * @since 0.0.1
-     */
     basic_multipoint(std::initializer_list<T> init)
         : base_type(init.begin(), init.end()) {}
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param first
-     * @param last
-     *
-     * @since 0.0.1
-     */
     explicit basic_multipoint(coord_const_iterator first, coord_const_iterator last)
     {
         /// @todo deal with repetition
-        size_t n = ndim_();
+        size_t n = this->ndim();
         this->reserve(std::distance(first, last));
         for (auto it = first; it != last; it += n)
         {
@@ -74,16 +44,10 @@ class basic_multipoint : public std::vector<T, AllocatorType>, public basic_geom
         }
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param first
-     *
-     * @since 0.0.1
-     */
     explicit basic_multipoint(coord_iterator first, coord_iterator last)
     {
         /// @todo deal with repetition
-        size_t n = ndim_();
+        size_t n = this->ndim();
         this->reserve(std::distance(first, last));
         for (auto it = first; it != last; it += n)
         {
@@ -91,23 +55,11 @@ class basic_multipoint : public std::vector<T, AllocatorType>, public basic_geom
         }
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param first
-     * @param last
-     *
-     * @since 0.0.1
-     */
     basic_multipoint(point_iterator first, point_iterator last)
         : base_type(first, last)
     {
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param first
-     * @param last
-     */
     basic_multipoint(point_const_iterator first, point_const_iterator last)
         : base_type(first, last)
     {
@@ -150,12 +102,6 @@ class basic_multipoint : public std::vector<T, AllocatorType>, public basic_geom
         return not operator==(lhs, rhs);
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @return
-     *
-     * @since 0.0.1
-     */
     std::vector<std::tuple<double, double>> xy() const
     {
         std::vector<std::tuple<double, double>> res;
@@ -169,14 +115,6 @@ class basic_multipoint : public std::vector<T, AllocatorType>, public basic_geom
 
     // polyline
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param polyline
-     * @param precision
-     * @return
-     *
-     * @since 0.0.1
-     */
     static basic_multipoint<T> from_polyline(const std::string& polyline, std::int32_t precision = 5)
     {
         static_assert(is_basic_point<T>::value, "must contain XY points");
@@ -185,13 +123,6 @@ class basic_multipoint : public std::vector<T, AllocatorType>, public basic_geom
         return {coords.begin(), coords.end()};
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param precision
-     * @return
-     *
-     * @since 0.0.1
-     */
     std::string polyline(std::int32_t precision = 5) const
     {
         static_assert(is_basic_point<T>::value, "must contain XY points");
@@ -233,42 +164,6 @@ class basic_multipoint : public std::vector<T, AllocatorType>, public basic_geom
     }
 
     /// @private
-    dimension_type dim_() const noexcept
-    {
-        if (is_basic_point_z<T>::value)
-        {
-            return dimension_type::XYZ;
-        }
-        if (is_basic_point_m<T>::value)
-        {
-            return dimension_type::XYM;
-        }
-        if (is_basic_point_zm<T>::value)
-        {
-            return dimension_type::XYZM;
-        }
-        return dimension_type::XY;
-    }
-
-    /// @private
-    int32_t ndim_() const noexcept
-    {
-        if (is_basic_point_z<T>::value)
-        {
-            return 3;
-        }
-        if (is_basic_point_m<T>::value)
-        {
-            return 3;
-        }
-        if (is_basic_point_zm<T>::value)
-        {
-            return 4;
-        }
-        return 2;
-    }
-
-    /// @private
     bool is_closed_() const noexcept
     {
         if (this->empty())
@@ -293,24 +188,6 @@ class basic_multipoint : public std::vector<T, AllocatorType>, public basic_geom
             res.extend(p.x, p.y);
         }
         return res;
-    }
-
-    /// @private
-    bool has_z_() const noexcept
-    {
-        return is_basic_point_z<T>::value or is_basic_point_zm<T>::value;
-    }
-
-    /// @private
-    bool has_m_() const noexcept
-    {
-        return is_basic_point_m<T>::value or is_basic_point_zm<T>::value;
-    }
-
-    /// @private
-    std::string tagged_text_() const noexcept
-    {
-        return "MultiPoint";
     }
 
     // json
@@ -361,7 +238,7 @@ class basic_multipoint : public std::vector<T, AllocatorType>, public basic_geom
                 ss << ",";
             }
             ss << "[";
-            for (int j = 0; j < p.ndim(); ++j)
+            for (size_t j = 0; j < p.size(); ++j)
             {
                 if (j > 0)
                 {
@@ -400,11 +277,11 @@ class basic_multipoint : public std::vector<T, AllocatorType>, public basic_geom
             ss << std::setprecision(precision);
         }
         ss << "MULTIPOINT";
-        if (has_z_())
+        if (this->has_z())
         {
             ss << "Z";
         }
-        if (has_m_())
+        if (this->has_m())
         {
             ss << "M";
         }
@@ -417,7 +294,7 @@ class basic_multipoint : public std::vector<T, AllocatorType>, public basic_geom
                 ss << ",";
             }
             ss << "(";
-            for (int32_t j = 0; j < p.ndim(); ++j)
+            for (size_t j = 0; j < p.size(); ++j)
             {
                 if (j > 0)
                 {
@@ -432,6 +309,38 @@ class basic_multipoint : public std::vector<T, AllocatorType>, public basic_geom
         return ss.str();
     }
 };
+
+template <typename>
+struct is_basic_multipoint : std::false_type
+{};
+
+template <typename T>
+struct is_basic_multipoint<basic_multipoint<basic_point<T>>> : std::true_type
+{};
+
+template <typename>
+struct is_basic_multipoint_z : std::false_type
+{};
+
+template <typename T>
+struct is_basic_multipoint_z<basic_multipoint<basic_point_z<T>>> : std::true_type
+{};
+
+template <typename>
+struct is_basic_multipoint_m : std::false_type
+{};
+
+template <typename T>
+struct is_basic_multipoint_m<basic_multipoint<basic_point_m<T>>> : std::true_type
+{};
+
+template <typename>
+struct is_basic_multipoint_zm : std::false_type
+{};
+
+template <typename T>
+struct is_basic_multipoint_zm<basic_multipoint<basic_point_zm<T>>> : std::true_type
+{};
 
 }  // namespace shapes
 }  // namespace simo

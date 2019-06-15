@@ -40,7 +40,7 @@ TEST_CASE("LineString")
             CHECK(!ls.empty());
             CHECK(ls.dim() == dimension_type::XYZ);
             CHECK(ls.geom_type() == geometry_type::LINESTRINGZ);
-            CHECK(ls.tagged_text() == "LineString");
+            CHECK(ls.tagged_text() == "LineString Z");
             const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -58,7 +58,7 @@ TEST_CASE("LineString")
             CHECK(!ls.empty());
             CHECK(ls.dim() == dimension_type::XYM);
             CHECK(ls.geom_type() == geometry_type::LINESTRINGM);
-            CHECK(ls.tagged_text() == "LineString");
+            CHECK(ls.tagged_text() == "LineString M");
             const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -76,7 +76,7 @@ TEST_CASE("LineString")
             CHECK(!ls.empty());
             CHECK(ls.dim() == dimension_type::XYZM);
             CHECK(ls.geom_type() == geometry_type::LINESTRINGZM);
-            CHECK(ls.tagged_text() == "LineString");
+            CHECK(ls.tagged_text() == "LineString ZM");
             const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -110,7 +110,7 @@ TEST_CASE("LineString")
             CHECK(!ls.empty());
             CHECK(ls.dim() == dimension_type::XYZ);
             CHECK(ls.geom_type() == geometry_type::LINESTRINGZ);
-            CHECK(ls.tagged_text() == "LineString");
+            CHECK(ls.tagged_text() == "LineString Z");
             const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -127,7 +127,7 @@ TEST_CASE("LineString")
             CHECK(!ls.empty());
             CHECK(ls.dim() == dimension_type::XYM);
             CHECK(ls.geom_type() == geometry_type::LINESTRINGM);
-            CHECK(ls.tagged_text() == "LineString");
+            CHECK(ls.tagged_text() == "LineString M");
             const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);
@@ -144,7 +144,7 @@ TEST_CASE("LineString")
             CHECK(!ls.empty());
             CHECK(ls.dim() == dimension_type::XYZM);
             CHECK(ls.geom_type() == geometry_type::LINESTRINGZM);
-            CHECK(ls.tagged_text() == "LineString");
+            CHECK(ls.tagged_text() == "LineString ZM");
             const auto& p1 = ls[0];
             CHECK(p1.x == 1.0);
             CHECK(p1.y == 2.0);

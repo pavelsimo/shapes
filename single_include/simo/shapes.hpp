@@ -49,17 +49,17 @@ namespace simo
 namespace shapes
 {
 
-class Point;
+//class Point;
 
-class MultiPoint;
+//class MultiPoint;
 
-class Polygon;
+//class Polygon;
+//
+//class MultiPolygon;
 
-class MultiPolygon;
+//class LineString;
 
-class LineString;
-
-class MultiLineString;
+//class MultiLineString;
 
 class GeometryCollection;
 
@@ -68,198 +68,10 @@ class Bounds;
 }  // namespace shapes
 }  // namespace simo
 
-// #include <simo/geom/geometry.hpp>
+// #include <simo/geom/utils.hpp>
 
 
 #include <ciso646>
-#include <vector>
-#include <memory>
-// #include <simo/shapes_fwd.hpp>
-
-// #include <simo/geom/bounds.hpp>
-
-
-#include <ciso646>
-#include <algorithm>
-#include <tuple>
-
-namespace simo
-{
-namespace shapes
-{
-
-/*!
- * @brief represents a bounding box
- * @ingroup geometry
- *
- * @since 0.0.1
- */
-class Bounds
-{
-  public:
-    /// the minimum x-coordinate
-    double minx;
-
-    /// the minimum y-coordinate
-    double miny;
-
-    /// the maximum x-coordinate
-    double maxx;
-
-    /// the maximum y-coordinate
-    double maxy;
-
-    /*!
-     * @brief creates a Bounds object
-     *
-     * @since 0.0.1
-     */
-    Bounds()
-        : minx(std::numeric_limits<double>::max()),
-          miny(std::numeric_limits<double>::max()),
-          maxx(std::numeric_limits<double>::min()),
-          maxy(std::numeric_limits<double>::min())
-    {
-    }
-
-    /*!
-     * @brief creates a Bounds object from the given coordinates
-     * @param minx the x-coordinate of the first corner
-     * @param miny the y-coordinate of the first corner
-     * @param maxx the x-coordinate of the second corner
-     * @param maxy the y-coordinate of the second corner
-     *
-     * @since 0.0.1
-     */
-    Bounds(double minx, double miny, double maxx, double maxy)
-        : minx(minx), miny(miny), maxx(maxx), maxy(maxy)
-    {
-    }
-
-    /*!
-     * @brief extends the bounds to contain the given point
-     * @param x the x-coordinate of the point
-     * @param y the y-coordinate of the point
-     * @return the Bounds object
-     *
-     * @since 0.0.1
-     */
-    Bounds& extend(double x, double y)
-    {
-        minx = std::min(x, minx);
-        maxx = std::max(x, maxx);
-        miny = std::min(y, miny);
-        maxy = std::max(y, maxy);
-        return *this;
-    }
-
-    /*!
-     * @brief returns a (x, y) tuple with the center of the bounds
-     * @return a tuple
-     *
-     * @since 0.0.1
-     */
-    std::tuple<double, double> center() const
-    {
-        return std::make_tuple((minx + maxx) / 2.0, (miny + maxy) / 2.0);
-    }
-
-    /*!
-     * @brief returns a (x, y) tuple with the bottom left bounds
-     * @return a tuple
-     *
-     * @since 0.0.1
-     */
-    std::tuple<double, double> bottom_left() const
-    {
-        return std::make_tuple(minx, maxy);
-    }
-
-    /*!
-     * @brief returns a (x, y) tuple with the top right bounds
-     * @return a tuple
-     *
-     * @since 0.0.1
-     */
-    std::tuple<double, double> top_right() const
-    {
-        return std::make_tuple(maxx, miny);
-    }
-
-    /*!
-     * @brief returns a (x, y) tuple with the top left bounds
-     * @return a tuple
-     *
-     * @since 0.0.1
-     */
-    std::tuple<double, double> top_left() const
-    {
-        return std::make_tuple(minx, miny);
-    }
-
-    /*!
-     * @brief returns a (x, y) tuple with the bottom right bounds
-     * @return a tuple
-     *
-     * @since 0.0.1
-     */
-    std::tuple<double, double> bottom_right() const
-    {
-        return std::make_tuple(maxx, maxy);
-    }
-
-    /*!
-     * @brief returns true if the bounds contains the given point
-     * @param x the x-coordinate of the point
-     * @param y the y-coordinate of the point
-     * @return true if the Bounds contains the given point, otherwise false
-     *
-     * @since 0.0.1
-     */
-    bool contains(double x, double y) const
-    {
-        return (x >= minx) && (x <= maxx) && (y >= miny) && (y <= maxy);
-    }
-
-    /*!
-     * @brief returns true if the bounds contains the given one
-     * @param other the bounds
-     * @return true if the Bounds contain the given one, otherwise false
-     *
-     * @since 0.0.1
-     */
-    bool contains(const Bounds& other)
-    {
-        return contains(other.minx, other.miny) && contains(other.maxx, other.maxy);
-    }
-
-    /*!
-     * @brief returns true if the bounds intersect the given one
-     * @param other the bounds
-     * @return true if the Bounds intersect the given one, otherwise false
-     *
-     * @since 0.0.1
-     */
-    bool intersects(const Bounds& other)
-    {
-        return (other.maxx >= minx) && (other.minx <= maxx) && (other.maxy >= miny) && (other.miny <= maxy);
-    }
-
-    /*!
-     * @brief returns true if the bounds overlaps the given one
-     * @param other the bounds
-     * @return true if the Bounds overlaps the given one, otherwise false
-     *
-     * @since 0.0.1
-     */
-    bool overlaps(const Bounds& other)
-    {
-        return (other.maxx > minx) && (other.minx < maxx) && (other.maxy > miny) && (other.miny < maxy);
-    }
-};
-
-}  // namespace shapes
-}  // namespace simo
 // #include <simo/geom/types.hpp>
 
 
@@ -269,11 +81,11 @@ namespace shapes
 {
 
 /*!
- * @brief geometry dimension type is (x, y), (x, y, z), (x, y, m) or (x, y, z, m)
+ * @brief Geometry dimension type is (x, y), (x, y, z), (x, y, m) or (x, y, z, m)
  *
  * @since 0.0.1
  */
-enum class DimensionType : uint8_t
+enum class dimension_type : uint8_t
 {
     XY   = 1,
     XYZ  = 2,
@@ -282,11 +94,11 @@ enum class DimensionType : uint8_t
 };
 
 /*!
- * @brief element type for the geometry
+ * @brief Element type for the geometry
  *
  * @since 0.0.1
  */
-enum class ElementType : uint8_t
+enum class element_type : uint8_t
 {
     POINT      = 1,
     LINESTRING = 2,
@@ -294,11 +106,11 @@ enum class ElementType : uint8_t
 };
 
 /*!
- * @brief geometry types as defined by the OpenGIS "Consortium Simple Features for SQL" specification
+ * @brief Geometry types as defined by the OpenGIS "Consortium Simple Features for SQL" specification
  *
  * @since 0.0.1
  */
-enum class GeometryType : uint16_t
+enum class geometry_type : uint16_t
 {
     GEOMETRY             = 0,
     POINT                = 1,
@@ -372,12 +184,6 @@ enum class GeometryType : uint16_t
 
 }  // namespace shapes
 }  // namespace simo
-// #include <simo/geom/utils.hpp>
-
-
-#include <ciso646>
-// #include <simo/geom/types.hpp>
-
 
 namespace simo
 {
@@ -387,371 +193,625 @@ namespace utils
 {
 
 /*!
- * @brief returns the dimension type given a geometry type
+ * @brief Returns the dimension type given a geometry type
+ *
  * @param geom_type the geometry type
  * @return the dimension type
  *
  * @since 0.0.1
  */
-DimensionType get_dim(GeometryType geom_type) noexcept
+dimension_type get_dim(geometry_type geom_type) noexcept
 {
     int value = static_cast<int>(geom_type);
     if (value >= 1000 and value < 2000)
     {
-        return DimensionType::XYZ;
+        return dimension_type::XYZ;
     }
     if (value >= 2000 and value < 3000)
     {
-        return DimensionType::XYM;
+        return dimension_type::XYM;
     }
     if (value >= 3000)
     {
-        return DimensionType::XYZM;
+        return dimension_type::XYZM;
     }
-    return DimensionType::XY;
+    return dimension_type::XY;
 }
 
 /*!
- * @brief returns the number of dimensions given a dimension type
+ * @brief Returns the dimension type given the number of dimensions
+ *
+ * @param ndim the number of dimensions
+ * @return the dimension type
+ *
+ * @since 0.0.1
+ */
+dimension_type get_dim(int8_t ndim) noexcept
+{
+    switch (ndim)
+    {
+        case 3:
+            return dimension_type::XYZ;
+        case 4:
+            return dimension_type::XYZM;
+        default:
+            return dimension_type::XY;
+    }
+}
+
+/*!
+ * @brief Returns the number of dimensions given a dimension type
+ *
  * @param dim_type the dimension type
  * @return the number of dimensions
  *
  * @since 0.0.1
  */
-int8_t get_ndim(DimensionType dim_type) noexcept
+int8_t get_ndim(dimension_type dim_type) noexcept
 {
     switch (dim_type)
     {
-        case DimensionType::XYZM:
+        case dimension_type::XYZM:
             return 4;
-        case DimensionType::XYZ:
-        case DimensionType::XYM:
+        case dimension_type::XYZ:
+        case dimension_type::XYM:
             return 3;
-        case DimensionType::XY:
+        default:
             return 2;
     }
 }
 
 /*!
- * @brief returns the number of dimensions given a geometry type
+ * @brief Returns the number of dimensions given a geometry type
+ *
  * @param geom_type the geometry type
  * @return the number of dimensions
  *
  * @since 0.0.1
  */
-int8_t get_ndim(GeometryType geom_type) noexcept
+int8_t get_ndim(geometry_type geom_type) noexcept
 {
     return get_ndim(get_dim(geom_type));
 }
 
 /*!
- * @brief returns a geometry type given the geometry type
+ * @brief Returns a geometry type given the geometry type
+ *
  * @param geom_type the geometry type
  * @return a geometry type
  *
  * @since 0.0.1
  */
-GeometryType get_geom_type(GeometryType geom_type)
+geometry_type get_geom_type(geometry_type geom_type) noexcept
 {
     switch (geom_type)
     {
-        case GeometryType::GEOMETRY:
-        case GeometryType::GEOMETRYZ:
-        case GeometryType::GEOMETRYM:
-        case GeometryType::GEOMETRYZM:
-            return GeometryType::GEOMETRY;
-        case GeometryType::POINT:
-        case GeometryType::POINTZ:
-        case GeometryType::POINTM:
-        case GeometryType::POINTZM:
-            return GeometryType::POINT;
-        case GeometryType::MULTIPOINT:
-        case GeometryType::MULTIPOINTZ:
-        case GeometryType::MULTIPOINTM:
-        case GeometryType::MULTIPOINTZM:
-            return GeometryType::MULTIPOINT;
-        case GeometryType::LINESTRING:
-        case GeometryType::LINESTRINGZ:
-        case GeometryType::LINESTRINGM:
-        case GeometryType::LINESTRINGZM:
-            return GeometryType::LINESTRING;
-        case GeometryType::MULTILINESTRING:
-        case GeometryType::MULTILINESTRINGZ:
-        case GeometryType::MULTILINESTRINGM:
-        case GeometryType::MULTILINESTRINGZM:
-            return GeometryType::MULTILINESTRING;
-        case GeometryType::POLYGON:
-        case GeometryType::POLYGONZ:
-        case GeometryType::POLYGONM:
-        case GeometryType::POLYGONZM:
-            return GeometryType::POLYGON;
-        case GeometryType::MULTIPOLYGON:
-        case GeometryType::MULTIPOLYGONZ:
-        case GeometryType::MULTIPOLYGONM:
-        case GeometryType::MULTIPOLYGONZM:
-            return GeometryType::MULTIPOLYGON;
-        case GeometryType::GEOMETRYCOLLECTION:
-        case GeometryType::GEOMETRYCOLLECTIONZ:
-        case GeometryType::GEOMETRYCOLLECTIONM:
-        case GeometryType::GEOMETRYCOLLECTIONZM:
-            return GeometryType::GEOMETRYCOLLECTION;
-        case GeometryType::CIRCULARSTRING:
-        case GeometryType::CIRCULARSTRINGZ:
-        case GeometryType::CIRCULARSTRINGM:
-        case GeometryType::CIRCULARSTRINGZM:
-            return GeometryType::CIRCULARSTRING;
-        case GeometryType::COMPOUNDCURVE:
-        case GeometryType::COMPOUNDCURVEZ:
-        case GeometryType::COMPOUNDCURVEM:
-        case GeometryType::COMPOUNDCURVEZM:
-            return GeometryType::COMPOUNDCURVE;
-        case GeometryType::CURVEPOLYGON:
-        case GeometryType::CURVEPOLYGONZ:
-        case GeometryType::CURVEPOLYGONM:
-        case GeometryType::CURVEPOLYGONZM:
-            return GeometryType::CURVEPOLYGON;
-        case GeometryType::MULTICURVE:
-        case GeometryType::MULTICURVEZ:
-        case GeometryType::MULTICURVEM:
-        case GeometryType::MULTICURVEZM:
-            return GeometryType::MULTICURVE;
-        case GeometryType::MULTISURFACE:
-        case GeometryType::MULTISURFACEZ:
-        case GeometryType::MULTISURFACEM:
-        case GeometryType::MULTISURFACEZM:
-            return GeometryType::MULTISURFACE;
-        case GeometryType::CURVE:
-        case GeometryType::CURVEZ:
-        case GeometryType::CURVEM:
-        case GeometryType::CURVEZM:
-            return GeometryType::CURVE;
-        case GeometryType::SURFACE:
-        case GeometryType::SURFACEZ:
-        case GeometryType::SURFACEM:
-        case GeometryType::SURFACEZM:
-            return GeometryType::SURFACE;
-        case GeometryType::POLYHEDRALSURFACE:
-        case GeometryType::POLYHEDRALSURFACEZ:
-        case GeometryType::POLYHEDRALSURFACEM:
-        case GeometryType::POLYHEDRALSURFACEZM:
-            return GeometryType::POLYHEDRALSURFACE;
-        case GeometryType::TIN:
-        case GeometryType::TINZ:
-        case GeometryType::TINM:
-        case GeometryType::TINZM:
-            return GeometryType::TIN;
-    }
-}
-
-/*!
- * @brief returns a geometry type with dimension given the geometry type and the dimension type
- * @param geom_type the geometry type
- * @param dim_type the dimension type
- * @return a geometry type
- *
- * @since 0.0.1
- */
-GeometryType get_geom_type_dim(GeometryType geom_type, DimensionType dim_type) noexcept
-{
-    auto geom_type_ = get_geom_type(geom_type);
-    switch (dim_type)
-    {
-        case DimensionType::XY:
-        {
-            return geom_type_;
-        }
-        case DimensionType::XYZ:
-        {
-            switch (geom_type_)
-            {
-                case GeometryType::POINT:
-                    return GeometryType::POINTZ;
-                case GeometryType::LINESTRING:
-                    return GeometryType::LINESTRINGZ;
-                case GeometryType::POLYGON:
-                    return GeometryType::POLYGONZ;
-                case GeometryType::MULTIPOINT:
-                    return GeometryType::MULTIPOINTZ;
-                case GeometryType::MULTILINESTRING:
-                    return GeometryType::MULTILINESTRINGZ;
-                case GeometryType::MULTIPOLYGON:
-                    return GeometryType::MULTIPOLYGONZ;
-                case GeometryType::GEOMETRYCOLLECTION:
-                    return GeometryType::GEOMETRYCOLLECTIONZ;
-                case GeometryType::CIRCULARSTRING:
-                    return GeometryType::CIRCULARSTRINGZ;
-                case GeometryType::COMPOUNDCURVE:
-                    return GeometryType::COMPOUNDCURVEZ;
-                case GeometryType::CURVEPOLYGON:
-                    return GeometryType::CURVEPOLYGONZ;
-                case GeometryType::MULTICURVE:
-                    return GeometryType::MULTICURVEZ;
-                case GeometryType::MULTISURFACE:
-                    return GeometryType::MULTISURFACEZ;
-                case GeometryType::CURVE:
-                    return GeometryType::CURVEZ;
-                case GeometryType::SURFACE:
-                    return GeometryType::SURFACEZ;
-                case GeometryType::POLYHEDRALSURFACE:
-                    return GeometryType::POLYHEDRALSURFACEZ;
-                case GeometryType::TIN:
-                    return GeometryType::TINZ;
-                default:
-                    return GeometryType::GEOMETRYZ;
-            }
-        }
-        case DimensionType::XYM:
-        {
-            switch (geom_type_)
-            {
-                case GeometryType::POINT:
-                    return GeometryType::POINTM;
-                case GeometryType::LINESTRING:
-                    return GeometryType::LINESTRINGM;
-                case GeometryType::POLYGON:
-                    return GeometryType::POLYGONM;
-                case GeometryType::MULTIPOINT:
-                    return GeometryType::MULTIPOINTM;
-                case GeometryType::MULTILINESTRING:
-                    return GeometryType::MULTILINESTRINGM;
-                case GeometryType::MULTIPOLYGON:
-                    return GeometryType::MULTIPOLYGONM;
-                case GeometryType::GEOMETRYCOLLECTION:
-                    return GeometryType::GEOMETRYCOLLECTIONM;
-                case GeometryType::CIRCULARSTRING:
-                    return GeometryType::CIRCULARSTRINGM;
-                case GeometryType::COMPOUNDCURVE:
-                    return GeometryType::COMPOUNDCURVEM;
-                case GeometryType::CURVEPOLYGON:
-                    return GeometryType::CURVEPOLYGONM;
-                case GeometryType::MULTICURVE:
-                    return GeometryType::MULTICURVEM;
-                case GeometryType::MULTISURFACE:
-                    return GeometryType::MULTISURFACEM;
-                case GeometryType::CURVE:
-                    return GeometryType::CURVEM;
-                case GeometryType::SURFACE:
-                    return GeometryType::SURFACEM;
-                case GeometryType::POLYHEDRALSURFACE:
-                    return GeometryType::POLYHEDRALSURFACEM;
-                case GeometryType::TIN:
-                    return GeometryType::TINM;
-                default:
-                    return GeometryType::GEOMETRYM;
-            }
-        }
-        case DimensionType::XYZM:
-        {
-            switch (geom_type_)
-            {
-                case GeometryType::POINT:
-                    return GeometryType::POINTZM;
-                case GeometryType::LINESTRING:
-                    return GeometryType::LINESTRINGZM;
-                case GeometryType::POLYGON:
-                    return GeometryType::POLYGONZM;
-                case GeometryType::MULTIPOINT:
-                    return GeometryType::MULTIPOINTZM;
-                case GeometryType::MULTILINESTRING:
-                    return GeometryType::MULTILINESTRINGZM;
-                case GeometryType::MULTIPOLYGON:
-                    return GeometryType::MULTIPOLYGONZM;
-                case GeometryType::GEOMETRYCOLLECTION:
-                    return GeometryType::GEOMETRYCOLLECTIONZM;
-                case GeometryType::CIRCULARSTRING:
-                    return GeometryType::CIRCULARSTRINGZM;
-                case GeometryType::COMPOUNDCURVE:
-                    return GeometryType::COMPOUNDCURVEZM;
-                case GeometryType::CURVEPOLYGON:
-                    return GeometryType::CURVEPOLYGONZM;
-                case GeometryType::MULTICURVE:
-                    return GeometryType::MULTICURVEZM;
-                case GeometryType::MULTISURFACE:
-                    return GeometryType::MULTISURFACEZM;
-                case GeometryType::CURVE:
-                    return GeometryType::CURVEZM;
-                case GeometryType::SURFACE:
-                    return GeometryType::SURFACEZM;
-                case GeometryType::POLYHEDRALSURFACE:
-                    return GeometryType::POLYHEDRALSURFACEZM;
-                case GeometryType::TIN:
-                    return GeometryType::TINZM;
-                default:
-                    return GeometryType::GEOMETRYZM;
-            }
-        }
+        case geometry_type::POINT:
+        case geometry_type::POINTZ:
+        case geometry_type::POINTM:
+        case geometry_type::POINTZM:
+            return geometry_type::POINT;
+        case geometry_type::MULTIPOINT:
+        case geometry_type::MULTIPOINTZ:
+        case geometry_type::MULTIPOINTM:
+        case geometry_type::MULTIPOINTZM:
+            return geometry_type::MULTIPOINT;
+        case geometry_type::LINESTRING:
+        case geometry_type::LINESTRINGZ:
+        case geometry_type::LINESTRINGM:
+        case geometry_type::LINESTRINGZM:
+            return geometry_type::LINESTRING;
+        case geometry_type::MULTILINESTRING:
+        case geometry_type::MULTILINESTRINGZ:
+        case geometry_type::MULTILINESTRINGM:
+        case geometry_type::MULTILINESTRINGZM:
+            return geometry_type::MULTILINESTRING;
+        case geometry_type::POLYGON:
+        case geometry_type::POLYGONZ:
+        case geometry_type::POLYGONM:
+        case geometry_type::POLYGONZM:
+            return geometry_type::POLYGON;
+        case geometry_type::MULTIPOLYGON:
+        case geometry_type::MULTIPOLYGONZ:
+        case geometry_type::MULTIPOLYGONM:
+        case geometry_type::MULTIPOLYGONZM:
+            return geometry_type::MULTIPOLYGON;
+        case geometry_type::GEOMETRYCOLLECTION:
+        case geometry_type::GEOMETRYCOLLECTIONZ:
+        case geometry_type::GEOMETRYCOLLECTIONM:
+        case geometry_type::GEOMETRYCOLLECTIONZM:
+            return geometry_type::GEOMETRYCOLLECTION;
+        case geometry_type::CIRCULARSTRING:
+        case geometry_type::CIRCULARSTRINGZ:
+        case geometry_type::CIRCULARSTRINGM:
+        case geometry_type::CIRCULARSTRINGZM:
+            return geometry_type::CIRCULARSTRING;
+        case geometry_type::COMPOUNDCURVE:
+        case geometry_type::COMPOUNDCURVEZ:
+        case geometry_type::COMPOUNDCURVEM:
+        case geometry_type::COMPOUNDCURVEZM:
+            return geometry_type::COMPOUNDCURVE;
+        case geometry_type::CURVEPOLYGON:
+        case geometry_type::CURVEPOLYGONZ:
+        case geometry_type::CURVEPOLYGONM:
+        case geometry_type::CURVEPOLYGONZM:
+            return geometry_type::CURVEPOLYGON;
+        case geometry_type::MULTICURVE:
+        case geometry_type::MULTICURVEZ:
+        case geometry_type::MULTICURVEM:
+        case geometry_type::MULTICURVEZM:
+            return geometry_type::MULTICURVE;
+        case geometry_type::MULTISURFACE:
+        case geometry_type::MULTISURFACEZ:
+        case geometry_type::MULTISURFACEM:
+        case geometry_type::MULTISURFACEZM:
+            return geometry_type::MULTISURFACE;
+        case geometry_type::CURVE:
+        case geometry_type::CURVEZ:
+        case geometry_type::CURVEM:
+        case geometry_type::CURVEZM:
+            return geometry_type::CURVE;
+        case geometry_type::SURFACE:
+        case geometry_type::SURFACEZ:
+        case geometry_type::SURFACEM:
+        case geometry_type::SURFACEZM:
+            return geometry_type::SURFACE;
+        case geometry_type::POLYHEDRALSURFACE:
+        case geometry_type::POLYHEDRALSURFACEZ:
+        case geometry_type::POLYHEDRALSURFACEM:
+        case geometry_type::POLYHEDRALSURFACEZM:
+            return geometry_type::POLYHEDRALSURFACE;
+        case geometry_type::TIN:
+        case geometry_type::TINZ:
+        case geometry_type::TINM:
+        case geometry_type::TINZM:
+            return geometry_type::TIN;
+        default:
+            return geometry_type::GEOMETRY;
     }
 }
 
 /*!
  * @param geom_type the geometry type
- * @return returns true if the geometry type is a Point, otherwise false
+ * @return true if the geometry type is a Point, otherwise false
  *
  * @since 0.0.1
  */
-bool is_point(GeometryType geom_type)
+bool is_point(geometry_type geom_type) noexcept
 {
-    return geom_type == GeometryType::POINT or geom_type == GeometryType::POINTZ or geom_type == GeometryType::POINTM or geom_type == GeometryType::POINTZM;
+    return geom_type == geometry_type::POINT or geom_type == geometry_type::POINTZ or geom_type == geometry_type::POINTM or geom_type == geometry_type::POINTZM;
 }
 
 /*!
  * @param geom_type the geometry type
- * @return returns true if the geometry type is a MultiPoint, otherwise false
+ * @return true if the geometry type is a MultiPoint, otherwise false
  *
  * @since 0.0.1
  */
-bool is_multipoint(GeometryType geom_type)
+bool is_multipoint(geometry_type geom_type) noexcept
 {
-    return geom_type == GeometryType::MULTIPOINT or geom_type == GeometryType::MULTIPOINTZ or geom_type == GeometryType::MULTIPOINTM or geom_type == GeometryType::MULTIPOINTZM;
+    return geom_type == geometry_type::MULTIPOINT or geom_type == geometry_type::MULTIPOINTZ or geom_type == geometry_type::MULTIPOINTM or geom_type == geometry_type::MULTIPOINTZM;
 }
 
 /*!
  * @param geom_type the geometry type
- * @return returns true if the geometry type is a LineString, otherwise false
+ * @return true if the geometry type is a LineString, otherwise false
  *
  * @since 0.0.1
  */
-bool is_linestring(GeometryType geom_type)
+bool is_linestring(geometry_type geom_type) noexcept
 {
-    return geom_type == GeometryType::LINESTRING or geom_type == GeometryType::LINESTRINGZ or geom_type == GeometryType::LINESTRINGM or geom_type == GeometryType::LINESTRINGZM;
+    return geom_type == geometry_type::LINESTRING or geom_type == geometry_type::LINESTRINGZ or geom_type == geometry_type::LINESTRINGM or geom_type == geometry_type::LINESTRINGZM;
 }
 
 /*!
  * @param geom_type the geometry type
- * @return returns true if the geometry type is a MultiLineString, otherwise false
+ * @return true if the geometry type is a MultiLineString, otherwise false
  *
  * @since 0.0.1
  */
-bool is_multilinestring(GeometryType geom_type)
+bool is_multilinestring(geometry_type geom_type) noexcept
 {
-    return geom_type == GeometryType::MULTILINESTRING or geom_type == GeometryType::MULTILINESTRINGZ or geom_type == GeometryType::MULTILINESTRINGM or geom_type == GeometryType::MULTILINESTRINGZM;
+    return geom_type == geometry_type::MULTILINESTRING or geom_type == geometry_type::MULTILINESTRINGZ or geom_type == geometry_type::MULTILINESTRINGM or geom_type == geometry_type::MULTILINESTRINGZM;
 }
 
 /*!
  * @param geom_type the geometry type
- * @return returns true if the geometry type is a Polygon, otherwise false
+ * @return true if the geometry type is a Polygon, otherwise false
  *
  * @since 0.0.1
  */
-bool is_polygon(GeometryType geom_type)
+bool is_polygon(geometry_type geom_type) noexcept
 {
-    return geom_type == GeometryType::POLYGON or geom_type == GeometryType::POLYGONZ or geom_type == GeometryType::POLYGONM or geom_type == GeometryType::POLYGONZM;
+    return geom_type == geometry_type::POLYGON or geom_type == geometry_type::POLYGONZ or geom_type == geometry_type::POLYGONM or geom_type == geometry_type::POLYGONZM;
 }
 
 /*!
  * @param geom_type the geometry type
- * @return returns true if the geometry type is a MultiPolygon, otherwise false
+ * @return true if the geometry type is a MultiPolygon, otherwise false
  *
  * @since 0.0.1
  */
-bool is_multipolygon(GeometryType geom_type)
+bool is_multipolygon(geometry_type geom_type) noexcept
 {
-    return geom_type == GeometryType::MULTIPOLYGON or geom_type == GeometryType::MULTIPOLYGONZ or geom_type == GeometryType::MULTIPOLYGONM or geom_type == GeometryType::MULTIPOLYGONZM;
+    return geom_type == geometry_type::MULTIPOLYGON or geom_type == geometry_type::MULTIPOLYGONZ or geom_type == geometry_type::MULTIPOLYGONM or geom_type == geometry_type::MULTIPOLYGONZM;
 }
 
 }  // namespace utils
 }  // namespace shapes
 }  // namespace simo
+// #include <simo/geom/geometry.hpp>
+
+
+#include <ciso646>
+#include <vector>
+#include <memory>
+// #include <simo/shapes_fwd.hpp>
+
+// #include <simo/geom/detail/bounds.hpp>
+
+
+#include <ciso646>
+#include <algorithm>
+#include <tuple>
+
+namespace simo
+{
+namespace shapes
+{
+namespace detail
+{
+/*!
+ * @brief Represents an axis-aligned bounding box
+ * @ingroup geometry
+ *
+ * @since 0.0.1
+ */
+struct bounds
+{
+    /// the minimum x-coordinate
+    double minx;
+
+    /// the minimum y-coordinate
+    double miny;
+
+    /// the maximum x-coordinate
+    double maxx;
+
+    /// the maximum y-coordinate
+    double maxy;
+
+    /*!
+         * @brief Creates a bounds object
+         *
+         * @since 0.0.1
+         */
+    bounds()
+        : minx(std::numeric_limits<double>::max()),
+          miny(std::numeric_limits<double>::max()),
+          maxx(std::numeric_limits<double>::min()),
+          maxy(std::numeric_limits<double>::min())
+    {
+    }
+
+    /*!
+     * @brief Creates a bounds object from the given coordinates
+     *
+     * @param minx the x-coordinate of the first corner
+     * @param miny the y-coordinate of the first corner
+     * @param maxx the x-coordinate of the second corner
+     * @param maxy the y-coordinate of the second corner
+     *
+     * @since 0.0.1
+     */
+    bounds(double minx, double miny, double maxx, double maxy)
+        : minx(minx), miny(miny), maxx(maxx), maxy(maxy)
+    {
+    }
+
+    /*!
+     * @brief Extends the bounds to contain the given point
+     *
+     * @param x the x-coordinate of the point
+     * @param y the y-coordinate of the point
+     * @return the bounds object
+     *
+     * @since 0.0.1
+     */
+    bounds& extend(double x, double y)
+    {
+        minx = std::min(x, minx);
+        maxx = std::max(x, maxx);
+        miny = std::min(y, miny);
+        maxy = std::max(y, maxy);
+        return *this;
+    }
+
+    /*!
+     * @brief Extends the bounds to contain the given bounds
+     *
+     * @param x the x-coordinate of the point
+     * @param y the y-coordinate of the point
+     * @return the bounds object
+     *
+     * @since 0.0.1
+     */
+    bounds& extend(const bounds& b)
+    {
+        minx = std::min(b.minx, minx);
+        maxx = std::max(b.maxx, maxx);
+        miny = std::min(b.miny, miny);
+        maxy = std::max(b.maxy, maxy);
+        return *this;
+    }
+
+    /*!
+     * @return a (x, y) tuple with the center of the bounds
+     *
+     * @since 0.0.1
+     */
+    std::tuple<double, double> center() const
+    {
+        return std::make_tuple((minx + maxx) / 2.0, (miny + maxy) / 2.0);
+    }
+
+    /*!
+     * @return a (x, y) tuple with the bottom left bounds
+     *
+     * @since 0.0.1
+     */
+    std::tuple<double, double> bottom_left() const
+    {
+        return std::make_tuple(minx, maxy);
+    }
+
+    /*!
+     * @return a (x, y) tuple with the top right bounds
+     *
+     * @since 0.0.1
+     */
+    std::tuple<double, double> top_right() const
+    {
+        return std::make_tuple(maxx, miny);
+    }
+
+    /*!
+     * @return a (x, y) tuple with the top left bounds
+     *
+     * @since 0.0.1
+     */
+    std::tuple<double, double> top_left() const
+    {
+        return std::make_tuple(minx, miny);
+    }
+
+    /*!
+     * @return a (x, y) tuple with the bottom right bounds
+     *
+     * @since 0.0.1
+     */
+    std::tuple<double, double> bottom_right() const
+    {
+        return std::make_tuple(maxx, maxy);
+    }
+
+    /*!
+     * @param x the x-coordinate of the point
+     * @param y the y-coordinate of the point
+     * @return true if the bounds contains the given point, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool contains(double x, double y) const
+    {
+        return (x >= minx) && (x <= maxx) && (y >= miny) && (y <= maxy);
+    }
+
+    /*!
+     * @param other the bounds
+     * @return true if the bounds contain the given one, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool contains(const bounds& other)
+    {
+        return contains(other.minx, other.miny) && contains(other.maxx, other.maxy);
+    }
+
+    /*!
+     * @param other the bounds
+     * @return true if the bounds intersect the given one, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool intersects(const bounds& other)
+    {
+        return (other.maxx >= minx) && (other.minx <= maxx) && (other.maxy >= miny) && (other.miny <= maxy);
+    }
+
+    /*!
+     * @param other the bounds
+     * @return true if the bounds overlaps the given one, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool overlaps(const bounds& other)
+    {
+        return (other.maxx > minx) && (other.minx < maxx) && (other.maxy > miny) && (other.miny < maxy);
+    }
+};
+
+}  // namespace detail
+}  // namespace shapes
+}  // namespace simo
+// #include <simo/geom/types.hpp>
+
+// #include <simo/geom/utils.hpp>
+
+// #include <simo/exceptions.hpp>
+
+
+#include <ciso646>
+#include <string>
+#include <exception>
+
+namespace simo
+{
+namespace shapes
+{
+namespace exceptions
+{
+
+/*!
+ * @brief Base shapes exception
+ *
+ * @since 0.0.1
+ */
+class shapes_exception : public std::exception
+{
+  public:
+    /*!
+     * @brief Creates a shapes exception
+     *
+     * @param reason the exception reason
+     *
+     * @since 0.0.1
+     */
+    explicit shapes_exception(const char* reason)
+        : m_reason(reason) {}
+
+    /*!
+     * @brief Returns the exception reason
+     *
+     * @return a string with the exception reason
+     *
+     * @since 0.0.1
+     */
+    const char* what() const noexcept override
+    {
+        return m_reason.c_str();
+    }
+
+  protected:
+    /*!
+     * @brief Set the exception reason
+     *
+     * @param reason the exception reason
+     *
+     * @since 0.0.1
+     */
+    void set_reason(const std::string& reason)
+    {
+        m_reason.append(": ");
+        m_reason.append(reason);
+    }
+
+  private:
+    std::string m_reason{};
+};
+
+/*!
+ * @brief Exception thrown when an error has been found while parsing
+ *
+ * @since 0.0.1
+ */
+class parse_error : public shapes_exception
+{
+  public:
+    /*!
+     * @brief Creates a parse error with the given reason
+     *
+     * @param reason the reason message
+     *
+     * @since 0.0.1
+     */
+    explicit parse_error(const std::string& reason)
+        : shapes_exception("parse error")
+    {
+        set_reason(reason);
+    }
+};
+
+/*!
+ * @brief Exception thrown when method or routine is not implemented
+ *
+ * @since 0.0.1
+ */
+class not_implemented_error : public shapes_exception
+{
+  public:
+    /*!
+     * @brief Creates a not implemented error exception
+     *
+     * @since 0.0.1
+     */
+    not_implemented_error()
+        : shapes_exception("not implemented error")
+    {
+    }
+
+    /*!
+     * @brief Creates a not implemented error exception
+     *
+     * @param reason the reason message
+     *
+     * @since 0.0.1
+     */
+    explicit not_implemented_error(const std::string& reason)
+        : shapes_exception("not implemented error")
+    {
+        set_reason(reason);
+    }
+};
+
+/*!
+ * @brief Exception thrown when a geometry error is found
+ *
+ * @since 0.0.1
+ */
+class geometry_error : public shapes_exception
+{
+  public:
+    /*!
+     * @brief Creates a geometry error exception
+     *
+     * @param reason the exception reason
+     *
+     * @since 0.0.1
+     */
+    explicit geometry_error(const std::string& reason)
+        : shapes_exception("geometry error")
+    {
+        set_reason(reason);
+    }
+};
+
+/*!
+ * @brief Exception thrown when a sequence index is out of range
+ *
+ * @since 0.0.1
+ */
+class index_error : public shapes_exception
+{
+  public:
+    /*!
+     * @brief Creates a index error exception
+     *
+     * @param reason the exception reason
+     *
+     * @since 0.0.1
+     */
+    explicit index_error(const std::string& reason)
+        : shapes_exception("index error")
+    {
+        set_reason(reason);
+    }
+};
+
+}  // namespace exceptions
+}  // namespace shapes
+}  // namespace simo
+
 
 namespace simo
 {
@@ -759,193 +819,212 @@ namespace shapes
 {
 
 /*!
- * @brief abstract class for all geometries
+ * @brief Base class for all geometries
+ *
  * @tparam T the geometry type (e.g. Point, Polygon, LineString)
  * @ingroup geometry
  *
  * @since 0.0.1
  */
 template <typename T>
-class BaseGeometry
+class basic_geometry
 {
   public:
-    /// a spatial reference identifier (SRID) is a unique identifier associated with a specific coordinate system
-    int32_t srid = -1;
-
-    /// the geometry bounds
-    Bounds bounds{};
-
-    /// the dimension type is either 2D (x, y), 3D (x, y, z), 4D (x, y, z, m) or 2D with measure-coordinate (x, y, m)
-    DimensionType dim = DimensionType::XY;
-
-    /// serialization precision
-    int8_t precision = 1;
-
     /*!
-     * @brief returns the geometry type (e.g. GeometryType::Point, GeometryType::MultiPoint)
+     * @brief Returns the geometry type
      * @return the geometry type
      *
      * @since 0.0.1
      */
-    GeometryType geom_type() const
+    geometry_type geom_type() const noexcept
     {
         return static_cast<const T*>(this)->geom_type_();
     }
 
     /*!
-     * @brief returns the geometry type with dimension (e.g. GeometryType::PointZ, GeometryType::MultiPointZM)
-     * @return the geometry type with dimension
-     *
-     * @since 0.0.1
-     */
-    GeometryType geom_type_dim() const
-    {
-        auto geom_type = static_cast<const T*>(this)->geom_type_();
-        return utils::get_geom_type_dim(geom_type, dim);
-    }
-
-    /*!
-     * @brief returns the geometry type as a string (e.g. Point, LineString)
+     * @brief Returns the geometry type as a string
      * @return the geometry type as a string
      *
      * @since 0.0.1
      */
-    std::string geom_type_str() const
+    std::string tagged_text() const noexcept
     {
-        return static_cast<const T*>(this)->geom_type_str_();
+        return static_cast<const T*>(this)->tagged_text_();
     }
 
     /*!
-     * @brief returns true if the geometry is empty
-     * @return true if the the geometry is empty, otherwise false
+     * @brief Returns the dimension type for the geometry
+     * @return the dimension type
      *
      * @since 0.0.1
      */
-    bool empty() const
+    dimension_type dim() const noexcept
     {
-        return static_cast<const T*>(this)->empty_();
+        return static_cast<const T*>(this)->dim_();
     }
 
     /*!
-     * @brief returns the geometry size
-     * @return the size of the geometry
-     *
-     * @since 0.0.1
-     */
-    size_t size() const
-    {
-        return static_cast<const T*>(this)->size_();
-    }
-
-    /*!
-     * @brief returns the geometry (x, y) coordinates as a tuple
-     * @return a vector of (x, y) tuples
-     *
-     * @since 0.0.1
-     */
-    std::vector<std::tuple<double, double>> xy() const
-    {
-        return static_cast<const T*>(this)->xy_();
-    }
-
-    /*!
-     * @brief returns the geometry (x, y, z) coordinates as a tuple
-     * @return a vector of (x, y, z) tuples
-     *
-     * @since 0.0.1
-     */
-    std::vector<std::tuple<double, double, double>> xyz() const
-    {
-        return static_cast<const T*>(this)->xyz_();
-    }
-
-    /*!
-     * @brief returns the geometry (x, y, m) coordinates as a tuple
-     * @return a vector of (x, y, m) tuples
-     *
-     * @since 0.0.1
-     */
-    std::vector<std::tuple<double, double, double>> xym() const
-    {
-        return static_cast<const T*>(this)->xym_();
-    }
-
-    /*!
-     * @brief returns the geometry (x, y, z, m) coordinates as a tuple
-     * @return a vector of (x, y, z, m) tuples
-     *
-     * @since 0.0.1
-     */
-    std::vector<std::tuple<double, double, double, double>> xyzm() const
-    {
-        return static_cast<const T*>(this)->xyzm_();
-    }
-
-    /*!
-     * @brief whether the geometry has z-coordinate
-     * @return true if the geometry has z-coordinate, otherwise false
-     *
-     * @since 0.0.1
-     */
-    bool has_z() const
-    {
-        return dim == DimensionType::XYZ or dim == DimensionType::XYZM;
-    }
-
-    /*!
-     * @brief whether the geometry has m-coordinate
-     * @return true if the geometry has m-coordinate, otherwise false
-     *
-     * @since 0.0.1
-     */
-    bool has_m() const
-    {
-        return dim == DimensionType::XYM or dim == DimensionType::XYZM;
-    }
-
-    /*!
-     * @brief whether the geometry is closed
-     * @return true if the geometry is closed, otherwise false
-     *
-     * @since 0.0.1
-     */
-    bool is_closed() const
-    {
-        return static_cast<const T*>(this)->is_closed_();
-    }
-
-    /*!
-     * @brief returns the number of dimensions of the geometry
+     * @brief Returns the number of dimensions of the geometry
      * @return the number of dimensions
      * @note the number of dimensions is (x, y) = 2, (x, y, z) = 3, (x, y, m) = 3 and (x, y, z, m) = 4
      *
      * @since 0.0.1
      */
-    int8_t ndim() const
+    int32_t ndim() const noexcept
     {
-        return utils::get_ndim(dim);
+        return static_cast<const T*>(this)->ndim_();
+    }
+
+    /*!
+     * @brief Raise an error if the geometry is invalid
+     * @throw geometry_error the geometry error
+     *
+     * @since 0.0.1
+     */
+    void throw_for_invalid() const
+    {
+        return static_cast<const T*>(this)->throw_for_invalid_();
+    }
+
+    /*!
+     * @brief Whether the geometry is closed
+     * @return true if the geometry is closed, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool is_closed() const noexcept
+    {
+        return static_cast<const T*>(this)->is_closed_();
+    }
+
+    /*!
+     * @brief Whether the geometry is valid
+     * @return true if the geometry is valid, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool is_valid() const noexcept
+    {
+        try
+        {
+            throw_for_invalid();
+        }
+        catch (const exceptions::geometry_error& e)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    /*!
+     * @brief Returns the bounding box of the geometry
+     * @return a bounds object
+     *
+     * @since 0.0.1
+     */
+    detail::bounds bounds() const
+    {
+        return static_cast<const T*>(this)->bounds_();
+    }
+
+    /*!
+     * @brief Whether the geometry has the z-coordinate
+     * @return true if the geometry has z-coordinate, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool has_z() const noexcept
+    {
+        return static_cast<const T*>(this)->has_z_();
+    }
+
+    /*!
+     * @brief Whether the geometry has the m-coordinate (measurement coordinate)
+     * @return true if the geometry has m-coordinate, otherwise false
+     *
+     * @since 0.0.1
+     */
+    bool has_m() const noexcept
+    {
+        return static_cast<const T*>(this)->has_m_();
+    }
+
+    // json
+
+    /*!
+     * @brief Creates a geometry from a geojson string
+     * @param json the geojson string
+     * @return a Geometry object
+     * @sa https://tools.ietf.org/html/rfc7946
+     *
+     * @since 0.0.1
+     */
+    static T from_json(const std::string& json)
+    {
+        return T::from_json_(json);
+    }
+
+    /*!
+     * @brief Dumps the geojson representation of the geometry
+     * @param precision the output precision
+     * @return a geojson string
+     * @sa https://tools.ietf.org/html/rfc7946
+     *
+     * @since 0.0.1
+     */
+    std::string json(std::int32_t precision = -1) const
+    {
+        return static_cast<const T*>(this)->json_(precision);
+    }
+
+    // wkt
+
+    /*!
+     * @brief Creates a Geometry from a wkt string
+     * @param wkt the wkt string
+     * @return a Geometry object
+     * @sa https://tools.ietf.org/html/rfc7946
+     *
+     * @since 0.0.1
+     */
+    static T from_wkt(const std::string& wkt)
+    {
+        return T::from_wkt_(wkt);
+    }
+
+    /*!
+     * @brief Dumps the wkt representation of the geometry
+     * @param precision the output precision
+     * @return a wkt string
+     * @sa https://tools.ietf.org/html/rfc7946
+     *
+     * @since 0.0.1
+     */
+    std::string wkt(std::int32_t precision = -1) const
+    {
+        return static_cast<const T*>(this)->wkt_(precision);
     }
 };
 
-/*!
- * @brief the geometry type
- *
- * @since 0.0.1
- */
-typedef union Geometry
-{
-    Point* point;                            ///< Point value
-    MultiPoint* multipoint;                  ///< MultiPoint value
-    LineString* linestring;                  ///< LineString value
-    MultiLineString* multilinestring;        ///< MultiLineString value
-    Polygon* polygon;                        ///< Polygon value
-    MultiPolygon* multipolygon;              ///< MultiPolygon value
-    GeometryCollection* geometrycollection;  ///< GeometryCollection value
-} Geometry;
+///*
+// * @brief The geometry type
+// *
+// * @since 0.0.1
+// */
+//typedef union Geometry
+//{
+//    Point* point;                            ///< Point value
+//    MultiPoint* multipoint;                  ///< MultiPoint value
+//    LineString* linestring;                  ///< LineString value
+//    MultiLineString* multilinestring;        ///< MultiLineString value
+//    Polygon* polygon;                        ///< Polygon value
+//    MultiPolygon* multipolygon;              ///< MultiPolygon value
+//    GeometryCollection* geometrycollection;  ///< GeometryCollection value
+//} Geometry;
 
 }  // namespace shapes
 }  // namespace simo
-// #include <simo/geom/bounds.hpp>
+// #include <simo/geom/detail/bounds.hpp>
 
 // #include <simo/geom/point.hpp>
 
@@ -21373,162 +21452,6 @@ inline nlohmann::json::json_pointer operator "" _json_pointer(const char* s, std
 
 // #include <simo/exceptions.hpp>
 
-
-#include <ciso646>
-#include <string>
-#include <exception>
-
-namespace simo
-{
-namespace shapes
-{
-namespace exceptions
-{
-
-/*!
- * @brief base shapes exception
- *
- * @since 0.0.1
- */
-class ShapesException : public std::exception
-{
-  public:
-    /*!
-     * @brief creates a shapes exception
-     * @param reason the exception reason
-     *
-     * @since 0.0.1
-     */
-    explicit ShapesException(const char* reason)
-        : m_reason(reason) {}
-
-    /*!
-     * @brief returns the exception reason
-     * @return a string with the exception reason
-     *
-     * @since 0.0.1
-     */
-    const char* what() const noexcept override
-    {
-        return m_reason.c_str();
-    }
-
-  protected:
-    /*!
-     * @brief set the exception reason
-     * @param reason the exception reason
-     *
-     * @since 0.0.1
-     */
-    void set_reason(const std::string& reason)
-    {
-        m_reason.append(": ");
-        m_reason.append(reason);
-    }
-
-  private:
-    std::string m_reason{};
-};
-
-/*!
- * @brief exception thrown when an error has been found while parsing
- *
- * @since 0.0.1
- */
-class ParseError : public ShapesException
-{
-  public:
-    /*!
-     * @brief creates a parse error with the given reason
-     * @param reason the reason message
-     *
-     * @since 0.0.1
-     */
-    explicit ParseError(const std::string& reason)
-        : ShapesException("parse error")
-    {
-        set_reason(reason);
-    }
-};
-
-/*!
- * @brief exception thrown when method or routine is not implemented
- *
- * @since 0.0.1
- */
-class NotImplementedError : public ShapesException
-{
-  public:
-    /*!
-     * @brief creates a not implemented error exception
-     *
-     * @since 0.0.1
-     */
-    NotImplementedError()
-        : ShapesException("not implemented error")
-    {
-    }
-
-    /*!
-     * @brief creates a not implemented error exception
-     *
-     * @param reason the reason message
-     *
-     * @since 0.0.1
-     */
-    explicit NotImplementedError(const std::string& reason)
-        : ShapesException("not implemented error")
-    {
-        set_reason(reason);
-    }
-};
-
-/*!
- * @brief exception thrown when a geometry error is found
- *
- * @since 0.0.1
- */
-class GeometryError : public ShapesException
-{
-  public:
-    /*!
-     * @brief creates a geometry error exception
-     * @param reason the exception reason
-     *
-     * @since 0.0.1
-     */
-    explicit GeometryError(const std::string& reason)
-        : ShapesException("geometry error")
-    {
-        set_reason(reason);
-    }
-};
-
-/*!
- * @brief exception thrown when a sequence index is out of range
- *
- * @since 0.0.1
- */
-class IndexError : public ShapesException
-{
-  public:
-    /*!
-     * @brief creates a index error exception
-     * @param reason the exception reason
-     *
-     * @since 0.0.1
-     */
-    explicit IndexError(const std::string& reason)
-        : ShapesException("index error")
-    {
-        set_reason(reason);
-    }
-};
-
-}  // namespace exceptions
-}  // namespace shapes
-}  // namespace simo
-
 // #include <simo/io/wkt_reader.hpp>
 
 
@@ -21540,47 +21463,14 @@ class IndexError : public ShapesException
 // #include <simo/io/wkt_parser.hpp>
 
 
+#include <ciso646>
+#include <iostream>
+#include <cassert>
 // #include <simo/geom/types.hpp>
 
+// #include <simo/io/wkt_token.hpp>
 
-namespace simo
-{
-namespace shapes
-{
 
-/*!
- * @brief a Well-known text (WKT) markup language parser result data
- * @ingroup wkt
- *
- * @since 0.0.1
- */
-struct WktData
-{
-    /// the dimension type of the geometry
-    GeometryType geom_type;
-
-    /// the coordinates as a sequence of numbers
-    std::vector<double> coords;
-
-    /// the offsets in the coordinates sequence
-    std::vector<std::size_t> offsets;
-};
-
-/*!
- * @brief a Well-known text (WKT) markup language parser result
- *
- * @since 0.0.1
- */
-struct WktResult
-{
-    /// whether there is a parser error
-    bool parser_error = false;
-
-    /// the parser result data
-    WktData data;
-};
-
-// #include <simo/io/wkt_parser.h>
 #define WKT_NUM                         1
 #define WKT_POINT_TAGGED_TEXT           2
 #define WKT_EMPTY_SET                   3
@@ -21616,7 +21506,45 @@ struct WktResult
 #define WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT 33
 #define WKT_END_OF_INPUT               99
 #define WKT_PARSE_ERROR                100
-// #include <simo/io/wkt_parser.c>
+
+namespace simo
+{
+namespace shapes
+{
+
+/*!
+ * @brief A Well-known text (WKT) markup language parser result data
+ * @ingroup wkt
+ *
+ * @since 0.0.1
+ */
+struct wkt_data
+{
+    /// the dimension type of the geometry
+    geometry_type geom_type;
+
+    /// the coordinates as a sequence of numbers
+    std::vector<double> coords;
+
+    /// the offsets in the coordinates sequence
+    std::vector<std::size_t> offsets;
+};
+
+/*!
+ * @brief A Well-known text (WKT) markup language parser results
+ * @ingroup wkt
+ *
+ * @since 0.0.1
+ */
+struct wkt_result
+{
+    /// whether there is a parser error
+    bool parser_error = false;
+
+    /// the parser result data
+    wkt_data data;
+};
+
 /* Driver template for the LEMON parser generator.
 ** The author disclaims copyright to this source code.
 */
@@ -21625,10 +21553,23 @@ struct WktResult
 #include <stdio.h>
 
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-variable"
+#endif
 
-#include <ciso646>
-#include <iostream>
-#include <cassert>
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#pragma clang diagnostic ignored "-Wunused-variable"
+#endif
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4100)
+#pragma warning(disable: 4189)
+#endif
 
 /* Next is all token values, in a form suitable for use by makeheaders.
 ** This section will be null unless lemon is run with the -m switch.
@@ -21690,9 +21631,9 @@ typedef union {
 #ifndef YYSTACKDEPTH
 #define YYSTACKDEPTH 1048576
 #endif
-#define ParseARG_SDECL  struct WktResult *result ;
-#define ParseARG_PDECL , struct WktResult *result 
-#define ParseARG_FETCH  struct WktResult *result  = yypParser->result 
+#define ParseARG_SDECL  struct wkt_result *result ;
+#define ParseARG_PDECL , struct wkt_result *result 
+#define ParseARG_FETCH  struct wkt_result *result  = yypParser->result 
 #define ParseARG_STORE yypParser->result  = result 
 #define YYNSTATE 399
 #define YYNRULE 202
@@ -22543,7 +22484,7 @@ static void yyStackOverflow(yyParser *yypParser, YYMINORTYPE *yypMinor){
    /* Here code is inserted which will execute if the parser
    ** stack every overflows */
 
-    result->parser_error = 1;
+    result->parser_error = true;
    ParseARG_STORE; /* Suppress warning about unused %extra_argument var */
 }
 
@@ -22863,12 +22804,12 @@ static void yy_reduce(
 {
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
-    result->data.geom_type = GeometryType::POINT;
+    result->data.geom_type = geometry_type::POINT;
 }
         break;
       case 31: /* point ::= WKT_POINT_TAGGED_TEXT point_text */
 {
-    result->data.geom_type = GeometryType::POINT;
+    result->data.geom_type = geometry_type::POINT;
 }
         break;
       case 32: /* point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_EMPTY_SET */
@@ -22876,12 +22817,12 @@ static void yy_reduce(
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
-    result->data.geom_type = GeometryType::POINTZ;
+    result->data.geom_type = geometry_type::POINTZ;
 }
         break;
       case 33: /* point_z ::= WKT_POINT_Z_TAGGED_TEXT point_text_z */
 {
-    result->data.geom_type = GeometryType::POINTZ;
+    result->data.geom_type = geometry_type::POINTZ;
 }
         break;
       case 34: /* point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_EMPTY_SET */
@@ -22889,12 +22830,12 @@ static void yy_reduce(
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
-    result->data.geom_type = GeometryType::POINTM;
+    result->data.geom_type = geometry_type::POINTM;
 }
         break;
       case 35: /* point_m ::= WKT_POINT_M_TAGGED_TEXT point_text_m */
 {
-    result->data.geom_type = GeometryType::POINTM;
+    result->data.geom_type = geometry_type::POINTM;
 }
         break;
       case 36: /* point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_EMPTY_SET */
@@ -22903,12 +22844,12 @@ static void yy_reduce(
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
     result->data.coords.push_back(0);
-    result->data.geom_type = GeometryType::POINTZM;
+    result->data.geom_type = geometry_type::POINTZM;
 }
         break;
       case 37: /* point_zm ::= WKT_POINT_ZM_TAGGED_TEXT point_text_zm */
 {
-    result->data.geom_type = GeometryType::POINTZM;
+    result->data.geom_type = geometry_type::POINTZM;
 }
         break;
       case 38: /* coord_xy ::= coord coord */
@@ -22937,148 +22878,160 @@ static void yy_reduce(
       case 71: /* multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN point_text multipoint_text WKT_RPAREN */ yytestcase(yyruleno==71);
       case 72: /* multipoint ::= WKT_MULTIPOINT_TAGGED_TEXT WKT_LPAREN coord_xy multipoint_text_2 WKT_RPAREN */ yytestcase(yyruleno==72);
 {
-    result->data.geom_type = GeometryType::MULTIPOINT;
+    result->data.geom_type = geometry_type::MULTIPOINT;
 }
         break;
       case 73: /* multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_EMPTY_SET */
       case 74: /* multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_LPAREN point_text_z multipoint_text_z WKT_RPAREN */ yytestcase(yyruleno==74);
       case 75: /* multipoint_z ::= WKT_MULTIPOINT_Z_TAGGED_TEXT WKT_LPAREN coord_xyz multipoint_text_z_2 WKT_RPAREN */ yytestcase(yyruleno==75);
 {
-    result->data.geom_type = GeometryType::MULTIPOINTZ;
+    result->data.geom_type = geometry_type::MULTIPOINTZ;
 }
         break;
       case 76: /* multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_EMPTY_SET */
       case 77: /* multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_LPAREN point_text_m multipoint_text_m WKT_RPAREN */ yytestcase(yyruleno==77);
       case 78: /* multipoint_m ::= WKT_MULTIPOINT_M_TAGGED_TEXT WKT_LPAREN coord_xym multipoint_text_m_2 WKT_RPAREN */ yytestcase(yyruleno==78);
 {
-    result->data.geom_type = GeometryType::MULTIPOINTM;
+    result->data.geom_type = geometry_type::MULTIPOINTM;
 }
         break;
       case 79: /* multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_EMPTY_SET */
       case 80: /* multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN point_text_zm multipoint_text_zm WKT_RPAREN */ yytestcase(yyruleno==80);
       case 81: /* multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN coord_xyzm multipoint_text_zm_2 WKT_RPAREN */ yytestcase(yyruleno==81);
 {
-    result->data.geom_type = GeometryType::MULTIPOINTZM;
+    result->data.geom_type = geometry_type::MULTIPOINTZM;
+}
+        break;
+      case 82: /* linestring_text ::= WKT_LPAREN coord_xy WKT_COMMA coord_xy coord_xy_repeated WKT_RPAREN */
+      case 83: /* linestring_text_z ::= WKT_LPAREN coord_xyz WKT_COMMA coord_xyz coord_xyz_repeated WKT_RPAREN */ yytestcase(yyruleno==83);
+      case 84: /* linestring_text_m ::= WKT_LPAREN coord_xym WKT_COMMA coord_xym coord_xym_repeated WKT_RPAREN */ yytestcase(yyruleno==84);
+      case 85: /* linestring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN */ yytestcase(yyruleno==85);
+      case 114: /* ring_text ::= WKT_LPAREN coord_xy WKT_COMMA coord_xy WKT_COMMA coord_xy WKT_COMMA coord_xy coord_xy_repeated WKT_RPAREN */ yytestcase(yyruleno==114);
+      case 115: /* ring_text_z ::= WKT_LPAREN coord_xyz WKT_COMMA coord_xyz WKT_COMMA coord_xyz WKT_COMMA coord_xyz coord_xyz_repeated WKT_RPAREN */ yytestcase(yyruleno==115);
+      case 116: /* ring_text_m ::= WKT_LPAREN coord_xym WKT_COMMA coord_xym WKT_COMMA coord_xym WKT_COMMA coord_xym coord_xym_repeated WKT_RPAREN */ yytestcase(yyruleno==116);
+      case 117: /* ring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm WKT_COMMA coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN */ yytestcase(yyruleno==117);
+{
+    result->data.offsets.push_back(result->data.coords.size());
 }
         break;
       case 94: /* linestring ::= WKT_LINESTRING_TAGGED_TEXT WKT_EMPTY_SET */
       case 95: /* linestring ::= WKT_LINESTRING_TAGGED_TEXT linestring_text */ yytestcase(yyruleno==95);
 {
-    result->data.geom_type = GeometryType::LINESTRING;
+    result->data.geom_type = geometry_type::LINESTRING;
 }
         break;
       case 96: /* linestring_z ::= WKT_LINESTRING_Z_TAGGED_TEXT WKT_EMPTY_SET */
       case 97: /* linestring_z ::= WKT_LINESTRING_Z_TAGGED_TEXT linestring_text_z */ yytestcase(yyruleno==97);
 {
-    result->data.geom_type = GeometryType::LINESTRINGZ;
+    result->data.geom_type = geometry_type::LINESTRINGZ;
 }
         break;
       case 98: /* linestring_m ::= WKT_LINESTRING_M_TAGGED_TEXT WKT_EMPTY_SET */
       case 99: /* linestring_m ::= WKT_LINESTRING_M_TAGGED_TEXT linestring_text_m */ yytestcase(yyruleno==99);
 {
-    result->data.geom_type = GeometryType::LINESTRINGM;
+    result->data.geom_type = geometry_type::LINESTRINGM;
 }
         break;
       case 100: /* linestring_zm ::= WKT_LINESTRING_ZM_TAGGED_TEXT WKT_EMPTY_SET */
       case 101: /* linestring_zm ::= WKT_LINESTRING_ZM_TAGGED_TEXT linestring_text_zm */ yytestcase(yyruleno==101);
 {
-    result->data.geom_type = GeometryType::LINESTRINGZM;
+    result->data.geom_type = geometry_type::LINESTRINGZM;
 }
         break;
       case 106: /* multilinestring ::= WKT_MULTILINESTRING_TAGGED_TEXT WKT_EMPTY_SET */
       case 107: /* multilinestring ::= WKT_MULTILINESTRING_TAGGED_TEXT multilinestring_text */ yytestcase(yyruleno==107);
 {
-    result->data.geom_type = GeometryType::MULTILINESTRING;
+    result->data.geom_type = geometry_type::MULTILINESTRING;
 }
         break;
       case 108: /* multilinestring_z ::= WKT_MULTILINESTRING_Z_TAGGED_TEXT WKT_EMPTY_SET */
       case 109: /* multilinestring_z ::= WKT_MULTILINESTRING_Z_TAGGED_TEXT multilinestring_text_z */ yytestcase(yyruleno==109);
 {
-    result->data.geom_type = GeometryType::MULTILINESTRINGZ;
+    result->data.geom_type = geometry_type::MULTILINESTRINGZ;
 }
         break;
       case 110: /* multilinestring_m ::= WKT_MULTILINESTRING_M_TAGGED_TEXT WKT_EMPTY_SET */
       case 111: /* multilinestring_m ::= WKT_MULTILINESTRING_M_TAGGED_TEXT multilinestring_text_m */ yytestcase(yyruleno==111);
 {
-    result->data.geom_type = GeometryType::MULTILINESTRINGM;
+    result->data.geom_type = geometry_type::MULTILINESTRINGM;
 }
         break;
       case 112: /* multilinestring_zm ::= WKT_MULTILINESTRING_ZM_TAGGED_TEXT WKT_EMPTY_SET */
       case 113: /* multilinestring_zm ::= WKT_MULTILINESTRING_ZM_TAGGED_TEXT multilinestring_text_zm */ yytestcase(yyruleno==113);
 {
-    result->data.geom_type = GeometryType::MULTILINESTRINGZM;
+    result->data.geom_type = geometry_type::MULTILINESTRINGZM;
 }
         break;
       case 138: /* polygon ::= WKT_POLYGON_TAGGED_TEXT WKT_EMPTY_SET */
       case 139: /* polygon ::= WKT_POLYGON_TAGGED_TEXT polygon_text */ yytestcase(yyruleno==139);
 {
-    result->data.geom_type = GeometryType::POLYGON;
+    result->data.geom_type = geometry_type::POLYGON;
 }
         break;
       case 140: /* polygon_z ::= WKT_POLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET */
       case 141: /* polygon_z ::= WKT_POLYGON_Z_TAGGED_TEXT polygon_text_z */ yytestcase(yyruleno==141);
 {
-    result->data.geom_type = GeometryType::POLYGONZ;
+    result->data.geom_type = geometry_type::POLYGONZ;
 }
         break;
       case 142: /* polygon_m ::= WKT_POLYGON_M_TAGGED_TEXT WKT_EMPTY_SET */
       case 143: /* polygon_m ::= WKT_POLYGON_M_TAGGED_TEXT polygon_text_m */ yytestcase(yyruleno==143);
 {
-    result->data.geom_type = GeometryType::POLYGONM;
+    result->data.geom_type = geometry_type::POLYGONM;
 }
         break;
       case 144: /* polygon_zm ::= WKT_POLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET */
       case 145: /* polygon_zm ::= WKT_POLYGON_ZM_TAGGED_TEXT polygon_text_zm */ yytestcase(yyruleno==145);
 {
-    result->data.geom_type = GeometryType::POLYGONZM;
+    result->data.geom_type = geometry_type::POLYGONZM;
 }
         break;
       case 150: /* multipolygon ::= WKT_MULTIPOLYGON_TAGGED_TEXT WKT_EMPTY_SET */
       case 151: /* multipolygon ::= WKT_MULTIPOLYGON_TAGGED_TEXT multipolygon_text */ yytestcase(yyruleno==151);
 {
-    result->data.geom_type = GeometryType::MULTIPOLYGON;
+    result->data.geom_type = geometry_type::MULTIPOLYGON;
 }
         break;
       case 152: /* multipolygon_z ::= WKT_MULTIPOLYGON_Z_TAGGED_TEXT WKT_EMPTY_SET */
       case 153: /* multipolygon_z ::= WKT_MULTIPOLYGON_Z_TAGGED_TEXT multipolygon_text_z */ yytestcase(yyruleno==153);
 {
-    result->data.geom_type = GeometryType::MULTIPOLYGONZ;
+    result->data.geom_type = geometry_type::MULTIPOLYGONZ;
 }
         break;
       case 154: /* multipolygon_m ::= WKT_MULTIPOLYGON_M_TAGGED_TEXT WKT_EMPTY_SET */
       case 155: /* multipolygon_m ::= WKT_MULTIPOLYGON_M_TAGGED_TEXT multipolygon_text_m */ yytestcase(yyruleno==155);
 {
-    result->data.geom_type = GeometryType::MULTIPOLYGONM;
+    result->data.geom_type = geometry_type::MULTIPOLYGONM;
 }
         break;
       case 156: /* multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT WKT_EMPTY_SET */
       case 157: /* multipolygon_zm ::= WKT_MULTIPOLYGON_ZM_TAGGED_TEXT multipolygon_text_zm */ yytestcase(yyruleno==157);
 {
-    result->data.geom_type = GeometryType::MULTIPOLYGONZM;
+    result->data.geom_type = geometry_type::MULTIPOLYGONZM;
 }
         break;
       case 194: /* geometrycollection ::= WKT_GEOMETRYCOLLECTION_TAGGED_TEXT WKT_EMPTY_SET */
       case 195: /* geometrycollection ::= WKT_GEOMETRYCOLLECTION_TAGGED_TEXT geometrycollection_text */ yytestcase(yyruleno==195);
 {
-    result->data.geom_type = GeometryType::GEOMETRYCOLLECTION;
+    result->data.geom_type = geometry_type::GEOMETRYCOLLECTION;
 }
         break;
       case 196: /* geometrycollection_z ::= WKT_GEOMETRYCOLLECTION_Z_TAGGED_TEXT WKT_EMPTY_SET */
       case 197: /* geometrycollection_z ::= WKT_GEOMETRYCOLLECTION_Z_TAGGED_TEXT geometrycollection_text_z */ yytestcase(yyruleno==197);
 {
-    result->data.geom_type = GeometryType::GEOMETRYCOLLECTIONZ;
+    result->data.geom_type = geometry_type::GEOMETRYCOLLECTIONZ;
 }
         break;
       case 198: /* geometrycollection_m ::= WKT_GEOMETRYCOLLECTION_M_TAGGED_TEXT WKT_EMPTY_SET */
       case 199: /* geometrycollection_m ::= WKT_GEOMETRYCOLLECTION_M_TAGGED_TEXT geometrycollection_text_m */ yytestcase(yyruleno==199);
 {
-    result->data.geom_type = GeometryType::GEOMETRYCOLLECTIONM;
+    result->data.geom_type = geometry_type::GEOMETRYCOLLECTIONM;
 }
         break;
       case 200: /* geometrycollection_zm ::= WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT WKT_EMPTY_SET */
       case 201: /* geometrycollection_zm ::= WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT geometrycollection_text_zm */ yytestcase(yyruleno==201);
 {
-    result->data.geom_type = GeometryType::GEOMETRYCOLLECTIONZM;
+    result->data.geom_type = geometry_type::GEOMETRYCOLLECTIONZM;
 }
         break;
       default:
@@ -23139,10 +23092,6 @@ static void yy_reduce(
       /* (67) multipoint_text_zm ::= WKT_COMMA point_text_zm multipoint_text_zm */ yytestcase(yyruleno==67);
       /* (68) multipoint_text_zm_2 ::= */ yytestcase(yyruleno==68);
       /* (69) multipoint_text_zm_2 ::= WKT_COMMA coord_xyzm multipoint_text_zm_2 */ yytestcase(yyruleno==69);
-      /* (82) linestring_text ::= WKT_LPAREN coord_xy WKT_COMMA coord_xy coord_xy_repeated WKT_RPAREN */ yytestcase(yyruleno==82);
-      /* (83) linestring_text_z ::= WKT_LPAREN coord_xyz WKT_COMMA coord_xyz coord_xyz_repeated WKT_RPAREN */ yytestcase(yyruleno==83);
-      /* (84) linestring_text_m ::= WKT_LPAREN coord_xym WKT_COMMA coord_xym coord_xym_repeated WKT_RPAREN */ yytestcase(yyruleno==84);
-      /* (85) linestring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN */ yytestcase(yyruleno==85);
       /* (86) linestring_text_repeated ::= */ yytestcase(yyruleno==86);
       /* (87) linestring_text_repeated ::= WKT_COMMA linestring_text linestring_text_repeated */ yytestcase(yyruleno==87);
       /* (88) linestring_text_z_repeated ::= */ yytestcase(yyruleno==88);
@@ -23155,10 +23104,6 @@ static void yy_reduce(
       /* (103) multilinestring_text_z ::= WKT_LPAREN linestring_text_z linestring_text_z_repeated WKT_RPAREN */ yytestcase(yyruleno==103);
       /* (104) multilinestring_text_m ::= WKT_LPAREN linestring_text_m linestring_text_m_repeated WKT_RPAREN */ yytestcase(yyruleno==104);
       /* (105) multilinestring_text_zm ::= WKT_LPAREN linestring_text_zm linestring_text_zm_repeated WKT_RPAREN */ yytestcase(yyruleno==105);
-      /* (114) ring_text ::= WKT_LPAREN coord_xy WKT_COMMA coord_xy WKT_COMMA coord_xy WKT_COMMA coord_xy coord_xy_repeated WKT_RPAREN */ yytestcase(yyruleno==114);
-      /* (115) ring_text_z ::= WKT_LPAREN coord_xyz WKT_COMMA coord_xyz WKT_COMMA coord_xyz WKT_COMMA coord_xyz coord_xyz_repeated WKT_RPAREN */ yytestcase(yyruleno==115);
-      /* (116) ring_text_m ::= WKT_LPAREN coord_xym WKT_COMMA coord_xym WKT_COMMA coord_xym WKT_COMMA coord_xym coord_xym_repeated WKT_RPAREN */ yytestcase(yyruleno==116);
-      /* (117) ring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm WKT_COMMA coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN */ yytestcase(yyruleno==117);
       /* (118) ring_text_repeated ::= */ yytestcase(yyruleno==118);
       /* (119) ring_text_repeated ::= WKT_COMMA ring_text ring_text_repeated */ yytestcase(yyruleno==119);
       /* (120) ring_text_z_repeated ::= */ yytestcase(yyruleno==120);
@@ -23279,7 +23224,7 @@ static void yy_syntax_error(
   ParseARG_FETCH;
 #define TOKEN (yyminor.yy0)
 
-    result->parser_error = 1;
+    result->parser_error = true;
 #ifdef SHAPES_VERBOSE
     int n = sizeof(yyTokenName) / sizeof(yyTokenName[0]);
     for (int i = 0; i < n; ++i) {
@@ -23481,17 +23426,29 @@ void Parse(
 }
 
 
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
+
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 
 }  // namespace shapes
 }  // namespace simo
-
 // #include <simo/io/wkt_lexer.hpp>
-/* Generated by re2c 1.1.1 on Sat Apr 20 11:09:50 2019 */
+/* Generated by re2c 1.1.1 on Sun Jun  9 00:24:27 2019 */
 
 
 #include <ciso646>
 #include <iostream>
+// #include <simo/io/wkt_token.hpp>
+
 
 namespace simo
 {
@@ -23500,26 +23457,25 @@ namespace shapes
 {
 
 /*!
- * @brief a Well-known text (WKT) markup language lexer
+ * @brief A Well-known text (WKT) markup language lexer
  * @ingroup wkt
  *
  * @since 0.0.1
  */
-class WktLexer
+class wkt_lexer
 {
   public:
-
     /*!
      * @brief creates a wkt lexer from the given source
      * @param source the source string
      *
      * @since 0.0.1
      */
-    WktLexer(const char* source)
+    wkt_lexer(const std::string& source)
         : content(source)
     {
-        start = cursor = source;
-        limit          = content + strlen(source);
+        start = cursor = source.c_str();
+        limit          = start + source.size();
     }
 
     /*!
@@ -23536,948 +23492,1735 @@ class WktLexer
 
         start = cursor;
 
-        
-{
-	char yych;
-	unsigned int yyaccept = 0;
-	static const unsigned char yybm[] = {
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0, 128, 128,   0,   0, 128,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		128,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		 64,  64,  64,  64,  64,  64,  64,  64, 
-		 64,  64,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-		  0,   0,   0,   0,   0,   0,   0,   0, 
-	};
-	yych = *cursor;
-	if (yych <= 'D') {
-		if (yych <= '\'') {
-			if (yych <= '\f') {
-				if (yych <= 0x00) goto shapes_wkt_lexer_2;
-				if (yych <= 0x08) goto shapes_wkt_lexer_4;
-				if (yych <= '\n') goto shapes_wkt_lexer_6;
-				goto shapes_wkt_lexer_4;
-			} else {
-				if (yych <= '\r') goto shapes_wkt_lexer_6;
-				if (yych == ' ') goto shapes_wkt_lexer_6;
-				goto shapes_wkt_lexer_4;
-			}
-		} else {
-			if (yych <= ',') {
-				if (yych <= '(') goto shapes_wkt_lexer_8;
-				if (yych <= ')') goto shapes_wkt_lexer_10;
-				if (yych <= '+') goto shapes_wkt_lexer_4;
-				goto shapes_wkt_lexer_12;
-			} else {
-				if (yych <= '/') {
-					if (yych <= '-') goto shapes_wkt_lexer_14;
-					goto shapes_wkt_lexer_4;
-				} else {
-					if (yych <= '0') goto shapes_wkt_lexer_15;
-					if (yych <= '9') goto shapes_wkt_lexer_17;
-					goto shapes_wkt_lexer_4;
-				}
-			}
-		}
-	} else {
-		if (yych <= 'd') {
-			if (yych <= 'K') {
-				if (yych <= 'E') goto shapes_wkt_lexer_19;
-				if (yych == 'G') goto shapes_wkt_lexer_20;
-				goto shapes_wkt_lexer_4;
-			} else {
-				if (yych <= 'M') {
-					if (yych <= 'L') goto shapes_wkt_lexer_21;
-					goto shapes_wkt_lexer_22;
-				} else {
-					if (yych == 'P') goto shapes_wkt_lexer_23;
-					goto shapes_wkt_lexer_4;
-				}
-			}
-		} else {
-			if (yych <= 'k') {
-				if (yych <= 'e') goto shapes_wkt_lexer_19;
-				if (yych == 'g') goto shapes_wkt_lexer_20;
-				goto shapes_wkt_lexer_4;
-			} else {
-				if (yych <= 'm') {
-					if (yych <= 'l') goto shapes_wkt_lexer_21;
-					goto shapes_wkt_lexer_22;
-				} else {
-					if (yych == 'p') goto shapes_wkt_lexer_23;
-					goto shapes_wkt_lexer_4;
-				}
-			}
-		}
-	}
-shapes_wkt_lexer_2:
-	++cursor;
-	{ return WKT_END_OF_INPUT; }
-shapes_wkt_lexer_4:
-	++cursor;
-shapes_wkt_lexer_5:
-	{ return WKT_PARSE_ERROR; }
-shapes_wkt_lexer_6:
-	++cursor;
-	{ return scan(); }
-shapes_wkt_lexer_8:
-	++cursor;
-	{ return WKT_LPAREN; }
-shapes_wkt_lexer_10:
-	++cursor;
-	{ return WKT_RPAREN; }
-shapes_wkt_lexer_12:
-	++cursor;
-	{ return WKT_COMMA; }
-shapes_wkt_lexer_14:
-	yych = *++cursor;
-	if (yych <= '/') goto shapes_wkt_lexer_5;
-	if (yych <= '0') goto shapes_wkt_lexer_15;
-	if (yych <= '9') goto shapes_wkt_lexer_17;
-	goto shapes_wkt_lexer_5;
-shapes_wkt_lexer_15:
-	yyaccept = 0;
-	yych = *(marker = ++cursor);
-	if (yych <= 'D') {
-		if (yych == '.') goto shapes_wkt_lexer_24;
-	} else {
-		if (yych <= 'E') goto shapes_wkt_lexer_26;
-		if (yych == 'e') goto shapes_wkt_lexer_26;
-	}
-shapes_wkt_lexer_16:
-	{ return WKT_NUM; }
-shapes_wkt_lexer_17:
-	yyaccept = 0;
-	yych = *(marker = ++cursor);
-	if (yybm[0+yych] & 64) {
-		goto shapes_wkt_lexer_17;
-	}
-	if (yych <= 'D') {
-		if (yych == '.') goto shapes_wkt_lexer_24;
-		goto shapes_wkt_lexer_16;
-	} else {
-		if (yych <= 'E') goto shapes_wkt_lexer_26;
-		if (yych == 'e') goto shapes_wkt_lexer_26;
-		goto shapes_wkt_lexer_16;
-	}
-shapes_wkt_lexer_19:
-	yyaccept = 1;
-	yych = *(marker = ++cursor);
-	if (yych == 'M') goto shapes_wkt_lexer_27;
-	if (yych == 'm') goto shapes_wkt_lexer_27;
-	goto shapes_wkt_lexer_5;
-shapes_wkt_lexer_20:
-	yyaccept = 1;
-	yych = *(marker = ++cursor);
-	if (yych == 'E') goto shapes_wkt_lexer_28;
-	if (yych == 'e') goto shapes_wkt_lexer_28;
-	goto shapes_wkt_lexer_5;
-shapes_wkt_lexer_21:
-	yyaccept = 1;
-	yych = *(marker = ++cursor);
-	if (yych == 'I') goto shapes_wkt_lexer_29;
-	if (yych == 'i') goto shapes_wkt_lexer_29;
-	goto shapes_wkt_lexer_5;
-shapes_wkt_lexer_22:
-	yyaccept = 1;
-	yych = *(marker = ++cursor);
-	if (yych == 'U') goto shapes_wkt_lexer_30;
-	if (yych == 'u') goto shapes_wkt_lexer_30;
-	goto shapes_wkt_lexer_5;
-shapes_wkt_lexer_23:
-	yyaccept = 1;
-	yych = *(marker = ++cursor);
-	if (yych == 'O') goto shapes_wkt_lexer_31;
-	if (yych == 'o') goto shapes_wkt_lexer_31;
-	goto shapes_wkt_lexer_5;
-shapes_wkt_lexer_24:
-	yych = *++cursor;
-	if (yych <= '/') goto shapes_wkt_lexer_25;
-	if (yych <= '9') goto shapes_wkt_lexer_32;
-shapes_wkt_lexer_25:
-	cursor = marker;
-	if (yyaccept <= 4) {
-		if (yyaccept <= 2) {
-			if (yyaccept <= 1) {
-				if (yyaccept == 0) {
-					goto shapes_wkt_lexer_16;
-				} else {
-					goto shapes_wkt_lexer_5;
-				}
-			} else {
-				goto shapes_wkt_lexer_55;
-			}
-		} else {
-			if (yyaccept == 3) {
-				goto shapes_wkt_lexer_75;
-			} else {
-				goto shapes_wkt_lexer_96;
-			}
-		}
-	} else {
-		if (yyaccept <= 6) {
-			if (yyaccept == 5) {
-				goto shapes_wkt_lexer_99;
-			} else {
-				goto shapes_wkt_lexer_123;
-			}
-		} else {
-			if (yyaccept == 7) {
-				goto shapes_wkt_lexer_138;
-			} else {
-				goto shapes_wkt_lexer_150;
-			}
-		}
-	}
-shapes_wkt_lexer_26:
-	yych = *++cursor;
-	if (yych <= ',') {
-		if (yych == '+') goto shapes_wkt_lexer_34;
-		goto shapes_wkt_lexer_25;
-	} else {
-		if (yych <= '-') goto shapes_wkt_lexer_34;
-		if (yych <= '/') goto shapes_wkt_lexer_25;
-		if (yych <= '9') goto shapes_wkt_lexer_35;
-		goto shapes_wkt_lexer_25;
-	}
-shapes_wkt_lexer_27:
-	yych = *++cursor;
-	if (yych == 'P') goto shapes_wkt_lexer_37;
-	if (yych == 'p') goto shapes_wkt_lexer_37;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_28:
-	yych = *++cursor;
-	if (yych == 'O') goto shapes_wkt_lexer_38;
-	if (yych == 'o') goto shapes_wkt_lexer_38;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_29:
-	yych = *++cursor;
-	if (yych == 'N') goto shapes_wkt_lexer_39;
-	if (yych == 'n') goto shapes_wkt_lexer_39;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_30:
-	yych = *++cursor;
-	if (yych == 'L') goto shapes_wkt_lexer_40;
-	if (yych == 'l') goto shapes_wkt_lexer_40;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_31:
-	yych = *++cursor;
-	if (yych <= 'L') {
-		if (yych == 'I') goto shapes_wkt_lexer_41;
-		if (yych <= 'K') goto shapes_wkt_lexer_25;
-		goto shapes_wkt_lexer_42;
-	} else {
-		if (yych <= 'i') {
-			if (yych <= 'h') goto shapes_wkt_lexer_25;
-			goto shapes_wkt_lexer_41;
-		} else {
-			if (yych == 'l') goto shapes_wkt_lexer_42;
-			goto shapes_wkt_lexer_25;
-		}
-	}
-shapes_wkt_lexer_32:
-	yyaccept = 0;
-	yych = *(marker = ++cursor);
-	if (yych <= 'D') {
-		if (yych <= '/') goto shapes_wkt_lexer_16;
-		if (yych <= '9') goto shapes_wkt_lexer_32;
-		goto shapes_wkt_lexer_16;
-	} else {
-		if (yych <= 'E') goto shapes_wkt_lexer_26;
-		if (yych == 'e') goto shapes_wkt_lexer_26;
-		goto shapes_wkt_lexer_16;
-	}
-shapes_wkt_lexer_34:
-	yych = *++cursor;
-	if (yych <= '/') goto shapes_wkt_lexer_25;
-	if (yych >= ':') goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_35:
-	yych = *++cursor;
-	if (yych <= '/') goto shapes_wkt_lexer_16;
-	if (yych <= '9') goto shapes_wkt_lexer_35;
-	goto shapes_wkt_lexer_16;
-shapes_wkt_lexer_37:
-	yych = *++cursor;
-	if (yych == 'T') goto shapes_wkt_lexer_43;
-	if (yych == 't') goto shapes_wkt_lexer_43;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_38:
-	yych = *++cursor;
-	if (yych == 'M') goto shapes_wkt_lexer_44;
-	if (yych == 'm') goto shapes_wkt_lexer_44;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_39:
-	yych = *++cursor;
-	if (yych == 'E') goto shapes_wkt_lexer_45;
-	if (yych == 'e') goto shapes_wkt_lexer_45;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_40:
-	yych = *++cursor;
-	if (yych == 'T') goto shapes_wkt_lexer_46;
-	if (yych == 't') goto shapes_wkt_lexer_46;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_41:
-	yych = *++cursor;
-	if (yych == 'N') goto shapes_wkt_lexer_47;
-	if (yych == 'n') goto shapes_wkt_lexer_47;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_42:
-	yych = *++cursor;
-	if (yych == 'Y') goto shapes_wkt_lexer_48;
-	if (yych == 'y') goto shapes_wkt_lexer_48;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_43:
-	yych = *++cursor;
-	if (yych == 'Y') goto shapes_wkt_lexer_49;
-	if (yych == 'y') goto shapes_wkt_lexer_49;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_44:
-	yych = *++cursor;
-	if (yych == 'E') goto shapes_wkt_lexer_51;
-	if (yych == 'e') goto shapes_wkt_lexer_51;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_45:
-	yych = *++cursor;
-	if (yych == 'S') goto shapes_wkt_lexer_52;
-	if (yych == 's') goto shapes_wkt_lexer_52;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_46:
-	yych = *++cursor;
-	if (yych == 'I') goto shapes_wkt_lexer_53;
-	if (yych == 'i') goto shapes_wkt_lexer_53;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_47:
-	yych = *++cursor;
-	if (yych == 'T') goto shapes_wkt_lexer_54;
-	if (yych == 't') goto shapes_wkt_lexer_54;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_48:
-	yych = *++cursor;
-	if (yych == 'G') goto shapes_wkt_lexer_56;
-	if (yych == 'g') goto shapes_wkt_lexer_56;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_49:
-	++cursor;
-	{ return WKT_EMPTY_SET; }
-shapes_wkt_lexer_51:
-	yych = *++cursor;
-	if (yych == 'T') goto shapes_wkt_lexer_57;
-	if (yych == 't') goto shapes_wkt_lexer_57;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_52:
-	yych = *++cursor;
-	if (yych == 'T') goto shapes_wkt_lexer_58;
-	if (yych == 't') goto shapes_wkt_lexer_58;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_53:
-	yych = *++cursor;
-	if (yych <= 'P') {
-		if (yych == 'L') goto shapes_wkt_lexer_59;
-		if (yych <= 'O') goto shapes_wkt_lexer_25;
-		goto shapes_wkt_lexer_60;
-	} else {
-		if (yych <= 'l') {
-			if (yych <= 'k') goto shapes_wkt_lexer_25;
-			goto shapes_wkt_lexer_59;
-		} else {
-			if (yych == 'p') goto shapes_wkt_lexer_60;
-			goto shapes_wkt_lexer_25;
-		}
-	}
-shapes_wkt_lexer_54:
-	yyaccept = 2;
-	yych = *(marker = ++cursor);
-	if (yybm[0+yych] & 128) {
-		goto shapes_wkt_lexer_61;
-	}
-	if (yych <= 'Z') {
-		if (yych == 'M') goto shapes_wkt_lexer_63;
-		if (yych >= 'Z') goto shapes_wkt_lexer_65;
-	} else {
-		if (yych <= 'm') {
-			if (yych >= 'm') goto shapes_wkt_lexer_63;
-		} else {
-			if (yych == 'z') goto shapes_wkt_lexer_65;
-		}
-	}
-shapes_wkt_lexer_55:
-	{ return WKT_POINT_TAGGED_TEXT; }
-shapes_wkt_lexer_56:
-	yych = *++cursor;
-	if (yych == 'O') goto shapes_wkt_lexer_67;
-	if (yych == 'o') goto shapes_wkt_lexer_67;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_57:
-	yych = *++cursor;
-	if (yych == 'R') goto shapes_wkt_lexer_68;
-	if (yych == 'r') goto shapes_wkt_lexer_68;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_58:
-	yych = *++cursor;
-	if (yych == 'R') goto shapes_wkt_lexer_69;
-	if (yych == 'r') goto shapes_wkt_lexer_69;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_59:
-	yych = *++cursor;
-	if (yych == 'I') goto shapes_wkt_lexer_70;
-	if (yych == 'i') goto shapes_wkt_lexer_70;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_60:
-	yych = *++cursor;
-	if (yych == 'O') goto shapes_wkt_lexer_71;
-	if (yych == 'o') goto shapes_wkt_lexer_71;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_61:
-	yych = *++cursor;
-	if (yybm[0+yych] & 128) {
-		goto shapes_wkt_lexer_61;
-	}
-	if (yych <= 'Z') {
-		if (yych == 'M') goto shapes_wkt_lexer_63;
-		if (yych <= 'Y') goto shapes_wkt_lexer_25;
-		goto shapes_wkt_lexer_65;
-	} else {
-		if (yych <= 'm') {
-			if (yych <= 'l') goto shapes_wkt_lexer_25;
-		} else {
-			if (yych == 'z') goto shapes_wkt_lexer_65;
-			goto shapes_wkt_lexer_25;
-		}
-	}
-shapes_wkt_lexer_63:
-	++cursor;
-	{ return WKT_POINT_M_TAGGED_TEXT; }
-shapes_wkt_lexer_65:
-	yych = *++cursor;
-	if (yych == 'M') goto shapes_wkt_lexer_72;
-	if (yych == 'm') goto shapes_wkt_lexer_72;
-	{ return WKT_POINT_Z_TAGGED_TEXT; }
-shapes_wkt_lexer_67:
-	yych = *++cursor;
-	if (yych == 'N') goto shapes_wkt_lexer_74;
-	if (yych == 'n') goto shapes_wkt_lexer_74;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_68:
-	yych = *++cursor;
-	if (yych == 'Y') goto shapes_wkt_lexer_76;
-	if (yych == 'y') goto shapes_wkt_lexer_76;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_69:
-	yych = *++cursor;
-	if (yych == 'I') goto shapes_wkt_lexer_77;
-	if (yych == 'i') goto shapes_wkt_lexer_77;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_70:
-	yych = *++cursor;
-	if (yych == 'N') goto shapes_wkt_lexer_78;
-	if (yych == 'n') goto shapes_wkt_lexer_78;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_71:
-	yych = *++cursor;
-	if (yych <= 'L') {
-		if (yych == 'I') goto shapes_wkt_lexer_79;
-		if (yych <= 'K') goto shapes_wkt_lexer_25;
-		goto shapes_wkt_lexer_80;
-	} else {
-		if (yych <= 'i') {
-			if (yych <= 'h') goto shapes_wkt_lexer_25;
-			goto shapes_wkt_lexer_79;
-		} else {
-			if (yych == 'l') goto shapes_wkt_lexer_80;
-			goto shapes_wkt_lexer_25;
-		}
-	}
-shapes_wkt_lexer_72:
-	++cursor;
-	{ return WKT_POINT_ZM_TAGGED_TEXT; }
-shapes_wkt_lexer_74:
-	yyaccept = 3;
-	yych = *(marker = ++cursor);
-	if (yych <= 'L') {
-		if (yych <= '\f') {
-			if (yych <= 0x08) goto shapes_wkt_lexer_75;
-			if (yych <= '\n') goto shapes_wkt_lexer_81;
-		} else {
-			if (yych <= '\r') goto shapes_wkt_lexer_81;
-			if (yych == ' ') goto shapes_wkt_lexer_81;
-		}
-	} else {
-		if (yych <= 'l') {
-			if (yych <= 'M') goto shapes_wkt_lexer_83;
-			if (yych == 'Z') goto shapes_wkt_lexer_85;
-		} else {
-			if (yych <= 'm') goto shapes_wkt_lexer_83;
-			if (yych == 'z') goto shapes_wkt_lexer_85;
-		}
-	}
-shapes_wkt_lexer_75:
-	{ return WKT_POLYGON_TAGGED_TEXT; }
-shapes_wkt_lexer_76:
-	yych = *++cursor;
-	if (yych == 'C') goto shapes_wkt_lexer_87;
-	if (yych == 'c') goto shapes_wkt_lexer_87;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_77:
-	yych = *++cursor;
-	if (yych == 'N') goto shapes_wkt_lexer_88;
-	if (yych == 'n') goto shapes_wkt_lexer_88;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_78:
-	yych = *++cursor;
-	if (yych == 'E') goto shapes_wkt_lexer_89;
-	if (yych == 'e') goto shapes_wkt_lexer_89;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_79:
-	yych = *++cursor;
-	if (yych == 'N') goto shapes_wkt_lexer_90;
-	if (yych == 'n') goto shapes_wkt_lexer_90;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_80:
-	yych = *++cursor;
-	if (yych == 'Y') goto shapes_wkt_lexer_91;
-	if (yych == 'y') goto shapes_wkt_lexer_91;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_81:
-	yych = *++cursor;
-	if (yych <= 'L') {
-		if (yych <= '\f') {
-			if (yych <= 0x08) goto shapes_wkt_lexer_25;
-			if (yych <= '\n') goto shapes_wkt_lexer_81;
-			goto shapes_wkt_lexer_25;
-		} else {
-			if (yych <= '\r') goto shapes_wkt_lexer_81;
-			if (yych == ' ') goto shapes_wkt_lexer_81;
-			goto shapes_wkt_lexer_25;
-		}
-	} else {
-		if (yych <= 'l') {
-			if (yych <= 'M') goto shapes_wkt_lexer_83;
-			if (yych == 'Z') goto shapes_wkt_lexer_85;
-			goto shapes_wkt_lexer_25;
-		} else {
-			if (yych <= 'm') goto shapes_wkt_lexer_83;
-			if (yych == 'z') goto shapes_wkt_lexer_85;
-			goto shapes_wkt_lexer_25;
-		}
-	}
-shapes_wkt_lexer_83:
-	++cursor;
-	{ return WKT_POLYGON_M_TAGGED_TEXT; }
-shapes_wkt_lexer_85:
-	yych = *++cursor;
-	if (yych == 'M') goto shapes_wkt_lexer_92;
-	if (yych == 'm') goto shapes_wkt_lexer_92;
-	{ return WKT_POLYGON_Z_TAGGED_TEXT; }
-shapes_wkt_lexer_87:
-	yych = *++cursor;
-	if (yych == 'O') goto shapes_wkt_lexer_94;
-	if (yych == 'o') goto shapes_wkt_lexer_94;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_88:
-	yych = *++cursor;
-	if (yych == 'G') goto shapes_wkt_lexer_95;
-	if (yych == 'g') goto shapes_wkt_lexer_95;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_89:
-	yych = *++cursor;
-	if (yych == 'S') goto shapes_wkt_lexer_97;
-	if (yych == 's') goto shapes_wkt_lexer_97;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_90:
-	yych = *++cursor;
-	if (yych == 'T') goto shapes_wkt_lexer_98;
-	if (yych == 't') goto shapes_wkt_lexer_98;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_91:
-	yych = *++cursor;
-	if (yych == 'G') goto shapes_wkt_lexer_100;
-	if (yych == 'g') goto shapes_wkt_lexer_100;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_92:
-	++cursor;
-	{ return WKT_POLYGON_ZM_TAGGED_TEXT; }
-shapes_wkt_lexer_94:
-	yych = *++cursor;
-	if (yych == 'L') goto shapes_wkt_lexer_101;
-	if (yych == 'l') goto shapes_wkt_lexer_101;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_95:
-	yyaccept = 4;
-	yych = *(marker = ++cursor);
-	if (yych <= 'L') {
-		if (yych <= '\f') {
-			if (yych <= 0x08) goto shapes_wkt_lexer_96;
-			if (yych <= '\n') goto shapes_wkt_lexer_102;
-		} else {
-			if (yych <= '\r') goto shapes_wkt_lexer_102;
-			if (yych == ' ') goto shapes_wkt_lexer_102;
-		}
-	} else {
-		if (yych <= 'l') {
-			if (yych <= 'M') goto shapes_wkt_lexer_104;
-			if (yych == 'Z') goto shapes_wkt_lexer_106;
-		} else {
-			if (yych <= 'm') goto shapes_wkt_lexer_104;
-			if (yych == 'z') goto shapes_wkt_lexer_106;
-		}
-	}
-shapes_wkt_lexer_96:
-	{ return WKT_LINESTRING_TAGGED_TEXT; }
-shapes_wkt_lexer_97:
-	yych = *++cursor;
-	if (yych == 'T') goto shapes_wkt_lexer_108;
-	if (yych == 't') goto shapes_wkt_lexer_108;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_98:
-	yyaccept = 5;
-	yych = *(marker = ++cursor);
-	if (yych <= 'L') {
-		if (yych <= '\f') {
-			if (yych <= 0x08) goto shapes_wkt_lexer_99;
-			if (yych <= '\n') goto shapes_wkt_lexer_109;
-		} else {
-			if (yych <= '\r') goto shapes_wkt_lexer_109;
-			if (yych == ' ') goto shapes_wkt_lexer_109;
-		}
-	} else {
-		if (yych <= 'l') {
-			if (yych <= 'M') goto shapes_wkt_lexer_111;
-			if (yych == 'Z') goto shapes_wkt_lexer_113;
-		} else {
-			if (yych <= 'm') goto shapes_wkt_lexer_111;
-			if (yych == 'z') goto shapes_wkt_lexer_113;
-		}
-	}
-shapes_wkt_lexer_99:
-	{ return WKT_MULTIPOINT_TAGGED_TEXT; }
-shapes_wkt_lexer_100:
-	yych = *++cursor;
-	if (yych == 'O') goto shapes_wkt_lexer_115;
-	if (yych == 'o') goto shapes_wkt_lexer_115;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_101:
-	yych = *++cursor;
-	if (yych == 'L') goto shapes_wkt_lexer_116;
-	if (yych == 'l') goto shapes_wkt_lexer_116;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_102:
-	yych = *++cursor;
-	if (yych <= 'L') {
-		if (yych <= '\f') {
-			if (yych <= 0x08) goto shapes_wkt_lexer_25;
-			if (yych <= '\n') goto shapes_wkt_lexer_102;
-			goto shapes_wkt_lexer_25;
-		} else {
-			if (yych <= '\r') goto shapes_wkt_lexer_102;
-			if (yych == ' ') goto shapes_wkt_lexer_102;
-			goto shapes_wkt_lexer_25;
-		}
-	} else {
-		if (yych <= 'l') {
-			if (yych <= 'M') goto shapes_wkt_lexer_104;
-			if (yych == 'Z') goto shapes_wkt_lexer_106;
-			goto shapes_wkt_lexer_25;
-		} else {
-			if (yych <= 'm') goto shapes_wkt_lexer_104;
-			if (yych == 'z') goto shapes_wkt_lexer_106;
-			goto shapes_wkt_lexer_25;
-		}
-	}
-shapes_wkt_lexer_104:
-	++cursor;
-	{ return WKT_LINESTRING_M_TAGGED_TEXT; }
-shapes_wkt_lexer_106:
-	yych = *++cursor;
-	if (yych == 'M') goto shapes_wkt_lexer_117;
-	if (yych == 'm') goto shapes_wkt_lexer_117;
-	{ return WKT_LINESTRING_Z_TAGGED_TEXT; }
-shapes_wkt_lexer_108:
-	yych = *++cursor;
-	if (yych == 'R') goto shapes_wkt_lexer_119;
-	if (yych == 'r') goto shapes_wkt_lexer_119;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_109:
-	yych = *++cursor;
-	if (yych <= 'L') {
-		if (yych <= '\f') {
-			if (yych <= 0x08) goto shapes_wkt_lexer_25;
-			if (yych <= '\n') goto shapes_wkt_lexer_109;
-			goto shapes_wkt_lexer_25;
-		} else {
-			if (yych <= '\r') goto shapes_wkt_lexer_109;
-			if (yych == ' ') goto shapes_wkt_lexer_109;
-			goto shapes_wkt_lexer_25;
-		}
-	} else {
-		if (yych <= 'l') {
-			if (yych <= 'M') goto shapes_wkt_lexer_111;
-			if (yych == 'Z') goto shapes_wkt_lexer_113;
-			goto shapes_wkt_lexer_25;
-		} else {
-			if (yych <= 'm') goto shapes_wkt_lexer_111;
-			if (yych == 'z') goto shapes_wkt_lexer_113;
-			goto shapes_wkt_lexer_25;
-		}
-	}
-shapes_wkt_lexer_111:
-	++cursor;
-	{ return WKT_MULTIPOINT_M_TAGGED_TEXT; }
-shapes_wkt_lexer_113:
-	yych = *++cursor;
-	if (yych == 'M') goto shapes_wkt_lexer_120;
-	if (yych == 'm') goto shapes_wkt_lexer_120;
-	{ return WKT_MULTIPOINT_Z_TAGGED_TEXT; }
-shapes_wkt_lexer_115:
-	yych = *++cursor;
-	if (yych == 'N') goto shapes_wkt_lexer_122;
-	if (yych == 'n') goto shapes_wkt_lexer_122;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_116:
-	yych = *++cursor;
-	if (yych == 'E') goto shapes_wkt_lexer_124;
-	if (yych == 'e') goto shapes_wkt_lexer_124;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_117:
-	++cursor;
-	{ return WKT_LINESTRING_ZM_TAGGED_TEXT; }
-shapes_wkt_lexer_119:
-	yych = *++cursor;
-	if (yych == 'I') goto shapes_wkt_lexer_125;
-	if (yych == 'i') goto shapes_wkt_lexer_125;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_120:
-	++cursor;
-	{ return WKT_MULTIPOINT_ZM_TAGGED_TEXT; }
-shapes_wkt_lexer_122:
-	yyaccept = 6;
-	yych = *(marker = ++cursor);
-	if (yych <= 'L') {
-		if (yych <= '\f') {
-			if (yych <= 0x08) goto shapes_wkt_lexer_123;
-			if (yych <= '\n') goto shapes_wkt_lexer_126;
-		} else {
-			if (yych <= '\r') goto shapes_wkt_lexer_126;
-			if (yych == ' ') goto shapes_wkt_lexer_126;
-		}
-	} else {
-		if (yych <= 'l') {
-			if (yych <= 'M') goto shapes_wkt_lexer_128;
-			if (yych == 'Z') goto shapes_wkt_lexer_130;
-		} else {
-			if (yych <= 'm') goto shapes_wkt_lexer_128;
-			if (yych == 'z') goto shapes_wkt_lexer_130;
-		}
-	}
-shapes_wkt_lexer_123:
-	{ return WKT_MULTIPOLYGON_TAGGED_TEXT; }
-shapes_wkt_lexer_124:
-	yych = *++cursor;
-	if (yych == 'C') goto shapes_wkt_lexer_132;
-	if (yych == 'c') goto shapes_wkt_lexer_132;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_125:
-	yych = *++cursor;
-	if (yych == 'N') goto shapes_wkt_lexer_133;
-	if (yych == 'n') goto shapes_wkt_lexer_133;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_126:
-	yych = *++cursor;
-	if (yych <= 'L') {
-		if (yych <= '\f') {
-			if (yych <= 0x08) goto shapes_wkt_lexer_25;
-			if (yych <= '\n') goto shapes_wkt_lexer_126;
-			goto shapes_wkt_lexer_25;
-		} else {
-			if (yych <= '\r') goto shapes_wkt_lexer_126;
-			if (yych == ' ') goto shapes_wkt_lexer_126;
-			goto shapes_wkt_lexer_25;
-		}
-	} else {
-		if (yych <= 'l') {
-			if (yych <= 'M') goto shapes_wkt_lexer_128;
-			if (yych == 'Z') goto shapes_wkt_lexer_130;
-			goto shapes_wkt_lexer_25;
-		} else {
-			if (yych <= 'm') goto shapes_wkt_lexer_128;
-			if (yych == 'z') goto shapes_wkt_lexer_130;
-			goto shapes_wkt_lexer_25;
-		}
-	}
-shapes_wkt_lexer_128:
-	++cursor;
-	{ return WKT_MULTIPOLYGON_M_TAGGED_TEXT; }
-shapes_wkt_lexer_130:
-	yych = *++cursor;
-	if (yych == 'M') goto shapes_wkt_lexer_134;
-	if (yych == 'm') goto shapes_wkt_lexer_134;
-	{ return WKT_MULTIPOLYGON_Z_TAGGED_TEXT; }
-shapes_wkt_lexer_132:
-	yych = *++cursor;
-	if (yych == 'T') goto shapes_wkt_lexer_136;
-	if (yych == 't') goto shapes_wkt_lexer_136;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_133:
-	yych = *++cursor;
-	if (yych == 'G') goto shapes_wkt_lexer_137;
-	if (yych == 'g') goto shapes_wkt_lexer_137;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_134:
-	++cursor;
-	{ return WKT_MULTIPOLYGON_ZM_TAGGED_TEXT; }
-shapes_wkt_lexer_136:
-	yych = *++cursor;
-	if (yych == 'I') goto shapes_wkt_lexer_139;
-	if (yych == 'i') goto shapes_wkt_lexer_139;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_137:
-	yyaccept = 7;
-	yych = *(marker = ++cursor);
-	if (yych <= 'L') {
-		if (yych <= '\f') {
-			if (yych <= 0x08) goto shapes_wkt_lexer_138;
-			if (yych <= '\n') goto shapes_wkt_lexer_140;
-		} else {
-			if (yych <= '\r') goto shapes_wkt_lexer_140;
-			if (yych == ' ') goto shapes_wkt_lexer_140;
-		}
-	} else {
-		if (yych <= 'l') {
-			if (yych <= 'M') goto shapes_wkt_lexer_142;
-			if (yych == 'Z') goto shapes_wkt_lexer_144;
-		} else {
-			if (yych <= 'm') goto shapes_wkt_lexer_142;
-			if (yych == 'z') goto shapes_wkt_lexer_144;
-		}
-	}
-shapes_wkt_lexer_138:
-	{ return WKT_MULTILINESTRING_TAGGED_TEXT; }
-shapes_wkt_lexer_139:
-	yych = *++cursor;
-	if (yych == 'O') goto shapes_wkt_lexer_146;
-	if (yych == 'o') goto shapes_wkt_lexer_146;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_140:
-	yych = *++cursor;
-	if (yych <= 'L') {
-		if (yych <= '\f') {
-			if (yych <= 0x08) goto shapes_wkt_lexer_25;
-			if (yych <= '\n') goto shapes_wkt_lexer_140;
-			goto shapes_wkt_lexer_25;
-		} else {
-			if (yych <= '\r') goto shapes_wkt_lexer_140;
-			if (yych == ' ') goto shapes_wkt_lexer_140;
-			goto shapes_wkt_lexer_25;
-		}
-	} else {
-		if (yych <= 'l') {
-			if (yych <= 'M') goto shapes_wkt_lexer_142;
-			if (yych == 'Z') goto shapes_wkt_lexer_144;
-			goto shapes_wkt_lexer_25;
-		} else {
-			if (yych <= 'm') goto shapes_wkt_lexer_142;
-			if (yych == 'z') goto shapes_wkt_lexer_144;
-			goto shapes_wkt_lexer_25;
-		}
-	}
-shapes_wkt_lexer_142:
-	++cursor;
-	{ return WKT_MULTILINESTRING_M_TAGGED_TEXT; }
-shapes_wkt_lexer_144:
-	yych = *++cursor;
-	if (yych == 'M') goto shapes_wkt_lexer_147;
-	if (yych == 'm') goto shapes_wkt_lexer_147;
-	{ return WKT_MULTILINESTRING_Z_TAGGED_TEXT; }
-shapes_wkt_lexer_146:
-	yych = *++cursor;
-	if (yych == 'N') goto shapes_wkt_lexer_149;
-	if (yych == 'n') goto shapes_wkt_lexer_149;
-	goto shapes_wkt_lexer_25;
-shapes_wkt_lexer_147:
-	++cursor;
-	{ return WKT_MULTILINESTRING_ZM_TAGGED_TEXT; }
-shapes_wkt_lexer_149:
-	yyaccept = 8;
-	yych = *(marker = ++cursor);
-	if (yych <= 'L') {
-		if (yych <= '\f') {
-			if (yych <= 0x08) goto shapes_wkt_lexer_150;
-			if (yych <= '\n') goto shapes_wkt_lexer_151;
-		} else {
-			if (yych <= '\r') goto shapes_wkt_lexer_151;
-			if (yych == ' ') goto shapes_wkt_lexer_151;
-		}
-	} else {
-		if (yych <= 'l') {
-			if (yych <= 'M') goto shapes_wkt_lexer_153;
-			if (yych == 'Z') goto shapes_wkt_lexer_155;
-		} else {
-			if (yych <= 'm') goto shapes_wkt_lexer_153;
-			if (yych == 'z') goto shapes_wkt_lexer_155;
-		}
-	}
-shapes_wkt_lexer_150:
-	{ return WKT_GEOMETRYCOLLECTION_TAGGED_TEXT; }
-shapes_wkt_lexer_151:
-	yych = *++cursor;
-	if (yych <= 'L') {
-		if (yych <= '\f') {
-			if (yych <= 0x08) goto shapes_wkt_lexer_25;
-			if (yych <= '\n') goto shapes_wkt_lexer_151;
-			goto shapes_wkt_lexer_25;
-		} else {
-			if (yych <= '\r') goto shapes_wkt_lexer_151;
-			if (yych == ' ') goto shapes_wkt_lexer_151;
-			goto shapes_wkt_lexer_25;
-		}
-	} else {
-		if (yych <= 'l') {
-			if (yych <= 'M') goto shapes_wkt_lexer_153;
-			if (yych == 'Z') goto shapes_wkt_lexer_155;
-			goto shapes_wkt_lexer_25;
-		} else {
-			if (yych <= 'm') goto shapes_wkt_lexer_153;
-			if (yych == 'z') goto shapes_wkt_lexer_155;
-			goto shapes_wkt_lexer_25;
-		}
-	}
-shapes_wkt_lexer_153:
-	++cursor;
-	{ return WKT_GEOMETRYCOLLECTION_M_TAGGED_TEXT; }
-shapes_wkt_lexer_155:
-	yych = *++cursor;
-	if (yych == 'M') goto shapes_wkt_lexer_157;
-	if (yych == 'm') goto shapes_wkt_lexer_157;
-	{ return WKT_GEOMETRYCOLLECTION_Z_TAGGED_TEXT; }
-shapes_wkt_lexer_157:
-	++cursor;
-	{ return WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT; }
-}
-
+        {
+            char yych;
+            unsigned int yyaccept             = 0;
+            static const unsigned char yybm[] = {
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                128,
+                128,
+                0,
+                0,
+                128,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                128,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+            };
+            yych = *cursor;
+            if (yych <= 'D')
+            {
+                if (yych <= '\'')
+                {
+                    if (yych <= '\f')
+                    {
+                        if (yych <= 0x00)
+                            goto shapes_wkt_lexer_2;
+                        if (yych <= 0x08)
+                            goto shapes_wkt_lexer_4;
+                        if (yych <= '\n')
+                            goto shapes_wkt_lexer_6;
+                        goto shapes_wkt_lexer_4;
+                    }
+                    else
+                    {
+                        if (yych <= '\r')
+                            goto shapes_wkt_lexer_6;
+                        if (yych == ' ')
+                            goto shapes_wkt_lexer_6;
+                        goto shapes_wkt_lexer_4;
+                    }
+                }
+                else
+                {
+                    if (yych <= ',')
+                    {
+                        if (yych <= '(')
+                            goto shapes_wkt_lexer_8;
+                        if (yych <= ')')
+                            goto shapes_wkt_lexer_10;
+                        if (yych <= '+')
+                            goto shapes_wkt_lexer_4;
+                        goto shapes_wkt_lexer_12;
+                    }
+                    else
+                    {
+                        if (yych <= '/')
+                        {
+                            if (yych <= '-')
+                                goto shapes_wkt_lexer_14;
+                            goto shapes_wkt_lexer_4;
+                        }
+                        else
+                        {
+                            if (yych <= '0')
+                                goto shapes_wkt_lexer_15;
+                            if (yych <= '9')
+                                goto shapes_wkt_lexer_17;
+                            goto shapes_wkt_lexer_4;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (yych <= 'd')
+                {
+                    if (yych <= 'K')
+                    {
+                        if (yych <= 'E')
+                            goto shapes_wkt_lexer_19;
+                        if (yych == 'G')
+                            goto shapes_wkt_lexer_20;
+                        goto shapes_wkt_lexer_4;
+                    }
+                    else
+                    {
+                        if (yych <= 'M')
+                        {
+                            if (yych <= 'L')
+                                goto shapes_wkt_lexer_21;
+                            goto shapes_wkt_lexer_22;
+                        }
+                        else
+                        {
+                            if (yych == 'P')
+                                goto shapes_wkt_lexer_23;
+                            goto shapes_wkt_lexer_4;
+                        }
+                    }
+                }
+                else
+                {
+                    if (yych <= 'k')
+                    {
+                        if (yych <= 'e')
+                            goto shapes_wkt_lexer_19;
+                        if (yych == 'g')
+                            goto shapes_wkt_lexer_20;
+                        goto shapes_wkt_lexer_4;
+                    }
+                    else
+                    {
+                        if (yych <= 'm')
+                        {
+                            if (yych <= 'l')
+                                goto shapes_wkt_lexer_21;
+                            goto shapes_wkt_lexer_22;
+                        }
+                        else
+                        {
+                            if (yych == 'p')
+                                goto shapes_wkt_lexer_23;
+                            goto shapes_wkt_lexer_4;
+                        }
+                    }
+                }
+            }
+        shapes_wkt_lexer_2:
+            ++cursor;
+            {
+                return WKT_END_OF_INPUT;
+            }
+        shapes_wkt_lexer_4:
+            ++cursor;
+        shapes_wkt_lexer_5:
+        {
+            return WKT_PARSE_ERROR;
+        }
+        shapes_wkt_lexer_6:
+            ++cursor;
+            {
+                return scan();
+            }
+        shapes_wkt_lexer_8:
+            ++cursor;
+            {
+                return WKT_LPAREN;
+            }
+        shapes_wkt_lexer_10:
+            ++cursor;
+            {
+                return WKT_RPAREN;
+            }
+        shapes_wkt_lexer_12:
+            ++cursor;
+            {
+                return WKT_COMMA;
+            }
+        shapes_wkt_lexer_14:
+            yych = *++cursor;
+            if (yych <= '/')
+                goto shapes_wkt_lexer_5;
+            if (yych <= '0')
+                goto shapes_wkt_lexer_15;
+            if (yych <= '9')
+                goto shapes_wkt_lexer_17;
+            goto shapes_wkt_lexer_5;
+        shapes_wkt_lexer_15:
+            yyaccept = 0;
+            yych     = *(marker = ++cursor);
+            if (yych <= 'D')
+            {
+                if (yych == '.')
+                    goto shapes_wkt_lexer_24;
+            }
+            else
+            {
+                if (yych <= 'E')
+                    goto shapes_wkt_lexer_26;
+                if (yych == 'e')
+                    goto shapes_wkt_lexer_26;
+            }
+        shapes_wkt_lexer_16:
+        {
+            return WKT_NUM;
+        }
+        shapes_wkt_lexer_17:
+            yyaccept = 0;
+            yych     = *(marker = ++cursor);
+            if (yybm[0 + yych] & 64)
+            {
+                goto shapes_wkt_lexer_17;
+            }
+            if (yych <= 'D')
+            {
+                if (yych == '.')
+                    goto shapes_wkt_lexer_24;
+                goto shapes_wkt_lexer_16;
+            }
+            else
+            {
+                if (yych <= 'E')
+                    goto shapes_wkt_lexer_26;
+                if (yych == 'e')
+                    goto shapes_wkt_lexer_26;
+                goto shapes_wkt_lexer_16;
+            }
+        shapes_wkt_lexer_19:
+            yyaccept = 1;
+            yych     = *(marker = ++cursor);
+            if (yych == 'M')
+                goto shapes_wkt_lexer_27;
+            if (yych == 'm')
+                goto shapes_wkt_lexer_27;
+            goto shapes_wkt_lexer_5;
+        shapes_wkt_lexer_20:
+            yyaccept = 1;
+            yych     = *(marker = ++cursor);
+            if (yych == 'E')
+                goto shapes_wkt_lexer_28;
+            if (yych == 'e')
+                goto shapes_wkt_lexer_28;
+            goto shapes_wkt_lexer_5;
+        shapes_wkt_lexer_21:
+            yyaccept = 1;
+            yych     = *(marker = ++cursor);
+            if (yych == 'I')
+                goto shapes_wkt_lexer_29;
+            if (yych == 'i')
+                goto shapes_wkt_lexer_29;
+            goto shapes_wkt_lexer_5;
+        shapes_wkt_lexer_22:
+            yyaccept = 1;
+            yych     = *(marker = ++cursor);
+            if (yych == 'U')
+                goto shapes_wkt_lexer_30;
+            if (yych == 'u')
+                goto shapes_wkt_lexer_30;
+            goto shapes_wkt_lexer_5;
+        shapes_wkt_lexer_23:
+            yyaccept = 1;
+            yych     = *(marker = ++cursor);
+            if (yych == 'O')
+                goto shapes_wkt_lexer_31;
+            if (yych == 'o')
+                goto shapes_wkt_lexer_31;
+            goto shapes_wkt_lexer_5;
+        shapes_wkt_lexer_24:
+            yych = *++cursor;
+            if (yych <= '/')
+                goto shapes_wkt_lexer_25;
+            if (yych <= '9')
+                goto shapes_wkt_lexer_32;
+        shapes_wkt_lexer_25:
+            cursor = marker;
+            if (yyaccept <= 4)
+            {
+                if (yyaccept <= 2)
+                {
+                    if (yyaccept <= 1)
+                    {
+                        if (yyaccept == 0)
+                        {
+                            goto shapes_wkt_lexer_16;
+                        }
+                        else
+                        {
+                            goto shapes_wkt_lexer_5;
+                        }
+                    }
+                    else
+                    {
+                        goto shapes_wkt_lexer_55;
+                    }
+                }
+                else
+                {
+                    if (yyaccept == 3)
+                    {
+                        goto shapes_wkt_lexer_75;
+                    }
+                    else
+                    {
+                        goto shapes_wkt_lexer_96;
+                    }
+                }
+            }
+            else
+            {
+                if (yyaccept <= 6)
+                {
+                    if (yyaccept == 5)
+                    {
+                        goto shapes_wkt_lexer_99;
+                    }
+                    else
+                    {
+                        goto shapes_wkt_lexer_123;
+                    }
+                }
+                else
+                {
+                    if (yyaccept == 7)
+                    {
+                        goto shapes_wkt_lexer_138;
+                    }
+                    else
+                    {
+                        goto shapes_wkt_lexer_150;
+                    }
+                }
+            }
+        shapes_wkt_lexer_26:
+            yych = *++cursor;
+            if (yych <= ',')
+            {
+                if (yych == '+')
+                    goto shapes_wkt_lexer_34;
+                goto shapes_wkt_lexer_25;
+            }
+            else
+            {
+                if (yych <= '-')
+                    goto shapes_wkt_lexer_34;
+                if (yych <= '/')
+                    goto shapes_wkt_lexer_25;
+                if (yych <= '9')
+                    goto shapes_wkt_lexer_35;
+                goto shapes_wkt_lexer_25;
+            }
+        shapes_wkt_lexer_27:
+            yych = *++cursor;
+            if (yych == 'P')
+                goto shapes_wkt_lexer_37;
+            if (yych == 'p')
+                goto shapes_wkt_lexer_37;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_28:
+            yych = *++cursor;
+            if (yych == 'O')
+                goto shapes_wkt_lexer_38;
+            if (yych == 'o')
+                goto shapes_wkt_lexer_38;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_29:
+            yych = *++cursor;
+            if (yych == 'N')
+                goto shapes_wkt_lexer_39;
+            if (yych == 'n')
+                goto shapes_wkt_lexer_39;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_30:
+            yych = *++cursor;
+            if (yych == 'L')
+                goto shapes_wkt_lexer_40;
+            if (yych == 'l')
+                goto shapes_wkt_lexer_40;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_31:
+            yych = *++cursor;
+            if (yych <= 'L')
+            {
+                if (yych == 'I')
+                    goto shapes_wkt_lexer_41;
+                if (yych <= 'K')
+                    goto shapes_wkt_lexer_25;
+                goto shapes_wkt_lexer_42;
+            }
+            else
+            {
+                if (yych <= 'i')
+                {
+                    if (yych <= 'h')
+                        goto shapes_wkt_lexer_25;
+                    goto shapes_wkt_lexer_41;
+                }
+                else
+                {
+                    if (yych == 'l')
+                        goto shapes_wkt_lexer_42;
+                    goto shapes_wkt_lexer_25;
+                }
+            }
+        shapes_wkt_lexer_32:
+            yyaccept = 0;
+            yych     = *(marker = ++cursor);
+            if (yych <= 'D')
+            {
+                if (yych <= '/')
+                    goto shapes_wkt_lexer_16;
+                if (yych <= '9')
+                    goto shapes_wkt_lexer_32;
+                goto shapes_wkt_lexer_16;
+            }
+            else
+            {
+                if (yych <= 'E')
+                    goto shapes_wkt_lexer_26;
+                if (yych == 'e')
+                    goto shapes_wkt_lexer_26;
+                goto shapes_wkt_lexer_16;
+            }
+        shapes_wkt_lexer_34:
+            yych = *++cursor;
+            if (yych <= '/')
+                goto shapes_wkt_lexer_25;
+            if (yych >= ':')
+                goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_35:
+            yych = *++cursor;
+            if (yych <= '/')
+                goto shapes_wkt_lexer_16;
+            if (yych <= '9')
+                goto shapes_wkt_lexer_35;
+            goto shapes_wkt_lexer_16;
+        shapes_wkt_lexer_37:
+            yych = *++cursor;
+            if (yych == 'T')
+                goto shapes_wkt_lexer_43;
+            if (yych == 't')
+                goto shapes_wkt_lexer_43;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_38:
+            yych = *++cursor;
+            if (yych == 'M')
+                goto shapes_wkt_lexer_44;
+            if (yych == 'm')
+                goto shapes_wkt_lexer_44;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_39:
+            yych = *++cursor;
+            if (yych == 'E')
+                goto shapes_wkt_lexer_45;
+            if (yych == 'e')
+                goto shapes_wkt_lexer_45;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_40:
+            yych = *++cursor;
+            if (yych == 'T')
+                goto shapes_wkt_lexer_46;
+            if (yych == 't')
+                goto shapes_wkt_lexer_46;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_41:
+            yych = *++cursor;
+            if (yych == 'N')
+                goto shapes_wkt_lexer_47;
+            if (yych == 'n')
+                goto shapes_wkt_lexer_47;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_42:
+            yych = *++cursor;
+            if (yych == 'Y')
+                goto shapes_wkt_lexer_48;
+            if (yych == 'y')
+                goto shapes_wkt_lexer_48;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_43:
+            yych = *++cursor;
+            if (yych == 'Y')
+                goto shapes_wkt_lexer_49;
+            if (yych == 'y')
+                goto shapes_wkt_lexer_49;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_44:
+            yych = *++cursor;
+            if (yych == 'E')
+                goto shapes_wkt_lexer_51;
+            if (yych == 'e')
+                goto shapes_wkt_lexer_51;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_45:
+            yych = *++cursor;
+            if (yych == 'S')
+                goto shapes_wkt_lexer_52;
+            if (yych == 's')
+                goto shapes_wkt_lexer_52;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_46:
+            yych = *++cursor;
+            if (yych == 'I')
+                goto shapes_wkt_lexer_53;
+            if (yych == 'i')
+                goto shapes_wkt_lexer_53;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_47:
+            yych = *++cursor;
+            if (yych == 'T')
+                goto shapes_wkt_lexer_54;
+            if (yych == 't')
+                goto shapes_wkt_lexer_54;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_48:
+            yych = *++cursor;
+            if (yych == 'G')
+                goto shapes_wkt_lexer_56;
+            if (yych == 'g')
+                goto shapes_wkt_lexer_56;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_49:
+            ++cursor;
+            {
+                return WKT_EMPTY_SET;
+            }
+        shapes_wkt_lexer_51:
+            yych = *++cursor;
+            if (yych == 'T')
+                goto shapes_wkt_lexer_57;
+            if (yych == 't')
+                goto shapes_wkt_lexer_57;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_52:
+            yych = *++cursor;
+            if (yych == 'T')
+                goto shapes_wkt_lexer_58;
+            if (yych == 't')
+                goto shapes_wkt_lexer_58;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_53:
+            yych = *++cursor;
+            if (yych <= 'P')
+            {
+                if (yych == 'L')
+                    goto shapes_wkt_lexer_59;
+                if (yych <= 'O')
+                    goto shapes_wkt_lexer_25;
+                goto shapes_wkt_lexer_60;
+            }
+            else
+            {
+                if (yych <= 'l')
+                {
+                    if (yych <= 'k')
+                        goto shapes_wkt_lexer_25;
+                    goto shapes_wkt_lexer_59;
+                }
+                else
+                {
+                    if (yych == 'p')
+                        goto shapes_wkt_lexer_60;
+                    goto shapes_wkt_lexer_25;
+                }
+            }
+        shapes_wkt_lexer_54:
+            yyaccept = 2;
+            yych     = *(marker = ++cursor);
+            if (yybm[0 + yych] & 128)
+            {
+                goto shapes_wkt_lexer_61;
+            }
+            if (yych <= 'Z')
+            {
+                if (yych == 'M')
+                    goto shapes_wkt_lexer_63;
+                if (yych >= 'Z')
+                    goto shapes_wkt_lexer_65;
+            }
+            else
+            {
+                if (yych <= 'm')
+                {
+                    if (yych >= 'm')
+                        goto shapes_wkt_lexer_63;
+                }
+                else
+                {
+                    if (yych == 'z')
+                        goto shapes_wkt_lexer_65;
+                }
+            }
+        shapes_wkt_lexer_55:
+        {
+            return WKT_POINT_TAGGED_TEXT;
+        }
+        shapes_wkt_lexer_56:
+            yych = *++cursor;
+            if (yych == 'O')
+                goto shapes_wkt_lexer_67;
+            if (yych == 'o')
+                goto shapes_wkt_lexer_67;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_57:
+            yych = *++cursor;
+            if (yych == 'R')
+                goto shapes_wkt_lexer_68;
+            if (yych == 'r')
+                goto shapes_wkt_lexer_68;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_58:
+            yych = *++cursor;
+            if (yych == 'R')
+                goto shapes_wkt_lexer_69;
+            if (yych == 'r')
+                goto shapes_wkt_lexer_69;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_59:
+            yych = *++cursor;
+            if (yych == 'I')
+                goto shapes_wkt_lexer_70;
+            if (yych == 'i')
+                goto shapes_wkt_lexer_70;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_60:
+            yych = *++cursor;
+            if (yych == 'O')
+                goto shapes_wkt_lexer_71;
+            if (yych == 'o')
+                goto shapes_wkt_lexer_71;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_61:
+            yych = *++cursor;
+            if (yybm[0 + yych] & 128)
+            {
+                goto shapes_wkt_lexer_61;
+            }
+            if (yych <= 'Z')
+            {
+                if (yych == 'M')
+                    goto shapes_wkt_lexer_63;
+                if (yych <= 'Y')
+                    goto shapes_wkt_lexer_25;
+                goto shapes_wkt_lexer_65;
+            }
+            else
+            {
+                if (yych <= 'm')
+                {
+                    if (yych <= 'l')
+                        goto shapes_wkt_lexer_25;
+                }
+                else
+                {
+                    if (yych == 'z')
+                        goto shapes_wkt_lexer_65;
+                    goto shapes_wkt_lexer_25;
+                }
+            }
+        shapes_wkt_lexer_63:
+            ++cursor;
+            {
+                return WKT_POINT_M_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_65:
+            yych = *++cursor;
+            if (yych == 'M')
+                goto shapes_wkt_lexer_72;
+            if (yych == 'm')
+                goto shapes_wkt_lexer_72;
+            {
+                return WKT_POINT_Z_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_67:
+            yych = *++cursor;
+            if (yych == 'N')
+                goto shapes_wkt_lexer_74;
+            if (yych == 'n')
+                goto shapes_wkt_lexer_74;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_68:
+            yych = *++cursor;
+            if (yych == 'Y')
+                goto shapes_wkt_lexer_76;
+            if (yych == 'y')
+                goto shapes_wkt_lexer_76;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_69:
+            yych = *++cursor;
+            if (yych == 'I')
+                goto shapes_wkt_lexer_77;
+            if (yych == 'i')
+                goto shapes_wkt_lexer_77;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_70:
+            yych = *++cursor;
+            if (yych == 'N')
+                goto shapes_wkt_lexer_78;
+            if (yych == 'n')
+                goto shapes_wkt_lexer_78;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_71:
+            yych = *++cursor;
+            if (yych <= 'L')
+            {
+                if (yych == 'I')
+                    goto shapes_wkt_lexer_79;
+                if (yych <= 'K')
+                    goto shapes_wkt_lexer_25;
+                goto shapes_wkt_lexer_80;
+            }
+            else
+            {
+                if (yych <= 'i')
+                {
+                    if (yych <= 'h')
+                        goto shapes_wkt_lexer_25;
+                    goto shapes_wkt_lexer_79;
+                }
+                else
+                {
+                    if (yych == 'l')
+                        goto shapes_wkt_lexer_80;
+                    goto shapes_wkt_lexer_25;
+                }
+            }
+        shapes_wkt_lexer_72:
+            ++cursor;
+            {
+                return WKT_POINT_ZM_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_74:
+            yyaccept = 3;
+            yych     = *(marker = ++cursor);
+            if (yych <= 'L')
+            {
+                if (yych <= '\f')
+                {
+                    if (yych <= 0x08)
+                        goto shapes_wkt_lexer_75;
+                    if (yych <= '\n')
+                        goto shapes_wkt_lexer_81;
+                }
+                else
+                {
+                    if (yych <= '\r')
+                        goto shapes_wkt_lexer_81;
+                    if (yych == ' ')
+                        goto shapes_wkt_lexer_81;
+                }
+            }
+            else
+            {
+                if (yych <= 'l')
+                {
+                    if (yych <= 'M')
+                        goto shapes_wkt_lexer_83;
+                    if (yych == 'Z')
+                        goto shapes_wkt_lexer_85;
+                }
+                else
+                {
+                    if (yych <= 'm')
+                        goto shapes_wkt_lexer_83;
+                    if (yych == 'z')
+                        goto shapes_wkt_lexer_85;
+                }
+            }
+        shapes_wkt_lexer_75:
+        {
+            return WKT_POLYGON_TAGGED_TEXT;
+        }
+        shapes_wkt_lexer_76:
+            yych = *++cursor;
+            if (yych == 'C')
+                goto shapes_wkt_lexer_87;
+            if (yych == 'c')
+                goto shapes_wkt_lexer_87;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_77:
+            yych = *++cursor;
+            if (yych == 'N')
+                goto shapes_wkt_lexer_88;
+            if (yych == 'n')
+                goto shapes_wkt_lexer_88;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_78:
+            yych = *++cursor;
+            if (yych == 'E')
+                goto shapes_wkt_lexer_89;
+            if (yych == 'e')
+                goto shapes_wkt_lexer_89;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_79:
+            yych = *++cursor;
+            if (yych == 'N')
+                goto shapes_wkt_lexer_90;
+            if (yych == 'n')
+                goto shapes_wkt_lexer_90;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_80:
+            yych = *++cursor;
+            if (yych == 'Y')
+                goto shapes_wkt_lexer_91;
+            if (yych == 'y')
+                goto shapes_wkt_lexer_91;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_81:
+            yych = *++cursor;
+            if (yych <= 'L')
+            {
+                if (yych <= '\f')
+                {
+                    if (yych <= 0x08)
+                        goto shapes_wkt_lexer_25;
+                    if (yych <= '\n')
+                        goto shapes_wkt_lexer_81;
+                    goto shapes_wkt_lexer_25;
+                }
+                else
+                {
+                    if (yych <= '\r')
+                        goto shapes_wkt_lexer_81;
+                    if (yych == ' ')
+                        goto shapes_wkt_lexer_81;
+                    goto shapes_wkt_lexer_25;
+                }
+            }
+            else
+            {
+                if (yych <= 'l')
+                {
+                    if (yych <= 'M')
+                        goto shapes_wkt_lexer_83;
+                    if (yych == 'Z')
+                        goto shapes_wkt_lexer_85;
+                    goto shapes_wkt_lexer_25;
+                }
+                else
+                {
+                    if (yych <= 'm')
+                        goto shapes_wkt_lexer_83;
+                    if (yych == 'z')
+                        goto shapes_wkt_lexer_85;
+                    goto shapes_wkt_lexer_25;
+                }
+            }
+        shapes_wkt_lexer_83:
+            ++cursor;
+            {
+                return WKT_POLYGON_M_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_85:
+            yych = *++cursor;
+            if (yych == 'M')
+                goto shapes_wkt_lexer_92;
+            if (yych == 'm')
+                goto shapes_wkt_lexer_92;
+            {
+                return WKT_POLYGON_Z_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_87:
+            yych = *++cursor;
+            if (yych == 'O')
+                goto shapes_wkt_lexer_94;
+            if (yych == 'o')
+                goto shapes_wkt_lexer_94;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_88:
+            yych = *++cursor;
+            if (yych == 'G')
+                goto shapes_wkt_lexer_95;
+            if (yych == 'g')
+                goto shapes_wkt_lexer_95;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_89:
+            yych = *++cursor;
+            if (yych == 'S')
+                goto shapes_wkt_lexer_97;
+            if (yych == 's')
+                goto shapes_wkt_lexer_97;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_90:
+            yych = *++cursor;
+            if (yych == 'T')
+                goto shapes_wkt_lexer_98;
+            if (yych == 't')
+                goto shapes_wkt_lexer_98;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_91:
+            yych = *++cursor;
+            if (yych == 'G')
+                goto shapes_wkt_lexer_100;
+            if (yych == 'g')
+                goto shapes_wkt_lexer_100;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_92:
+            ++cursor;
+            {
+                return WKT_POLYGON_ZM_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_94:
+            yych = *++cursor;
+            if (yych == 'L')
+                goto shapes_wkt_lexer_101;
+            if (yych == 'l')
+                goto shapes_wkt_lexer_101;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_95:
+            yyaccept = 4;
+            yych     = *(marker = ++cursor);
+            if (yych <= 'L')
+            {
+                if (yych <= '\f')
+                {
+                    if (yych <= 0x08)
+                        goto shapes_wkt_lexer_96;
+                    if (yych <= '\n')
+                        goto shapes_wkt_lexer_102;
+                }
+                else
+                {
+                    if (yych <= '\r')
+                        goto shapes_wkt_lexer_102;
+                    if (yych == ' ')
+                        goto shapes_wkt_lexer_102;
+                }
+            }
+            else
+            {
+                if (yych <= 'l')
+                {
+                    if (yych <= 'M')
+                        goto shapes_wkt_lexer_104;
+                    if (yych == 'Z')
+                        goto shapes_wkt_lexer_106;
+                }
+                else
+                {
+                    if (yych <= 'm')
+                        goto shapes_wkt_lexer_104;
+                    if (yych == 'z')
+                        goto shapes_wkt_lexer_106;
+                }
+            }
+        shapes_wkt_lexer_96:
+        {
+            return WKT_LINESTRING_TAGGED_TEXT;
+        }
+        shapes_wkt_lexer_97:
+            yych = *++cursor;
+            if (yych == 'T')
+                goto shapes_wkt_lexer_108;
+            if (yych == 't')
+                goto shapes_wkt_lexer_108;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_98:
+            yyaccept = 5;
+            yych     = *(marker = ++cursor);
+            if (yych <= 'L')
+            {
+                if (yych <= '\f')
+                {
+                    if (yych <= 0x08)
+                        goto shapes_wkt_lexer_99;
+                    if (yych <= '\n')
+                        goto shapes_wkt_lexer_109;
+                }
+                else
+                {
+                    if (yych <= '\r')
+                        goto shapes_wkt_lexer_109;
+                    if (yych == ' ')
+                        goto shapes_wkt_lexer_109;
+                }
+            }
+            else
+            {
+                if (yych <= 'l')
+                {
+                    if (yych <= 'M')
+                        goto shapes_wkt_lexer_111;
+                    if (yych == 'Z')
+                        goto shapes_wkt_lexer_113;
+                }
+                else
+                {
+                    if (yych <= 'm')
+                        goto shapes_wkt_lexer_111;
+                    if (yych == 'z')
+                        goto shapes_wkt_lexer_113;
+                }
+            }
+        shapes_wkt_lexer_99:
+        {
+            return WKT_MULTIPOINT_TAGGED_TEXT;
+        }
+        shapes_wkt_lexer_100:
+            yych = *++cursor;
+            if (yych == 'O')
+                goto shapes_wkt_lexer_115;
+            if (yych == 'o')
+                goto shapes_wkt_lexer_115;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_101:
+            yych = *++cursor;
+            if (yych == 'L')
+                goto shapes_wkt_lexer_116;
+            if (yych == 'l')
+                goto shapes_wkt_lexer_116;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_102:
+            yych = *++cursor;
+            if (yych <= 'L')
+            {
+                if (yych <= '\f')
+                {
+                    if (yych <= 0x08)
+                        goto shapes_wkt_lexer_25;
+                    if (yych <= '\n')
+                        goto shapes_wkt_lexer_102;
+                    goto shapes_wkt_lexer_25;
+                }
+                else
+                {
+                    if (yych <= '\r')
+                        goto shapes_wkt_lexer_102;
+                    if (yych == ' ')
+                        goto shapes_wkt_lexer_102;
+                    goto shapes_wkt_lexer_25;
+                }
+            }
+            else
+            {
+                if (yych <= 'l')
+                {
+                    if (yych <= 'M')
+                        goto shapes_wkt_lexer_104;
+                    if (yych == 'Z')
+                        goto shapes_wkt_lexer_106;
+                    goto shapes_wkt_lexer_25;
+                }
+                else
+                {
+                    if (yych <= 'm')
+                        goto shapes_wkt_lexer_104;
+                    if (yych == 'z')
+                        goto shapes_wkt_lexer_106;
+                    goto shapes_wkt_lexer_25;
+                }
+            }
+        shapes_wkt_lexer_104:
+            ++cursor;
+            {
+                return WKT_LINESTRING_M_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_106:
+            yych = *++cursor;
+            if (yych == 'M')
+                goto shapes_wkt_lexer_117;
+            if (yych == 'm')
+                goto shapes_wkt_lexer_117;
+            {
+                return WKT_LINESTRING_Z_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_108:
+            yych = *++cursor;
+            if (yych == 'R')
+                goto shapes_wkt_lexer_119;
+            if (yych == 'r')
+                goto shapes_wkt_lexer_119;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_109:
+            yych = *++cursor;
+            if (yych <= 'L')
+            {
+                if (yych <= '\f')
+                {
+                    if (yych <= 0x08)
+                        goto shapes_wkt_lexer_25;
+                    if (yych <= '\n')
+                        goto shapes_wkt_lexer_109;
+                    goto shapes_wkt_lexer_25;
+                }
+                else
+                {
+                    if (yych <= '\r')
+                        goto shapes_wkt_lexer_109;
+                    if (yych == ' ')
+                        goto shapes_wkt_lexer_109;
+                    goto shapes_wkt_lexer_25;
+                }
+            }
+            else
+            {
+                if (yych <= 'l')
+                {
+                    if (yych <= 'M')
+                        goto shapes_wkt_lexer_111;
+                    if (yych == 'Z')
+                        goto shapes_wkt_lexer_113;
+                    goto shapes_wkt_lexer_25;
+                }
+                else
+                {
+                    if (yych <= 'm')
+                        goto shapes_wkt_lexer_111;
+                    if (yych == 'z')
+                        goto shapes_wkt_lexer_113;
+                    goto shapes_wkt_lexer_25;
+                }
+            }
+        shapes_wkt_lexer_111:
+            ++cursor;
+            {
+                return WKT_MULTIPOINT_M_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_113:
+            yych = *++cursor;
+            if (yych == 'M')
+                goto shapes_wkt_lexer_120;
+            if (yych == 'm')
+                goto shapes_wkt_lexer_120;
+            {
+                return WKT_MULTIPOINT_Z_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_115:
+            yych = *++cursor;
+            if (yych == 'N')
+                goto shapes_wkt_lexer_122;
+            if (yych == 'n')
+                goto shapes_wkt_lexer_122;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_116:
+            yych = *++cursor;
+            if (yych == 'E')
+                goto shapes_wkt_lexer_124;
+            if (yych == 'e')
+                goto shapes_wkt_lexer_124;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_117:
+            ++cursor;
+            {
+                return WKT_LINESTRING_ZM_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_119:
+            yych = *++cursor;
+            if (yych == 'I')
+                goto shapes_wkt_lexer_125;
+            if (yych == 'i')
+                goto shapes_wkt_lexer_125;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_120:
+            ++cursor;
+            {
+                return WKT_MULTIPOINT_ZM_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_122:
+            yyaccept = 6;
+            yych     = *(marker = ++cursor);
+            if (yych <= 'L')
+            {
+                if (yych <= '\f')
+                {
+                    if (yych <= 0x08)
+                        goto shapes_wkt_lexer_123;
+                    if (yych <= '\n')
+                        goto shapes_wkt_lexer_126;
+                }
+                else
+                {
+                    if (yych <= '\r')
+                        goto shapes_wkt_lexer_126;
+                    if (yych == ' ')
+                        goto shapes_wkt_lexer_126;
+                }
+            }
+            else
+            {
+                if (yych <= 'l')
+                {
+                    if (yych <= 'M')
+                        goto shapes_wkt_lexer_128;
+                    if (yych == 'Z')
+                        goto shapes_wkt_lexer_130;
+                }
+                else
+                {
+                    if (yych <= 'm')
+                        goto shapes_wkt_lexer_128;
+                    if (yych == 'z')
+                        goto shapes_wkt_lexer_130;
+                }
+            }
+        shapes_wkt_lexer_123:
+        {
+            return WKT_MULTIPOLYGON_TAGGED_TEXT;
+        }
+        shapes_wkt_lexer_124:
+            yych = *++cursor;
+            if (yych == 'C')
+                goto shapes_wkt_lexer_132;
+            if (yych == 'c')
+                goto shapes_wkt_lexer_132;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_125:
+            yych = *++cursor;
+            if (yych == 'N')
+                goto shapes_wkt_lexer_133;
+            if (yych == 'n')
+                goto shapes_wkt_lexer_133;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_126:
+            yych = *++cursor;
+            if (yych <= 'L')
+            {
+                if (yych <= '\f')
+                {
+                    if (yych <= 0x08)
+                        goto shapes_wkt_lexer_25;
+                    if (yych <= '\n')
+                        goto shapes_wkt_lexer_126;
+                    goto shapes_wkt_lexer_25;
+                }
+                else
+                {
+                    if (yych <= '\r')
+                        goto shapes_wkt_lexer_126;
+                    if (yych == ' ')
+                        goto shapes_wkt_lexer_126;
+                    goto shapes_wkt_lexer_25;
+                }
+            }
+            else
+            {
+                if (yych <= 'l')
+                {
+                    if (yych <= 'M')
+                        goto shapes_wkt_lexer_128;
+                    if (yych == 'Z')
+                        goto shapes_wkt_lexer_130;
+                    goto shapes_wkt_lexer_25;
+                }
+                else
+                {
+                    if (yych <= 'm')
+                        goto shapes_wkt_lexer_128;
+                    if (yych == 'z')
+                        goto shapes_wkt_lexer_130;
+                    goto shapes_wkt_lexer_25;
+                }
+            }
+        shapes_wkt_lexer_128:
+            ++cursor;
+            {
+                return WKT_MULTIPOLYGON_M_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_130:
+            yych = *++cursor;
+            if (yych == 'M')
+                goto shapes_wkt_lexer_134;
+            if (yych == 'm')
+                goto shapes_wkt_lexer_134;
+            {
+                return WKT_MULTIPOLYGON_Z_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_132:
+            yych = *++cursor;
+            if (yych == 'T')
+                goto shapes_wkt_lexer_136;
+            if (yych == 't')
+                goto shapes_wkt_lexer_136;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_133:
+            yych = *++cursor;
+            if (yych == 'G')
+                goto shapes_wkt_lexer_137;
+            if (yych == 'g')
+                goto shapes_wkt_lexer_137;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_134:
+            ++cursor;
+            {
+                return WKT_MULTIPOLYGON_ZM_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_136:
+            yych = *++cursor;
+            if (yych == 'I')
+                goto shapes_wkt_lexer_139;
+            if (yych == 'i')
+                goto shapes_wkt_lexer_139;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_137:
+            yyaccept = 7;
+            yych     = *(marker = ++cursor);
+            if (yych <= 'L')
+            {
+                if (yych <= '\f')
+                {
+                    if (yych <= 0x08)
+                        goto shapes_wkt_lexer_138;
+                    if (yych <= '\n')
+                        goto shapes_wkt_lexer_140;
+                }
+                else
+                {
+                    if (yych <= '\r')
+                        goto shapes_wkt_lexer_140;
+                    if (yych == ' ')
+                        goto shapes_wkt_lexer_140;
+                }
+            }
+            else
+            {
+                if (yych <= 'l')
+                {
+                    if (yych <= 'M')
+                        goto shapes_wkt_lexer_142;
+                    if (yych == 'Z')
+                        goto shapes_wkt_lexer_144;
+                }
+                else
+                {
+                    if (yych <= 'm')
+                        goto shapes_wkt_lexer_142;
+                    if (yych == 'z')
+                        goto shapes_wkt_lexer_144;
+                }
+            }
+        shapes_wkt_lexer_138:
+        {
+            return WKT_MULTILINESTRING_TAGGED_TEXT;
+        }
+        shapes_wkt_lexer_139:
+            yych = *++cursor;
+            if (yych == 'O')
+                goto shapes_wkt_lexer_146;
+            if (yych == 'o')
+                goto shapes_wkt_lexer_146;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_140:
+            yych = *++cursor;
+            if (yych <= 'L')
+            {
+                if (yych <= '\f')
+                {
+                    if (yych <= 0x08)
+                        goto shapes_wkt_lexer_25;
+                    if (yych <= '\n')
+                        goto shapes_wkt_lexer_140;
+                    goto shapes_wkt_lexer_25;
+                }
+                else
+                {
+                    if (yych <= '\r')
+                        goto shapes_wkt_lexer_140;
+                    if (yych == ' ')
+                        goto shapes_wkt_lexer_140;
+                    goto shapes_wkt_lexer_25;
+                }
+            }
+            else
+            {
+                if (yych <= 'l')
+                {
+                    if (yych <= 'M')
+                        goto shapes_wkt_lexer_142;
+                    if (yych == 'Z')
+                        goto shapes_wkt_lexer_144;
+                    goto shapes_wkt_lexer_25;
+                }
+                else
+                {
+                    if (yych <= 'm')
+                        goto shapes_wkt_lexer_142;
+                    if (yych == 'z')
+                        goto shapes_wkt_lexer_144;
+                    goto shapes_wkt_lexer_25;
+                }
+            }
+        shapes_wkt_lexer_142:
+            ++cursor;
+            {
+                return WKT_MULTILINESTRING_M_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_144:
+            yych = *++cursor;
+            if (yych == 'M')
+                goto shapes_wkt_lexer_147;
+            if (yych == 'm')
+                goto shapes_wkt_lexer_147;
+            {
+                return WKT_MULTILINESTRING_Z_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_146:
+            yych = *++cursor;
+            if (yych == 'N')
+                goto shapes_wkt_lexer_149;
+            if (yych == 'n')
+                goto shapes_wkt_lexer_149;
+            goto shapes_wkt_lexer_25;
+        shapes_wkt_lexer_147:
+            ++cursor;
+            {
+                return WKT_MULTILINESTRING_ZM_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_149:
+            yyaccept = 8;
+            yych     = *(marker = ++cursor);
+            if (yych <= 'L')
+            {
+                if (yych <= '\f')
+                {
+                    if (yych <= 0x08)
+                        goto shapes_wkt_lexer_150;
+                    if (yych <= '\n')
+                        goto shapes_wkt_lexer_151;
+                }
+                else
+                {
+                    if (yych <= '\r')
+                        goto shapes_wkt_lexer_151;
+                    if (yych == ' ')
+                        goto shapes_wkt_lexer_151;
+                }
+            }
+            else
+            {
+                if (yych <= 'l')
+                {
+                    if (yych <= 'M')
+                        goto shapes_wkt_lexer_153;
+                    if (yych == 'Z')
+                        goto shapes_wkt_lexer_155;
+                }
+                else
+                {
+                    if (yych <= 'm')
+                        goto shapes_wkt_lexer_153;
+                    if (yych == 'z')
+                        goto shapes_wkt_lexer_155;
+                }
+            }
+        shapes_wkt_lexer_150:
+        {
+            return WKT_GEOMETRYCOLLECTION_TAGGED_TEXT;
+        }
+        shapes_wkt_lexer_151:
+            yych = *++cursor;
+            if (yych <= 'L')
+            {
+                if (yych <= '\f')
+                {
+                    if (yych <= 0x08)
+                        goto shapes_wkt_lexer_25;
+                    if (yych <= '\n')
+                        goto shapes_wkt_lexer_151;
+                    goto shapes_wkt_lexer_25;
+                }
+                else
+                {
+                    if (yych <= '\r')
+                        goto shapes_wkt_lexer_151;
+                    if (yych == ' ')
+                        goto shapes_wkt_lexer_151;
+                    goto shapes_wkt_lexer_25;
+                }
+            }
+            else
+            {
+                if (yych <= 'l')
+                {
+                    if (yych <= 'M')
+                        goto shapes_wkt_lexer_153;
+                    if (yych == 'Z')
+                        goto shapes_wkt_lexer_155;
+                    goto shapes_wkt_lexer_25;
+                }
+                else
+                {
+                    if (yych <= 'm')
+                        goto shapes_wkt_lexer_153;
+                    if (yych == 'z')
+                        goto shapes_wkt_lexer_155;
+                    goto shapes_wkt_lexer_25;
+                }
+            }
+        shapes_wkt_lexer_153:
+            ++cursor;
+            {
+                return WKT_GEOMETRYCOLLECTION_M_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_155:
+            yych = *++cursor;
+            if (yych == 'M')
+                goto shapes_wkt_lexer_157;
+            if (yych == 'm')
+                goto shapes_wkt_lexer_157;
+            {
+                return WKT_GEOMETRYCOLLECTION_Z_TAGGED_TEXT;
+            }
+        shapes_wkt_lexer_157:
+            ++cursor;
+            {
+                return WKT_GEOMETRYCOLLECTION_ZM_TAGGED_TEXT;
+            }
+        }
     }
 
     /*!
@@ -24492,8 +25235,8 @@ shapes_wkt_lexer_157:
     }
 
   private:
-    /// pointer to the buffer
-    const char* content = nullptr;
+    /// the source string
+    std::string content;
 
     /// pointer to the beginning of the current token
     const char* start = nullptr;
@@ -24513,13 +25256,17 @@ namespace simo
 namespace shapes
 {
 
+#ifdef SHAPES_VERBOSE
+static char WKT_TRACE_PREFIX[] = "[shapes] ";
+#endif
+
 /*!
  * @brief a Well-known text (WKT) markup language reader
  * @ingroup wkt
  *
  * @since 0.0.1
  */
-class WktReader
+class wkt_reader
 {
   public:
     /*!
@@ -24527,13 +25274,13 @@ class WktReader
      *
      * @since 0.0.1
      */
-    WktReader()
+    wkt_reader()
         : m_parser(ParseAlloc(malloc))
     {
     }
 
     /// destructor
-    ~WktReader()
+    ~wkt_reader()
     {
         ParseFree(m_parser, free);
     }
@@ -24546,12 +25293,13 @@ class WktReader
      *
      * @since 0.0.1
      */
-    WktResult read(const char* wkt)
+    wkt_result read(const std::string& wkt)
     {
-        WktLexer lexer(wkt);
-        WktResult result{};
+        wkt_lexer lexer(wkt);
+        wkt_result result{};
+
 #ifdef SHAPES_VERBOSE
-        ParseTrace(stdout, "[shapes] ");
+        ParseTrace(stdout, WKT_TRACE_PREFIX);
 #endif
         while (true)
         {
@@ -24567,7 +25315,7 @@ class WktReader
             if (token == WKT_PARSE_ERROR)
             {
                 /// @todo (pavel) add position to the error message
-                throw exceptions::ParseError("wkt lexer error");
+                throw exceptions::parse_error("wkt lexer error");
             }
 
             if (token == WKT_NUM)
@@ -24582,7 +25330,7 @@ class WktReader
             if (result.parser_error)
             {
                 /// @todo (pavel) add position to the error message
-                throw exceptions::ParseError("wkt parser error");
+                throw exceptions::parse_error("wkt parser error");
             }
         }
         Parse(m_parser, 0, 0, &result);
@@ -24596,461 +25344,1240 @@ class WktReader
 
 }  // namespace shapes
 }  // namespace simo
+// #include <simo/io/polyline.hpp>
+
+
+#include <ciso646>
+// #include <simo/exceptions.hpp>
+
+
+namespace simo
+{
+namespace shapes
+{
+namespace polyline
+{
+
+/// the chunk size
+constexpr static const int32_t CHUNK_SIZE = 5;
+
+/// a mask to extract the chunks
+constexpr static const int32_t CHUNK_MASK = 0x1f;
+
+/// threshold used to signal another value follows or not
+constexpr static const int32_t CHUNK_THRESHOLD = 0x20;
+
+/// the ascii offset to apply
+constexpr static const int32_t ASCII_OFFSET = 63;
+
+/*!
+ * @brief Encode a polyline coordinate
+ * @param coord the coordinate value
+ * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+ * @return the encoded coordinate
+ *
+ * @since 0.0.1
+ */
+std::string encode(double coord, int32_t precision = 5)
+{
+    assert(precision >= 0);
+    double pow10 = std::pow(10, precision);
+    auto value   = static_cast<int32_t>(std::round(coord * pow10));
+    value <<= 1;
+    if (coord < 0)
+    {
+        value = ~value;
+    }
+    std::string res;
+    while (value >= CHUNK_THRESHOLD)
+    {
+        int32_t ch = ((value & CHUNK_MASK) | CHUNK_THRESHOLD) + ASCII_OFFSET;
+        res += static_cast<char>(ch);
+        value >>= CHUNK_SIZE;
+    }
+    res += static_cast<char>(value + ASCII_OFFSET);
+    return res;
+}
+
+/*!
+ * @brief Decode a section of the polyline string
+ * @param text the polyline encoded string
+ * @param index the current reading position
+ * @return an integer with the decoded delta value
+ *
+ * @since 0.0.1
+ */
+int32_t advance(const std::string& text, size_t& index)
+{
+    int32_t res   = 0;
+    int32_t shift = 0;
+    char ch       = 0;
+    while (index < text.size())
+    {
+        ch = text[index++] - ASCII_OFFSET;
+        res |= (ch & CHUNK_MASK) << shift;
+        shift += CHUNK_SIZE;
+        if (ch < CHUNK_THRESHOLD)
+        {
+            break;
+        }
+    }
+    if (res & 1)
+    {
+        res = ~res;
+    }
+    res >>= 1;
+    return res;
+}
+
+/*!
+ * @brief Decode a polyline string
+ * @param text the polyline encoded string
+ * @param precision the coordinates precision
+ * @sa https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+ * @return the decoded coordinates
+ *
+ * @since 0.0.1
+ */
+std::vector<double> decode(const std::string& text, int32_t precision = 5)
+{
+    assert(precision >= 0);
+    double pow10 = std::pow(10, precision);
+    std::vector<double> res;
+    res.reserve(text.size() / 3);
+    size_t index = 0;
+    int32_t y    = 0;
+    int32_t x    = 0;
+    while (index < text.size())
+    {
+        y += advance(text, index);
+        x += advance(text, index);
+        res.push_back(x / pow10);
+        res.push_back(y / pow10);
+    }
+    return res;
+}
+
+}  // namespace polyline
+}  // namespace shapes
+}  // namespace simo
 
 namespace simo
 {
 namespace shapes
 {
 
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+#endif
+
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wgnu-anonymous-struct"
+#pragma clang diagnostic ignored "-Wnested-anon-types"
+#endif
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4201)
+#endif
+
 /*!
- * @brief represents a point
+ * @brief DOCUMENT ME!
+ * @tparam T
  * @ingroup geometry
  *
  * @since 0.0.1
  */
-class Point : public BaseGeometry<Point>
+template <class T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+class basic_point : public basic_geometry<basic_point<T>>
 {
   public:
-    /// the x-coordinate value for this Point
-    double x = 0;
+    /// DOCUMENT ME!
+    using point_type = basic_point;
+    /// DOCUMENT ME!
+    using coord_type = T;
+    /// DOCUMENT ME!
+    using coord_iterator = typename std::vector<coord_type>::iterator;
+    /// DOCUMENT ME!
+    using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
 
-    /// the y-coordinate value for this Point
-    double y = 0;
-
-    /// the z-coordinate value for this Point, if it has one.
-    double z = 0;
-
-    /// the m-coordinate value for this Point, if it has one.
-    double m = 0;
-
-    /*!
-     * @brief creates a Point
-     * @note the default behaviour is to create a 2-dimensional point with coordinates (0, 0)
-     *
-     * @since 0.0.1
-     */
-    Point() = default;
-
-    /*!
-     * @brief creates a Point from coordinates (x, y)
-     * @param x the x-coordinate value
-     * @param y the y-coordinate value
-     *
-     * @since 0.0.1
-     */
-    Point(double x, double y)
-        : x(x), y(y)
+    union
     {
-        dim = DimensionType::XY;
-    }
+        struct
+        {
+            T x;
+            T y;
+        };
+
+        struct
+        {
+            T lng;
+            T lat;
+        };
+
+        T coords[2];
+    };
 
     /*!
-     * @brief creates a Point from coordinates (x, y, z)
-     * @param x the x-coordinate value
-     * @param y the y-coordinate value
-     * @param z the z-coordinate value
-     *
-     * @since 0.0.1
+     * @brief Creates a empty point
      */
-    Point(double x, double y, double z)
-        : x(x), y(y), z(z)
-    {
-        dim = DimensionType::XYZ;
-    }
+    basic_point()
+        : x(0), y(0) {}
 
     /*!
-     * @brief creates a Point from coordinates (x, y, z, m)
-     * @param x the x-coordinate value
-     * @param y the y-coordinate value
-     * @param z the z-coordinate value
-     * @param m the m-coordinate (measure) value
-     *
-     * @since 0.0.1
+     * @brief Creates a point from the given coordinates
+     * @param x the x-coordinate
+     * @param y the y-coordinate
      */
-    Point(double x, double y, double z, double m)
-        : x(x), y(y), z(z), m(m)
-    {
-        dim = DimensionType::XYZM;
-    }
+    basic_point(T x, T y)
+        : x(x), y(y) {}
 
     /*!
-     * @brief creates a Point from coordinates
-     * @param coords the coordinates
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param begin
+     * @param end
      */
-    explicit Point(const std::vector<double>& coords)
+    explicit basic_point(coord_iterator begin, coord_iterator end)
     {
-        if (coords.size() == 2)
+        /// @todo (pavel) deal with repetition
+        assert(std::distance(begin, end) == 2);
+        size_t i = 0;
+        for (auto it = begin; it != end; ++it)
         {
-            x   = coords[0];
-            y   = coords[1];
-            dim = DimensionType::XY;
-        }
-        else if (coords.size() == 3)
-        {
-            x   = coords[0];
-            y   = coords[1];
-            z   = coords[2];
-            dim = DimensionType::XYZ;
-        }
-        else if (coords.size() == 4)
-        {
-            x   = coords[0];
-            y   = coords[1];
-            z   = coords[2];
-            m   = coords[3];
-            dim = DimensionType::XYZM;
-        }
-        else
-        {
-            throw exceptions::GeometryError("too many coordinates");
-        }
-    }
-    /*!
-     * @brief creates a Point
-     * @tparam T an arithmetic value (e.g. int, float, double)
-     * @param init the coordinates list
-     * @throw exception if the given number of coordinates is either less than two or greater than four
-     *
-     * @since 0.0.1
-     */
-    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-    Point(std::initializer_list<T> init)
-    {
-        if (init.size() == 2)
-        {
-            x   = *init.begin();
-            y   = *(init.begin() + 1);
-            dim = DimensionType::XY;
-        }
-        else if (init.size() == 3)
-        {
-            x   = *init.begin();
-            y   = *(init.begin() + 1);
-            z   = *(init.begin() + 2);
-            dim = DimensionType::XYZ;
-        }
-        else if (init.size() == 4)
-        {
-            x   = *init.begin();
-            y   = *(init.begin() + 1);
-            z   = *(init.begin() + 2);
-            m   = *(init.begin() + 3);
-            dim = DimensionType::XYZM;
-        }
-        else
-        {
-            throw exceptions::GeometryError("invalid number of dimensions " + std::to_string(init.size()));
+            coords[i++] = *it;
         }
     }
 
     /*!
-     * @brief creates a Point from coordinates (x, y)
-     * @param x the x-coordinate value
-     * @param y the y-coordinate value
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param begin
+     * @param end
      */
-    static Point from_xy(double x, double y)
+    explicit basic_point(coord_const_iterator begin, coord_const_iterator end)
     {
-        return {x, y};
-    }
-
-    /*!
-     * @brief creates a Point from coordinates (x, y, z)
-     * @param x the x-coordinate value
-     * @param y the y-coordinate value
-     * @param z the z-coordinate value
-     *
-     * @since 0.0.1
-     */
-    static Point from_xyz(double x, double y, double z)
-    {
-        return {x, y, z};
-    }
-
-    /*!
-     * @brief creates a Point from coordinates (x, y, m)
-     * @param x the x-coordinate value
-     * @param y the y-coordinate value
-     * @param m the m-coordinate value
-     *
-     * @since 0.0.1
-     */
-    static Point from_xym(double x, double y, double m)
-    {
-        Point p;
-        p.x   = x;
-        p.y   = y;
-        p.m   = m;
-        p.dim = DimensionType::XYM;
-        return p;
-    }
-
-    /*!
-     * @brief creates a Point from coordinates (x, y, z, m)
-     * @param x the x-coordinate value
-     * @param y the y-coordinate value
-     * @param z the z-coordinate value
-     * @param m the m-coordinate value
-     *
-     * @since 0.0.1
-     */
-    static Point from_xyzm(double x, double y, double z, double m)
-    {
-        return {x, y, z, m};
-    }
-
-    /*!
-     * @brief returns the coordinate at the given index
-     * @param pos the coordinate position
-     * @return a double with the coordinate value
-     *
-     * @throw IndexError if the index at pos is out of range
-     *
-     * @since 0.0.1
-     */
-    double& at(size_t pos)
-    {
-        if (pos >= size_())
+        /// @todo (pavel) deal with repetition
+        assert(std::distance(begin, end) == 2);
+        size_t i = 0;
+        for (auto it = begin; it != end; ++it)
         {
-            throw exceptions::IndexError("index at " + std::to_string(pos) + " is out of range");
+            coords[i++] = *it;
         }
-
-        if (pos == 0)
-        {
-            return x;
-        }
-
-        if (pos == 1)
-        {
-            return y;
-        }
-
-        if (pos == 2)
-        {
-            return dim == DimensionType::XYM ? m : z;
-        }
-
-        return m;
-    }
-
-    /// @copydoc Point::at()
-    double& operator[](size_t pos)
-    {
-        return at(pos);
     }
 
     /*!
-     * @brief returns true if all coordinates are equal, otherwise false
-     * @param other the point to compare
-     * @return true if all coordinates are equal, otherwise false
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @return
      */
-    bool operator==(const Point& other) const
+    std::size_t size() const noexcept
     {
-        return x == other.x and y == other.y and z == other.z and m == other.m;
+        return static_cast<std::size_t>(ndim_());
+    }
+
+    // operators
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param pos
+     * @return
+     */
+    T& operator[](size_t pos)
+    {
+        assert(pos < 2);
+        return coords[pos];
     }
 
     /*!
-     * @brief returns true if at least one coordinate is different, otherwise false
-     * @param other the point to compare
-     * @return true if at least one coordinate is different, otherwise false
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
      */
-    bool operator!=(const Point& other) const
+    friend bool operator==(const basic_point<T>& lhs, const basic_point<T>& rhs)
     {
-        return not(*this == other);
+        return lhs.x == rhs.x and lhs.y == rhs.y;
     }
 
     /*!
-     * @brief creates a Point from a geojson string
-     * @param json the geojson string
-     * @return a Point object
-     * @sa https://tools.ietf.org/html/rfc7946
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
      */
-    static Point from_json(const std::string& json)
+    friend bool operator!=(const basic_point<T>& lhs, const basic_point<T>& rhs)
     {
+        return not operator==(lhs, rhs);
+    }
+
+    // polyline
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param polyline
+     * @param precision
+     * @return
+     */
+    static basic_point<T> from_polyline(const std::string& polyline, std::int32_t precision = 5)
+    {
+        auto coords = polyline::decode(polyline, precision);
+        if (coords.size() > 2)
+        {
+            throw exceptions::parse_error("too many points");
+        }
+        return {coords[0], coords[1]};
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param precision
+     * @return
+     */
+    std::string polyline(std::int32_t precision = 5) const
+    {
+        return polyline::encode(lat, precision) + polyline::encode(lng, precision);
+    }
+
+  private:
+    /// for allow basic_geometry to access basic_point private members
+    friend class basic_geometry<basic_point<T>>;
+
+    /// @private
+    geometry_type geom_type_() const noexcept
+    {
+        return geometry_type::POINT;
+    }
+
+    /// @private
+    std::string tagged_text_() const noexcept
+    {
+        return "Point";
+    }
+
+    /// @private
+    dimension_type dim_() const noexcept
+    {
+        return dimension_type::XY;
+    }
+
+    /// @private
+    int32_t ndim_() const noexcept
+    {
+        return 2;
+    }
+
+    /// @private
+    bool is_closed_() const noexcept
+    {
+        return true;
+    }
+
+    /// @private
+    void throw_for_invalid_() const
+    {
+        // do nothing
+    }
+
+    /// @private
+    detail::bounds bounds_() const
+    {
+        return {x, y, x, y};
+    }
+
+    /// @private
+    bool has_z_() const noexcept
+    {
+        return false;
+    }
+
+    /// @private
+    bool has_m_() const noexcept
+    {
+        return false;
+    }
+
+    // json
+
+    /// @private
+    static basic_point<T> from_json_(const std::string& json)
+    {
+        /// @todo (pavel) deal with repeated code
         try
         {
             auto j         = nlohmann::json::parse(json);
             auto geom_type = j.at("type").get<std::string>();
             if (geom_type != "Point")
             {
-                throw exceptions::ParseError("invalid geometry type");
+                throw exceptions::parse_error("invalid geometry type");
             }
             auto coords = j.at("coordinates").get<std::vector<double>>();
-            return Point(coords);
+            return {coords.at(0), coords.at(1)};
+        }
+        catch (const std::out_of_range& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
         catch (const nlohmann::json::exception& e)
         {
-            throw exceptions::ParseError("invalid json: " + std::string(e.what()));
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
-        catch (const exceptions::GeometryError&)
+        catch (const exceptions::geometry_error& e)
         {
-            throw exceptions::ParseError("invalid geometry");
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
         }
     }
 
-    /*!
-     * @brief dumps the geojson representation of the Point
-     * @return a geojson string
-     * @sa https://tools.ietf.org/html/rfc7946
-     *
-     * @since 0.0.1
-     */
-    std::string json()
+    /// @private
+    std::string json_(std::int32_t precision = -1) const
     {
-        /// @todo (pavel) add properties to specify z, m and zm
         std::stringstream ss;
-        ss << std::fixed << std::setprecision(precision);
-        ss << "{\"type\":\"Point\",\"coordinates\":";
-        ss << "[" << x << "," << y;
-        if (has_z())
+        if (precision >= 0)
         {
-            ss << "," << z;
+            ss << std::setprecision(precision);
         }
-        if (has_m())
-        {
-            ss << "," << m;
-        }
-        ss << "]}";
+        ss << "{\"type\":\"Point\",\"coordinates\":"
+           << "[" << x << "," << y << "]}";
         return ss.str();
     }
 
-    /*!
-     * @brief creates a Point from a WKT string
-     * @param wkt the WKT string
-     * @return a Point object
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @throw ParseError if a parser error occurs
-     *
-     * @since 0.0.1
-     */
-    static Point from_wkt(const std::string& wkt)
+    // wkt
+
+    /// @private
+    static basic_point<T> from_wkt_(const std::string& wkt)
     {
-        WktReader reader{};
-        auto result = reader.read(wkt.c_str());
+        wkt_reader reader{};
+        auto result = reader.read(wkt);
         auto data   = result.data;
-        switch (data.geom_type)
+        if (data.geom_type != geometry_type::POINT)
         {
-            case GeometryType::POINT:
-                return {data.coords[0], data.coords[1]};
-            case GeometryType::POINTZ:
-                return {data.coords[0], data.coords[1], data.coords[2]};
-            case GeometryType::POINTM:
-                return Point::from_xym(data.coords[0], data.coords[1], data.coords[2]);
-            case GeometryType::POINTZM:
-                return {data.coords[0], data.coords[1], data.coords[2], data.coords[3]};
-            default:
-                throw exceptions::ParseError("invalid WKT string");
+            throw exceptions::parse_error("invalid wkt string");
+        }
+        return {data.coords[0], data.coords[1]};
+    }
+
+    /// @private
+    std::string wkt_(std::int32_t precision = -1) const
+    {
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "POINT "
+           << "(" << x << " " << y << ")";
+        return ss.str();
+    }
+};
+
+// xyz
+
+/*!
+ * @brief DOCUMENT ME!
+ * @tparam T
+ * @ingroup geometry
+ *
+ * @since 0.0.1
+ */
+template <class T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+class basic_point_z : public basic_geometry<basic_point_z<T>>
+{
+  public:
+    /// DOCUMENT ME!
+    using point_type = basic_point_z;
+    /// DOCUMENT ME!
+    using coord_type = T;
+    /// DOCUMENT ME!
+    using coord_iterator = typename std::vector<coord_type>::iterator;
+    /// DOCUMENT ME!
+    using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
+
+    union
+    {
+        struct
+        {
+            T x;
+            T y;
+            T z;
+        };
+
+        struct
+        {
+            T lng;
+            T lat;
+            T height;
+        };
+
+        T coords[3];
+    };
+
+    /*!
+     * @brief DOCUMENT ME!
+     */
+    basic_point_z()
+        : x(0), y(0), z(0) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param x
+     * @param y
+     * @param z
+     */
+    basic_point_z(T x, T y, T z)
+        : x(x), y(y), z(z) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param begin
+     * @param end
+     */
+    explicit basic_point_z(coord_iterator begin, coord_iterator end)
+    {
+        assert(std::distance(begin, end) == 3);
+        size_t i = 0;
+        for (auto it = begin; it != end; ++it)
+        {
+            coords[i++] = *it;
         }
     }
 
     /*!
-     * @brief dumps the WKT representation of the point
-     * @return a WKT string
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param begin
+     * @param end
      */
-    std::string wkt()
+    explicit basic_point_z(coord_const_iterator begin, coord_const_iterator end)
     {
-        std::stringstream ss;
-        ss << std::fixed << std::setprecision(precision);
-        ss << "POINT ";
-        if (has_z())
+        assert(std::distance(begin, end) == 3);
+        size_t i = 0;
+        for (auto it = begin; it != end; ++it)
         {
-            ss << "Z";
+            coords[i++] = *it;
         }
-        if (has_m())
-        {
-            ss << "M";
-        }
-        if (has_z() or has_m())
-        {
-            ss << " ";
-        }
-        ss << "(";
-        ss << x << " " << y;
-        if (has_z())
-        {
-            ss << " " << z;
-        }
-        if (has_m())
-        {
-            ss << " " << m;
-        }
-        ss << ")";
-        return ss.str();
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @return
+     */
+    std::size_t size() const noexcept
+    {
+        return static_cast<std::size_t>(ndim_());
+    }
+
+    // operators
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param pos
+     * @return
+     */
+    T& operator[](size_t pos)
+    {
+        assert(pos < 3);
+        return coords[pos];
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator==(const basic_point_z<T>& lhs, const basic_point_z<T>& rhs)
+    {
+        return lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z;
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator!=(const basic_point_z<T>& lhs, const basic_point_z<T>& rhs)
+    {
+        return not operator==(lhs, rhs);
     }
 
   private:
-    /// for allow BaseGeometry to access Point private members
-    friend class BaseGeometry<Point>;
+    /// for allow basic_geometry to access basic_point_z private members
+    friend class basic_geometry<basic_point_z<T>>;
 
     /// @private
-    GeometryType geom_type_() const
+    geometry_type geom_type_() const noexcept
     {
-        return GeometryType::POINT;
+        return geometry_type::POINTZ;
     }
 
     /// @private
-    std::string geom_type_str_() const
+    std::string tagged_text_() const noexcept
     {
         return "Point";
     }
 
     /// @private
-    bool empty_() const
+    dimension_type dim_() const noexcept
+    {
+        return dimension_type::XYZ;
+    }
+
+    /// @private
+    int32_t ndim_() const noexcept
+    {
+        return 3;
+    }
+
+    /// @private
+    bool is_closed_() const noexcept
+    {
+        return true;
+    }
+
+    /// @private
+    void throw_for_invalid_() const
+    {
+        // do nothing
+    }
+
+    /// @private
+    detail::bounds bounds_() const
+    {
+        return {x, y, x, y};
+    }
+
+    /// @private
+    bool has_z_() const noexcept
+    {
+        return true;
+    }
+
+    /// @private
+    bool has_m_() const noexcept
     {
         return false;
     }
 
+    // json
+
     /// @private
-    size_t size_() const
+    static basic_point_z<T> from_json_(const std::string& json)
     {
-        return static_cast<size_t>(ndim());
+        /// @todo (pavel) deal with repeated code
+        try
+        {
+            auto j         = nlohmann::json::parse(json);
+            auto geom_type = j.at("type").get<std::string>();
+            if (geom_type != "Point")
+            {
+                throw exceptions::parse_error("invalid geometry type");
+            }
+            auto coords = j.at("coordinates").get<std::vector<double>>();
+            return {coords.at(0), coords.at(1), coords.at(2)};
+        }
+        catch (const std::out_of_range& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const nlohmann::json::exception& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const exceptions::geometry_error& e)
+        {
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
+        }
     }
 
     /// @private
-    bool is_closed_() const
+    std::string json_(std::int32_t precision = -1) const
     {
-        return false;
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "{\"type\":\"Point\",\"coordinates\":"
+           << "[" << x << "," << y << "," << z << "]}";
+        return ss.str();
+    }
+
+    // wkt
+
+    /// @private
+    static basic_point_z<T> from_wkt_(const std::string& wkt)
+    {
+        wkt_reader reader{};
+        auto result = reader.read(wkt);
+        auto data   = result.data;
+        if (data.geom_type != geometry_type::POINTZ)
+        {
+            throw exceptions::parse_error("invalid wkt string");
+        }
+        return {data.coords[0], data.coords[1], data.coords[2]};
+    }
+
+    /// @private
+    std::string wkt_(std::int32_t precision = -1) const
+    {
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "POINT Z "
+           << "(" << x << " " << y << " " << z << ")";
+        return ss.str();
+    }
+};
+
+// xym
+
+/*!
+ * @brief DOCUMENT ME!
+ * @tparam T
+ * @ingroup geometry
+ */
+template <class T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+class basic_point_m : public basic_geometry<basic_point_m<T>>
+{
+  public:
+    /// DOCUMENT ME!
+    using point_type = basic_point_m;
+    /// DOCUMENT ME!
+    using coord_type = T;
+    /// DOCUMENT ME!
+    using coord_iterator = typename std::vector<coord_type>::iterator;
+    /// DOCUMENT ME!
+    using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
+
+    union
+    {
+        struct
+        {
+            T x;
+            T y;
+            T m;
+        };
+
+        struct
+        {
+            T lng;
+            T lat;
+            T measure;
+        };
+
+        T coords[3];
+    };
+
+    /*!
+     * @brief DOCUMENT ME!
+     */
+    basic_point_m()
+        : x(0), y(0), m(0) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param x
+     * @param y
+     * @param m
+     */
+    basic_point_m(T x, T y, T m)
+        : x(x), y(y), m(m) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param begin
+     * @param end
+     */
+    explicit basic_point_m(coord_iterator begin, coord_iterator end)
+    {
+        assert(std::distance(begin, end) == 3);
+        size_t i = 0;
+        for (auto it = begin; it != end; ++it)
+        {
+            coords[i++] = *it;
+        }
     }
 
     /*!
-     * @private
+     * @brief DOCUMENT ME!
+     * @param begin
+     * @param end
      */
-    std::vector<std::tuple<double, double>> xy_() const
+    explicit basic_point_m(coord_const_iterator begin, coord_const_iterator end)
     {
-        return {std::make_tuple(x, y)};
+        assert(std::distance(begin, end) == 3);
+        size_t i = 0;
+        for (auto it = begin; it != end; ++it)
+        {
+            coords[i++] = *it;
+        }
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @return
+     */
+    std::size_t size() const noexcept
+    {
+        return static_cast<std::size_t>(ndim_());
+    }
+
+    // operators
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param pos
+     * @return
+     */
+    T& operator[](size_t pos)
+    {
+        assert(pos < 3);
+        return coords[pos];
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator==(const basic_point_m<T>& lhs, const basic_point_m<T>& rhs)
+    {
+        return lhs.x == rhs.x and lhs.y == rhs.y and lhs.m == rhs.m;
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator!=(const basic_point_m<T>& lhs, const basic_point_m<T>& rhs)
+    {
+        return not operator==(lhs, rhs);
+    }
+
+  private:
+    /// for allow basic_geometry to access basic_point_m private members
+    friend class basic_geometry<basic_point_m<T>>;
+
+    /// @private
+    geometry_type geom_type_() const noexcept
+    {
+        return geometry_type::POINTM;
     }
 
     /// @private
-    std::vector<std::tuple<double, double, double>> xyz_() const
+    std::string tagged_text_() const noexcept
     {
-        return {std::make_tuple(x, y, z)};
+        return "Point";
     }
 
     /// @private
-    std::vector<std::tuple<double, double, double>> xym_() const
+    dimension_type dim_() const noexcept
     {
-        return {std::make_tuple(x, y, m)};
+        return dimension_type::XYM;
     }
 
     /// @private
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
+    int32_t ndim_() const noexcept
     {
-        return {std::make_tuple(x, y, z, m)};
+        return 3;
+    }
+
+    /// @private
+    bool is_closed_() const noexcept
+    {
+        return true;
+    }
+
+    /// @private
+    void throw_for_invalid_() const
+    {
+        // do nothing
+    }
+
+    /// @private
+    detail::bounds bounds_() const
+    {
+        return {x, y, x, y};
+    }
+
+    /// @private
+    bool has_z_() const noexcept
+    {
+        return false;
+    }
+
+    /// @private
+    bool has_m_() const noexcept
+    {
+        return true;
+    }
+
+    // json
+
+    /// @private
+    static basic_point_m<T> from_json_(const std::string& json)
+    {
+        /// @todo (pavel) deal with repeated code
+        try
+        {
+            auto j         = nlohmann::json::parse(json);
+            auto geom_type = j.at("type").get<std::string>();
+            if (geom_type != "Point")
+            {
+                throw exceptions::parse_error("invalid geometry type");
+            }
+            auto coords = j.at("coordinates").get<std::vector<double>>();
+            return {coords.at(0), coords.at(1), coords.at(2)};
+        }
+        catch (const std::out_of_range& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const nlohmann::json::exception& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const exceptions::geometry_error& e)
+        {
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
+        }
+    }
+
+    /// @private
+    std::string json_(std::int32_t precision = -1) const
+    {
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "{\"type\":\"Point\",\"coordinates\":"
+           << "[" << x << "," << y << "," << m << "]}";
+        return ss.str();
+    }
+
+    // wkt
+
+    /// @private
+    static basic_point_m<T> from_wkt_(const std::string& wkt)
+    {
+        wkt_reader reader{};
+        auto result = reader.read(wkt);
+        auto data   = result.data;
+        if (data.geom_type != geometry_type::POINTM)
+        {
+            throw exceptions::parse_error("invalid wkt string");
+        }
+        return {data.coords[0], data.coords[1], data.coords[2]};
+    }
+
+    std::string wkt_(std::int32_t precision = -1) const
+    {
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "POINT M "
+           << "(" << x << " " << y << " " << m << ")";
+        return ss.str();
     }
 };
+
+// xyzm
+
+/*!
+ * @brief DOCUMENT ME!
+ * @tparam T
+ * @ingroup geometry
+ */
+template <class T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+class basic_point_zm : public basic_geometry<basic_point_zm<T>>
+{
+  public:
+    /// DOCUMENT ME!
+    using point_type = basic_point_zm;
+    /// DOCUMENT ME!
+    using coord_type = T;
+    /// DOCUMENT ME!
+    using coord_iterator = typename std::vector<coord_type>::iterator;
+    /// DOCUMENT ME!
+    using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
+
+    union
+    {
+        struct
+        {
+            T x;
+            T y;
+            T z;
+            T m;
+        };
+
+        struct
+        {
+            T lng;
+            T lat;
+            T height;
+            T measure;
+        };
+
+        T coords[4];
+    };
+
+    /*!
+     * @brief DOCUMENT ME!
+     */
+    basic_point_zm()
+        : x(0), y(0), z(0), m(0) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param x
+     * @param y
+     * @param z
+     * @param m
+     */
+    basic_point_zm(T x, T y, T z, T m)
+        : x(x), y(y), z(z), m(m) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param begin
+     * @param end
+     */
+    explicit basic_point_zm(coord_iterator begin, coord_iterator end)
+    {
+        assert(std::distance(begin, end) == 4);
+        size_t i = 0;
+        for (auto it = begin; it != end; ++it)
+        {
+            coords[i++] = *it;
+        }
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param begin
+     * @param end
+     */
+    explicit basic_point_zm(coord_const_iterator begin, coord_const_iterator end)
+    {
+        assert(std::distance(begin, end) == 4);
+        size_t i = 0;
+        for (auto it = begin; it != end; ++it)
+        {
+            coords[i++] = *it;
+        }
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @return
+     */
+    std::size_t size() const noexcept
+    {
+        return static_cast<std::size_t>(ndim_());
+    }
+
+    // operators
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param pos
+     * @return
+     */
+    T& operator[](size_t pos)
+    {
+        assert(pos < 4);
+        return coords[pos];
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator==(const basic_point_zm<T>& lhs, const basic_point_zm<T>& rhs)
+    {
+        return lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z and lhs.m == rhs.m;
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator!=(const basic_point_zm<T>& lhs, const basic_point_zm<T>& rhs)
+    {
+        return not operator==(lhs, rhs);
+    }
+
+  private:
+    /// for allow basic_geometry to access basic_point_zm private members
+    friend class basic_geometry<basic_point_zm<T>>;
+
+    /// @private
+    geometry_type geom_type_() const noexcept
+    {
+        return geometry_type::POINTZM;
+    }
+
+    /// @private
+    std::string tagged_text_() const noexcept
+    {
+        return "Point";
+    }
+
+    /// @private
+    dimension_type dim_() const noexcept
+    {
+        return dimension_type::XYZM;
+    }
+
+    /// @private
+    int32_t ndim_() const noexcept
+    {
+        return 4;
+    }
+
+    /// @private
+    bool is_closed_() const noexcept
+    {
+        return true;
+    }
+
+    /// @private
+    void throw_for_invalid_() const
+    {
+        // do nothing
+    }
+
+    /// @private
+    detail::bounds bounds_() const
+    {
+        return {x, y, x, y};
+    }
+
+    /// @private
+    bool has_z_() const noexcept
+    {
+        return true;
+    }
+
+    /// @private
+    bool has_m_() const noexcept
+    {
+        return true;
+    }
+
+    // json
+
+    /// @private
+    static basic_point_zm<T> from_json_(const std::string& json)
+    {
+        /// @todo (pavel) deal with repeated code
+        try
+        {
+            auto j         = nlohmann::json::parse(json);
+            auto geom_type = j.at("type").get<std::string>();
+            if (geom_type != "Point")
+            {
+                throw exceptions::parse_error("invalid geometry type");
+            }
+            auto coords = j.at("coordinates").get<std::vector<double>>();
+            return {coords.at(0), coords.at(1), coords.at(2), coords.at(3)};
+        }
+        catch (const std::out_of_range& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const nlohmann::json::exception& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const exceptions::geometry_error& e)
+        {
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
+        }
+    }
+
+    /// @private
+    std::string json_(std::int32_t precision = -1) const
+    {
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "{\"type\":\"Point\",\"coordinates\":"
+           << "[" << x << "," << y << "," << z << "," << m << "]}";
+        return ss.str();
+    }
+
+    // wkt
+
+    /// @private
+    static basic_point_zm<T> from_wkt_(const std::string& wkt)
+    {
+        wkt_reader reader{};
+        auto result = reader.read(wkt);
+        auto data   = result.data;
+        if (data.geom_type != geometry_type::POINTZM)
+        {
+            throw exceptions::parse_error("invalid wkt string");
+        }
+        return {data.coords[0], data.coords[1], data.coords[2], data.coords[3]};
+    }
+
+    /// @private
+    std::string wkt_(std::int32_t precision = -1) const
+    {
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "POINT ZM "
+           << "(" << x << " " << y << " " << z << " " << m << ")";
+        return ss.str();
+    }
+};
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
+
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
+template <class T = double>
+using point = basic_point<T>;
+
+template <class T = double>
+using point_z = basic_point_z<T>;
+
+template <class T = double>
+using point_m = basic_point_m<T>;
+
+template <class T = double>
+using point_zm = basic_point_zm<T>;
+
+using Point   = point<double>;
+using PointZ  = point_z<double>;
+using PointM  = point_m<double>;
+using PointZM = point_zm<double>;
 
 }  // namespace shapes
 }  // namespace simo
@@ -25064,11 +26591,7 @@ class Point : public BaseGeometry<Point>
 #include <iomanip>
 // #include <simo/geom/geometry.hpp>
 
-// #include <simo/geom/detail/geometry_sequence.hpp>
-
-
-#include <ciso646>
-// #include <simo/geom/point.hpp>
+// #include <simo/geom/detail/bounds.hpp>
 
 
 namespace simo
@@ -25077,374 +26600,123 @@ namespace shapes
 {
 
 /*!
- * @brief represents a geometry sequence
- * @tparam T the geometry type (e.g. Point, LineString, Polygon)
+ * @brief DOCUMENT ME!
+ * @tparam T
+ * @tparam AllocatorType
  *
  * @since 0.0.1
  */
-template <typename T>
-class GeometrySequence
+template <typename T, typename AllocatorType = std::allocator<T>>
+class basic_multipoint : public std::vector<T, AllocatorType>, public basic_geometry<basic_multipoint<T>>
 {
   public:
-    /// iterator type
-    typedef typename std::vector<T>::iterator iterator;
-
-    /// const iterator type
-    typedef typename std::vector<T>::const_iterator const_iterator;
+    /// DOCUMENT ME!
+    using base_type = std::vector<T, AllocatorType>;
+    /// DOCUMENT ME!
+    using point_type = typename T::point_type;
+    /// DOCUMENT ME!
+    using point_iterator = typename std::vector<T>::iterator;
+    /// DOCUMENT ME!
+    using point_const_iterator = typename std::vector<T>::const_iterator;
+    /// DOCUMENT ME!
+    using coord_type = typename T::coord_type;
+    /// DOCUMENT ME!
+    using coord_iterator = typename std::vector<coord_type>::iterator;
+    /// DOCUMENT ME!
+    using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
 
     /*!
-     * @return returns an iterator pointing to the first element in T
+     * @brief DOCUMENT ME!
      *
      * @since 0.0.1
      */
-    iterator begin()
-    {
-        return seq.begin();
-    }
+    inline basic_multipoint()
+        : base_type() {}
 
     /*!
-     * @return returns a constant iterator pointing to the first element in T
+     * @brief DOCUMENT ME!
+     * @param init
      *
      * @since 0.0.1
      */
-    const_iterator begin() const
-    {
-        return seq.begin();
-    }
+    basic_multipoint(std::initializer_list<T> init)
+        : base_type(init.begin(), init.end()) {}
 
     /*!
-     * @return returns an iterator pointing to the past-the-end element in T
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
      *
      * @since 0.0.1
      */
-    iterator end()
+    explicit basic_multipoint(coord_const_iterator first, coord_const_iterator last)
     {
-        return seq.end();
+        /// @todo deal with repetition
+        size_t n = ndim_();
+        this->reserve(std::distance(first, last));
+        for (auto it = first; it != last; it += n)
+        {
+            this->emplace_back(it, it + n);
+        }
     }
 
     /*!
-     * @return returns a const iterator pointing to the past-the-end element in T
+     * @brief DOCUMENT ME!
+     * @param first
      *
      * @since 0.0.1
      */
-    const_iterator end() const
+    explicit basic_multipoint(coord_iterator first, coord_iterator last)
     {
-        return seq.end();
-    }
-
-    /*!
-     * @param pos the element position
-     * @return returns a reference to the element at position n in T
-     *
-     * @throw IndexError if the index at pos is out of range
-     *
-     * @since 0.0.1
-     */
-    const T& at(size_t pos) const
-    {
-        try
+        /// @todo deal with repetition
+        size_t n = ndim_();
+        this->reserve(std::distance(first, last));
+        for (auto it = first; it != last; it += n)
         {
-            return seq.at(pos);
-        }
-        catch (std::out_of_range&)
-        {
-            throw exceptions::IndexError("index at " + std::to_string(pos) + " is out of range");
-        }
-    }
-
-    /// @copydoc GeometrySequence::at()
-    T& at(size_t pos)
-    {
-        try
-        {
-            return seq.at(pos);
-        }
-        catch (std::out_of_range&)
-        {
-            throw exceptions::IndexError("index at " + std::to_string(pos) + " is out of range");
+            this->emplace_back(it, it + n);
         }
     }
 
     /*!
-    * @param pos the element position
-    * @return returns a reference to the element at position n in T
-    *
-    * @since 0.0.1
-    */
-    T& operator[](size_t pos)
-    {
-        return at(pos);
-    }
-
-  protected:
-    /// the geometry sequence
-    std::vector<T> seq;
-};
-
-}  // namespace shapes
-}  // namespace simo
-// #include <simo/geom/bounds.hpp>
-
-
-namespace simo
-{
-namespace shapes
-{
-
-/*!
- * @brief Point collection
- * @ingroup geometry
- *
- * @since 0.0.1
- */
-class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Point>
-{
-  public:
-    /*!
-     * @brief creates an empty MultiPoint
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
      *
      * @since 0.0.1
      */
-    MultiPoint() = default;
-
-    /*!
-      * @brief creates a MultiPoint from a given initializer list
-      * @tparam T an arithmetic value (e.g. int, float, double)
-      * @param init the initializer list
-      *
-      * @since 0.0.1
-      */
-    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-    MultiPoint(std::initializer_list<std::initializer_list<T>> init)
+    basic_multipoint(point_iterator first, point_iterator last)
+        : base_type(first, last)
     {
-        if (init.size() > 0)
-        {
-            seq.reserve(init.size());
-
-            auto it = init.begin();
-            Point head(*it);
-            dim = head.dim;
-            bounds.extend(head.x, head.y);
-            seq.emplace_back(head);
-
-            ++it;
-            for (; it != init.end(); ++it)
-            {
-                Point p(*it);
-                if (p.dim != dim)
-                {
-                    throw exceptions::GeometryError("dimensions mismatch between point 0 and point " + std::to_string(it - init.begin()));
-                }
-                bounds.extend(p.x, p.y);
-                seq.emplace_back(p);
-            }
-        }
     }
 
     /*!
-     * @brief creates a MultiPoint from a given point vector
-     * @param points the point list
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
      */
-    explicit MultiPoint(const std::vector<Point>& points)
+    basic_multipoint(point_const_iterator first, point_const_iterator last)
+        : base_type(first, last)
     {
-        if (not points.empty())
-        {
-            dim = points[0].dim;
-            seq = points;
-            std::for_each(std::begin(points), std::end(points), [&](const Point& p) {
-                bounds.extend(p.x, p.y);
-            });
-        }
     }
 
+    // operators
+
     /*!
-     * @brief creates a MultiPoint from a geojson string
-     * @param json the geojson string
-     * @return a MultiPoint object
-     * @sa https://tools.ietf.org/html/rfc7946
+     * @param lhs a mulipoint
+     * @param rhs a mulipoint
+     * @return true if all Point's are equal, otherwise false
      *
      * @since 0.0.1
      */
-    static MultiPoint from_json(const std::string& json)
+    friend bool operator==(const basic_multipoint<T>& lhs, const basic_multipoint<T>& rhs)
     {
-        try
-        {
-            auto j         = nlohmann::json::parse(json);
-            auto geom_type = j.at("type").get<std::string>();
-            if (geom_type != "MultiPoint")
-            {
-                throw exceptions::ParseError("invalid geometry type: " + std::string(geom_type));
-            }
-            const auto& coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
-            std::vector<Point> res;
-            res.reserve(coords.size());
-            std::for_each(std::begin(coords), std::end(coords), [&](const std::vector<double>& coord) {
-                res.emplace_back(coord);
-            });
-            return MultiPoint(res);
-        }
-        catch (const nlohmann::json::exception& e)
-        {
-            throw exceptions::ParseError("invalid json: " + std::string(e.what()));
-        }
-        catch (const exceptions::GeometryError&)
-        {
-            throw exceptions::ParseError("invalid geometry");
-        }
-    }
-
-    /*!
-     * @brief dumps the geojson representation of the MultiPoint
-     * @return a geojson string
-     * @sa https://tools.ietf.org/html/rfc7946
-     *
-     * @since 0.0.1
-     */
-    std::string json()
-    {
-        /// @todo (pavel) add properties to specify z, m and zm
-        std::stringstream ss;
-        ss << std::fixed << std::setprecision(precision);
-        ss << "{\"type\":\"MultiPoint\",\"coordinates\":[";
-        for (size_t i = 0; i < seq.size(); ++i)
-        {
-            if (i > 0)
-            {
-                ss << ",";
-            }
-            const auto& p = seq[i];
-            switch (p.dim)
-            {
-                case DimensionType::XY:
-                {
-                    ss << "[" << p.x << "," << p.y << "]";
-                    break;
-                }
-                case DimensionType::XYZ:
-                {
-                    ss << "[" << p.x << "," << p.y << "," << p.z << "]";
-                    break;
-                }
-                case DimensionType::XYM:
-                {
-                    ss << "[" << p.x << "," << p.y << "," << p.m << "]";
-                    break;
-                }
-                case DimensionType::XYZM:
-                {
-                    ss << "[" << p.x << "," << p.y << "," << p.z << "," << p.m << "]";
-                    break;
-                }
-            }
-        }
-        ss << "]}";
-        return ss.str();
-    }
-
-    /*!
-     * @brief creates a MultiPoint from a WKT string
-     * @param wkt the WKT string
-     * @return a MultiPoint object
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @throw ParseError if a parser error occurs
-     *
-     * @since 0.0.1
-     */
-    static MultiPoint from_wkt(const std::string& wkt)
-    {
-        WktReader reader{};
-        auto result      = reader.read(wkt.c_str());
-        const auto& data = result.data;
-        if (not utils::is_multipoint(data.geom_type))
-        {
-            throw exceptions::ParseError("invalid WKT string");
-        }
-        /// @todo (pavel) extract this repetition
-        std::vector<Point> points;
-        points.reserve(data.coords.size());
-        auto dim = utils::get_dim(data.geom_type);
-        int ndim = utils::get_ndim(dim);
-        Point p;
-        p.dim = dim;
-        for (size_t i = 0; i < result.data.coords.size(); i += ndim)
-        {
-            for (size_t j = 0; j < size_t(ndim); ++j)
-            {
-                p[j] = result.data.coords[i + j];
-            }
-            points.push_back(p);
-        }
-        MultiPoint res(points);
-        res.dim = dim;
-        return res;
-    }
-
-    /*!
-     * @brief creates a MultiPoint from a WKT string
-     * @param wkt the WKT string
-     * @return a MultiPoint object
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @since 0.0.1
-     */
-    std::string wkt()
-    {
-        std::stringstream ss;
-        ss << std::fixed << std::setprecision(precision);
-
-        ss << "MULTIPOINT";
-        if (has_z())
-        {
-            ss << "Z";
-        }
-        if (has_m())
-        {
-            ss << "M";
-        }
-
-        ss << "(";
-        for (size_t i = 0; i < seq.size(); ++i)
-        {
-            const Point& p = seq[i];
-            if (i > 0)
-            {
-                ss << ",";
-            }
-            ss << "(" << p.x << " " << p.y;
-            if (has_z())
-            {
-                ss << " " << p.z;
-            }
-            if (has_m())
-            {
-                ss << " " << p.m;
-            }
-            ss << ")";
-        }
-        ss << ")";
-        return ss.str();
-    }
-
-    /*!
-     * @brief returns true if all coordinates are equal, otherwise false
-     * @param other the MultiPoint to compare
-     * @return true if all coordinates are equal, otherwise false
-     *
-     * @since 0.0.1
-     */
-    bool operator==(const MultiPoint& other) const
-    {
-        if (size() != other.size())
+        if (lhs.size() != rhs.size())
         {
             return false;
         }
-
-        for (size_t i = 0; i < other.size(); ++i)
+        for (size_t i = 0; i < lhs.size(); ++i)
         {
-            if (at(i) != other.at(i))
+            if (lhs[i] != rhs[i])
             {
                 return false;
             }
@@ -25453,100 +26725,316 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
     }
 
     /*!
-     * @brief returns true if at least one coordinate is different, otherwise false
-     * @param other the point to compare
-     * @return true if at least one coordinate is different, otherwise false
+     * @param lhs a mulipoint
+     * @param rhs a mulipoint
+     * @return true if at least one Point is different, otherwise false
      *
      * @since 0.0.1
      */
-    bool operator!=(const MultiPoint& other) const
+    friend bool operator!=(const basic_multipoint<T>& lhs, const basic_multipoint<T>& rhs)
     {
-        return not(*this == other);
+        return not operator==(lhs, rhs);
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @return
+     *
+     * @since 0.0.1
+     */
+    std::vector<std::tuple<double, double>> xy() const
+    {
+        std::vector<std::tuple<double, double>> res;
+        res.reserve(this->size());
+        for (const auto& p : *this)
+        {
+            res.emplace_back(p.x, p.y);
+        }
+        return res;
+    }
+
+    // polyline
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param polyline
+     * @param precision
+     * @return
+     *
+     * @since 0.0.1
+     */
+    static basic_multipoint<T> from_polyline(const std::string& polyline, std::int32_t precision = 5)
+    {
+        static_assert(std::is_same<point_type, Point::point_type>::value, "must contain XY points");
+
+        auto coords = polyline::decode(polyline, precision);
+        return {coords.begin(), coords.end()};
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param precision
+     * @return
+     *
+     * @since 0.0.1
+     */
+    std::string polyline(std::int32_t precision = 5) const
+    {
+        static_assert(std::is_same<point_type, Point::point_type>::value, "must contain XY points");
+
+        std::string res;
+        res.reserve(this->size() * 6);
+        double prev_lng = 0;
+        double prev_lat = 0;
+        for (const auto& p : *this)
+        {
+            res += polyline::encode(p.lat - prev_lat, precision);
+            res += polyline::encode(p.lng - prev_lng, precision);
+            prev_lat = p.lat;
+            prev_lng = p.lng;
+        }
+        return res;
     }
 
   private:
-    /// for allow BaseGeometry to access MultiPoint private members
-    friend class BaseGeometry<MultiPoint>;
+    /// for allow basic_geometry to access basic_multipoint private members
+    friend class basic_geometry<basic_multipoint<T>>;
 
     /// @private
-    GeometryType geom_type_() const
+    geometry_type geom_type_() const noexcept
     {
-        return GeometryType::MULTIPOINT;
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return geometry_type::MULTIPOINTZ;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return geometry_type::MULTIPOINTM;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return geometry_type::MULTIPOINTZM;
+        }
+        return geometry_type::MULTIPOINT;
     }
 
     /// @private
-    std::string geom_type_str_() const
+    dimension_type dim_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return dimension_type::XYZ;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return dimension_type::XYM;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return dimension_type::XYZM;
+        }
+        return dimension_type::XY;
+    }
+
+    /// @private
+    int32_t ndim_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return 3;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return 3;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return 4;
+        }
+        return 2;
+    }
+
+    /// @private
+    bool is_closed_() const noexcept
+    {
+        if (this->empty())
+        {
+            return true;
+        }
+        return *this[0] == *this[this->size() - 1];
+    }
+
+    /// @private
+    void throw_for_invalid_() const
+    {
+        // do nothing
+    }
+
+    /// @private
+    detail::bounds bounds_() const
+    {
+        detail::bounds res{};
+        for (const auto& p : *this)
+        {
+            res.extend(p.x, p.y);
+        }
+        return res;
+    }
+
+    /// @private
+    bool has_z_() const noexcept
+    {
+        return std::is_same<point_type, PointZ::point_type>::value or std::is_same<point_type, PointZM::point_type>::value;
+    }
+
+    /// @private
+    bool has_m_() const noexcept
+    {
+        return std::is_same<point_type, PointM::point_type>::value or std::is_same<point_type, PointZM::point_type>::value;
+    }
+
+    /// @private
+    std::string tagged_text_() const noexcept
     {
         return "MultiPoint";
     }
 
+    // json
+
     /// @private
-    std::vector<std::tuple<double, double>> xy_() const
+    static basic_multipoint<T> from_json_(const std::string& json)
     {
-        std::vector<std::tuple<double, double>> res;
-        for (const auto& point : seq)
+        try
         {
-            res.emplace_back(point.x, point.y);
+            auto j         = nlohmann::json::parse(json);
+            auto geom_type = j.at("type").get<std::string>();
+            if (geom_type != "MultiPoint")
+            {
+                throw exceptions::parse_error("invalid geometry type: " + std::string(geom_type));
+            }
+            const auto& coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
+            std::vector<point_type> res;
+            res.reserve(coords.size());
+            std::for_each(std::begin(coords), std::end(coords), [&](const std::vector<double>& coord) {
+                res.emplace_back(coord.begin(), coord.end());
+            });
+            return basic_multipoint<T>(res.begin(), res.end());
         }
-        return res;
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xyz_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        for (const auto& point : seq)
+        catch (const nlohmann::json::exception& e)
         {
-            res.emplace_back(point.x, point.y, point.z);
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
-        return res;
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xym_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        for (const auto& point : seq)
+        catch (const exceptions::geometry_error& e)
         {
-            res.emplace_back(point.x, point.y, point.m);
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
         }
-        return res;
     }
 
     /// @private
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
+    std::string json_(std::int32_t precision = -1) const
     {
-        std::vector<std::tuple<double, double, double, double>> res;
-        for (const auto& point : seq)
+        std::stringstream ss;
+        if (precision >= 0)
         {
-            res.emplace_back(point.x, point.y, point.z, point.m);
+            ss << std::setprecision(precision);
         }
-        return res;
-    }
-
-    /// @private
-    bool empty_() const
-    {
-        return seq.empty();
-    }
-
-    /// @private
-    size_t size_() const
-    {
-        return seq.size();
-    }
-
-    /// @private
-    bool is_closed_() const
-    {
-        if (seq.size() < 2)
+        ss << "{\"type\":\"MultiPoint\",\"coordinates\":[";
+        int i = 0;
+        for (const auto& p : *this)
         {
-            return false;
+            if (i > 0)
+            {
+                ss << ",";
+            }
+            ss << "[";
+            for (int j = 0; j < p.ndim(); ++j)
+            {
+                if (j > 0)
+                {
+                    ss << ",";
+                }
+                ss << p.coords[j];
+            }
+            ss << "]";
+            ++i;
         }
-        size_t last_index = seq.size() - 1;
-        return seq[0] == seq[last_index];
+        ss << "]}";
+        return ss.str();
+    }
+
+    // wkt
+
+    /// @private
+    static basic_multipoint<T> from_wkt_(const std::string& wkt)
+    {
+        wkt_reader reader{};
+        auto result      = reader.read(wkt);
+        const auto& data = result.data;
+        if (not utils::is_multipoint(data.geom_type))
+        {
+            throw exceptions::parse_error("invalid wkt string");
+        }
+        return basic_multipoint<T>(result.data.coords.begin(), result.data.coords.end());
+    }
+
+    /// @private
+    std::string wkt_(std::int32_t precision = -1) const
+    {
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "MULTIPOINT";
+        if (has_z_())
+        {
+            ss << "Z";
+        }
+        if (has_m_())
+        {
+            ss << "M";
+        }
+        ss << "(";
+        int i = 0;
+        for (const auto& p : *this)
+        {
+            if (i > 0)
+            {
+                ss << ",";
+            }
+            ss << "(";
+            for (int32_t j = 0; j < p.ndim(); ++j)
+            {
+                if (j > 0)
+                {
+                    ss << " ";
+                }
+                ss << p.coords[j];
+            }
+            ss << ")";
+            ++i;
+        }
+        ss << ")";
+        return ss.str();
     }
 };
+
+template <class T = double>
+using multipoint = basic_multipoint<basic_point<T>>;
+
+template <class T = double>
+using multipoint_z = basic_multipoint<basic_point_z<T>>;
+
+template <class T = double>
+using multipoint_m = basic_multipoint<basic_point_m<T>>;
+
+template <class T = double>
+using multipoint_zm = basic_multipoint<basic_point_zm<T>>;
+
+using MultiPoint   = multipoint<double>;
+using MultiPointZ  = multipoint_z<double>;
+using MultiPointM  = multipoint_m<double>;
+using MultiPointZM = multipoint_zm<double>;
 
 }  // namespace shapes
 }  // namespace simo
@@ -25556,13 +27044,14 @@ class MultiPoint : public BaseGeometry<MultiPoint>, public GeometrySequence<Poin
 #include <ciso646>
 #include <vector>
 #include <set>
+#include <iterator>
 #include <sstream>
 #include <iomanip>
 // #include <simo/geom/geometry.hpp>
 
-// #include <simo/geom/detail/geometry_sequence.hpp>
+// #include <simo/geom/utils.hpp>
 
-// #include <simo/geom/bounds.hpp>
+// #include <simo/geom/detail/bounds.hpp>
 
 
 namespace simo
@@ -25571,241 +27060,456 @@ namespace shapes
 {
 
 /*!
- * @brief a curve where each consecutive pair of points defines a line segment.
+ * @brief A curve where each consecutive pair of points defines a line segment
+ * @tparam T
+ * @tparam AllocatorType
  * @ingroup geometry
  *
  * @since 0.0.1
  */
-class LineString : public BaseGeometry<LineString>, public GeometrySequence<Point>
+template <typename T, typename AllocatorType = std::allocator<T>>
+class basic_linestring : public std::vector<T, AllocatorType>, public basic_geometry<basic_linestring<T>>
 {
   public:
-    /*!
-     * @brief creates an empty LineString
-     *
-     * @since 0.0.1
-     */
-    LineString() = default;
+    /// DOCUMENT ME!
+    using base_type = std::vector<T, AllocatorType>;
+    /// DOCUMENT ME!
+    using point_type = typename T::point_type;
+    /// DOCUMENT ME!
+    using point_iterator = typename std::vector<T>::iterator;
+    /// DOCUMENT ME!
+    using point_const_iterator = typename std::vector<T>::const_iterator;
+    /// DOCUMENT ME!
+    using coord_type = typename T::coord_type;
+    /// DOCUMENT ME!
+    using coord_iterator = typename std::vector<coord_type>::iterator;
+    /// DOCUMENT ME!
+    using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
 
     /*!
-     * @brief creates a LineString from a given initializer list
-     * @tparam T an arithmetic value (e.g. int, float, double)
-     * @param init the initializer list
-     *
-     * @throw GeometryError DOCUMENT ME!
+     * @brief DOCUMENT ME!
      *
      * @since 0.0.1
      */
-    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-    LineString(std::initializer_list<std::initializer_list<T>> init)
+    basic_linestring()
+        : base_type() {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param init
+     *
+     * @since 0.0.1
+     */
+    basic_linestring(std::initializer_list<T> init)
+        : base_type(init.begin(), init.end()) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
+     *
+     * @since 0.0.1
+     */
+    explicit basic_linestring(coord_const_iterator first, coord_const_iterator last)
     {
-        seq.reserve(init.size());
-        for (const auto& coords : init)
+        /// @todo deal with repetition
+        size_t n = ndim_();
+        this->reserve(std::distance(first, last));
+        for (auto it = first; it != last; it += n)
         {
-            Point p(coords);
-            bounds.extend(p.x, p.y);
-            seq.emplace_back(p);
+            this->emplace_back(it, it + n);
         }
-        throw_for_invalid();
     }
 
     /*!
-     * @brief creates a LineString from a given point vector
-     * @param points the point list
-     *
-     * @throw GeometryError DOCUMENT ME!
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
      *
      * @since 0.0.1
      */
-    explicit LineString(const std::vector<Point>& points)
+    explicit basic_linestring(coord_iterator first, coord_iterator last)
     {
-        seq = points;
-        for (const auto& p : seq)
+        /// @todo deal with repetition
+        size_t n = ndim_();
+        this->reserve(std::distance(first, last));
+        for (auto it = first; it != last; it += n)
         {
-            bounds.extend(p.x, p.y);
+            this->emplace_back(it, it + n);
         }
-        throw_for_invalid();
     }
 
     /*!
-     * @brief creates a LineString from a geojson string
-     * @param json the geojson string
-     * @return a LineString object
-     * @sa https://tools.ietf.org/html/rfc7946
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
      *
      * @since 0.0.1
      */
-    static LineString from_json(const std::string& /*json*/)
+    basic_linestring(point_iterator first, point_iterator last)
+        : base_type(first, last)
     {
-        throw exceptions::NotImplementedError();
     }
 
     /*!
-     * @brief dumps the geojson representation of the LineString
-     * @return a geojson string
-     * @sa https://tools.ietf.org/html/rfc7946
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
      *
      * @since 0.0.1
      */
-    std::string json()
+    basic_linestring(point_const_iterator first, point_const_iterator last)
+        : base_type(first, last)
     {
-        throw exceptions::NotImplementedError();
     }
 
+    // operators
+
     /*!
-     * @brief creates a LineString from a WKT string
-     * @param wkt the WKT string
-     * @return a LineString object
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
+     * @param lhs a linestring
+     * @param rhs a linestring
+     * @return true if all points are equal, otherwise false
      *
      * @since 0.0.1
      */
-    static LineString from_wkt(const std::string& wkt)
+    friend bool operator==(const basic_linestring<T>& lhs, const basic_linestring<T>& rhs)
     {
-        WktReader reader{};
-        auto result      = reader.read(wkt.c_str());
-        const auto& data = result.data;
-        if (not utils::is_linestring(data.geom_type))
+        if (lhs.size() != rhs.size())
         {
-            throw exceptions::ParseError("invalid WKT string");
+            return false;
         }
-
-        std::vector<Point> points;
-        points.reserve(data.coords.size());
-        auto dim = utils::get_dim(data.geom_type);
-        int ndim = utils::get_ndim(dim);
-        Point p;
-        p.dim = dim;
-        for (size_t i = 0; i < result.data.coords.size(); i += ndim)
+        for (size_t i = 0; i < lhs.size(); ++i)
         {
-            for (size_t j = 0; j < size_t(ndim); ++j)
+            if (lhs[i] != rhs[i])
             {
-                p[j] = result.data.coords[i + j];
+                return false;
             }
-            points.push_back(p);
         }
-        LineString res(points);
-        res.dim = dim;
+        return true;
+    }
+
+    /*!
+     * @param lhs a linestring
+     * @param rhs a linestring
+     * @return true if at least one point is different, otherwise false
+     *
+     * @since 0.0.1
+     */
+    friend bool operator!=(const basic_linestring<T>& lhs, const basic_linestring<T>& rhs)
+    {
+        return not operator==(lhs, rhs);
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @return
+     */
+    std::vector<std::tuple<double, double>> xy() const
+    {
+        std::vector<std::tuple<double, double>> res;
+        res.reserve(this->size());
+        for (const auto& p : *this)
+        {
+            res.emplace_back(p.x, p.y);
+        }
         return res;
     }
 
+    // polyline
+
     /*!
-     * @brief creates a LineString from a WKT string
-     * @param wkt the WKT string
-     * @return a LineString object
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
+     * @brief DOCUMENT ME!
+     * @param polyline
+     * @param precision
+     * @return
      *
      * @since 0.0.1
      */
-    std::string wkt()
+    static basic_linestring<T> from_polyline(const std::string& polyline, std::int32_t precision = 5)
     {
-        throw exceptions::NotImplementedError();
+        static_assert(std::is_same<point_type, Point::point_type>::value, "must contain XY points");
+
+        auto coords = polyline::decode(polyline, precision);
+        return {coords.begin(), coords.end()};
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param precision
+     * @return
+     *
+     * @since 0.0.1
+     */
+    std::string polyline(std::int32_t precision = 5) const
+    {
+        static_assert(std::is_same<point_type, Point::point_type>::value, "must contain XY points");
+
+        std::string res;
+        res.reserve(this->size() * 6);
+        double prev_lng = 0;
+        double prev_lat = 0;
+        for (const auto& p : *this)
+        {
+            res += polyline::encode(p.lat - prev_lat, precision);
+            res += polyline::encode(p.lng - prev_lng, precision);
+            prev_lat = p.lat;
+            prev_lng = p.lng;
+        }
+        return res;
     }
 
   private:
-    /// for allow BaseGeometry to access LineString private members
-    friend class BaseGeometry<LineString>;
+    friend class basic_geometry<basic_linestring<T>>;
 
     /// @private
-    void throw_for_invalid()
+    geometry_type geom_type_() const noexcept
     {
-        if (empty())
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return geometry_type::LINESTRINGZ;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return geometry_type::LINESTRINGM;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return geometry_type::LINESTRINGZM;
+        }
+        return geometry_type::LINESTRING;
+    }
+
+    /// @private
+    dimension_type dim_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return dimension_type::XYZ;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return dimension_type::XYM;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return dimension_type::XYZM;
+        }
+        return dimension_type::XY;
+    }
+
+    /// @private
+    int32_t ndim_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return 3;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return 3;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return 4;
+        }
+        return 2;
+    }
+
+    /// @private
+    bool is_closed_() const noexcept
+    {
+        if (this->empty())
+        {
+            return true;
+        }
+        return *this[0] == *this[this->size() - 1];
+    }
+
+    /// @private
+    void throw_for_invalid_() const
+    {
+        if (this->empty())
         {
             return;
         }
 
-        if (seq.size() < 2)
+        if (this->size() < 2)
         {
-            throw exceptions::GeometryError("LineString should be either empty or with 2 or more points");
+            throw exceptions::geometry_error("LineString should be either empty or with 2 or more points");
         }
 
-        if (seq.size() == 2)
+        if (this->size() == 2)
         {
-            if (seq[0] == seq[1])
+            if (*this[0] == *this[1])
             {
-                throw exceptions::GeometryError("LineString with exactly two equal points");
+                throw exceptions::geometry_error("LineString with exactly two equal points");
             }
         }
     }
 
     /// @private
-    GeometryType geom_type_() const
+    detail::bounds bounds_() const
     {
-        return GeometryType::LINESTRING;
+        detail::bounds res{};
+        for (const auto& p : *this)
+        {
+            res.extend(p.x, p.y);
+        }
+        return res;
     }
 
     /// @private
-    std::string geom_type_str_() const
+    bool has_z_() const noexcept
+    {
+        return std::is_same<point_type, PointZ::point_type>::value or std::is_same<point_type, PointZM::point_type>::value;
+    }
+
+    /// @private
+    bool has_m_() const noexcept
+    {
+        return std::is_same<point_type, PointM::point_type>::value or std::is_same<point_type, PointZM::point_type>::value;
+    }
+
+    /// @private
+    std::string tagged_text_() const noexcept
     {
         return "LineString";
     }
 
+    // json
+
     /// @private
-    std::vector<std::tuple<double, double>> xy_() const
+    static basic_linestring<T> from_json_(const std::string& json)
     {
-        std::vector<std::tuple<double, double>> res;
-        for (const auto& point : seq)
+        try
         {
-            res.emplace_back(point.x, point.y);
+            auto j         = nlohmann::json::parse(json);
+            auto geom_type = j.at("type").get<std::string>();
+            if (geom_type != "LineString")
+            {
+                throw exceptions::parse_error("invalid geometry type: " + std::string(geom_type));
+            }
+            const auto& coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
+            std::vector<point_type> res;
+            res.reserve(coords.size());
+            std::for_each(std::begin(coords), std::end(coords), [&](const std::vector<double>& coord) {
+                res.emplace_back(coord.begin(), coord.end());
+            });
+            return basic_linestring<T>(res.begin(), res.end());
         }
-        return res;
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xyz_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        for (const auto& point : seq)
+        catch (const nlohmann::json::exception& e)
         {
-            res.emplace_back(point.x, point.y, point.z);
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
-        return res;
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xym_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        for (const auto& point : seq)
+        catch (const exceptions::geometry_error& e)
         {
-            res.emplace_back(point.x, point.y, point.m);
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
         }
-        return res;
     }
 
     /// @private
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
+    std::string json_(std::int32_t precision = -1) const
     {
-        std::vector<std::tuple<double, double, double, double>> res;
-        for (const auto& point : seq)
+        std::stringstream ss;
+        if (precision >= 0)
         {
-            res.emplace_back(point.x, point.y, point.z, point.m);
+            ss << std::setprecision(precision);
         }
-        return res;
-    }
-
-    /// @private
-    bool empty_() const
-    {
-        return seq.empty();
-    }
-
-    /// @private
-    size_t size_() const
-    {
-        return seq.size();
-    }
-
-    /// @private
-    bool is_closed_() const
-    {
-        if (seq.size() < 2)
+        ss << "{\"type\":\"LineString\",\"coordinates\":[";
+        int i = 0;
+        for (const auto& p : *this)
         {
-            return false;
+            if (i > 0)
+            {
+                ss << ",";
+            }
+            ss << "[";
+            for (int j = 0; j < p.ndim(); ++j)
+            {
+                if (j > 0)
+                {
+                    ss << ",";
+                }
+                ss << p.coords[j];
+            }
+            ss << "]";
+            ++i;
         }
-        size_t last_index = seq.size() - 1;
-        return seq[0] == seq[last_index];
+        ss << "]}";
+        return ss.str();
+    }
+
+    // wkt
+
+    /// @private
+    static basic_linestring<T> from_wkt_(const std::string& wkt)
+    {
+        wkt_reader reader{};
+        auto result      = reader.read(wkt);
+        const auto& data = result.data;
+        if (not utils::is_linestring(data.geom_type))
+        {
+            throw exceptions::parse_error("invalid wkt string");
+        }
+        return basic_linestring<T>(result.data.coords.begin(), result.data.coords.end());
+    }
+
+    /// @private
+    std::string wkt_(std::int32_t precision = -1) const
+    {
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "LINESTRING";
+        if (has_z_())
+        {
+            ss << "Z";
+        }
+        if (has_m_())
+        {
+            ss << "M";
+        }
+        ss << "(";
+        int i = 0;
+        for (const auto& p : *this)
+        {
+            if (i > 0)
+            {
+                ss << ",";
+            }
+            for (int32_t j = 0; j < p.ndim(); ++j)
+            {
+                if (j > 0)
+                {
+                    ss << " ";
+                }
+                ss << p.coords[j];
+            }
+            ++i;
+        }
+        ss << ")";
+        return ss.str();
     }
 };
+
+template <class T = double>
+using linestring = basic_linestring<basic_point<T>>;
+
+template <class T = double>
+using linestring_z = basic_linestring<basic_point_z<T>>;
+
+template <class T = double>
+using linestring_m = basic_linestring<basic_point_m<T>>;
+
+template <class T = double>
+using linestring_zm = basic_linestring<basic_point_zm<T>>;
+
+using LineString   = linestring<double>;
+using LineStringZ  = linestring_z<double>;
+using LineStringM  = linestring_m<double>;
+using LineStringZM = linestring_zm<double>;
 
 }  // namespace shapes
 }  // namespace simo
@@ -25816,12 +27520,11 @@ class LineString : public BaseGeometry<LineString>, public GeometrySequence<Poin
 #include <vector>
 #include <set>
 #include <sstream>
+#include <iterator>
 #include <iomanip>
 // #include <simo/geom/geometry.hpp>
 
-// #include <simo/geom/detail/geometry_sequence.hpp>
-
-// #include <simo/geom/bounds.hpp>
+// #include <simo/geom/detail/bounds.hpp>
 
 
 namespace simo
@@ -25830,137 +27533,407 @@ namespace shapes
 {
 
 /*!
- * @brief LineString collection
- * @ingroup geometry
- *
- * @since 0.0.1
+ * @brief DOCUMENT ME!
+ * @tparam T
+ * @tparam AllocatorType
  */
-class MultiLineString : public BaseGeometry<MultiLineString>, public GeometrySequence<LineString>
+template <typename T, typename AllocatorType = std::allocator<T>>
+class basic_multilinestring : public std::vector<T, AllocatorType>, public basic_geometry<basic_multilinestring<T>>
 {
   public:
-    /*!
-     * @brief creates an empty MultiLineString
-     *
-     * @since 0.0.1
-     */
-    MultiLineString() = default;
+    /// DOCUMENT ME!
+    using base_type = std::vector<T, AllocatorType>;
+    /// DOCUMENT ME!
+    using point_type = typename T::point_type;
+    /// DOCUMENT ME!
+    using point_iterator = typename std::vector<T>::iterator;
+    /// DOCUMENT ME!
+    using point_const_iterator = typename std::vector<T>::const_iterator;
+    /// DOCUMENT ME!
+    using coord_type = typename T::coord_type;
+    /// DOCUMENT ME!
+    using coord_iterator = typename std::vector<coord_type>::iterator;
+    /// DOCUMENT ME!
+    using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
+
+    basic_multilinestring()
+        : base_type() {}
 
     /*!
-     * @brief creates a MultiLineString from a geojson string
-     * @param json the geojson string
-     * @return a MultiLineString object
-     * @sa https://tools.ietf.org/html/rfc7946
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
      */
-    static MultiLineString from_json(const std::string& /*json*/)
+    basic_multilinestring(point_iterator first, point_iterator last)
+        : base_type(first, last)
     {
-        throw exceptions::NotImplementedError();
     }
 
     /*!
-     * @brief dumps the geojson representation of the MultiLineString
-     * @return a geojson string
-     * @sa https://tools.ietf.org/html/rfc7946
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
      */
-    std::string json()
+    basic_multilinestring(point_const_iterator first, point_const_iterator last)
+        : base_type(first, last)
     {
-        throw exceptions::NotImplementedError();
     }
 
     /*!
-     * @brief creates a MultiLineString from a WKT string
-     * @param wkt the WKT string
-     * @return a MultiLineString object
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param init
      */
-    static MultiLineString from_wkt(const std::string& wkt)
+    basic_multilinestring(std::initializer_list<T> init)
+        : base_type(init.begin(), init.end()) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @tparam CoordIterator
+     * @tparam OffsetIterator
+     * @param coord_first
+     * @param coord_last
+     * @param offset_first
+     * @param offset_last
+     */
+    template <typename CoordIterator, typename OffsetIterator>
+    basic_multilinestring(CoordIterator coord_first, CoordIterator coord_last, OffsetIterator offset_first, OffsetIterator offset_last)
     {
-        WktReader reader{};
-        auto result      = reader.read(wkt.c_str());
-        const auto& data = result.data;
-        if (not utils::is_multilinestring(data.geom_type))
+        if (std::distance(coord_first, coord_last) > 0)
         {
-            throw exceptions::ParseError("invalid WKT string");
+            auto n = ndim_();
+            this->reserve((coord_last - coord_first) / n);
+            size_t lo = 0;
+            for (auto it = offset_first; it != offset_last; ++it)
+            {
+                size_t hi = *it;
+                this->emplace_back(coord_first + lo, coord_first + hi);
+                lo = hi;
+            }
         }
-        return MultiLineString();
+    }
+
+    // operators
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator==(const basic_multilinestring<T>& lhs, const basic_multilinestring<T>& rhs)
+    {
+        if (lhs.size() != rhs.size())
+        {
+            return false;
+        }
+        for (size_t i = 0; i < lhs.size(); ++i)
+        {
+            if (lhs[i] != rhs[i])
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /*!
-     * @brief creates a MultiLineString from a WKT string
-     * @param wkt the WKT string
-     * @return a MultiLineString object
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
      */
-    std::string wkt()
+    friend bool operator!=(const basic_multilinestring<T>& lhs, const basic_multilinestring<T>& rhs)
     {
-        throw exceptions::NotImplementedError();
+        return not operator==(lhs, rhs);
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @return
+     */
+    std::vector<std::tuple<double, double>> xy() const
+    {
+        std::vector<std::tuple<double, double>> res;
+        res.reserve(this->size());
+        for (const auto& p : *this)
+        {
+            res.emplace_back(p.x, p.y);
+        }
+        return res;
     }
 
   private:
-    /// for allow BaseGeometry to access MultiLineString private members
-    friend class BaseGeometry<MultiLineString>;
+    /// for allow basic_geometry to access basic_multipoint private members
+    friend class basic_geometry<basic_multilinestring<T>>;
 
     /// @private
-    GeometryType geom_type_() const
+    geometry_type geom_type_() const noexcept
     {
-        return GeometryType::MULTILINESTRING;
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return geometry_type::MULTILINESTRINGZ;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return geometry_type::MULTILINESTRINGM;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return geometry_type::MULTILINESTRINGZM;
+        }
+        return geometry_type::MULTILINESTRING;
     }
 
     /// @private
-    std::string geom_type_str_() const
+    dimension_type dim_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return dimension_type::XYZ;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return dimension_type::XYM;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return dimension_type::XYZM;
+        }
+        return dimension_type::XY;
+    }
+
+    /// @private
+    int32_t ndim_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return 3;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return 3;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return 4;
+        }
+        return 2;
+    }
+
+    /// @private
+    bool is_closed_() const noexcept
+    {
+        if (this->empty())
+        {
+            return true;
+        }
+        return *this[0] == *this[this->size() - 1];
+    }
+
+    /// @private
+    void throw_for_invalid_() const
+    {
+        for (const auto& ls : *this)
+        {
+            ls.throw_for_invalid();
+        }
+    }
+
+    /// @private
+    detail::bounds bounds_() const
+    {
+        detail::bounds res{};
+        for (const auto& p : *this)
+        {
+            res.extend(p.x, p.y);
+        }
+        return res;
+    }
+
+    /// @private
+    bool has_z_() const noexcept
+    {
+        return std::is_same<point_type, PointZ::point_type>::value or std::is_same<point_type, PointZM::point_type>::value;
+    }
+
+    /// @private
+    bool has_m_() const noexcept
+    {
+        return std::is_same<point_type, PointM::point_type>::value or std::is_same<point_type, PointZM::point_type>::value;
+    }
+
+    /// @private
+    std::string tagged_text_() const noexcept
     {
         return "MultiLineString";
     }
 
+    // json
+
     /// @private
-    std::vector<std::tuple<double, double>> xy_() const
+    static basic_multilinestring<T> from_json_(const std::string& json)
     {
-        throw exceptions::NotImplementedError();
+        try
+        {
+            auto j         = nlohmann::json::parse(json);
+            auto geom_type = j.at("type").get<std::string>();
+            if (geom_type != "MultiLineString")
+            {
+                throw exceptions::parse_error("invalid geometry type: " + std::string(geom_type));
+            }
+            const auto& linestrings = j.at("coordinates");
+            std::vector<T> res;
+            res.reserve(linestrings.size());
+            std::vector<point_type> points;
+            for (const auto& linestring : linestrings)
+            {
+                if (not linestring.empty())
+                {
+                    const auto& coords = linestring.get<std::vector<std::vector<double>>>();
+                    points.reserve(coords.size());
+                    std::for_each(std::begin(coords), std::end(coords), [&points](const std::vector<double>& coord) {
+                        points.emplace_back(coord.begin(), coord.end());
+                    });
+                    res.emplace_back(points.begin(), points.end());
+                }
+                points.clear();
+            }
+            return basic_multilinestring<T>(res.begin(), res.end());
+        }
+        catch (const nlohmann::json::exception& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const exceptions::geometry_error& e)
+        {
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
+        }
     }
 
     /// @private
-    std::vector<std::tuple<double, double, double>> xyz_() const
+    std::string json_(std::int32_t precision = -1) const
     {
-        throw exceptions::NotImplementedError();
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "{\"type\":\"MultiLineString\",\"coordinates\":[";
+        int i = 0;
+        for (const auto& ls : *this)
+        {
+            if (i > 0)
+            {
+                ss << ",";
+            }
+            ss << "[";
+            for (size_t j = 0; j < ls.size(); ++j)
+            {
+                if (j > 0)
+                {
+                    ss << ",";
+                }
+                ss << "[";
+                const auto& p = ls[j];
+                for (int k = 0; k < p.ndim(); ++k)
+                {
+                    if (k > 0)
+                    {
+                        ss << ",";
+                    }
+                    ss << p.coords[k];
+                }
+                ss << "]";
+                ++i;
+            }
+            ss << "]";
+            ++i;
+        }
+        ss << "]}";
+        return ss.str();
+    }
+
+    // wkt
+
+    /// @private
+    static basic_multilinestring<T> from_wkt_(const std::string& wkt)
+    {
+        wkt_reader reader{};
+        auto result      = reader.read(wkt);
+        const auto& data = result.data;
+        if (not utils::is_multilinestring(data.geom_type))
+        {
+            throw exceptions::parse_error("invalid wkt string");
+        }
+        return basic_multilinestring<T>(result.data.coords.begin(), result.data.coords.end(), result.data.offsets.begin(), result.data.offsets.end());
     }
 
     /// @private
-    std::vector<std::tuple<double, double, double>> xym_() const
+    std::string wkt_(std::int32_t precision = -1) const
     {
-        throw exceptions::NotImplementedError();
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /// @private
-    bool empty_() const
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /// @private
-    size_t size_() const
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /// @private
-    bool is_closed_() const
-    {
-        throw exceptions::NotImplementedError();
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "MULTILINESTRING";
+        if (has_z_())
+        {
+            ss << "Z";
+        }
+        if (has_m_())
+        {
+            ss << "M";
+        }
+        ss << "(";
+        int i = 0;
+        for (const auto& ls : *this)
+        {
+            if (i > 0)
+            {
+                ss << ",";
+            }
+            ss << "(";
+            for (size_t j = 0; j < ls.size(); ++j)
+            {
+                if (j > 0)
+                {
+                    ss << ",";
+                }
+                const auto& p = ls[j];
+                for (int32_t k = 0; k < p.ndim(); ++k)
+                {
+                    if (k > 0)
+                    {
+                        ss << " ";
+                    }
+                    ss << p.coords[k];
+                }
+            }
+            ss << ")";
+            ++i;
+        }
+        ss << ")";
+        return ss.str();
     }
 };
+
+template <class T = double>
+using multilinestring = basic_multilinestring<basic_linestring<basic_point<T>>>;
+
+template <class T = double>
+using multilinestring_z = basic_multilinestring<basic_linestring<basic_point_z<T>>>;
+
+template <class T = double>
+using multilinestring_m = basic_multilinestring<basic_linestring<basic_point_m<T>>>;
+
+template <class T = double>
+using multilinestring_zm = basic_multilinestring<basic_linestring<basic_point_zm<T>>>;
+
+using MultiLineString   = multilinestring<double>;
+using MultiLineStringZ  = multilinestring_z<double>;
+using MultiLineStringM  = multilinestring_m<double>;
+using MultiLineStringZM = multilinestring_zm<double>;
 
 }  // namespace shapes
 }  // namespace simo
@@ -25985,9 +27958,7 @@ class MultiLineString : public BaseGeometry<MultiLineString>, public GeometrySeq
 #include <iomanip>
 // #include <simo/geom/geometry.hpp>
 
-// #include <simo/geom/detail/geometry_sequence.hpp>
-
-// #include <simo/geom/bounds.hpp>
+// #include <simo/geom/detail/bounds.hpp>
 
 
 namespace simo
@@ -25998,173 +27969,36 @@ namespace shapes
 /*!
  * @brief a LineString that is both closed and simple, in shapes this feature is implicitly closed,
  * there is no need to specify the last coordinate, it will always be identical to the first.
+ *
  * @ingroup geometry
  *
  * @since 0.0.1
  */
-class LinearRing : public BaseGeometry<LinearRing>, public GeometrySequence<Point>
-{
-  public:
-    /// two-dimensional rotation direction, clockwise=true, counterclockwise=false
-    bool clockwise = true;
+template <class T = double>
+using linearring = basic_linestring<basic_point<T>>;
 
-    /*!
-     * @brief creates an empty LinearRing
-     *
-     * @since 0.0.1
-     */
-    LinearRing() = default;
+template <class T = double>
+using linearring_z = basic_linestring<basic_point_z<T>>;
 
-    /*!
-      * @brief creates a LinearRing from a given initializer list
-      * @tparam T an arithmetic value (e.g. int, float, double)
-      * @param init the initializer list
-      *
-      * @throw GeometryError DOCUMENT ME!
-      *
-      * @since 0.0.1
-      */
-    template <typename T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-    LinearRing(std::initializer_list<std::initializer_list<T>> init)
-    {
-        /// @todo (pavel) make LinearRing implicitly closed
-        seq.reserve(init.size());
-        for (const auto& coords : init)
-        {
-            Point p(coords);
-            bounds.extend(p.x, p.y);
-            seq.emplace_back(p);
-        }
-        throw_for_invalid();
-    }
+template <class T = double>
+using linearring_m = basic_linestring<basic_point_m<T>>;
 
-    /*!
-     * @brief creates a LinearRing from a given point vector
-     * @param points the point list
-     *
-     * @throw GeometryError DOCUMENT ME!
-     *
-     * @since 0.0.1
-     */
-    explicit LinearRing(const std::vector<Point>& points)
-    {
-        /// @todo (pavel) make LinearRing implicitly closed
-        seq = points;
-        for (const auto& p : seq)
-        {
-            bounds.extend(p.x, p.y);
-        }
-        throw_for_invalid();
-    }
+template <class T = double>
+using linearring_zm = basic_linestring<basic_point_zm<T>>;
 
-  private:
-    /// for allow BaseGeometry to access LinearRing private members
-    friend class BaseGeometry<LinearRing>;
+using LinearRing   = linearring<double>;
+using LinearRingZ  = linearring_z<double>;
+using LinearRingM  = linearring_m<double>;
+using LinearRingZM = linearring_zm<double>;
 
-    /// @private
-    void throw_for_invalid() const
-    {
-        if (empty())
-        {
-            return;
-        }
-
-        if (seq.size() < 4)
-        {
-            throw exceptions::GeometryError("LinearRing should be either empty or with 4 or more points");
-        }
-
-        if (not is_closed())
-        {
-            throw exceptions::GeometryError("LinearRing is not closed, first and last point are different");
-        }
-
-        /// @todo (pavel) check for self-intersections
-    }
-
-    /// @private
-    GeometryType geom_type_() const
-    {
-        return GeometryType::LINESTRING;
-    }
-
-    /// @private
-    std::string geom_type_str_() const
-    {
-        return "LineString";
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double>> xy_() const
-    {
-        std::vector<std::tuple<double, double>> res;
-        for (const auto& point : seq)
-        {
-            res.emplace_back(point.x, point.y);
-        }
-        return res;
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xyz_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        for (const auto& point : seq)
-        {
-            res.emplace_back(point.x, point.y, point.z);
-        }
-        return res;
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xym_() const
-    {
-        std::vector<std::tuple<double, double, double>> res;
-        for (const auto& point : seq)
-        {
-            res.emplace_back(point.x, point.y, point.m);
-        }
-        return res;
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
-    {
-        std::vector<std::tuple<double, double, double, double>> res;
-        for (const auto& point : seq)
-        {
-            res.emplace_back(point.x, point.y, point.z, point.m);
-        }
-        return res;
-    }
-
-    /// @private
-    bool empty_() const
-    {
-        return seq.empty();
-    }
-
-    /// @private
-    size_t size_() const
-    {
-        return seq.size();
-    }
-
-    /// @private
-    bool is_closed_() const
-    {
-        if (seq.size() < 2)
-        {
-            return false;
-        }
-        size_t last_index = seq.size() - 1;
-        return seq[0] == seq[last_index];
-    }
-};
+/// @todo (pavel) LinearRing is not closed, first and last point are different
+/// @todo (pavel) LinearRing should be either empty or with 4 or more points
+/// @todo (pavel) LinearRing cannot self-intersect
+/// @todo (pavel) LinearRing should be implicitly closed
 
 }  // namespace shapes
 }  // namespace simo
-// #include <simo/geom/bounds.hpp>
+// #include <simo/geom/detail/bounds.hpp>
 
 
 namespace simo
@@ -26173,216 +28007,436 @@ namespace shapes
 {
 
 /*!
- * @brief represents a polygon
- * @ingroup geometry
+ * @brief DOCUMENT ME!
+ * @tparam T
+ * @tparam AllocatorType
  *
  * @since 0.0.1
  */
-class Polygon : public BaseGeometry<Polygon>
+template <typename T, typename AllocatorType = std::allocator<T>>
+class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometry<basic_polygon<T>>
 {
   public:
-    /// linear ring that represents the shell of the polygon
-    LinearRing exterior;
-
-    /// collection of linear rings that represent the holes of the polygon
-    std::vector<LinearRing> interiors;
+    /// DOCUMENT ME!
+    using base_type = std::vector<T, AllocatorType>;
+    /// DOCUMENT ME!
+    using point_type = typename T::point_type;
+    /// DOCUMENT ME!
+    using point_iterator = typename std::vector<T>::iterator;
+    /// DOCUMENT ME!
+    using point_const_iterator = typename std::vector<T>::const_iterator;
+    /// DOCUMENT ME!
+    using coord_type = typename T::coord_type;
+    /// DOCUMENT ME!
+    using coord_iterator = typename std::vector<coord_type>::iterator;
+    /// DOCUMENT ME!
+    using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
 
     /*!
-     * @brief creates an empty Polygon
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
      */
-    Polygon() = default;
+    basic_polygon()
+        : base_type() {}
 
     /*!
-     * @brief creates a Polygon
-     * @param rings a LinearRing sequence with the shell and holes of the polygon
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
      */
-    Polygon(std::initializer_list<LinearRing> rings)
+    basic_polygon(point_iterator first, point_iterator last)
+        : base_type(first, last)
     {
-        if (rings.size() > 0)
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param first
+     * @param last
+     */
+    basic_polygon(point_const_iterator first, point_const_iterator last)
+        : base_type(first, last)
+    {
+    }
+
+    /*!
+     * DOCUMENT ME!
+     * @param init
+     */
+    basic_polygon(std::initializer_list<T> init)
+        : base_type(init.begin(), init.end()) {}
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @tparam CoordIterator
+     * @tparam OffsetIterator
+     * @param coord_first
+     * @param coord_last
+     * @param offset_first
+     * @param offset_last
+     */
+    template <typename CoordIterator, typename OffsetIterator>
+    basic_polygon(CoordIterator coord_first, CoordIterator coord_last, OffsetIterator offset_first, OffsetIterator offset_last)
+    {
+        if (std::distance(coord_first, coord_last) > 0)
         {
-            auto ring     = rings.begin();
-            Bounds& b     = bounds;
-            exterior      = LinearRing(*ring);
-            Bounds& b_ext = exterior.bounds;
-            b.extend(b_ext.minx, b_ext.miny);
-            b.extend(b_ext.maxx, b_ext.maxy);
-            ring++;
-            for (; ring != rings.end(); ++ring)
+            auto n = ndim_();
+            this->reserve((coord_last - coord_first) / n);
+            size_t lo = 0;
+            for (auto it = offset_first; it != offset_last; ++it)
             {
-                interiors.emplace_back(*ring);
-                Bounds& b_int = interiors[interiors.size() - 1].bounds;
-                b.extend(b_int.minx, b_int.miny);
-                b.extend(b_int.maxx, b_int.maxy);
+                size_t hi = *it;
+                this->emplace_back(coord_first + lo, coord_first + hi);
+                lo = hi;
             }
         }
     }
 
-    /*!
-     * @brief creates a Polygon
-     * @param shell the shell of the polygon as a Point sequence
-     *
-     * @since 0.0.1
-     */
-    explicit Polygon(const std::vector<Point>& shell)
-        : exterior(shell)
-    {
-        Bounds& b     = bounds;
-        Bounds& b_ext = exterior.bounds;
-        b.extend(b_ext.minx, b_ext.miny);
-        b.extend(b_ext.maxx, b_ext.maxy);
-    }
+    // operators
 
     /*!
-     * @brief creates a Polygon
-     * @param shell the shell of the polygon as a Point sequence
-     * @param holes one or more collection of points, each representing a hole in the polygon
-     *
-     * @since 0.0.1
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
      */
-    Polygon(const std::vector<Point>& shell, const std::vector<std::vector<Point>>& holes)
-        : exterior(shell)
+    friend bool operator==(const basic_polygon<T>& lhs, const basic_polygon<T>& rhs)
     {
-        Bounds& b     = bounds;
-        Bounds& b_ext = exterior.bounds;
-        b.extend(b_ext.minx, b_ext.miny);
-        b.extend(b_ext.maxx, b_ext.maxy);
-        interiors.reserve(holes.size());
-        for (const auto& hole : holes)
+        if (lhs.size() != rhs.size())
         {
-            interiors.emplace_back(hole);
-            Bounds& b_int = interiors[interiors.size() - 1].bounds;
-            b.extend(b_int.minx, b_int.miny);
-            b.extend(b_int.maxx, b_int.maxy);
+            return false;
         }
-    }
-
-    /*!
-     * @brief creates a Polygon from a geojson string
-     * @param json the geojson string
-     * @return a Polygon object
-     * @sa https://tools.ietf.org/html/rfc7946
-     *
-     * @since 0.0.1
-     */
-    static Polygon from_json(const std::string& /*json*/)
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /*!
-     * @brief dumps the geojson representation of the Polygon
-     * @return a geojson string
-     * @sa https://tools.ietf.org/html/rfc7946
-     *
-     * @since 0.0.1
-     */
-    std::string json()
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /*!
-     * @brief creates a Polygon from a WKT string
-     * @param wkt the WKT string
-     * @return a Polygon object
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @since 0.0.1
-     */
-    static Polygon from_wkt(const std::string& wkt)
-    {
-        WktReader reader{};
-        auto result      = reader.read(wkt.c_str());
-        const auto& data = result.data;
-        if (not utils::is_polygon(data.geom_type))
+        for (size_t i = 0; i < lhs.size(); ++i)
         {
-            throw exceptions::ParseError("invalid WKT string");
+            if (lhs[i] != rhs[i])
+            {
+                return false;
+            }
         }
-        return Polygon();
+        return true;
     }
 
     /*!
-     * @brief creates a Polygon from a WKT string
-     * @param wkt the WKT string
-     * @return a Polygon object
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
+     * @brief DOCUMENT ME!
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    friend bool operator!=(const basic_polygon<T>& lhs, const basic_polygon<T>& rhs)
+    {
+        return not operator==(lhs, rhs);
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @return
      *
      * @since 0.0.1
      */
-    std::string wkt()
+    std::vector<std::tuple<double, double>> xy() const
     {
-        throw exceptions::NotImplementedError();
+        std::vector<std::tuple<double, double>> res;
+        res.reserve(this->size());
+        for (const auto& p : *this)
+        {
+            res.emplace_back(p.x, p.y);
+        }
+        return res;
     }
 
-    /// @todo (pavel) add from_bounds method
+    /*!
+     * @brief DOCUMENT ME!
+     * @return
+     *
+     * @since 0.0.1
+     */
+    T& exterior()
+    {
+        return *this->begin();
+    }
+
+    /*!
+     * @brief DOCUMENT ME!
+     * @param pos
+     * @return
+     *
+     * @since 0.0.1
+     */
+    T& interiors(size_t pos)
+    {
+        assert(this->begin() + pos + 1 < this->end());
+        return *(this->begin() + pos + 1);
+    }
 
   private:
-    /// for allow BaseGeometry to access Polygon private members
-    friend class BaseGeometry<Polygon>;
+    /// for allow basic_geometry to access basic_polygon private members
+    friend class basic_geometry<basic_polygon<T>>;
 
     /// @private
-    GeometryType geom_type_() const
+    geometry_type geom_type_() const noexcept
     {
-        return GeometryType::POLYGON;
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return geometry_type::POLYGONZ;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return geometry_type::POLYGONM;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return geometry_type::POLYGONZM;
+        }
+        return geometry_type::POLYGON;
     }
 
     /// @private
-    std::string geom_type_str_() const
+    dimension_type dim_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return dimension_type::XYZ;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return dimension_type::XYM;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return dimension_type::XYZM;
+        }
+        return dimension_type::XY;
+    }
+
+    /// @private
+    int32_t ndim_() const noexcept
+    {
+        if (std::is_same<point_type, PointZ::point_type>::value)
+        {
+            return 3;
+        }
+        if (std::is_same<point_type, PointM::point_type>::value)
+        {
+            return 3;
+        }
+        if (std::is_same<point_type, PointZM::point_type>::value)
+        {
+            return 4;
+        }
+        return 2;
+    }
+
+    /// @private
+    bool is_closed_() const noexcept
+    {
+        if (this->empty())
+        {
+            return true;
+        }
+        return *this[0] == *this[this->size() - 1];
+    }
+
+    /// @private
+    void throw_for_invalid_() const
+    {
+        /// @todo (pavel) add checks
+    }
+
+    /// @private
+    detail::bounds bounds_() const
+    {
+        detail::bounds res{};
+        for (const auto& r : *this)
+        {
+            auto r_bound = r.bounds();
+            res.extend(r_bound);
+        }
+        return res;
+    }
+
+    /// @private
+    bool has_z_() const noexcept
+    {
+        return std::is_same<point_type, PointZ::point_type>::value or std::is_same<point_type, PointZM::point_type>::value;
+    }
+
+    /// @private
+    bool has_m_() const noexcept
+    {
+        return std::is_same<point_type, PointM::point_type>::value or std::is_same<point_type, PointZM::point_type>::value;
+    }
+
+    /// @private
+    std::string tagged_text_() const noexcept
     {
         return "Polygon";
     }
 
-    /// @private
-    bool empty_() const
-    {
-        return size_() == 0;
-    }
+    // json
 
     /// @private
-    size_t size_() const
+    static basic_polygon<T> from_json_(const std::string& json)
     {
-        size_t size = exterior.size();
-        for (const auto& interior : interiors)
+        try
         {
-            size += interior.size();
+            auto j         = nlohmann::json::parse(json);
+            auto geom_type = j.at("type").get<std::string>();
+            if (geom_type != "Polygon")
+            {
+                throw exceptions::parse_error("invalid geometry type: " + std::string(geom_type));
+            }
+            const auto& rings = j.at("coordinates");
+            std::vector<T> res;
+            res.reserve(rings.size());
+            std::vector<point_type> points;
+            for (const auto& ring : rings)
+            {
+                if (not ring.empty())
+                {
+                    const auto& coords = ring.get<std::vector<std::vector<double>>>();
+                    points.reserve(coords.size());
+                    std::for_each(std::begin(coords), std::end(coords), [&points](const std::vector<double>& coord) {
+                        points.emplace_back(coord.begin(), coord.end());
+                    });
+                    res.emplace_back(points.begin(), points.end());
+                }
+                points.clear();
+            }
+            return basic_polygon<T>(res.begin(), res.end());
         }
-        return size;
+        catch (const nlohmann::json::exception& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const exceptions::geometry_error& e)
+        {
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
+        }
     }
 
     /// @private
-    bool is_closed_() const
+    std::string json_(std::int32_t precision = -1) const
     {
-        return true;
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "{\"type\":\"Polygon\",\"coordinates\":[";
+        int i = 0;
+        for (const auto& ls : *this)
+        {
+            if (i > 0)
+            {
+                ss << ",";
+            }
+            ss << "[";
+            for (size_t j = 0; j < ls.size(); ++j)
+            {
+                if (j > 0)
+                {
+                    ss << ",";
+                }
+                ss << "[";
+                const auto& p = ls[j];
+                for (int k = 0; k < p.ndim(); ++k)
+                {
+                    if (k > 0)
+                    {
+                        ss << ",";
+                    }
+                    ss << p.coords[k];
+                }
+                ss << "]";
+                ++i;
+            }
+            ss << "]";
+            ++i;
+        }
+        ss << "]}";
+        return ss.str();
+    }
+
+    // wkt
+
+    /// @private
+    static basic_polygon<T> from_wkt_(const std::string& wkt)
+    {
+        wkt_reader reader{};
+        auto result      = reader.read(wkt);
+        const auto& data = result.data;
+        if (not utils::is_polygon(data.geom_type))
+        {
+            throw exceptions::parse_error("invalid wkt string");
+        }
+        return basic_polygon<T>(result.data.coords.begin(), result.data.coords.end(), result.data.offsets.begin(), result.data.offsets.end());
     }
 
     /// @private
-    std::vector<std::tuple<double, double>> xy_() const
+    std::string wkt_(std::int32_t precision = -1) const
     {
-        throw exceptions::NotImplementedError();
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xyz_() const
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xym_() const
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
-    {
-        throw exceptions::NotImplementedError();
+        std::stringstream ss;
+        if (precision >= 0)
+        {
+            ss << std::setprecision(precision);
+        }
+        ss << "POLYGON";
+        if (has_z_())
+        {
+            ss << "Z";
+        }
+        if (has_m_())
+        {
+            ss << "M";
+        }
+        ss << "(";
+        int i = 0;
+        for (const auto& ls : *this)
+        {
+            if (i > 0)
+            {
+                ss << ",";
+            }
+            ss << "(";
+            for (size_t j = 0; j < ls.size(); ++j)
+            {
+                if (j > 0)
+                {
+                    ss << ",";
+                }
+                const auto& p = ls[j];
+                for (int32_t k = 0; k < p.ndim(); ++k)
+                {
+                    if (k > 0)
+                    {
+                        ss << " ";
+                    }
+                    ss << p.coords[k];
+                }
+            }
+            ss << ")";
+            ++i;
+        }
+        ss << ")";
+        return ss.str();
     }
 };
+
+template <class T = double>
+using polygon = basic_polygon<linearring<T>>;
+
+template <class T = double>
+using polygon_z = basic_polygon<linearring_z<T>>;
+
+template <class T = double>
+using polygon_m = basic_polygon<linearring_m<T>>;
+
+template <class T = double>
+using polygon_zm = basic_polygon<linearring_zm<T>>;
+
+using Polygon   = polygon<double>;
+using PolygonZ  = polygon_z<double>;
+using PolygonM  = polygon_m<double>;
+using PolygonZM = polygon_zm<double>;
 
 }  // namespace shapes
 }  // namespace simo
@@ -26396,7 +28450,7 @@ class Polygon : public BaseGeometry<Polygon>
 #include <iomanip>
 // #include <simo/geom/geometry.hpp>
 
-// #include <simo/geom/bounds.hpp>
+// #include <simo/geom/detail/bounds.hpp>
 
 
 namespace simo
@@ -26404,142 +28458,13 @@ namespace simo
 namespace shapes
 {
 
-/*!
- * @brief Polygon collection
- * @ingroup geometry
- *
- * @since 0.0.1
- */
-class MultiPolygon : public BaseGeometry<MultiPolygon>
-{
-  public:
-    /*!
-     * @brief creates an empty MultiPolygon
-     *
-     * @since 0.0.1
-     */
-    MultiPolygon() = default;
-
-    /*!
-     * @brief creates a MultiPolygon from a geojson string
-     * @param json the geojson string
-     * @return a MultiPolygon object
-     * @sa https://tools.ietf.org/html/rfc7946
-     *
-     * @since 0.0.1
-     */
-    static MultiPolygon from_json(const std::string& /*json*/)
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /*!
-     * @brief dumps the geojson representation of the MultiPolygon
-     * @return a geojson string
-     * @sa https://tools.ietf.org/html/rfc7946
-     *
-     * @since 0.0.1
-     */
-    std::string json()
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /*!
-     * @brief creates a MultiPolygon from a WKT string
-     * @param wkt the WKT string
-     * @return a MultiPolygon object
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @since 0.0.1
-     */
-    static MultiPolygon from_wkt(const std::string& wkt)
-    {
-        WktReader reader{};
-        auto result      = reader.read(wkt.c_str());
-        const auto& data = result.data;
-        if (not utils::is_multipolygon(data.geom_type))
-        {
-            throw exceptions::ParseError("invalid WKT string");
-        }
-        return MultiPolygon();
-    }
-
-    /*!
-     * @brief creates a MultiPolygon from a WKT string
-     * @param wkt the WKT string
-     * @return a MultiPolygon object
-     * @sa https://en.wikipedia.org/wiki/Well-known_text_representation_of_geometry
-     *
-     * @since 0.0.1
-     */
-    std::string wkt()
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-  private:
-    /// for allow BaseGeometry to access MultiPolygon private members
-    friend class BaseGeometry<MultiPolygon>;
-
-    /// @private
-    GeometryType geom_type_() const
-    {
-        return GeometryType::MULTIPOLYGON;
-    }
-
-    /// @private
-    std::string geom_type_str_() const
-    {
-        return "MultiPolygon";
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double>> xy_() const
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xyz_() const
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double>> xym_() const
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /// @private
-    std::vector<std::tuple<double, double, double, double>> xyzm_() const
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /// @private
-    bool empty_() const
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /// @private
-    size_t size_() const
-    {
-        throw exceptions::NotImplementedError();
-    }
-
-    /// @private
-    bool is_closed_() const
-    {
-        throw exceptions::NotImplementedError();
-    }
-};
+/// @todo add MultiPolygon
 
 }  // namespace shapes
 }  // namespace simo
 // #include <simo/geom/linearring.hpp>
+
+// #include <simo/io/polyline.hpp>
 
 
 #endif  // SIMO_SHAPES_HPP

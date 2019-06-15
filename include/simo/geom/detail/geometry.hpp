@@ -45,7 +45,67 @@ class basic_geometry
      */
     std::string tagged_text() const noexcept
     {
-        return static_cast<const T*>(this)->tagged_text_();
+        switch (geom_type())
+        {
+            case geometry_type::POINT:
+                return "Point";
+            case geometry_type::POINTZ:
+                return "Point Z";
+            case geometry_type::POINTM:
+                return "Point M";
+            case geometry_type::POINTZM:
+                return "Point ZM";
+            case geometry_type::MULTIPOINT:
+                return "MultiPoint";
+            case geometry_type::MULTIPOINTZ:
+                return "MultiPoint Z";
+            case geometry_type::MULTIPOINTM:
+                return "MultiPoint M";
+            case geometry_type::MULTIPOINTZM:
+                return "MultiPoint ZM";
+            case geometry_type::LINESTRING:
+                return "LineString";
+            case geometry_type::LINESTRINGZ:
+                return "LineString Z";
+            case geometry_type::LINESTRINGM:
+                return "LineString M";
+            case geometry_type::LINESTRINGZM:
+                return "LineString ZM";
+            case geometry_type::MULTILINESTRING:
+                return "MultiLineString";
+            case geometry_type::MULTILINESTRINGZ:
+                return "MultiLineString Z";
+            case geometry_type::MULTILINESTRINGM:
+                return "MultiLineString M";
+            case geometry_type::MULTILINESTRINGZM:
+                return "MultiLineString ZM";
+            case geometry_type::POLYGON:
+                return "Polygon";
+            case geometry_type::POLYGONZ:
+                return "Polygon Z";
+            case geometry_type::POLYGONM:
+                return "Polygon M";
+            case geometry_type::POLYGONZM:
+                return "Polygon ZM";
+            case geometry_type::MULTIPOLYGON:
+                return "MultiPolygon";
+            case geometry_type::MULTIPOLYGONZ:
+                return "MultiPolygon Z";
+            case geometry_type::MULTIPOLYGONM:
+                return "MultiPolygon M";
+            case geometry_type::MULTIPOLYGONZM:
+                return "MultiPolygon ZM";
+            case geometry_type::GEOMETRYCOLLECTION:
+                return "GeometryCollection";
+            case geometry_type::GEOMETRYCOLLECTIONZ:
+                return "GeometryCollection Z";
+            case geometry_type::GEOMETRYCOLLECTIONM:
+                return "GeometryCollection M";
+            case geometry_type::GEOMETRYCOLLECTIONZM:
+                return "GeometryCollection ZM";
+            default:
+                return "Geometry";
+        }
     }
 
     /*!
@@ -56,7 +116,20 @@ class basic_geometry
      */
     dimension_type dim() const noexcept
     {
-        return static_cast<const T*>(this)->dim_();
+        int value = static_cast<int>(geom_type());
+        if (value >= 1000 and value < 2000)
+        {
+            return dimension_type::XYZ;
+        }
+        if (value >= 2000 and value < 3000)
+        {
+            return dimension_type::XYM;
+        }
+        if (value >= 3000)
+        {
+            return dimension_type::XYZM;
+        }
+        return dimension_type::XY;
     }
 
     /*!
@@ -66,9 +139,18 @@ class basic_geometry
      *
      * @since 0.0.1
      */
-    int32_t ndim() const noexcept
+    size_t ndim() const noexcept
     {
-        return static_cast<const T*>(this)->ndim_();
+        switch (dim())
+        {
+            case dimension_type::XYZM:
+                return 4;
+            case dimension_type::XYZ:
+            case dimension_type::XYM:
+                return 3;
+            default:
+                return 2;
+        }
     }
 
     /*!
@@ -131,7 +213,8 @@ class basic_geometry
      */
     bool has_z() const noexcept
     {
-        return static_cast<const T*>(this)->has_z_();
+        int value = static_cast<int>(geom_type());
+        return (value >= 1000 and value < 2000) or value >= 3000;
     }
 
     /*!
@@ -142,7 +225,8 @@ class basic_geometry
      */
     bool has_m() const noexcept
     {
-        return static_cast<const T*>(this)->has_m_();
+        int value = static_cast<int>(geom_type());
+        return value >= 2000;
     }
 
     // json

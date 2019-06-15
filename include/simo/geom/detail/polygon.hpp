@@ -15,80 +15,42 @@ namespace simo
 namespace shapes
 {
 
-/*!
- * @brief DOCUMENT ME!
- * @tparam T
- * @tparam AllocatorType
- *
- * @since 0.0.1
- */
 template <typename T, typename AllocatorType = std::allocator<T>>
 class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometry<basic_polygon<T>>
 {
   public:
-    /// DOCUMENT ME!
     using base_type = std::vector<T, AllocatorType>;
-    /// DOCUMENT ME!
-    using point_type = typename T::point_type;
-    /// DOCUMENT ME!
-    using point_iterator = typename std::vector<T>::iterator;
-    /// DOCUMENT ME!
+
+    using point_type           = typename T::point_type;
+    using point_iterator       = typename std::vector<T>::iterator;
     using point_const_iterator = typename std::vector<T>::const_iterator;
-    /// DOCUMENT ME!
-    using coord_type = typename T::coord_type;
-    /// DOCUMENT ME!
-    using coord_iterator = typename std::vector<coord_type>::iterator;
-    /// DOCUMENT ME!
+
+    using coord_type           = typename T::coord_type;
+    using coord_iterator       = typename std::vector<coord_type>::iterator;
     using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
 
-    /*!
-     * @brief DOCUMENT ME!
-     */
     basic_polygon()
         : base_type() {}
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param first
-     * @param last
-     */
     basic_polygon(point_iterator first, point_iterator last)
         : base_type(first, last)
     {
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param first
-     * @param last
-     */
     basic_polygon(point_const_iterator first, point_const_iterator last)
         : base_type(first, last)
     {
     }
 
-    /*!
-     * DOCUMENT ME!
-     * @param init
-     */
     basic_polygon(std::initializer_list<T> init)
         : base_type(init.begin(), init.end()) {}
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @tparam CoordIterator
-     * @tparam OffsetIterator
-     * @param coord_first
-     * @param coord_last
-     * @param offset_first
-     * @param offset_last
-     */
     template <typename CoordIterator, typename OffsetIterator>
     basic_polygon(CoordIterator coord_first, CoordIterator coord_last, OffsetIterator offset_first, OffsetIterator offset_last)
     {
         if (std::distance(coord_first, coord_last) > 0)
         {
-            auto n = ndim_();
+            auto n = this->ndim();
             this->reserve((coord_last - coord_first) / n);
             size_t lo = 0;
             for (auto it = offset_first; it != offset_last; ++it)
@@ -102,12 +64,6 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
 
     // operators
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param lhs
-     * @param rhs
-     * @return
-     */
     friend bool operator==(const basic_polygon<T>& lhs, const basic_polygon<T>& rhs)
     {
         if (lhs.size() != rhs.size())
@@ -124,23 +80,11 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
         return true;
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param lhs
-     * @param rhs
-     * @return
-     */
     friend bool operator!=(const basic_polygon<T>& lhs, const basic_polygon<T>& rhs)
     {
         return not operator==(lhs, rhs);
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @return
-     *
-     * @since 0.0.1
-     */
     std::vector<std::tuple<double, double>> xy() const
     {
         std::vector<std::tuple<double, double>> res;
@@ -152,24 +96,11 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
         return res;
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @return
-     *
-     * @since 0.0.1
-     */
     T& exterior()
     {
         return *this->begin();
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param pos
-     * @return
-     *
-     * @since 0.0.1
-     */
     T& interiors(size_t pos)
     {
         assert(this->begin() + pos + 1 < this->end());
@@ -196,42 +127,6 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
             return geometry_type::POLYGONZM;
         }
         return geometry_type::POLYGON;
-    }
-
-    /// @private
-    dimension_type dim_() const noexcept
-    {
-        if (is_basic_linestring_z<T>::value)
-        {
-            return dimension_type::XYZ;
-        }
-        if (is_basic_linestring_m<T>::value)
-        {
-            return dimension_type::XYM;
-        }
-        if (is_basic_linestring_zm<T>::value)
-        {
-            return dimension_type::XYZM;
-        }
-        return dimension_type::XY;
-    }
-
-    /// @private
-    int32_t ndim_() const noexcept
-    {
-        if (is_basic_linestring_z<T>::value)
-        {
-            return 3;
-        }
-        if (is_basic_linestring_m<T>::value)
-        {
-            return 3;
-        }
-        if (is_basic_linestring_zm<T>::value)
-        {
-            return 4;
-        }
-        return 2;
     }
 
     /// @private
@@ -348,7 +243,7 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
                 }
                 ss << "[";
                 const auto& p = ls[j];
-                for (int k = 0; k < p.ndim(); ++k)
+                for (size_t k = 0; k < p.size(); ++k)
                 {
                     if (k > 0)
                     {
@@ -415,7 +310,7 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
                     ss << ",";
                 }
                 const auto& p = ls[j];
-                for (int32_t k = 0; k < p.ndim(); ++k)
+                for (size_t k = 0; k < p.size(); ++k)
                 {
                     if (k > 0)
                     {
@@ -431,6 +326,38 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
         return ss.str();
     }
 };
+
+template <typename>
+struct is_basic_polygon : std::false_type
+{};
+
+template <typename T>
+struct is_basic_polygon<basic_polygon<basic_point<T>>> : std::true_type
+{};
+
+template <typename>
+struct is_basic_polygon_z : std::false_type
+{};
+
+template <typename T>
+struct is_basic_polygon_z<basic_polygon<basic_point_z<T>>> : std::true_type
+{};
+
+template <typename>
+struct is_basic_polygon_m : std::false_type
+{};
+
+template <typename T>
+struct is_basic_polygon_m<basic_polygon<basic_point_m<T>>> : std::true_type
+{};
+
+template <typename>
+struct is_basic_polygon_zm : std::false_type
+{};
+
+template <typename T>
+struct is_basic_polygon_zm<basic_polygon<basic_point_zm<T>>> : std::true_type
+{};
 
 }  // namespace shapes
 }  // namespace simo

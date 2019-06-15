@@ -16,61 +16,30 @@ namespace simo
 namespace shapes
 {
 
-/*!
- * @brief A curve where each consecutive pair of points defines a line segment
- * @tparam T
- * @tparam AllocatorType
- * @ingroup geometry
- *
- * @since 0.0.1
- */
 template <typename T, typename AllocatorType = std::allocator<T>>
 class basic_linestring : public std::vector<T, AllocatorType>, public basic_geometry<basic_linestring<T>>
 {
   public:
-    /// DOCUMENT ME!
     using base_type = std::vector<T, AllocatorType>;
-    /// DOCUMENT ME!
-    using point_type = typename T::point_type;
-    /// DOCUMENT ME!
-    using point_iterator = typename std::vector<T>::iterator;
-    /// DOCUMENT ME!
+
+    using point_type           = typename T::point_type;
+    using point_iterator       = typename std::vector<T>::iterator;
     using point_const_iterator = typename std::vector<T>::const_iterator;
-    /// DOCUMENT ME!
-    using coord_type = typename T::coord_type;
-    /// DOCUMENT ME!
-    using coord_iterator = typename std::vector<coord_type>::iterator;
-    /// DOCUMENT ME!
+
+    using coord_type           = typename T::coord_type;
+    using coord_iterator       = typename std::vector<coord_type>::iterator;
     using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
 
-    /*!
-     * @brief DOCUMENT ME!
-     *
-     * @since 0.0.1
-     */
     basic_linestring()
         : base_type() {}
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param init
-     *
-     * @since 0.0.1
-     */
     basic_linestring(std::initializer_list<T> init)
         : base_type(init.begin(), init.end()) {}
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param first
-     * @param last
-     *
-     * @since 0.0.1
-     */
     explicit basic_linestring(coord_const_iterator first, coord_const_iterator last)
     {
         /// @todo deal with repetition
-        size_t n = ndim_();
+        size_t n = this->ndim();
         this->reserve(std::distance(first, last));
         for (auto it = first; it != last; it += n)
         {
@@ -78,17 +47,10 @@ class basic_linestring : public std::vector<T, AllocatorType>, public basic_geom
         }
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param first
-     * @param last
-     *
-     * @since 0.0.1
-     */
     explicit basic_linestring(coord_iterator first, coord_iterator last)
     {
         /// @todo deal with repetition
-        size_t n = ndim_();
+        size_t n = this->ndim();
         this->reserve(std::distance(first, last));
         for (auto it = first; it != last; it += n)
         {
@@ -96,25 +58,11 @@ class basic_linestring : public std::vector<T, AllocatorType>, public basic_geom
         }
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param first
-     * @param last
-     *
-     * @since 0.0.1
-     */
     basic_linestring(point_iterator first, point_iterator last)
         : base_type(first, last)
     {
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param first
-     * @param last
-     *
-     * @since 0.0.1
-     */
     basic_linestring(point_const_iterator first, point_const_iterator last)
         : base_type(first, last)
     {
@@ -237,42 +185,6 @@ class basic_linestring : public std::vector<T, AllocatorType>, public basic_geom
     }
 
     /// @private
-    dimension_type dim_() const noexcept
-    {
-        if (is_basic_point_z<T>::value)
-        {
-            return dimension_type::XYZ;
-        }
-        if (is_basic_point_m<T>::value)
-        {
-            return dimension_type::XYM;
-        }
-        if (is_basic_point_zm<T>::value)
-        {
-            return dimension_type::XYZM;
-        }
-        return dimension_type::XY;
-    }
-
-    /// @private
-    int32_t ndim_() const noexcept
-    {
-        if (is_basic_point_z<T>::value)
-        {
-            return 3;
-        }
-        if (is_basic_point_m<T>::value)
-        {
-            return 3;
-        }
-        if (is_basic_point_zm<T>::value)
-        {
-            return 4;
-        }
-        return 2;
-    }
-
-    /// @private
     bool is_closed_() const noexcept
     {
         if (this->empty())
@@ -313,24 +225,6 @@ class basic_linestring : public std::vector<T, AllocatorType>, public basic_geom
             res.extend(p.x, p.y);
         }
         return res;
-    }
-
-    /// @private
-    bool has_z_() const noexcept
-    {
-        return is_basic_point_z<T>::value or is_basic_point_zm<T>::value;
-    }
-
-    /// @private
-    bool has_m_() const noexcept
-    {
-        return is_basic_point_m<T>::value or is_basic_point_zm<T>::value;
-    }
-
-    /// @private
-    std::string tagged_text_() const noexcept
-    {
-        return "LineString";
     }
 
     // json
@@ -381,7 +275,7 @@ class basic_linestring : public std::vector<T, AllocatorType>, public basic_geom
                 ss << ",";
             }
             ss << "[";
-            for (int j = 0; j < p.ndim(); ++j)
+            for (size_t j = 0; j < p.size(); ++j)
             {
                 if (j > 0)
                 {
@@ -420,11 +314,11 @@ class basic_linestring : public std::vector<T, AllocatorType>, public basic_geom
             ss << std::setprecision(precision);
         }
         ss << "LINESTRING";
-        if (has_z_())
+        if (this->has_z())
         {
             ss << "Z";
         }
-        if (has_m_())
+        if (this->has_m())
         {
             ss << "M";
         }
@@ -436,7 +330,7 @@ class basic_linestring : public std::vector<T, AllocatorType>, public basic_geom
             {
                 ss << ",";
             }
-            for (int32_t j = 0; j < p.ndim(); ++j)
+            for (size_t j = 0; j < p.size(); ++j)
             {
                 if (j > 0)
                 {

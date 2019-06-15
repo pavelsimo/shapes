@@ -20,6 +20,11 @@ using linestring_m_t = basic_linestring<basic_point_m<T>>;
 template <class T = double>
 using linestring_zm_t = basic_linestring<basic_point_zm<T>>;
 
+using linestring    = linestring_t<double>;
+using linestring_z  = linestring_z_t<double>;
+using linestring_m  = linestring_m_t<double>;
+using linestring_zm = linestring_zm_t<double>;
+
 using LineString   = linestring_t<double>;
 using LineStringZ  = linestring_z_t<double>;
 using LineStringM  = linestring_m_t<double>;

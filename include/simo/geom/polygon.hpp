@@ -20,6 +20,11 @@ using polygon_m_t = basic_polygon<linearring_m_t<T>>;
 template <class T = double>
 using polygon_zm_t = basic_polygon<linearring_zm_t<T>>;
 
+using polygon    = polygon_t<double>;
+using polygon_z  = polygon_z_t<double>;
+using polygon_m  = polygon_m_t<double>;
+using polygon_zm = polygon_zm_t<double>;
+
 using Polygon   = polygon_t<double>;
 using PolygonZ  = polygon_z_t<double>;
 using PolygonM  = polygon_m_t<double>;

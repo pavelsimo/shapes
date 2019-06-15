@@ -20,6 +20,11 @@ using linearring_m_t = basic_linestring<basic_point_m<T>>;
 template <class T = double>
 using linearring_zm_t = basic_linestring<basic_point_zm<T>>;
 
+using linearring    = linearring_t<double>;
+using linearring_z  = linearring_z_t<double>;
+using linearring_m  = linearring_m_t<double>;
+using linearring_zm = linearring_zm_t<double>;
+
 using LinearRing   = linearring_t<double>;
 using LinearRingZ  = linearring_z_t<double>;
 using LinearRingM  = linearring_m_t<double>;
