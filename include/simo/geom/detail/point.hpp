@@ -38,25 +38,26 @@ namespace shapes
 #    pragma warning(disable : 4201)
 #endif
 
-/*!
- * @brief DOCUMENT ME!
- * @tparam T
- * @ingroup geometry
- *
- * @since 0.0.1
- */
 template <class T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 class basic_point : public basic_geometry<basic_point<T>>
 {
   public:
-    /// DOCUMENT ME!
-    using point_type = basic_point;
-    /// DOCUMENT ME!
-    using coord_type = T;
-    /// DOCUMENT ME!
-    using coord_iterator = typename std::vector<coord_type>::iterator;
-    /// DOCUMENT ME!
+    using value_type             = T;
+    using reference              = T&;
+    using const_reference        = const T&;
+    using iterator               = T*;
+    using const_iterator         = const T*;
+    using difference_type        = std::ptrdiff_t;
+    using size_type              = size_t;
+    using reverse_iterator       = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
+    using point_type           = basic_point;
+    using coord_type           = T;
+    using coord_iterator       = typename std::vector<coord_type>::iterator;
     using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
+
+    static const size_type N = 2;
 
     union
     {
@@ -72,7 +73,7 @@ class basic_point : public basic_geometry<basic_point<T>>
             T lat;
         };
 
-        T coords[2];
+        T coords[N];
     };
 
     /*!
@@ -89,15 +90,10 @@ class basic_point : public basic_geometry<basic_point<T>>
     basic_point(T x, T y)
         : x(x), y(y) {}
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param begin
-     * @param end
-     */
     explicit basic_point(coord_iterator begin, coord_iterator end)
     {
         /// @todo (pavel) deal with repetition
-        assert(std::distance(begin, end) == 2);
+        assert(std::distance(begin, end) == N);
         size_t i = 0;
         for (auto it = begin; it != end; ++it)
         {
@@ -105,15 +101,10 @@ class basic_point : public basic_geometry<basic_point<T>>
         }
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param begin
-     * @param end
-     */
     explicit basic_point(coord_const_iterator begin, coord_const_iterator end)
     {
         /// @todo (pavel) deal with repetition
-        assert(std::distance(begin, end) == 2);
+        assert(std::distance(begin, end) == N);
         size_t i = 0;
         for (auto it = begin; it != end; ++it)
         {
@@ -121,45 +112,24 @@ class basic_point : public basic_geometry<basic_point<T>>
         }
     }
 
-    /*!
-    * @brief DOCUMENT ME!
-    * @return
-    */
-    std::size_t size() const noexcept
+    size_type size() const noexcept
     {
-        return static_cast<std::size_t>(ndim_());
+        return this->ndim();
     }
 
     // operators
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param pos
-     * @return
-     */
-    T& operator[](size_t pos)
+    reference operator[](size_t pos)
     {
-        assert(pos < 2);
+        assert(pos < N);
         return coords[pos];
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param lhs
-     * @param rhs
-     * @return
-     */
     friend bool operator==(const basic_point<T>& lhs, const basic_point<T>& rhs)
     {
         return lhs.x == rhs.x and lhs.y == rhs.y;
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param lhs
-     * @param rhs
-     * @return
-     */
     friend bool operator!=(const basic_point<T>& lhs, const basic_point<T>& rhs)
     {
         return not operator==(lhs, rhs);
@@ -167,30 +137,70 @@ class basic_point : public basic_geometry<basic_point<T>>
 
     // polyline
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param polyline
-     * @param precision
-     * @return
-     */
     static basic_point<T> from_polyline(const std::string& polyline, std::int32_t precision = 5)
     {
         auto coords = polyline::decode(polyline, precision);
-        if (coords.size() > 2)
+        if (coords.size() > N)
         {
             throw exceptions::parse_error("too many points");
         }
         return {coords[0], coords[1]};
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param precision
-     * @return
-     */
     std::string polyline(std::int32_t precision = 5) const
     {
         return polyline::encode(lat, precision) + polyline::encode(lng, precision);
+    }
+
+    size_type max_size() const
+    {
+        return N;
+    }
+
+    bool empty()
+    {
+        return begin() == end();
+    }
+
+    // iterators
+
+    iterator begin()
+    {
+        return coords;
+    }
+
+    iterator end()
+    {
+        return coords + N;
+    }
+
+    const_iterator begin() const
+    {
+        return coords;
+    }
+    const_iterator end() const
+    {
+        return coords + N;
+    }
+
+    reverse_iterator rbegin()
+    {
+        return coords + N - 1;
+    }
+
+    reverse_iterator rend()
+    {
+        return coords - 1;
+    }
+
+    const_reverse_iterator rbegin() const
+    {
+        return coords + N - 1;
+    }
+
+    const_reverse_iterator rend() const
+    {
+        return coords - 1;
     }
 
   private:
@@ -201,24 +211,6 @@ class basic_point : public basic_geometry<basic_point<T>>
     geometry_type geom_type_() const noexcept
     {
         return geometry_type::POINT;
-    }
-
-    /// @private
-    std::string tagged_text_() const noexcept
-    {
-        return "Point";
-    }
-
-    /// @private
-    dimension_type dim_() const noexcept
-    {
-        return dimension_type::XY;
-    }
-
-    /// @private
-    int32_t ndim_() const noexcept
-    {
-        return 2;
     }
 
     /// @private
@@ -237,18 +229,6 @@ class basic_point : public basic_geometry<basic_point<T>>
     bounds_t bounds_() const
     {
         return {x, y, x, y};
-    }
-
-    /// @private
-    bool has_z_() const noexcept
-    {
-        return false;
-    }
-
-    /// @private
-    bool has_m_() const noexcept
-    {
-        return false;
     }
 
     // json
@@ -326,25 +306,26 @@ class basic_point : public basic_geometry<basic_point<T>>
 
 // xyz
 
-/*!
- * @brief DOCUMENT ME!
- * @tparam T
- * @ingroup geometry
- *
- * @since 0.0.1
- */
 template <class T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 class basic_point_z : public basic_geometry<basic_point_z<T>>
 {
   public:
-    /// DOCUMENT ME!
-    using point_type = basic_point_z;
-    /// DOCUMENT ME!
-    using coord_type = T;
-    /// DOCUMENT ME!
-    using coord_iterator = typename std::vector<coord_type>::iterator;
-    /// DOCUMENT ME!
+    using value_type             = T;
+    using reference              = T&;
+    using const_reference        = const T&;
+    using iterator               = T*;
+    using const_iterator         = const T*;
+    using difference_type        = std::ptrdiff_t;
+    using size_type              = size_t;
+    using reverse_iterator       = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
+    using point_type           = basic_point_z;
+    using coord_type           = value_type;
+    using coord_iterator       = typename std::vector<coord_type>::iterator;
     using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
+
+    static const size_type N = 3;
 
     union
     {
@@ -362,32 +343,18 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
             T height;
         };
 
-        T coords[3];
+        T coords[N];
     };
 
-    /*!
-     * @brief DOCUMENT ME!
-     */
     basic_point_z()
         : x(0), y(0), z(0) {}
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param x
-     * @param y
-     * @param z
-     */
     basic_point_z(T x, T y, T z)
         : x(x), y(y), z(z) {}
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param begin
-     * @param end
-     */
     explicit basic_point_z(coord_iterator begin, coord_iterator end)
     {
-        assert(std::distance(begin, end) == 3);
+        assert(std::distance(begin, end) == N);
         size_t i = 0;
         for (auto it = begin; it != end; ++it)
         {
@@ -395,14 +362,9 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
         }
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param begin
-     * @param end
-     */
     explicit basic_point_z(coord_const_iterator begin, coord_const_iterator end)
     {
-        assert(std::distance(begin, end) == 3);
+        assert(std::distance(begin, end) == N);
         size_t i = 0;
         for (auto it = begin; it != end; ++it)
         {
@@ -410,48 +372,78 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
         }
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @return
-     */
     std::size_t size() const noexcept
     {
-        return static_cast<std::size_t>(ndim_());
+        return this->ndim();
     }
 
     // operators
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param pos
-     * @return
-     */
     T& operator[](size_t pos)
     {
-        assert(pos < 3);
+        assert(pos < N);
         return coords[pos];
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param lhs
-     * @param rhs
-     * @return
-     */
     friend bool operator==(const basic_point_z<T>& lhs, const basic_point_z<T>& rhs)
     {
         return lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z;
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param lhs
-     * @param rhs
-     * @return
-     */
     friend bool operator!=(const basic_point_z<T>& lhs, const basic_point_z<T>& rhs)
     {
         return not operator==(lhs, rhs);
+    }
+
+    size_type max_size() const
+    {
+        return N;
+    }
+
+    bool empty()
+    {
+        return begin() == end();
+    }
+
+    // iterators
+
+    iterator begin()
+    {
+        return coords;
+    }
+
+    iterator end()
+    {
+        return coords + N;
+    }
+
+    const_iterator begin() const
+    {
+        return coords;
+    }
+    const_iterator end() const
+    {
+        return coords + N;
+    }
+
+    reverse_iterator rbegin()
+    {
+        return coords + N - 1;
+    }
+
+    reverse_iterator rend()
+    {
+        return coords - 1;
+    }
+
+    const_reverse_iterator rbegin() const
+    {
+        return coords + N - 1;
+    }
+
+    const_reverse_iterator rend() const
+    {
+        return coords - 1;
     }
 
   private:
@@ -462,24 +454,6 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
     geometry_type geom_type_() const noexcept
     {
         return geometry_type::POINTZ;
-    }
-
-    /// @private
-    std::string tagged_text_() const noexcept
-    {
-        return "Point";
-    }
-
-    /// @private
-    dimension_type dim_() const noexcept
-    {
-        return dimension_type::XYZ;
-    }
-
-    /// @private
-    int32_t ndim_() const noexcept
-    {
-        return 3;
     }
 
     /// @private
@@ -498,18 +472,6 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
     bounds_t bounds_() const
     {
         return {x, y, x, y};
-    }
-
-    /// @private
-    bool has_z_() const noexcept
-    {
-        return true;
-    }
-
-    /// @private
-    bool has_m_() const noexcept
-    {
-        return false;
     }
 
     // json
@@ -587,23 +549,26 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
 
 // xym
 
-/*!
- * @brief DOCUMENT ME!
- * @tparam T
- * @ingroup geometry
- */
 template <class T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 class basic_point_m : public basic_geometry<basic_point_m<T>>
 {
   public:
-    /// DOCUMENT ME!
-    using point_type = basic_point_m;
-    /// DOCUMENT ME!
-    using coord_type = T;
-    /// DOCUMENT ME!
-    using coord_iterator = typename std::vector<coord_type>::iterator;
-    /// DOCUMENT ME!
+    using value_type             = T;
+    using reference              = T&;
+    using const_reference        = const T&;
+    using iterator               = T*;
+    using const_iterator         = const T*;
+    using difference_type        = std::ptrdiff_t;
+    using size_type              = size_t;
+    using reverse_iterator       = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
+    using point_type           = basic_point_m;
+    using coord_type           = value_type;
+    using coord_iterator       = typename std::vector<coord_type>::iterator;
     using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
+
+    static const size_type N = 3;
 
     union
     {
@@ -621,32 +586,18 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
             T measure;
         };
 
-        T coords[3];
+        T coords[N];
     };
 
-    /*!
-     * @brief DOCUMENT ME!
-     */
     basic_point_m()
         : x(0), y(0), m(0) {}
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param x
-     * @param y
-     * @param m
-     */
     basic_point_m(T x, T y, T m)
         : x(x), y(y), m(m) {}
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param begin
-     * @param end
-     */
     explicit basic_point_m(coord_iterator begin, coord_iterator end)
     {
-        assert(std::distance(begin, end) == 3);
+        assert(std::distance(begin, end) == N);
         size_t i = 0;
         for (auto it = begin; it != end; ++it)
         {
@@ -654,14 +605,9 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
         }
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param begin
-     * @param end
-     */
     explicit basic_point_m(coord_const_iterator begin, coord_const_iterator end)
     {
-        assert(std::distance(begin, end) == 3);
+        assert(std::distance(begin, end) == N);
         size_t i = 0;
         for (auto it = begin; it != end; ++it)
         {
@@ -669,48 +615,78 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
         }
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @return
-     */
     std::size_t size() const noexcept
     {
-        return static_cast<std::size_t>(ndim_());
+        return this->ndim();
     }
 
     // operators
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param pos
-     * @return
-     */
     T& operator[](size_t pos)
     {
-        assert(pos < 3);
+        assert(pos < N);
         return coords[pos];
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param lhs
-     * @param rhs
-     * @return
-     */
     friend bool operator==(const basic_point_m<T>& lhs, const basic_point_m<T>& rhs)
     {
         return lhs.x == rhs.x and lhs.y == rhs.y and lhs.m == rhs.m;
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param lhs
-     * @param rhs
-     * @return
-     */
     friend bool operator!=(const basic_point_m<T>& lhs, const basic_point_m<T>& rhs)
     {
         return not operator==(lhs, rhs);
+    }
+
+    size_type max_size() const
+    {
+        return N;
+    }
+
+    bool empty()
+    {
+        return begin() == end();
+    }
+
+    // iterators
+
+    iterator begin()
+    {
+        return coords;
+    }
+
+    iterator end()
+    {
+        return coords + N;
+    }
+
+    const_iterator begin() const
+    {
+        return coords;
+    }
+    const_iterator end() const
+    {
+        return coords + N;
+    }
+
+    reverse_iterator rbegin()
+    {
+        return coords + N - 1;
+    }
+
+    reverse_iterator rend()
+    {
+        return coords - 1;
+    }
+
+    const_reverse_iterator rbegin() const
+    {
+        return coords + N - 1;
+    }
+
+    const_reverse_iterator rend() const
+    {
+        return coords - 1;
     }
 
   private:
@@ -721,24 +697,6 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
     geometry_type geom_type_() const noexcept
     {
         return geometry_type::POINTM;
-    }
-
-    /// @private
-    std::string tagged_text_() const noexcept
-    {
-        return "Point";
-    }
-
-    /// @private
-    dimension_type dim_() const noexcept
-    {
-        return dimension_type::XYM;
-    }
-
-    /// @private
-    int32_t ndim_() const noexcept
-    {
-        return 3;
     }
 
     /// @private
@@ -757,18 +715,6 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
     bounds_t bounds_() const
     {
         return {x, y, x, y};
-    }
-
-    /// @private
-    bool has_z_() const noexcept
-    {
-        return false;
-    }
-
-    /// @private
-    bool has_m_() const noexcept
-    {
-        return true;
     }
 
     // json
@@ -845,23 +791,26 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
 
 // xyzm
 
-/*!
- * @brief DOCUMENT ME!
- * @tparam T
- * @ingroup geometry
- */
 template <class T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 class basic_point_zm : public basic_geometry<basic_point_zm<T>>
 {
   public:
-    /// DOCUMENT ME!
-    using point_type = basic_point_zm;
-    /// DOCUMENT ME!
-    using coord_type = T;
-    /// DOCUMENT ME!
-    using coord_iterator = typename std::vector<coord_type>::iterator;
-    /// DOCUMENT ME!
+    using value_type             = T;
+    using reference              = T&;
+    using const_reference        = const T&;
+    using iterator               = T*;
+    using const_iterator         = const T*;
+    using difference_type        = std::ptrdiff_t;
+    using size_type              = size_t;
+    using reverse_iterator       = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
+    using point_type           = basic_point_zm;
+    using coord_type           = value_type;
+    using coord_iterator       = typename std::vector<coord_type>::iterator;
     using coord_const_iterator = typename std::vector<coord_type>::const_iterator;
+
+    static const size_type N = 4;
 
     union
     {
@@ -881,33 +830,18 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
             T measure;
         };
 
-        T coords[4];
+        T coords[N];
     };
 
-    /*!
-     * @brief DOCUMENT ME!
-     */
     basic_point_zm()
         : x(0), y(0), z(0), m(0) {}
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param x
-     * @param y
-     * @param z
-     * @param m
-     */
     basic_point_zm(T x, T y, T z, T m)
         : x(x), y(y), z(z), m(m) {}
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param begin
-     * @param end
-     */
     explicit basic_point_zm(coord_iterator begin, coord_iterator end)
     {
-        assert(std::distance(begin, end) == 4);
+        assert(std::distance(begin, end) == N);
         size_t i = 0;
         for (auto it = begin; it != end; ++it)
         {
@@ -915,14 +849,9 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
         }
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param begin
-     * @param end
-     */
     explicit basic_point_zm(coord_const_iterator begin, coord_const_iterator end)
     {
-        assert(std::distance(begin, end) == 4);
+        assert(std::distance(begin, end) == N);
         size_t i = 0;
         for (auto it = begin; it != end; ++it)
         {
@@ -930,48 +859,78 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
         }
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @return
-     */
     std::size_t size() const noexcept
     {
-        return static_cast<std::size_t>(ndim_());
+        return this->ndim();
     }
 
     // operators
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param pos
-     * @return
-     */
     T& operator[](size_t pos)
     {
-        assert(pos < 4);
+        assert(pos < N);
         return coords[pos];
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param lhs
-     * @param rhs
-     * @return
-     */
     friend bool operator==(const basic_point_zm<T>& lhs, const basic_point_zm<T>& rhs)
     {
         return lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z and lhs.m == rhs.m;
     }
 
-    /*!
-     * @brief DOCUMENT ME!
-     * @param lhs
-     * @param rhs
-     * @return
-     */
     friend bool operator!=(const basic_point_zm<T>& lhs, const basic_point_zm<T>& rhs)
     {
         return not operator==(lhs, rhs);
+    }
+
+    size_type max_size() const
+    {
+        return N;
+    }
+
+    bool empty()
+    {
+        return begin() == end();
+    }
+
+    // iterators
+
+    iterator begin()
+    {
+        return coords;
+    }
+
+    iterator end()
+    {
+        return coords + N;
+    }
+
+    const_iterator begin() const
+    {
+        return coords;
+    }
+    const_iterator end() const
+    {
+        return coords + N;
+    }
+
+    reverse_iterator rbegin()
+    {
+        return coords + N - 1;
+    }
+
+    reverse_iterator rend()
+    {
+        return coords - 1;
+    }
+
+    const_reverse_iterator rbegin() const
+    {
+        return coords + N - 1;
+    }
+
+    const_reverse_iterator rend() const
+    {
+        return coords - 1;
     }
 
   private:
@@ -982,24 +941,6 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
     geometry_type geom_type_() const noexcept
     {
         return geometry_type::POINTZM;
-    }
-
-    /// @private
-    std::string tagged_text_() const noexcept
-    {
-        return "Point";
-    }
-
-    /// @private
-    dimension_type dim_() const noexcept
-    {
-        return dimension_type::XYZM;
-    }
-
-    /// @private
-    int32_t ndim_() const noexcept
-    {
-        return 4;
     }
 
     /// @private
@@ -1018,18 +959,6 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
     bounds_t bounds_() const
     {
         return {x, y, x, y};
-    }
-
-    /// @private
-    bool has_z_() const noexcept
-    {
-        return true;
-    }
-
-    /// @private
-    bool has_m_() const noexcept
-    {
-        return true;
     }
 
     // json
