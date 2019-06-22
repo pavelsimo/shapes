@@ -270,16 +270,16 @@ TEST_CASE("MultiPolygon")
 
                 SECTION("xym - from wkt")
                 {
-                    auto mpg = MultiPolygonZ::from_wkt(R"(MULTIPOLYGON M (((40 40 1, 20 45 2, 45 30 3, 40 40 4)),((20 35 1, 10 30 2, 10 10 3, 30 5 4, 45 20 5, 20 35 6),(30 20 1, 20 15 2, 20 25 3, 30 20 4))))");
+                    auto mpg = MultiPolygonM::from_wkt(R"(MULTIPOLYGON M (((40 40 1, 20 45 2, 45 30 3, 40 40 4)),((20 35 1, 10 30 2, 10 10 3, 30 5 4, 45 20 5, 20 35 6),(30 20 1, 20 15 2, 20 25 3, 30 20 4))))");
                     CHECK(mpg.size() == 3);
                     CHECK(mpg.dim() == dimension_type::XYM);
                     CHECK(mpg.geom_type() == geometry_type::MULTIPOLYGONM);
                     CHECK(mpg[0][0][0].x == 40.0);
                     CHECK(mpg[0][0][0].y == 40.0);
-                    CHECK(mpg[0][0][0].z == 1.0);
+                    CHECK(mpg[0][0][0].m == 1.0);
                     CHECK(mpg[1][0][0].x == 20.0);
                     CHECK(mpg[1][0][0].y == 35.0);
-                    CHECK(mpg[1][0][0].z == 1.0);
+                    CHECK(mpg[1][0][0].m == 1.0);
                 }
 
                 SECTION("xyzm - from wkt")
