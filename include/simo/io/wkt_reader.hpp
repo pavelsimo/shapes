@@ -11,12 +11,8 @@ namespace simo
 namespace shapes
 {
 
-#ifdef SHAPES_VERBOSE
-static char WKT_TRACE_PREFIX[] = "[shapes] ";
-#endif
-
 /*!
- * @brief a Well-known text (WKT) markup language reader
+ * @brief a wkt reader
  * @ingroup wkt
  *
  * @since 0.0.1
@@ -25,7 +21,7 @@ class wkt_reader
 {
   public:
     /*!
-     * @brief creates a WKT reader
+     * @brief creates a wkt reader
      *
      * @since 0.0.1
      */
@@ -54,6 +50,7 @@ class wkt_reader
         wkt_result result{};
 
 #ifdef SHAPES_VERBOSE
+        static char WKT_TRACE_PREFIX[] = "[shapes] ";
         ParseTrace(stdout, WKT_TRACE_PREFIX);
 #endif
         while (true)
@@ -69,8 +66,7 @@ class wkt_reader
 
             if (token == WKT_PARSE_ERROR)
             {
-                /// @todo (pavel) add position to the error message
-                throw exceptions::parse_error("wkt lexer error");
+                throw exceptions::parse_error("lexer error at line " + std::to_string(lexer.get_position()));
             }
 
             if (token == WKT_NUM)
@@ -84,11 +80,15 @@ class wkt_reader
 
             if (result.parser_error)
             {
-                /// @todo (pavel) add position to the error message
-                throw exceptions::parse_error("wkt parser error");
+                throw exceptions::parse_error("parser error for token " + lexer.get_token());
             }
         }
+
         Parse(m_parser, 0, 0, &result);
+        if (result.parser_error)
+        {
+            throw exceptions::parse_error("parser error");
+        }
         return result;
     }
 

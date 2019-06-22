@@ -205,47 +205,43 @@ class basic_multipolygon
             ss << std::setprecision(precision);
         }
         ss << "{\"type\":\"Multipolygon\",\"coordinates\":[";
-
-        int polygon_index = 0;
-        for (const auto& pg : *this)
+        for (size_t polygon_index = 0; polygon_index < this->size(); ++polygon_index)
         {
+            const auto& pg = (*this)[polygon_index];
             if (polygon_index > 0)
             {
                 ss << ",";
             }
             ss << "[";
-            int ring_index = 0;
-            for (const auto& ring : pg)
+            for (size_t ring_index = 0; ring_index < pg.size(); ++ring_index)
             {
+                const auto& ring = pg[ring_index];
                 if (ring_index > 0)
                 {
                     ss << ",";
                 }
                 ss << "[";
-                size_t point_index = 0;
-                for (const auto& p : ring)
+                for (size_t point_index = 0; point_index < ring.size(); ++point_index)
                 {
+                    const auto& p = ring[point_index];
                     if (point_index > 0)
                     {
                         ss << ",";
                     }
                     ss << "[";
-                    for (size_t k = 0; k < p.ndim(); ++k)
+                    for (size_t coord_index = 0; coord_index < p.size(); ++coord_index)
                     {
-                        if (k > 0)
+                        if (coord_index > 0)
                         {
                             ss << ",";
                         }
-                        ss << p.coords[k];
+                        ss << p.coords[coord_index];
                     }
                     ss << "]";
-                    ++ring_index;
                 }
                 ss << "]";
-                ++ring_index;
             }
             ss << "]";
-            ++polygon_index;
         }
         ss << "]}";
         return ss.str();
@@ -263,8 +259,7 @@ class basic_multipolygon
         {
             throw exceptions::parse_error("invalid wkt string");
         }
-        return basic_multipolygon<T>(result.data.coords.begin(), result.data.coords.end(),
-                                     result.data.offsets.begin(), result.data.offsets.end());
+        return basic_multipolygon<T>(data.coords.begin(), data.coords.end(), data.offsets.begin(), data.offsets.end());
     }
 
     /// @private

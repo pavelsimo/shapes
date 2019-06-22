@@ -10,7 +10,7 @@ namespace shapes
 {
 
 /*!
- * @brief A Well-known text (WKT) markup language lexer
+ * @brief A wkt lexer
  * @ingroup wkt
  *
  * @since 0.0.1
@@ -171,6 +171,17 @@ class wkt_lexer
     std::string get_token() const
     {
         return std::string(reinterpret_cast<const char*>(start), static_cast<size_t>(cursor - start));
+    }
+
+    /*!
+     * @brief returns the current reading position
+     * @return the index position
+     *
+     * @since 0.0.1
+     */
+    size_t get_position()
+    {
+        return static_cast<size_t>(start - content.c_str());
     }
 
   private:

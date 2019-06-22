@@ -58,8 +58,8 @@ TEST_CASE("MultiPolygon")
 
             MultiPolygonZ mpg(polygons.begin(), polygons.end());
             CHECK(mpg.size() == 2);
-            CHECK(mpg.dim() == dimension_type::XY);
-            CHECK(mpg.geom_type() == geometry_type::MULTIPOLYGON);
+            CHECK(mpg.dim() == dimension_type::XYZ);
+            CHECK(mpg.geom_type() == geometry_type::MULTIPOLYGONZ);
 
             /// polygon 1 -> exterior -> point 1
             CHECK(mpg[0][0][0].x == 1.0);
@@ -86,8 +86,8 @@ TEST_CASE("MultiPolygon")
 
             MultiPolygonM mpg(polygons.begin(), polygons.end());
             CHECK(mpg.size() == 2);
-            CHECK(mpg.dim() == dimension_type::XY);
-            CHECK(mpg.geom_type() == geometry_type::MULTIPOLYGON);
+            CHECK(mpg.dim() == dimension_type::XYM);
+            CHECK(mpg.geom_type() == geometry_type::MULTIPOLYGONM);
 
             /// polygon 1 -> exterior -> point 1
             CHECK(mpg[0][0][0].x == 1.0);
@@ -114,8 +114,8 @@ TEST_CASE("MultiPolygon")
 
             MultiPolygonZM mpg(polygons.begin(), polygons.end());
             CHECK(mpg.size() == 2);
-            CHECK(mpg.dim() == dimension_type::XY);
-            CHECK(mpg.geom_type() == geometry_type::MULTIPOLYGON);
+            CHECK(mpg.dim() == dimension_type::XYZM);
+            CHECK(mpg.geom_type() == geometry_type::MULTIPOLYGONZM);
 
             /// polygon 1 -> exterior -> point 1
             CHECK(mpg[0][0][0].x == 1.0);
@@ -163,7 +163,7 @@ TEST_CASE("MultiPolygon")
                     {{11.0, 12.0, -1}, {13.0, 14.0, -1}, {16.0, 17.0, -1}}  // interior #1
                 }};
             CHECK(mpg.size() == 2);
-            CHECK(mpg.dim() == dimension_type::XY);
+            CHECK(mpg.dim() == dimension_type::XYZ);
             CHECK(mpg[0][0][0].x == 1.0);
             CHECK(mpg[0][0][0].y == 2.0);
             CHECK(mpg[0][0][0].z == -1.0);
@@ -186,7 +186,7 @@ TEST_CASE("MultiPolygon")
                     {{11.0, 12.0, -1}, {13.0, 14.0, -1}, {16.0, 17.0, -1}}  // interior #1
                 }};
             CHECK(mpg.size() == 2);
-            CHECK(mpg.dim() == dimension_type::XY);
+            CHECK(mpg.dim() == dimension_type::XYM);
             CHECK(mpg[0][0][0].x == 1.0);
             CHECK(mpg[0][0][0].y == 2.0);
             CHECK(mpg[0][0][0].m == -1.0);
@@ -209,7 +209,7 @@ TEST_CASE("MultiPolygon")
                     {{11.0, 12.0, -1, 5}, {13.0, 14.0, -1, 5}, {16.0, 17.0, -1, 5}}  // interior #1
                 }};
             CHECK(mpg.size() == 2);
-            CHECK(mpg.dim() == dimension_type::XY);
+            CHECK(mpg.dim() == dimension_type::XYZM);
             CHECK(mpg[0][0][0].x == 1.0);
             CHECK(mpg[0][0][0].y == 2.0);
             CHECK(mpg[0][0][0].z == -1.0);
@@ -227,7 +227,12 @@ TEST_CASE("MultiPolygon")
                 {
                     for (const auto& p : ring)
                     {
-                        std::cout << p.wkt() << std::endl;
+                        CHECK(p.geom_type() == geometry_type::POINTZM);
+                        for (const auto& coord: p)
+                        {
+                            std::cout << coord << " ";
+                        }
+                        std::cout << "\n";
                     }
                 }
             }
@@ -235,17 +240,76 @@ TEST_CASE("MultiPolygon")
 
         SECTION("from_... methods")
         {
+            SECTION("wkt")
+            {
+                SECTION("xy - from wkt")
+                {
+                    auto mpg = MultiPolygon::from_wkt(R"(MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),((20 35, 10 30, 10 10, 30 5, 45 20, 20 35),(30 20, 20 15, 20 25, 30 20))))");
+                    CHECK(mpg.size() == 3);
+                    CHECK(mpg.dim() == dimension_type::XY);
+                    CHECK(mpg.geom_type() == geometry_type::MULTIPOLYGON);
+                    CHECK(mpg[0][0][0].x == 40.0);
+                    CHECK(mpg[0][0][0].y == 40.0);
+                    CHECK(mpg[1][0][0].x == 20.0);
+                    CHECK(mpg[1][0][0].y == 35.0);
+                }
+
+                SECTION("xyz - from wkt")
+                {
+                    auto mpg = MultiPolygonZ::from_wkt(R"(MULTIPOLYGON Z (((40 40 1, 20 45 2, 45 30 3, 40 40 4)),((20 35 1, 10 30 2, 10 10 3, 30 5 4, 45 20 5, 20 35 6),(30 20 1, 20 15 2, 20 25 3, 30 20 4))))");
+                    CHECK(mpg.size() == 3);
+                    CHECK(mpg.dim() == dimension_type::XYZ);
+                    CHECK(mpg.geom_type() == geometry_type::MULTIPOLYGONZ);
+                    CHECK(mpg[0][0][0].x == 40.0);
+                    CHECK(mpg[0][0][0].y == 40.0);
+                    CHECK(mpg[0][0][0].z == 1.0);
+                    CHECK(mpg[1][0][0].x == 20.0);
+                    CHECK(mpg[1][0][0].y == 35.0);
+                    CHECK(mpg[1][0][0].z == 1.0);
+                }
+
+                SECTION("xym - from wkt")
+                {
+                    auto mpg = MultiPolygonZ::from_wkt(R"(MULTIPOLYGON M (((40 40 1, 20 45 2, 45 30 3, 40 40 4)),((20 35 1, 10 30 2, 10 10 3, 30 5 4, 45 20 5, 20 35 6),(30 20 1, 20 15 2, 20 25 3, 30 20 4))))");
+                    CHECK(mpg.size() == 3);
+                    CHECK(mpg.dim() == dimension_type::XYM);
+                    CHECK(mpg.geom_type() == geometry_type::MULTIPOLYGONM);
+                    CHECK(mpg[0][0][0].x == 40.0);
+                    CHECK(mpg[0][0][0].y == 40.0);
+                    CHECK(mpg[0][0][0].z == 1.0);
+                    CHECK(mpg[1][0][0].x == 20.0);
+                    CHECK(mpg[1][0][0].y == 35.0);
+                    CHECK(mpg[1][0][0].z == 1.0);
+                }
+
+                SECTION("xyzm - from wkt")
+                {
+                    auto mpg = MultiPolygonZM::from_wkt(R"(MULTIPOLYGON ZM (((40 40 1 -1, 20 45 2 -2, 45 30 3 -3, 40 40 4 -4)),((20 35 1 -1, 10 30 2 -2, 10 10 3 -3, 30 5 4 -4, 45 20 5 -5, 20 35 6 -6),(30 20 1 -1, 20 15 2 -2, 20 25 3 -3, 30 20 4 -4))))");
+                    CHECK(mpg.size() == 3);
+                    CHECK(mpg.dim() == dimension_type::XYZM);
+                    CHECK(mpg.geom_type() == geometry_type::MULTIPOLYGONZM);
+                    CHECK(mpg[0][0][0].x == 40.0);
+                    CHECK(mpg[0][0][0].y == 40.0);
+                    CHECK(mpg[0][0][0].z == 1.0);
+                    CHECK(mpg[0][0][0].m == -1.0);
+                    CHECK(mpg[1][0][0].x == 20.0);
+                    CHECK(mpg[1][0][0].y == 35.0);
+                    CHECK(mpg[1][0][0].z == 1.0);
+                    CHECK(mpg[1][0][0].m == -1.0);
+                }
+            }
+
             SECTION("json")
             {
                 SECTION("xy - from json")
                 {
-                    std::string json = R"({
-                                            "type": "MultiPolygon",
-                                                    "coordinates": [
-                                            [[10, 35], [20, 20], [10, 40]],
-                                            [[40, 40], [30, 30], [40, 20], [30, 5]]
-                                            ]
-                                        })";
+//                    std::string json = R"({
+//                                            "type": "MultiPolygon",
+//                                                    "coordinates": [
+//                                            [[10, 35], [20, 20], [10, 40]],
+//                                            [[40, 40], [30, 30], [40, 20], [30, 5]]
+//                                            ]
+//                                        })";
 //                    auto ml          = MultiPolygon::from_json(json);
 //                    CHECK(ml.size() == 2);
 //                    CHECK(ml.dim() == dimension_type::XY);

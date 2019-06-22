@@ -45,6 +45,29 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
     basic_polygon(std::initializer_list<T> init)
         : base_type(init.begin(), init.end()) {}
 
+
+    explicit basic_polygon(coord_const_iterator first, coord_const_iterator last)
+    {
+        /// @todo deal with repetition
+        size_t n = this->ndim();
+        this->reserve(std::distance(first, last));
+        for (auto it = first; it != last; it += n)
+        {
+            this->emplace_back(it, it + n);
+        }
+    }
+
+    explicit basic_polygon(coord_iterator first, coord_iterator last)
+    {
+        /// @todo deal with repetition
+        size_t n = this->ndim();
+        this->reserve(std::distance(first, last));
+        for (auto it = first; it != last; it += n)
+        {
+            this->emplace_back(it, it + n);
+        }
+    }
+
     template <typename CoordIterator, typename OffsetIterator>
     basic_polygon(CoordIterator coord_first, CoordIterator coord_last, OffsetIterator offset_first, OffsetIterator offset_last)
     {
@@ -155,18 +178,6 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
             res.extend(r_bound);
         }
         return res;
-    }
-
-    /// @private
-    bool has_z_() const noexcept
-    {
-        return is_basic_linestring_z<T>::value or is_basic_linestring_zm<T>::value;
-    }
-
-    /// @private
-    bool has_m_() const noexcept
-    {
-        return is_basic_linestring_m<T>::value or is_basic_linestring_zm<T>::value;
     }
 
     /// @private
@@ -286,11 +297,11 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
             ss << std::setprecision(precision);
         }
         ss << "POLYGON";
-        if (has_z_())
+        if (this->has_z())
         {
             ss << "Z";
         }
-        if (has_m_())
+        if (this->has_m())
         {
             ss << "M";
         }
@@ -332,7 +343,7 @@ struct is_basic_polygon : std::false_type
 {};
 
 template <typename T>
-struct is_basic_polygon<basic_polygon<basic_point<T>>> : std::true_type
+struct is_basic_polygon<basic_polygon<basic_linestring<basic_point<T>>>> : std::true_type
 {};
 
 template <typename>
@@ -340,7 +351,7 @@ struct is_basic_polygon_z : std::false_type
 {};
 
 template <typename T>
-struct is_basic_polygon_z<basic_polygon<basic_point_z<T>>> : std::true_type
+struct is_basic_polygon_z<basic_polygon<basic_linestring<basic_point_z<T>>>> : std::true_type
 {};
 
 template <typename>
@@ -348,7 +359,7 @@ struct is_basic_polygon_m : std::false_type
 {};
 
 template <typename T>
-struct is_basic_polygon_m<basic_polygon<basic_point_m<T>>> : std::true_type
+struct is_basic_polygon_m<basic_polygon<basic_linestring<basic_point_m<T>>>> : std::true_type
 {};
 
 template <typename>
@@ -356,7 +367,7 @@ struct is_basic_polygon_zm : std::false_type
 {};
 
 template <typename T>
-struct is_basic_polygon_zm<basic_polygon<basic_point_zm<T>>> : std::true_type
+struct is_basic_polygon_zm<basic_polygon<basic_linestring<basic_point_zm<T>>>> : std::true_type
 {};
 
 }  // namespace shapes
