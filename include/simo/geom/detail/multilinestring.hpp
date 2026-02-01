@@ -154,33 +154,33 @@ class basic_multilinestring
     {
         try
         {
-            auto j         = nlohmann::json::parse(json);
-            auto geom_type = j.at("type").get<std::string>();
+            auto j         = io::geojson_parser::parse(json);
+            auto geom_type = j.at("type").as_string();
             if (geom_type != "MultiLineString")
             {
                 throw exceptions::parse_error("invalid geometry type: " + std::string(geom_type));
             }
-            const auto& linestrings = j.at("coordinates");
+            const auto& linestrings = j.at("coordinates").as_array();
             std::vector<T> res;
             res.reserve(linestrings.size());
-            std::vector<point_type> points;
             for (const auto& linestring : linestrings)
             {
-                if (not linestring.empty())
+                if (linestring.is_array() && !linestring.empty())
                 {
-                    const auto& coords = linestring.get<std::vector<std::vector<double>>>();
-                    points.reserve(coords.size());
-                    std::for_each(std::begin(coords), std::end(coords),
-                                  [&points](const std::vector<double>& coord) {
-                                      points.emplace_back(coord.begin(), coord.end());
-                                  });
+                    const auto& coords_array = linestring.as_array();
+                    std::vector<point_type> points;
+                    points.reserve(coords_array.size());
+                    for (const auto& coord : coords_array)
+                    {
+                        auto point_coords = coord.as_double_array();
+                        points.emplace_back(point_coords.begin(), point_coords.end());
+                    }
                     res.emplace_back(points.begin(), points.end());
                 }
-                points.clear();
             }
             return basic_multilinestring<T>(res.begin(), res.end());
         }
-        catch (const nlohmann::json::exception& e)
+        catch (const io::geojson_parse_error& e)
         {
             throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }

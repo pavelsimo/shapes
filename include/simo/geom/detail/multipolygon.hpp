@@ -160,33 +160,45 @@ class basic_multipolygon
     {
         try
         {
-            auto j         = nlohmann::json::parse(json);
-            auto geom_type = j.at("type").get<std::string>();
-            if (geom_type != "Multipolygon")
+            auto j         = io::geojson_parser::parse(json);
+            auto geom_type = j.at("type").as_string();
+            if (geom_type != "MultiPolygon")
             {
                 throw exceptions::parse_error("invalid geometry type: " + std::string(geom_type));
             }
-            const auto& polygons = j.at("coordinates");
+            const auto& polygons = j.at("coordinates").as_array();
             std::vector<T> res;
             res.reserve(polygons.size());
-            std::vector<point_type> points;
             for (const auto& polygon : polygons)
             {
-                if (not polygon.empty())
+                if (polygon.is_array() && !polygon.empty())
                 {
-                    const auto& coords = polygon.get<std::vector<std::vector<double>>>();
-                    points.reserve(coords.size());
-                    std::for_each(std::begin(coords), std::end(coords),
-                                  [&points](const std::vector<double>& coord) {
-                                      points.emplace_back(coord.begin(), coord.end());
-                                  });
-                    res.emplace_back(points.begin(), points.end());
+                    // Each polygon is an array of rings (exterior + holes)
+                    const auto& rings = polygon.as_array();
+                    using ring_type = typename T::value_type;
+                    std::vector<ring_type> polygon_rings;
+                    polygon_rings.reserve(rings.size());
+                    for (const auto& ring : rings)
+                    {
+                        if (ring.is_array() && !ring.empty())
+                        {
+                            const auto& coords_array = ring.as_array();
+                            std::vector<point_type> points;
+                            points.reserve(coords_array.size());
+                            for (const auto& coord : coords_array)
+                            {
+                                auto point_coords = coord.as_double_array();
+                                points.emplace_back(point_coords.begin(), point_coords.end());
+                            }
+                            polygon_rings.emplace_back(points.begin(), points.end());
+                        }
+                    }
+                    res.emplace_back(polygon_rings.begin(), polygon_rings.end());
                 }
-                points.clear();
             }
             return basic_multipolygon<T>(res.begin(), res.end());
         }
-        catch (const nlohmann::json::exception& e)
+        catch (const io::geojson_parse_error& e)
         {
             throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }

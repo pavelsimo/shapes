@@ -9,6 +9,12 @@
 #include <simo/geom/detail/utils.hpp>
 #include <simo/exceptions.hpp>
 
+// Include algorithm headers for the convenience methods in basic_geometry
+#include <simo/algorithm/measurements.hpp>
+#include <simo/algorithm/predicates.hpp>
+#include <simo/algorithm/operations.hpp>
+#include <simo/algorithm/transformations.hpp>
+
 namespace simo
 {
 namespace shapes
@@ -32,7 +38,7 @@ class basic_geometry
      *
      * @since 0.0.1
      */
-    geometry_type geom_type() const noexcept
+    constexpr geometry_type geom_type() const noexcept
     {
         return static_cast<const T*>(this)->geom_type_();
     }
@@ -114,7 +120,7 @@ class basic_geometry
      *
      * @since 0.0.1
      */
-    dimension_type dim() const noexcept
+    constexpr dimension_type dim() const noexcept
     {
         int value = static_cast<int>(geom_type());
         if (value >= 1000 and value < 2000)
@@ -139,7 +145,7 @@ class basic_geometry
      *
      * @since 0.0.1
      */
-    size_t ndim() const noexcept
+    constexpr size_t ndim() const noexcept
     {
         switch (dim())
         {
@@ -211,7 +217,7 @@ class basic_geometry
      *
      * @since 0.0.1
      */
-    bool has_z() const noexcept
+    constexpr bool has_z() const noexcept
     {
         int value = static_cast<int>(geom_type());
         return (value >= 1000 and value < 2000) or value >= 3000;
@@ -223,7 +229,7 @@ class basic_geometry
      *
      * @since 0.0.1
      */
-    bool has_m() const noexcept
+    constexpr bool has_m() const noexcept
     {
         int value = static_cast<int>(geom_type());
         return value >= 2000;
@@ -283,6 +289,116 @@ class basic_geometry
     std::string wkt(std::int32_t precision = -1) const
     {
         return static_cast<const T*>(this)->wkt_(precision);
+    }
+
+    // Geometric algorithms (forward to algorithm namespace functions)
+    // Note: These are provided as convenience methods. Full implementations
+    // are in the simo::shapes::algorithm namespace.
+
+    /*!
+     * @brief Get length of the geometry (for LineString types)
+     * @return Length
+     * @since 0.1.0
+     */
+    template <typename U = T>
+    auto length() const -> typename U::coord_type
+    {
+        return algorithm::length(*static_cast<const T*>(this));
+    }
+
+    /*!
+     * @brief Get area of the geometry (for Polygon types)
+     * @return Area
+     * @since 0.1.0
+     */
+    template <typename U = T>
+    auto area() const -> typename U::coord_type
+    {
+        return algorithm::area(*static_cast<const T*>(this));
+    }
+
+    /*!
+     * @brief Test if this geometry contains another
+     * @param other The other geometry
+     * @return true if this contains other
+     * @since 0.1.0
+     */
+    template <typename Other>
+    bool contains(const Other& other) const
+    {
+        return algorithm::contains(*static_cast<const T*>(this), other);
+    }
+
+    /*!
+     * @brief Test if this geometry intersects another
+     * @param other The other geometry
+     * @return true if geometries intersect
+     * @since 0.1.0
+     */
+    template <typename Other>
+    bool intersects(const Other& other) const
+    {
+        return algorithm::intersects(*static_cast<const T*>(this), other);
+    }
+
+    /*!
+     * @brief Test if this geometry is within another
+     * @param other The other geometry
+     * @return true if this is within other
+     * @since 0.1.0
+     */
+    template <typename Other>
+    bool within(const Other& other) const
+    {
+        return algorithm::within(*static_cast<const T*>(this), other);
+    }
+
+    /*!
+     * @brief Translate geometry by offset
+     * @param xoff X offset
+     * @param yoff Y offset
+     * @return Translated geometry
+     * @since 0.1.0
+     */
+    template <typename U = T>
+    T translate(typename U::coord_type xoff, typename U::coord_type yoff) const
+    {
+        return algorithm::translate(*static_cast<const T*>(this), xoff, yoff);
+    }
+
+    /*!
+     * @brief Rotate geometry around origin
+     * @param angle Rotation angle in radians
+     * @return Rotated geometry
+     * @since 0.1.0
+     */
+    T rotate(double angle) const
+    {
+        return algorithm::rotate(*static_cast<const T*>(this), angle);
+    }
+
+    /*!
+     * @brief Scale geometry by factors
+     * @param xfact X scale factor
+     * @param yfact Y scale factor
+     * @return Scaled geometry
+     * @since 0.1.0
+     */
+    template <typename U = T>
+    T scale(typename U::coord_type xfact, typename U::coord_type yfact) const
+    {
+        return algorithm::scale(*static_cast<const T*>(this), xfact, yfact);
+    }
+
+    /*!
+     * @brief Simplify geometry using Douglas-Peucker algorithm
+     * @param tolerance Tolerance for simplification
+     * @return Simplified geometry
+     * @since 0.1.0
+     */
+    T simplify(double tolerance) const
+    {
+        return algorithm::simplify(*static_cast<const T*>(this), tolerance);
     }
 };
 

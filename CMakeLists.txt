@@ -1,12 +1,9 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.15)
 
-project(shapes LANGUAGES CXX)
-set(SHAPES_VERSION_MAJOR 0)
-set(SHAPES_VERSION_MINOR 0)
-set(SHAPES_VERSION_PATCH 1)
+project(shapes VERSION 0.0.1 LANGUAGES CXX)
 set(SHAPES_LIBRARY ${PROJECT_NAME})
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -18,12 +15,16 @@ option(SHAPES_SINGLE_HEADER "whether to use a single header or multiple headers"
 option(SHAPES_ENABLE_COVERAGE "whether to enable coverage" OFF)
 option(SHAPES_TESTING "build tests" ON)
 option(SHAPES_VERBOSE "whether to enable verbose output" OFF)
+option(SHAPES_WERROR "treat compiler warnings as errors" OFF)
 
 #
 # warning settings
 #
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|AppleClang|GNU")
-  add_compile_options(-Wall -Wextra -Wunreachable-code -Wpedantic)
+  add_compile_options(-Wall -Wextra -Wunreachable-code -Wpedantic -Wshadow -Wconversion)
+  if(SHAPES_WERROR)
+    add_compile_options(-Werror)
+  endif()
 endif()
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -33,6 +34,9 @@ endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
   add_compile_options(/W4 /EHsc /wd4065 /wd4061 /wd4577)
   add_definitions(-DNOGDI)
+  if(SHAPES_WERROR)
+    add_compile_options(/WX)
+  endif()
 endif()
 
 #
@@ -50,7 +54,7 @@ endif()
 
 add_library(${SHAPES_LIBRARY} INTERFACE)
 add_library(${SHAPES_LIBRARY}::${SHAPES_LIBRARY} ALIAS ${SHAPES_LIBRARY})
-target_compile_features(${SHAPES_LIBRARY} INTERFACE)
+target_compile_features(${SHAPES_LIBRARY} INTERFACE cxx_std_14)
 if(SHAPES_SINGLE_HEADER)
   add_dependencies(${SHAPES_LIBRARY} amalgamate)
 endif()

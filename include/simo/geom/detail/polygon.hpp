@@ -193,33 +193,33 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
     {
         try
         {
-            auto j         = nlohmann::json::parse(json);
-            auto geom_type = j.at("type").get<std::string>();
+            auto j         = io::geojson_parser::parse(json);
+            auto geom_type = j.at("type").as_string();
             if (geom_type != "Polygon")
             {
                 throw exceptions::parse_error("invalid geometry type: " + std::string(geom_type));
             }
-            const auto& rings = j.at("coordinates");
+            const auto& rings = j.at("coordinates").as_array();
             std::vector<T> res;
             res.reserve(rings.size());
-            std::vector<point_type> points;
             for (const auto& ring : rings)
             {
-                if (not ring.empty())
+                if (ring.is_array() && !ring.empty())
                 {
-                    const auto& coords = ring.get<std::vector<std::vector<double>>>();
-                    points.reserve(coords.size());
-                    std::for_each(std::begin(coords), std::end(coords),
-                                  [&points](const std::vector<double>& coord) {
-                                      points.emplace_back(coord.begin(), coord.end());
-                                  });
+                    const auto& coords_array = ring.as_array();
+                    std::vector<point_type> points;
+                    points.reserve(coords_array.size());
+                    for (const auto& coord : coords_array)
+                    {
+                        auto point_coords = coord.as_double_array();
+                        points.emplace_back(point_coords.begin(), point_coords.end());
+                    }
                     res.emplace_back(points.begin(), points.end());
                 }
-                points.clear();
             }
             return basic_polygon<T>(res.begin(), res.end());
         }
-        catch (const nlohmann::json::exception& e)
+        catch (const io::geojson_parse_error& e)
         {
             throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }

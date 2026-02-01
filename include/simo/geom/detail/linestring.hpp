@@ -191,7 +191,7 @@ class basic_linestring : public std::vector<T, AllocatorType>, public basic_geom
         {
             return true;
         }
-        return *this[0] == *this[this->size() - 1];
+        return (*this)[0] == (*this)[this->size() - 1];
     }
 
     /// @private
@@ -234,21 +234,23 @@ class basic_linestring : public std::vector<T, AllocatorType>, public basic_geom
     {
         try
         {
-            auto j         = nlohmann::json::parse(json);
-            auto geom_type = j.at("type").get<std::string>();
+            auto j         = io::geojson_parser::parse(json);
+            auto geom_type = j.at("type").as_string();
             if (geom_type != "LineString")
             {
                 throw exceptions::parse_error("invalid geometry type: " + std::string(geom_type));
             }
-            const auto& coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
+            const auto& coords_array = j.at("coordinates").as_array();
             std::vector<point_type> res;
-            res.reserve(coords.size());
-            std::for_each(std::begin(coords), std::end(coords), [&](const std::vector<double>& coord) {
-                res.emplace_back(coord.begin(), coord.end());
-            });
+            res.reserve(coords_array.size());
+            for (const auto& coord : coords_array)
+            {
+                auto point_coords = coord.as_double_array();
+                res.emplace_back(point_coords.begin(), point_coords.end());
+            }
             return basic_linestring<T>(res.begin(), res.end());
         }
-        catch (const nlohmann::json::exception& e)
+        catch (const io::geojson_parse_error& e)
         {
             throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }

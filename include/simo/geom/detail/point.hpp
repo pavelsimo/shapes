@@ -11,7 +11,7 @@
 #include <sstream>
 #include <iomanip>
 #include <regex>
-#include <json/json.hpp>
+#include <simo/io/geojson_parser.hpp>
 #include <simo/geom/detail/geometry.hpp>
 #include <simo/exceptions.hpp>
 #include <simo/io/wkt_reader.hpp>
@@ -38,7 +38,7 @@ namespace shapes
 #    pragma warning(disable : 4201)
 #endif
 
-template <class T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+template <class T, typename = std::enable_if_t<std::is_arithmetic<T>::value, T>>
 class basic_point : public basic_geometry<basic_point<T>>
 {
   public:
@@ -183,24 +183,34 @@ class basic_point : public basic_geometry<basic_point<T>>
         return coords + N;
     }
 
-    reverse_iterator rbegin()
+    reverse_iterator rbegin() noexcept
     {
-        return coords + N - 1;
+        return std::reverse_iterator<iterator>(end());
     }
 
-    reverse_iterator rend()
+    reverse_iterator rend() noexcept
     {
-        return coords - 1;
+        return std::reverse_iterator<iterator>(begin());
     }
 
-    const_reverse_iterator rbegin() const
+    const_reverse_iterator rbegin() const noexcept
     {
-        return coords + N - 1;
+        return std::reverse_iterator<const_iterator>(end());
     }
 
-    const_reverse_iterator rend() const
+    const_reverse_iterator rend() const noexcept
     {
-        return coords - 1;
+        return std::reverse_iterator<const_iterator>(begin());
+    }
+
+    const_reverse_iterator crbegin() const noexcept
+    {
+        return std::reverse_iterator<const_iterator>(end());
+    }
+
+    const_reverse_iterator crend() const noexcept
+    {
+        return std::reverse_iterator<const_iterator>(begin());
     }
 
   private:
@@ -236,23 +246,22 @@ class basic_point : public basic_geometry<basic_point<T>>
     /// @private
     static basic_point<T> from_json_(const std::string& json)
     {
-        /// @todo (pavel) deal with repeated code
         try
         {
-            auto j         = nlohmann::json::parse(json);
-            auto geom_type = j.at("type").get<std::string>();
+            auto j         = io::geojson_parser::parse(json);
+            auto geom_type = j.at("type").as_string();
             if (geom_type != "Point")
             {
                 throw exceptions::parse_error("invalid geometry type");
             }
-            auto coords = j.at("coordinates").get<std::vector<double>>();
-            return {coords.at(0), coords.at(1)};
+            auto coords = j.at("coordinates").as_double_array();
+            return {static_cast<T>(coords.at(0)), static_cast<T>(coords.at(1))};
         }
         catch (const std::out_of_range& e)
         {
             throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
-        catch (const nlohmann::json::exception& e)
+        catch (const io::geojson_parse_error& e)
         {
             throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
@@ -306,7 +315,7 @@ class basic_point : public basic_geometry<basic_point<T>>
 
 // xyz
 
-template <class T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+template <class T, typename = std::enable_if_t<std::is_arithmetic<T>::value, T>>
 class basic_point_z : public basic_geometry<basic_point_z<T>>
 {
   public:
@@ -426,24 +435,34 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
         return coords + N;
     }
 
-    reverse_iterator rbegin()
+    reverse_iterator rbegin() noexcept
     {
-        return coords + N - 1;
+        return std::reverse_iterator<iterator>(end());
     }
 
-    reverse_iterator rend()
+    reverse_iterator rend() noexcept
     {
-        return coords - 1;
+        return std::reverse_iterator<iterator>(begin());
     }
 
-    const_reverse_iterator rbegin() const
+    const_reverse_iterator rbegin() const noexcept
     {
-        return coords + N - 1;
+        return std::reverse_iterator<const_iterator>(end());
     }
 
-    const_reverse_iterator rend() const
+    const_reverse_iterator rend() const noexcept
     {
-        return coords - 1;
+        return std::reverse_iterator<const_iterator>(begin());
+    }
+
+    const_reverse_iterator crbegin() const noexcept
+    {
+        return std::reverse_iterator<const_iterator>(end());
+    }
+
+    const_reverse_iterator crend() const noexcept
+    {
+        return std::reverse_iterator<const_iterator>(begin());
     }
 
   private:
@@ -482,20 +501,21 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
         /// @todo (pavel) deal with repeated code
         try
         {
-            auto j         = nlohmann::json::parse(json);
-            auto geom_type = j.at("type").get<std::string>();
+            auto j         = io::geojson_parser::parse(json);
+            auto geom_type = j.at("type").as_string();
+
             if (geom_type != "Point")
             {
                 throw exceptions::parse_error("invalid geometry type");
             }
-            auto coords = j.at("coordinates").get<std::vector<double>>();
-            return {coords.at(0), coords.at(1), coords.at(2)};
+            auto coords = j.at("coordinates").as_double_array();
+            return {static_cast<T>(coords.at(0)), static_cast<T>(coords.at(1)), static_cast<T>(coords.at(2))};
         }
         catch (const std::out_of_range& e)
         {
             throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
-        catch (const nlohmann::json::exception& e)
+        catch (const io::geojson_parse_error& e)
         {
             throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
@@ -549,7 +569,7 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
 
 // xym
 
-template <class T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+template <class T, typename = std::enable_if_t<std::is_arithmetic<T>::value, T>>
 class basic_point_m : public basic_geometry<basic_point_m<T>>
 {
   public:
@@ -669,24 +689,34 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
         return coords + N;
     }
 
-    reverse_iterator rbegin()
+    reverse_iterator rbegin() noexcept
     {
-        return coords + N - 1;
+        return std::reverse_iterator<iterator>(end());
     }
 
-    reverse_iterator rend()
+    reverse_iterator rend() noexcept
     {
-        return coords - 1;
+        return std::reverse_iterator<iterator>(begin());
     }
 
-    const_reverse_iterator rbegin() const
+    const_reverse_iterator rbegin() const noexcept
     {
-        return coords + N - 1;
+        return std::reverse_iterator<const_iterator>(end());
     }
 
-    const_reverse_iterator rend() const
+    const_reverse_iterator rend() const noexcept
     {
-        return coords - 1;
+        return std::reverse_iterator<const_iterator>(begin());
+    }
+
+    const_reverse_iterator crbegin() const noexcept
+    {
+        return std::reverse_iterator<const_iterator>(end());
+    }
+
+    const_reverse_iterator crend() const noexcept
+    {
+        return std::reverse_iterator<const_iterator>(begin());
     }
 
   private:
@@ -725,20 +755,21 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
         /// @todo (pavel) deal with repeated code
         try
         {
-            auto j         = nlohmann::json::parse(json);
-            auto geom_type = j.at("type").get<std::string>();
+            auto j         = io::geojson_parser::parse(json);
+            auto geom_type = j.at("type").as_string();
+
             if (geom_type != "Point")
             {
                 throw exceptions::parse_error("invalid geometry type");
             }
-            auto coords = j.at("coordinates").get<std::vector<double>>();
-            return {coords.at(0), coords.at(1), coords.at(2)};
+            auto coords = j.at("coordinates").as_double_array();
+            return {static_cast<T>(coords.at(0)), static_cast<T>(coords.at(1)), static_cast<T>(coords.at(2))};
         }
         catch (const std::out_of_range& e)
         {
             throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
-        catch (const nlohmann::json::exception& e)
+        catch (const io::geojson_parse_error& e)
         {
             throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
@@ -791,7 +822,7 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
 
 // xyzm
 
-template <class T, typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+template <class T, typename = std::enable_if_t<std::is_arithmetic<T>::value, T>>
 class basic_point_zm : public basic_geometry<basic_point_zm<T>>
 {
   public:
@@ -913,24 +944,34 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
         return coords + N;
     }
 
-    reverse_iterator rbegin()
+    reverse_iterator rbegin() noexcept
     {
-        return coords + N - 1;
+        return std::reverse_iterator<iterator>(end());
     }
 
-    reverse_iterator rend()
+    reverse_iterator rend() noexcept
     {
-        return coords - 1;
+        return std::reverse_iterator<iterator>(begin());
     }
 
-    const_reverse_iterator rbegin() const
+    const_reverse_iterator rbegin() const noexcept
     {
-        return coords + N - 1;
+        return std::reverse_iterator<const_iterator>(end());
     }
 
-    const_reverse_iterator rend() const
+    const_reverse_iterator rend() const noexcept
     {
-        return coords - 1;
+        return std::reverse_iterator<const_iterator>(begin());
+    }
+
+    const_reverse_iterator crbegin() const noexcept
+    {
+        return std::reverse_iterator<const_iterator>(end());
+    }
+
+    const_reverse_iterator crend() const noexcept
+    {
+        return std::reverse_iterator<const_iterator>(begin());
     }
 
   private:
@@ -969,20 +1010,21 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
         /// @todo (pavel) deal with repeated code
         try
         {
-            auto j         = nlohmann::json::parse(json);
-            auto geom_type = j.at("type").get<std::string>();
+            auto j         = io::geojson_parser::parse(json);
+            auto geom_type = j.at("type").as_string();
+
             if (geom_type != "Point")
             {
                 throw exceptions::parse_error("invalid geometry type");
             }
-            auto coords = j.at("coordinates").get<std::vector<double>>();
-            return {coords.at(0), coords.at(1), coords.at(2), coords.at(3)};
+            auto coords = j.at("coordinates").as_double_array();
+            return {static_cast<T>(coords.at(0)), static_cast<T>(coords.at(1)), static_cast<T>(coords.at(2)), static_cast<T>(coords.at(3))};
         }
         catch (const std::out_of_range& e)
         {
             throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
-        catch (const nlohmann::json::exception& e)
+        catch (const io::geojson_parse_error& e)
         {
             throw exceptions::parse_error("invalid json: " + std::string(e.what()));
         }
