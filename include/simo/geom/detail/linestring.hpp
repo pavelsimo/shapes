@@ -135,7 +135,7 @@ class basic_linestring : public std::vector<T, AllocatorType>, public basic_geom
         static_assert(is_basic_point<T>::value, "must contain XY points");
 
         auto coords = polyline::decode(polyline, precision);
-        return {coords.begin(), coords.end()};
+        return basic_linestring<T>(coords.begin(), coords.end());
     }
 
     /*!

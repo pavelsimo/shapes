@@ -348,9 +348,9 @@ TEST_CASE("MultiPoint")
         {
             SECTION("xy - from polyline")
             {
-                //                std::string polyline = "_p~iF~ps|U_ulLnnqC_mqNvxq`@";
-                //                auto mp              = MultiPoint::from_polyline(polyline);
-                //                CHECK(mp.wkt() == "MULTIPOINT((-120.2 38.5),(-120.95 40.7),(-126.453 43.252))");
+                std::string polyline = "_p~iF~ps|U_ulLnnqC_mqNvxq`@";
+                auto mp              = MultiPoint::from_polyline(polyline);
+                CHECK(mp.wkt() == "MULTIPOINT((-120.2 38.5),(-120.95 40.7),(-126.453 43.252))");
             }
         }
     }

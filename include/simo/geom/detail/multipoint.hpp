@@ -120,7 +120,7 @@ class basic_multipoint : public std::vector<T, AllocatorType>, public basic_geom
         static_assert(is_basic_point<T>::value, "must contain XY points");
 
         auto coords = polyline::decode(polyline, precision);
-        return {coords.begin(), coords.end()};
+        return basic_multipoint<T>(coords.begin(), coords.end());
     }
 
     std::string polyline(std::int32_t precision = 5) const
