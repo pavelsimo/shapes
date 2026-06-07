@@ -4,6 +4,11 @@
 
 using namespace simo::shapes;
 
+namespace
+{
+constexpr double pi = 3.14159265358979323846;
+}
+
 TEST_CASE("LinearRing - Construction")
 {
     SECTION("empty linearring")
@@ -328,7 +333,7 @@ TEST_CASE("LinearRing - Algorithms")
     SECTION("rotate ring")
     {
         LinearRing ring{{0, 0}, {1, 0}, {1, 1}, {0, 1}, {0, 0}};
-        auto rotated = ring.rotate(M_PI / 2);  // 90 degrees
+        auto rotated = ring.rotate(pi / 2);  // 90 degrees
 
         REQUIRE(rotated.size() == ring.size());
         REQUIRE(rotated.is_closed());
