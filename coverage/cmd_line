@@ -1,0 +1,1 @@
+genhtml build/coverage.info --output-directory build/coverage
