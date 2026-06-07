@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-06-07 13:04:20</td>
+            <td class="headerValue">2026-06-07 14:58:24</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
@@ -98,27 +98,27 @@
 <span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">         408 :     basic_linestring(std::initializer_list&lt;T&gt; init)</span></span>
 <span id="L37"><span class="lineNum">      37</span> <span class="tlaGNC">        1224 :         : base_type(init.begin(), init.end()) {}</span></span>
 <span id="L38"><span class="lineNum">      38</span>              : </span>
-<span id="L39"><span class="lineNum">      39</span> <span class="tlaGNC">          56 :     explicit basic_linestring(coord_const_iterator first, coord_const_iterator last)</span></span>
-<span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">          56 :     {</span></span>
+<span id="L39"><span class="lineNum">      39</span> <span class="tlaGNC">          15 :     explicit basic_linestring(coord_const_iterator first, coord_const_iterator last)</span></span>
+<span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">          15 :     {</span></span>
 <span id="L41"><span class="lineNum">      41</span>              :         /// @todo deal with repetition</span>
-<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC">          56 :         size_t n = this-&gt;ndim();</span></span>
-<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">         112 :         this-&gt;reserve(std::distance(first, last));</span></span>
-<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">         112 :         for (auto it = first; it != last; it += n)</span></span>
+<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC">          15 :         size_t n = this-&gt;ndim();</span></span>
+<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">          30 :         this-&gt;reserve(std::distance(first, last));</span></span>
+<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">          84 :         for (auto it = first; it != last; it += n)</span></span>
 <span id="L45"><span class="lineNum">      45</span>              :         {</span>
-<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">          56 :             this-&gt;emplace_back(it, it + n);</span></span>
+<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">          69 :             this-&gt;emplace_back(it, it + n);</span></span>
 <span id="L47"><span class="lineNum">      47</span>              :         }</span>
-<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">          56 :     }</span></span>
+<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">          15 :     }</span></span>
 <span id="L49"><span class="lineNum">      49</span>              : </span>
-<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">          42 :     explicit basic_linestring(coord_iterator first, coord_iterator last)</span></span>
-<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">          42 :     {</span></span>
+<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">          47 :     explicit basic_linestring(coord_iterator first, coord_iterator last)</span></span>
+<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">          47 :     {</span></span>
 <span id="L52"><span class="lineNum">      52</span>              :         /// @todo deal with repetition</span>
-<span id="L53"><span class="lineNum">      53</span> <span class="tlaGNC">          42 :         size_t n = this-&gt;ndim();</span></span>
-<span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">          84 :         this-&gt;reserve(std::distance(first, last));</span></span>
-<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">         180 :         for (auto it = first; it != last; it += n)</span></span>
+<span id="L53"><span class="lineNum">      53</span> <span class="tlaGNC">          47 :         size_t n = this-&gt;ndim();</span></span>
+<span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">          94 :         this-&gt;reserve(std::distance(first, last));</span></span>
+<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">         204 :         for (auto it = first; it != last; it += n)</span></span>
 <span id="L56"><span class="lineNum">      56</span>              :         {</span>
-<span id="L57"><span class="lineNum">      57</span> <span class="tlaGNC">         138 :             this-&gt;emplace_back(it, it + n);</span></span>
+<span id="L57"><span class="lineNum">      57</span> <span class="tlaGNC">         157 :             this-&gt;emplace_back(it, it + n);</span></span>
 <span id="L58"><span class="lineNum">      58</span>              :         }</span>
-<span id="L59"><span class="lineNum">      59</span> <span class="tlaGNC">          42 :     }</span></span>
+<span id="L59"><span class="lineNum">      59</span> <span class="tlaGNC">          47 :     }</span></span>
 <span id="L60"><span class="lineNum">      60</span>              : </span>
 <span id="L61"><span class="lineNum">      61</span> <span class="tlaGNC">          36 :     basic_linestring(point_iterator first, point_iterator last)</span></span>
 <span id="L62"><span class="lineNum">      62</span> <span class="tlaGNC">          72 :         : base_type(first, last)</span></span>
@@ -229,21 +229,21 @@
 <span id="L167"><span class="lineNum">     167</span>              :     friend class basic_geometry&lt;basic_linestring&lt;T&gt;&gt;;</span>
 <span id="L168"><span class="lineNum">     168</span>              : </span>
 <span id="L169"><span class="lineNum">     169</span>              :     /// @private</span>
-<span id="L170"><span class="lineNum">     170</span> <span class="tlaGNC tlaBgGNC">         163 :     geometry_type geom_type_() const noexcept</span></span>
+<span id="L170"><span class="lineNum">     170</span> <span class="tlaGNC tlaBgGNC">         129 :     geometry_type geom_type_() const noexcept</span></span>
 <span id="L171"><span class="lineNum">     171</span>              :     {</span>
 <span id="L172"><span class="lineNum">     172</span>              :         if (is_basic_point_z&lt;T&gt;::value)</span>
 <span id="L173"><span class="lineNum">     173</span>              :         {</span>
-<span id="L174"><span class="lineNum">     174</span> <span class="tlaGNC">          39 :             return geometry_type::LINESTRINGZ;</span></span>
+<span id="L174"><span class="lineNum">     174</span> <span class="tlaGNC">          28 :             return geometry_type::LINESTRINGZ;</span></span>
 <span id="L175"><span class="lineNum">     175</span>              :         }</span>
 <span id="L176"><span class="lineNum">     176</span>              :         if (is_basic_point_m&lt;T&gt;::value)</span>
 <span id="L177"><span class="lineNum">     177</span>              :         {</span>
-<span id="L178"><span class="lineNum">     178</span> <span class="tlaGNC">          37 :             return geometry_type::LINESTRINGM;</span></span>
+<span id="L178"><span class="lineNum">     178</span> <span class="tlaGNC">          26 :             return geometry_type::LINESTRINGM;</span></span>
 <span id="L179"><span class="lineNum">     179</span>              :         }</span>
 <span id="L180"><span class="lineNum">     180</span>              :         if (is_basic_point_zm&lt;T&gt;::value)</span>
 <span id="L181"><span class="lineNum">     181</span>              :         {</span>
-<span id="L182"><span class="lineNum">     182</span> <span class="tlaGNC">          37 :             return geometry_type::LINESTRINGZM;</span></span>
+<span id="L182"><span class="lineNum">     182</span> <span class="tlaGNC">          26 :             return geometry_type::LINESTRINGZM;</span></span>
 <span id="L183"><span class="lineNum">     183</span>              :         }</span>
-<span id="L184"><span class="lineNum">     184</span> <span class="tlaGNC">          50 :         return geometry_type::LINESTRING;</span></span>
+<span id="L184"><span class="lineNum">     184</span> <span class="tlaGNC">          49 :         return geometry_type::LINESTRING;</span></span>
 <span id="L185"><span class="lineNum">     185</span>              :     }</span>
 <span id="L186"><span class="lineNum">     186</span>              : </span>
 <span id="L187"><span class="lineNum">     187</span>              :     /// @private</span>
@@ -357,56 +357,56 @@
 <span id="L295"><span class="lineNum">     295</span>              :     // wkt</span>
 <span id="L296"><span class="lineNum">     296</span>              : </span>
 <span id="L297"><span class="lineNum">     297</span>              :     /// @private</span>
-<span id="L298"><span class="lineNum">     298</span> <span class="tlaGNC">          22 :     static basic_linestring&lt;T&gt; from_wkt_(const std::string&amp; wkt)</span></span>
+<span id="L298"><span class="lineNum">     298</span> <span class="tlaGNC">          23 :     static basic_linestring&lt;T&gt; from_wkt_(const std::string&amp; wkt)</span></span>
 <span id="L299"><span class="lineNum">     299</span>              :     {</span>
-<span id="L300"><span class="lineNum">     300</span> <span class="tlaGNC">          22 :         wkt_reader reader{};</span></span>
-<span id="L301"><span class="lineNum">     301</span> <span class="tlaGNC">          22 :         auto result      = reader.read(wkt);</span></span>
-<span id="L302"><span class="lineNum">     302</span> <span class="tlaGNC">          17 :         const auto&amp; data = result.data;</span></span>
-<span id="L303"><span class="lineNum">     303</span> <span class="tlaGNC">          17 :         if (not utils::is_linestring(data.geom_type))</span></span>
+<span id="L300"><span class="lineNum">     300</span> <span class="tlaGNC">          23 :         wkt_reader reader{};</span></span>
+<span id="L301"><span class="lineNum">     301</span> <span class="tlaGNC">          23 :         auto result      = reader.read(wkt);</span></span>
+<span id="L302"><span class="lineNum">     302</span> <span class="tlaGNC">          18 :         const auto&amp; data = result.data;</span></span>
+<span id="L303"><span class="lineNum">     303</span> <span class="tlaGNC">          18 :         if (not utils::is_linestring(data.geom_type))</span></span>
 <span id="L304"><span class="lineNum">     304</span>              :         {</span>
 <span id="L305"><span class="lineNum">     305</span> <span class="tlaUNC tlaBgUNC">           0 :             throw exceptions::parse_error(&quot;invalid wkt string&quot;);</span></span>
 <span id="L306"><span class="lineNum">     306</span>              :         }</span>
-<span id="L307"><span class="lineNum">     307</span> <span class="tlaGNC tlaBgGNC">          34 :         return basic_linestring&lt;T&gt;(result.data.coords.begin(), result.data.coords.end());</span></span>
-<span id="L308"><span class="lineNum">     308</span> <span class="tlaGNC">          22 :     }</span></span>
+<span id="L307"><span class="lineNum">     307</span> <span class="tlaGNC tlaBgGNC">          36 :         return basic_linestring&lt;T&gt;(result.data.coords.begin(), result.data.coords.end());</span></span>
+<span id="L308"><span class="lineNum">     308</span> <span class="tlaGNC">          23 :     }</span></span>
 <span id="L309"><span class="lineNum">     309</span>              : </span>
 <span id="L310"><span class="lineNum">     310</span>              :     /// @private</span>
-<span id="L311"><span class="lineNum">     311</span> <span class="tlaGNC">          11 :     std::string wkt_(std::int32_t precision = -1) const</span></span>
+<span id="L311"><span class="lineNum">     311</span> <span class="tlaGNC">          12 :     std::string wkt_(std::int32_t precision = -1) const</span></span>
 <span id="L312"><span class="lineNum">     312</span>              :     {</span>
-<span id="L313"><span class="lineNum">     313</span> <span class="tlaGNC">          11 :         std::stringstream ss;</span></span>
-<span id="L314"><span class="lineNum">     314</span> <span class="tlaGNC">          11 :         if (precision &gt;= 0)</span></span>
+<span id="L313"><span class="lineNum">     313</span> <span class="tlaGNC">          12 :         std::stringstream ss;</span></span>
+<span id="L314"><span class="lineNum">     314</span> <span class="tlaGNC">          12 :         if (precision &gt;= 0)</span></span>
 <span id="L315"><span class="lineNum">     315</span>              :         {</span>
 <span id="L316"><span class="lineNum">     316</span> <span class="tlaUNC tlaBgUNC">           0 :             ss &lt;&lt; std::setprecision(precision);</span></span>
 <span id="L317"><span class="lineNum">     317</span>              :         }</span>
-<span id="L318"><span class="lineNum">     318</span> <span class="tlaGNC tlaBgGNC">          11 :         ss &lt;&lt; &quot;LINESTRING&quot;;</span></span>
-<span id="L319"><span class="lineNum">     319</span> <span class="tlaGNC">          11 :         if (this-&gt;has_z())</span></span>
+<span id="L318"><span class="lineNum">     318</span> <span class="tlaGNC tlaBgGNC">          12 :         ss &lt;&lt; &quot;LINESTRING&quot;;</span></span>
+<span id="L319"><span class="lineNum">     319</span> <span class="tlaGNC">          12 :         if (this-&gt;has_z())</span></span>
 <span id="L320"><span class="lineNum">     320</span>              :         {</span>
 <span id="L321"><span class="lineNum">     321</span> <span class="tlaGNC">           4 :             ss &lt;&lt; &quot;Z&quot;;</span></span>
 <span id="L322"><span class="lineNum">     322</span>              :         }</span>
-<span id="L323"><span class="lineNum">     323</span> <span class="tlaGNC">          11 :         if (this-&gt;has_m())</span></span>
+<span id="L323"><span class="lineNum">     323</span> <span class="tlaGNC">          12 :         if (this-&gt;has_m())</span></span>
 <span id="L324"><span class="lineNum">     324</span>              :         {</span>
 <span id="L325"><span class="lineNum">     325</span> <span class="tlaGNC">           4 :             ss &lt;&lt; &quot;M&quot;;</span></span>
 <span id="L326"><span class="lineNum">     326</span>              :         }</span>
-<span id="L327"><span class="lineNum">     327</span> <span class="tlaGNC">          11 :         ss &lt;&lt; &quot;(&quot;;</span></span>
-<span id="L328"><span class="lineNum">     328</span> <span class="tlaGNC">          11 :         int i = 0;</span></span>
-<span id="L329"><span class="lineNum">     329</span> <span class="tlaGNC">          48 :         for (const auto&amp; p : *this)</span></span>
+<span id="L327"><span class="lineNum">     327</span> <span class="tlaGNC">          12 :         ss &lt;&lt; &quot;(&quot;;</span></span>
+<span id="L328"><span class="lineNum">     328</span> <span class="tlaGNC">          12 :         int i = 0;</span></span>
+<span id="L329"><span class="lineNum">     329</span> <span class="tlaGNC">          51 :         for (const auto&amp; p : *this)</span></span>
 <span id="L330"><span class="lineNum">     330</span>              :         {</span>
-<span id="L331"><span class="lineNum">     331</span> <span class="tlaGNC">          37 :             if (i &gt; 0)</span></span>
+<span id="L331"><span class="lineNum">     331</span> <span class="tlaGNC">          39 :             if (i &gt; 0)</span></span>
 <span id="L332"><span class="lineNum">     332</span>              :             {</span>
-<span id="L333"><span class="lineNum">     333</span> <span class="tlaGNC">          26 :                 ss &lt;&lt; &quot;,&quot;;</span></span>
+<span id="L333"><span class="lineNum">     333</span> <span class="tlaGNC">          27 :                 ss &lt;&lt; &quot;,&quot;;</span></span>
 <span id="L334"><span class="lineNum">     334</span>              :             }</span>
-<span id="L335"><span class="lineNum">     335</span> <span class="tlaGNC">         135 :             for (size_t j = 0; j &lt; p.size(); ++j)</span></span>
+<span id="L335"><span class="lineNum">     335</span> <span class="tlaGNC">         141 :             for (size_t j = 0; j &lt; p.size(); ++j)</span></span>
 <span id="L336"><span class="lineNum">     336</span>              :             {</span>
-<span id="L337"><span class="lineNum">     337</span> <span class="tlaGNC">          98 :                 if (j &gt; 0)</span></span>
+<span id="L337"><span class="lineNum">     337</span> <span class="tlaGNC">         102 :                 if (j &gt; 0)</span></span>
 <span id="L338"><span class="lineNum">     338</span>              :                 {</span>
-<span id="L339"><span class="lineNum">     339</span> <span class="tlaGNC">          61 :                     ss &lt;&lt; &quot; &quot;;</span></span>
+<span id="L339"><span class="lineNum">     339</span> <span class="tlaGNC">          63 :                     ss &lt;&lt; &quot; &quot;;</span></span>
 <span id="L340"><span class="lineNum">     340</span>              :                 }</span>
-<span id="L341"><span class="lineNum">     341</span> <span class="tlaGNC">          98 :                 ss &lt;&lt; p.coords[j];</span></span>
+<span id="L341"><span class="lineNum">     341</span> <span class="tlaGNC">         102 :                 ss &lt;&lt; p.coords[j];</span></span>
 <span id="L342"><span class="lineNum">     342</span>              :             }</span>
-<span id="L343"><span class="lineNum">     343</span> <span class="tlaGNC">          37 :             ++i;</span></span>
+<span id="L343"><span class="lineNum">     343</span> <span class="tlaGNC">          39 :             ++i;</span></span>
 <span id="L344"><span class="lineNum">     344</span>              :         }</span>
-<span id="L345"><span class="lineNum">     345</span> <span class="tlaGNC">          11 :         ss &lt;&lt; &quot;)&quot;;</span></span>
-<span id="L346"><span class="lineNum">     346</span> <span class="tlaGNC">          22 :         return ss.str();</span></span>
-<span id="L347"><span class="lineNum">     347</span> <span class="tlaGNC">          11 :     }</span></span>
+<span id="L345"><span class="lineNum">     345</span> <span class="tlaGNC">          12 :         ss &lt;&lt; &quot;)&quot;;</span></span>
+<span id="L346"><span class="lineNum">     346</span> <span class="tlaGNC">          24 :         return ss.str();</span></span>
+<span id="L347"><span class="lineNum">     347</span> <span class="tlaGNC">          12 :     }</span></span>
 <span id="L348"><span class="lineNum">     348</span>              : };</span>
 <span id="L349"><span class="lineNum">     349</span>              : </span>
 <span id="L350"><span class="lineNum">     350</span>              : template &lt;typename&gt;</span>

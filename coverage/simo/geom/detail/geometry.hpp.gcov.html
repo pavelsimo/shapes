@@ -31,18 +31,18 @@
             <td class="headerValue">coverage.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntryMed">75.7&nbsp;%</td>
-            <td class="headerCovTableEntry">115</td>
-            <td class="headerCovTableEntry">87</td>
+            <td class="headerCovTableEntryMed">76.1&nbsp;%</td>
+            <td class="headerCovTableEntry">117</td>
+            <td class="headerCovTableEntry">89</td>
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-06-07 13:04:20</td>
+            <td class="headerValue">2026-06-07 14:58:24</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntryHi">96.7&nbsp;%</td>
-            <td class="headerCovTableEntry">239</td>
-            <td class="headerCovTableEntry">231</td>
+            <td class="headerCovTableEntryHi">92.1&nbsp;%</td>
+            <td class="headerCovTableEntry">267</td>
+            <td class="headerCovTableEntry">246</td>
           </tr>
                   <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
                 </table>
@@ -100,9 +100,9 @@
 <span id="L38"><span class="lineNum">      38</span>              :      *</span>
 <span id="L39"><span class="lineNum">      39</span>              :      * @since 0.0.1</span>
 <span id="L40"><span class="lineNum">      40</span>              :      */</span>
-<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC tlaBgGNC">        2165 :     constexpr geometry_type geom_type() const noexcept</span></span>
+<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC tlaBgGNC">        2226 :     constexpr geometry_type geom_type() const noexcept</span></span>
 <span id="L42"><span class="lineNum">      42</span>              :     {</span>
-<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">        2165 :         return static_cast&lt;const T*&gt;(this)-&gt;geom_type_();</span></span>
+<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">        2226 :         return static_cast&lt;const T*&gt;(this)-&gt;geom_type_();</span></span>
 <span id="L44"><span class="lineNum">      44</span>              :     }</span>
 <span id="L45"><span class="lineNum">      45</span>              : </span>
 <span id="L46"><span class="lineNum">      46</span>              :     /*!</span>
@@ -111,18 +111,18 @@
 <span id="L49"><span class="lineNum">      49</span>              :      *</span>
 <span id="L50"><span class="lineNum">      50</span>              :      * @since 0.0.1</span>
 <span id="L51"><span class="lineNum">      51</span>              :      */</span>
-<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC">          36 :     std::string tagged_text() const noexcept</span></span>
+<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC">          39 :     std::string tagged_text() const noexcept</span></span>
 <span id="L53"><span class="lineNum">      53</span>              :     {</span>
-<span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">          36 :         switch (geom_type())</span></span>
+<span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">          39 :         switch (geom_type())</span></span>
 <span id="L55"><span class="lineNum">      55</span>              :         {</span>
 <span id="L56"><span class="lineNum">      56</span> <span class="tlaGNC">           5 :             case geometry_type::POINT:</span></span>
 <span id="L57"><span class="lineNum">      57</span> <span class="tlaGNC">          10 :                 return &quot;Point&quot;;</span></span>
-<span id="L58"><span class="lineNum">      58</span> <span class="tlaGNC">           4 :             case geometry_type::POINTZ:</span></span>
-<span id="L59"><span class="lineNum">      59</span> <span class="tlaGNC">           8 :                 return &quot;Point Z&quot;;</span></span>
-<span id="L60"><span class="lineNum">      60</span> <span class="tlaGNC">           2 :             case geometry_type::POINTM:</span></span>
-<span id="L61"><span class="lineNum">      61</span> <span class="tlaGNC">           4 :                 return &quot;Point M&quot;;</span></span>
-<span id="L62"><span class="lineNum">      62</span> <span class="tlaGNC">           4 :             case geometry_type::POINTZM:</span></span>
-<span id="L63"><span class="lineNum">      63</span> <span class="tlaGNC">           8 :                 return &quot;Point ZM&quot;;</span></span>
+<span id="L58"><span class="lineNum">      58</span> <span class="tlaGNC">           5 :             case geometry_type::POINTZ:</span></span>
+<span id="L59"><span class="lineNum">      59</span> <span class="tlaGNC">          10 :                 return &quot;Point Z&quot;;</span></span>
+<span id="L60"><span class="lineNum">      60</span> <span class="tlaGNC">           3 :             case geometry_type::POINTM:</span></span>
+<span id="L61"><span class="lineNum">      61</span> <span class="tlaGNC">           6 :                 return &quot;Point M&quot;;</span></span>
+<span id="L62"><span class="lineNum">      62</span> <span class="tlaGNC">           5 :             case geometry_type::POINTZM:</span></span>
+<span id="L63"><span class="lineNum">      63</span> <span class="tlaGNC">          10 :                 return &quot;Point ZM&quot;;</span></span>
 <span id="L64"><span class="lineNum">      64</span> <span class="tlaGNC">           3 :             case geometry_type::MULTIPOINT:</span></span>
 <span id="L65"><span class="lineNum">      65</span> <span class="tlaGNC">           6 :                 return &quot;MultiPoint&quot;;</span></span>
 <span id="L66"><span class="lineNum">      66</span> <span class="tlaGNC">           2 :             case geometry_type::MULTIPOINTZ:</span></span>
@@ -182,22 +182,22 @@
 <span id="L120"><span class="lineNum">     120</span>              :      *</span>
 <span id="L121"><span class="lineNum">     121</span>              :      * @since 0.0.1</span>
 <span id="L122"><span class="lineNum">     122</span>              :      */</span>
-<span id="L123"><span class="lineNum">     123</span> <span class="tlaGNC tlaBgGNC">        1890 :     constexpr dimension_type dim() const noexcept</span></span>
+<span id="L123"><span class="lineNum">     123</span> <span class="tlaGNC tlaBgGNC">        1925 :     constexpr dimension_type dim() const noexcept</span></span>
 <span id="L124"><span class="lineNum">     124</span>              :     {</span>
-<span id="L125"><span class="lineNum">     125</span> <span class="tlaGNC">        1890 :         int value = static_cast&lt;int&gt;(geom_type());</span></span>
-<span id="L126"><span class="lineNum">     126</span> <span class="tlaGNC">        1890 :         if (value &gt;= 1000 and value &lt; 2000)</span></span>
+<span id="L125"><span class="lineNum">     125</span> <span class="tlaGNC">        1925 :         int value = static_cast&lt;int&gt;(geom_type());</span></span>
+<span id="L126"><span class="lineNum">     126</span> <span class="tlaGNC">        1925 :         if (value &gt;= 1000 and value &lt; 2000)</span></span>
 <span id="L127"><span class="lineNum">     127</span>              :         {</span>
-<span id="L128"><span class="lineNum">     128</span> <span class="tlaGNC">         402 :             return dimension_type::XYZ;</span></span>
+<span id="L128"><span class="lineNum">     128</span> <span class="tlaGNC">         401 :             return dimension_type::XYZ;</span></span>
 <span id="L129"><span class="lineNum">     129</span>              :         }</span>
-<span id="L130"><span class="lineNum">     130</span> <span class="tlaGNC">        1488 :         if (value &gt;= 2000 and value &lt; 3000)</span></span>
+<span id="L130"><span class="lineNum">     130</span> <span class="tlaGNC">        1524 :         if (value &gt;= 2000 and value &lt; 3000)</span></span>
 <span id="L131"><span class="lineNum">     131</span>              :         {</span>
-<span id="L132"><span class="lineNum">     132</span> <span class="tlaGNC">         393 :             return dimension_type::XYM;</span></span>
+<span id="L132"><span class="lineNum">     132</span> <span class="tlaGNC">         391 :             return dimension_type::XYM;</span></span>
 <span id="L133"><span class="lineNum">     133</span>              :         }</span>
-<span id="L134"><span class="lineNum">     134</span> <span class="tlaGNC">        1095 :         if (value &gt;= 3000)</span></span>
+<span id="L134"><span class="lineNum">     134</span> <span class="tlaGNC">        1133 :         if (value &gt;= 3000)</span></span>
 <span id="L135"><span class="lineNum">     135</span>              :         {</span>
-<span id="L136"><span class="lineNum">     136</span> <span class="tlaGNC">         545 :             return dimension_type::XYZM;</span></span>
+<span id="L136"><span class="lineNum">     136</span> <span class="tlaGNC">         550 :             return dimension_type::XYZM;</span></span>
 <span id="L137"><span class="lineNum">     137</span>              :         }</span>
-<span id="L138"><span class="lineNum">     138</span> <span class="tlaGNC">         550 :         return dimension_type::XY;</span></span>
+<span id="L138"><span class="lineNum">     138</span> <span class="tlaGNC">         583 :         return dimension_type::XY;</span></span>
 <span id="L139"><span class="lineNum">     139</span>              :     }</span>
 <span id="L140"><span class="lineNum">     140</span>              : </span>
 <span id="L141"><span class="lineNum">     141</span>              :     /*!</span>
@@ -207,17 +207,17 @@
 <span id="L145"><span class="lineNum">     145</span>              :      *</span>
 <span id="L146"><span class="lineNum">     146</span>              :      * @since 0.0.1</span>
 <span id="L147"><span class="lineNum">     147</span>              :      */</span>
-<span id="L148"><span class="lineNum">     148</span> <span class="tlaGNC">        1795 :     constexpr size_t ndim() const noexcept</span></span>
+<span id="L148"><span class="lineNum">     148</span> <span class="tlaGNC">        1827 :     constexpr size_t ndim() const noexcept</span></span>
 <span id="L149"><span class="lineNum">     149</span>              :     {</span>
-<span id="L150"><span class="lineNum">     150</span> <span class="tlaGNC">        1795 :         switch (dim())</span></span>
+<span id="L150"><span class="lineNum">     150</span> <span class="tlaGNC">        1827 :         switch (dim())</span></span>
 <span id="L151"><span class="lineNum">     151</span>              :         {</span>
-<span id="L152"><span class="lineNum">     152</span> <span class="tlaGNC">         521 :             case dimension_type::XYZM:</span></span>
-<span id="L153"><span class="lineNum">     153</span> <span class="tlaGNC">         521 :                 return 4;</span></span>
-<span id="L154"><span class="lineNum">     154</span> <span class="tlaGNC">         753 :             case dimension_type::XYZ:</span></span>
+<span id="L152"><span class="lineNum">     152</span> <span class="tlaGNC">         525 :             case dimension_type::XYZM:</span></span>
+<span id="L153"><span class="lineNum">     153</span> <span class="tlaGNC">         525 :                 return 4;</span></span>
+<span id="L154"><span class="lineNum">     154</span> <span class="tlaGNC">         748 :             case dimension_type::XYZ:</span></span>
 <span id="L155"><span class="lineNum">     155</span>              :             case dimension_type::XYM:</span>
-<span id="L156"><span class="lineNum">     156</span> <span class="tlaGNC">         753 :                 return 3;</span></span>
-<span id="L157"><span class="lineNum">     157</span> <span class="tlaGNC">         521 :             default:</span></span>
-<span id="L158"><span class="lineNum">     158</span> <span class="tlaGNC">         521 :                 return 2;</span></span>
+<span id="L156"><span class="lineNum">     156</span> <span class="tlaGNC">         748 :                 return 3;</span></span>
+<span id="L157"><span class="lineNum">     157</span> <span class="tlaGNC">         554 :             default:</span></span>
+<span id="L158"><span class="lineNum">     158</span> <span class="tlaGNC">         554 :                 return 2;</span></span>
 <span id="L159"><span class="lineNum">     159</span>              :         }</span>
 <span id="L160"><span class="lineNum">     160</span>              :     }</span>
 <span id="L161"><span class="lineNum">     161</span>              : </span>
@@ -227,9 +227,9 @@
 <span id="L165"><span class="lineNum">     165</span>              :      *</span>
 <span id="L166"><span class="lineNum">     166</span>              :      * @since 0.0.1</span>
 <span id="L167"><span class="lineNum">     167</span>              :      */</span>
-<span id="L168"><span class="lineNum">     168</span>              :     void throw_for_invalid() const</span>
+<span id="L168"><span class="lineNum">     168</span> <span class="tlaGNC">          29 :     void throw_for_invalid() const</span></span>
 <span id="L169"><span class="lineNum">     169</span>              :     {</span>
-<span id="L170"><span class="lineNum">     170</span>              :         return static_cast&lt;const T*&gt;(this)-&gt;throw_for_invalid_();</span>
+<span id="L170"><span class="lineNum">     170</span> <span class="tlaGNC">          29 :         return static_cast&lt;const T*&gt;(this)-&gt;throw_for_invalid_();</span></span>
 <span id="L171"><span class="lineNum">     171</span>              :     }</span>
 <span id="L172"><span class="lineNum">     172</span>              : </span>
 <span id="L173"><span class="lineNum">     173</span>              :     /*!</span>
@@ -279,10 +279,10 @@
 <span id="L217"><span class="lineNum">     217</span>              :      *</span>
 <span id="L218"><span class="lineNum">     218</span>              :      * @since 0.0.1</span>
 <span id="L219"><span class="lineNum">     219</span>              :      */</span>
-<span id="L220"><span class="lineNum">     220</span> <span class="tlaGNC">          39 :     constexpr bool has_z() const noexcept</span></span>
+<span id="L220"><span class="lineNum">     220</span> <span class="tlaGNC">          43 :     constexpr bool has_z() const noexcept</span></span>
 <span id="L221"><span class="lineNum">     221</span>              :     {</span>
-<span id="L222"><span class="lineNum">     222</span> <span class="tlaGNC">          39 :         int value = static_cast&lt;int&gt;(geom_type());</span></span>
-<span id="L223"><span class="lineNum">     223</span> <span class="tlaGNC">          39 :         return (value &gt;= 1000 and value &lt; 2000) or value &gt;= 3000;</span></span>
+<span id="L222"><span class="lineNum">     222</span> <span class="tlaGNC">          43 :         int value = static_cast&lt;int&gt;(geom_type());</span></span>
+<span id="L223"><span class="lineNum">     223</span> <span class="tlaGNC">          43 :         return (value &gt;= 1000 and value &lt; 2000) or value &gt;= 3000;</span></span>
 <span id="L224"><span class="lineNum">     224</span>              :     }</span>
 <span id="L225"><span class="lineNum">     225</span>              : </span>
 <span id="L226"><span class="lineNum">     226</span>              :     /*!</span>
@@ -291,10 +291,10 @@
 <span id="L229"><span class="lineNum">     229</span>              :      *</span>
 <span id="L230"><span class="lineNum">     230</span>              :      * @since 0.0.1</span>
 <span id="L231"><span class="lineNum">     231</span>              :      */</span>
-<span id="L232"><span class="lineNum">     232</span> <span class="tlaGNC">          39 :     constexpr bool has_m() const noexcept</span></span>
+<span id="L232"><span class="lineNum">     232</span> <span class="tlaGNC">          43 :     constexpr bool has_m() const noexcept</span></span>
 <span id="L233"><span class="lineNum">     233</span>              :     {</span>
-<span id="L234"><span class="lineNum">     234</span> <span class="tlaGNC">          39 :         int value = static_cast&lt;int&gt;(geom_type());</span></span>
-<span id="L235"><span class="lineNum">     235</span> <span class="tlaGNC">          39 :         return value &gt;= 2000;</span></span>
+<span id="L234"><span class="lineNum">     234</span> <span class="tlaGNC">          43 :         int value = static_cast&lt;int&gt;(geom_type());</span></span>
+<span id="L235"><span class="lineNum">     235</span> <span class="tlaGNC">          43 :         return value &gt;= 2000;</span></span>
 <span id="L236"><span class="lineNum">     236</span>              :     }</span>
 <span id="L237"><span class="lineNum">     237</span>              : </span>
 <span id="L238"><span class="lineNum">     238</span>              :     // json</span>
@@ -307,9 +307,9 @@
 <span id="L245"><span class="lineNum">     245</span>              :      *</span>
 <span id="L246"><span class="lineNum">     246</span>              :      * @since 0.0.1</span>
 <span id="L247"><span class="lineNum">     247</span>              :      */</span>
-<span id="L248"><span class="lineNum">     248</span> <span class="tlaGNC">          22 :     static T from_json(const std::string&amp; json)</span></span>
+<span id="L248"><span class="lineNum">     248</span> <span class="tlaGNC">          26 :     static T from_json(const std::string&amp; json)</span></span>
 <span id="L249"><span class="lineNum">     249</span>              :     {</span>
-<span id="L250"><span class="lineNum">     250</span> <span class="tlaGNC">          22 :         return T::from_json_(json);</span></span>
+<span id="L250"><span class="lineNum">     250</span> <span class="tlaGNC">          26 :         return T::from_json_(json);</span></span>
 <span id="L251"><span class="lineNum">     251</span>              :     }</span>
 <span id="L252"><span class="lineNum">     252</span>              : </span>
 <span id="L253"><span class="lineNum">     253</span>              :     /*!</span>
@@ -320,9 +320,9 @@
 <span id="L258"><span class="lineNum">     258</span>              :      *</span>
 <span id="L259"><span class="lineNum">     259</span>              :      * @since 0.0.1</span>
 <span id="L260"><span class="lineNum">     260</span>              :      */</span>
-<span id="L261"><span class="lineNum">     261</span> <span class="tlaGNC">          66 :     std::string json(std::int32_t precision = -1) const</span></span>
+<span id="L261"><span class="lineNum">     261</span> <span class="tlaGNC">          72 :     std::string json(std::int32_t precision = -1) const</span></span>
 <span id="L262"><span class="lineNum">     262</span>              :     {</span>
-<span id="L263"><span class="lineNum">     263</span> <span class="tlaGNC">          66 :         return static_cast&lt;const T*&gt;(this)-&gt;json_(precision);</span></span>
+<span id="L263"><span class="lineNum">     263</span> <span class="tlaGNC">          72 :         return static_cast&lt;const T*&gt;(this)-&gt;json_(precision);</span></span>
 <span id="L264"><span class="lineNum">     264</span>              :     }</span>
 <span id="L265"><span class="lineNum">     265</span>              : </span>
 <span id="L266"><span class="lineNum">     266</span>              :     // wkt</span>
@@ -335,9 +335,9 @@
 <span id="L273"><span class="lineNum">     273</span>              :      *</span>
 <span id="L274"><span class="lineNum">     274</span>              :      * @since 0.0.1</span>
 <span id="L275"><span class="lineNum">     275</span>              :      */</span>
-<span id="L276"><span class="lineNum">     276</span> <span class="tlaGNC">         132 :     static T from_wkt(const std::string&amp; wkt)</span></span>
+<span id="L276"><span class="lineNum">     276</span> <span class="tlaGNC">         159 :     static T from_wkt(const std::string&amp; wkt)</span></span>
 <span id="L277"><span class="lineNum">     277</span>              :     {</span>
-<span id="L278"><span class="lineNum">     278</span> <span class="tlaGNC">         132 :         return T::from_wkt_(wkt);</span></span>
+<span id="L278"><span class="lineNum">     278</span> <span class="tlaGNC">         159 :         return T::from_wkt_(wkt);</span></span>
 <span id="L279"><span class="lineNum">     279</span>              :     }</span>
 <span id="L280"><span class="lineNum">     280</span>              : </span>
 <span id="L281"><span class="lineNum">     281</span>              :     /*!</span>
@@ -348,9 +348,9 @@
 <span id="L286"><span class="lineNum">     286</span>              :      *</span>
 <span id="L287"><span class="lineNum">     287</span>              :      * @since 0.0.1</span>
 <span id="L288"><span class="lineNum">     288</span>              :      */</span>
-<span id="L289"><span class="lineNum">     289</span> <span class="tlaGNC">          70 :     std::string wkt(std::int32_t precision = -1) const</span></span>
+<span id="L289"><span class="lineNum">     289</span> <span class="tlaGNC">          94 :     std::string wkt(std::int32_t precision = -1) const</span></span>
 <span id="L290"><span class="lineNum">     290</span>              :     {</span>
-<span id="L291"><span class="lineNum">     291</span> <span class="tlaGNC">          70 :         return static_cast&lt;const T*&gt;(this)-&gt;wkt_(precision);</span></span>
+<span id="L291"><span class="lineNum">     291</span> <span class="tlaGNC">          94 :         return static_cast&lt;const T*&gt;(this)-&gt;wkt_(precision);</span></span>
 <span id="L292"><span class="lineNum">     292</span>              :     }</span>
 <span id="L293"><span class="lineNum">     293</span>              : </span>
 <span id="L294"><span class="lineNum">     294</span>              :     // Geometric algorithms (forward to algorithm namespace functions)</span>

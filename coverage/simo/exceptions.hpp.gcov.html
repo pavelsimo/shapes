@@ -31,18 +31,18 @@
             <td class="headerValue">coverage.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntryMed">83.3&nbsp;%</td>
-            <td class="headerCovTableEntry">12</td>
-            <td class="headerCovTableEntry">10</td>
+            <td class="headerCovTableEntryMed">87.5&nbsp;%</td>
+            <td class="headerCovTableEntry">16</td>
+            <td class="headerCovTableEntry">14</td>
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-06-07 13:04:20</td>
+            <td class="headerValue">2026-06-07 14:58:24</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntryMed">75.0&nbsp;%</td>
+            <td class="headerCovTableEntryMed">80.0&nbsp;%</td>
+            <td class="headerCovTableEntry">5</td>
             <td class="headerCovTableEntry">4</td>
-            <td class="headerCovTableEntry">3</td>
           </tr>
                   <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
                 </table>
@@ -88,8 +88,8 @@
 <span id="L26"><span class="lineNum">      26</span>              :      *</span>
 <span id="L27"><span class="lineNum">      27</span>              :      * @since 0.0.1</span>
 <span id="L28"><span class="lineNum">      28</span>              :      */</span>
-<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC tlaBgGNC">          43 :     explicit shapes_exception(const char* reason)</span></span>
-<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">         129 :         : m_reason(reason) {}</span></span>
+<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC tlaBgGNC">          45 :     explicit shapes_exception(const char* reason)</span></span>
+<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">         135 :         : m_reason(reason) {}</span></span>
 <span id="L31"><span class="lineNum">      31</span>              : </span>
 <span id="L32"><span class="lineNum">      32</span>              :     /*!</span>
 <span id="L33"><span class="lineNum">      33</span>              :      * @brief Returns the exception reason</span>
@@ -111,11 +111,11 @@
 <span id="L49"><span class="lineNum">      49</span>              :      *</span>
 <span id="L50"><span class="lineNum">      50</span>              :      * @since 0.0.1</span>
 <span id="L51"><span class="lineNum">      51</span>              :      */</span>
-<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC tlaBgGNC">          43 :     void set_reason(const std::string&amp; reason)</span></span>
+<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC tlaBgGNC">          45 :     void set_reason(const std::string&amp; reason)</span></span>
 <span id="L53"><span class="lineNum">      53</span>              :     {</span>
-<span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">          43 :         m_reason.append(&quot;: &quot;);</span></span>
-<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">          43 :         m_reason.append(reason);</span></span>
-<span id="L56"><span class="lineNum">      56</span> <span class="tlaGNC">          43 :     }</span></span>
+<span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">          45 :         m_reason.append(&quot;: &quot;);</span></span>
+<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">          45 :         m_reason.append(reason);</span></span>
+<span id="L56"><span class="lineNum">      56</span> <span class="tlaGNC">          45 :     }</span></span>
 <span id="L57"><span class="lineNum">      57</span>              : </span>
 <span id="L58"><span class="lineNum">      58</span>              :   private:</span>
 <span id="L59"><span class="lineNum">      59</span>              :     std::string m_reason{};</span>
@@ -190,11 +190,11 @@
 <span id="L128"><span class="lineNum">     128</span>              :      *</span>
 <span id="L129"><span class="lineNum">     129</span>              :      * @since 0.0.1</span>
 <span id="L130"><span class="lineNum">     130</span>              :      */</span>
-<span id="L131"><span class="lineNum">     131</span>              :     explicit geometry_error(const std::string&amp; reason)</span>
-<span id="L132"><span class="lineNum">     132</span>              :         : shapes_exception(&quot;geometry error&quot;)</span>
+<span id="L131"><span class="lineNum">     131</span> <span class="tlaGNC">           2 :     explicit geometry_error(const std::string&amp; reason)</span></span>
+<span id="L132"><span class="lineNum">     132</span> <span class="tlaGNC">           2 :         : shapes_exception(&quot;geometry error&quot;)</span></span>
 <span id="L133"><span class="lineNum">     133</span>              :     {</span>
-<span id="L134"><span class="lineNum">     134</span>              :         set_reason(reason);</span>
-<span id="L135"><span class="lineNum">     135</span>              :     }</span>
+<span id="L134"><span class="lineNum">     134</span> <span class="tlaGNC">           2 :         set_reason(reason);</span></span>
+<span id="L135"><span class="lineNum">     135</span> <span class="tlaGNC">           2 :     }</span></span>
 <span id="L136"><span class="lineNum">     136</span>              : };</span>
 <span id="L137"><span class="lineNum">     137</span>              : </span>
 <span id="L138"><span class="lineNum">     138</span>              : /*!</span>
