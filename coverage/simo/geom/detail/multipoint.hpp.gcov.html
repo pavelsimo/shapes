@@ -31,18 +31,18 @@
             <td class="headerValue">coverage.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntryHi">90.8&nbsp;%</td>
-            <td class="headerCovTableEntry">120</td>
-            <td class="headerCovTableEntry">109</td>
+            <td class="headerCovTableEntryHi">91.1&nbsp;%</td>
+            <td class="headerCovTableEntry">124</td>
+            <td class="headerCovTableEntry">113</td>
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-06-07 12:30:00</td>
+            <td class="headerValue">2026-06-07 12:34:01</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
-            <td class="headerCovTableEntry">47</td>
-            <td class="headerCovTableEntry">47</td>
+            <td class="headerCovTableEntry">48</td>
+            <td class="headerCovTableEntry">48</td>
           </tr>
                   <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
                 </table>
@@ -106,16 +106,16 @@
 <span id="L44"><span class="lineNum">      44</span>              :         }</span>
 <span id="L45"><span class="lineNum">      45</span>              :     }</span>
 <span id="L46"><span class="lineNum">      46</span>              : </span>
-<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">          16 :     explicit basic_multipoint(coord_iterator first, coord_iterator last)</span></span>
-<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">          16 :     {</span></span>
+<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">          17 :     explicit basic_multipoint(coord_iterator first, coord_iterator last)</span></span>
+<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">          17 :     {</span></span>
 <span id="L49"><span class="lineNum">      49</span>              :         /// @todo deal with repetition</span>
-<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">          16 :         size_t n = this-&gt;ndim();</span></span>
-<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">          32 :         this-&gt;reserve(std::distance(first, last));</span></span>
-<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC">          50 :         for (auto it = first; it != last; it += n)</span></span>
+<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">          17 :         size_t n = this-&gt;ndim();</span></span>
+<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">          34 :         this-&gt;reserve(std::distance(first, last));</span></span>
+<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC">          54 :         for (auto it = first; it != last; it += n)</span></span>
 <span id="L53"><span class="lineNum">      53</span>              :         {</span>
-<span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">          34 :             this-&gt;emplace_back(it, it + n);</span></span>
+<span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">          37 :             this-&gt;emplace_back(it, it + n);</span></span>
 <span id="L55"><span class="lineNum">      55</span>              :         }</span>
-<span id="L56"><span class="lineNum">      56</span> <span class="tlaGNC">          16 :     }</span></span>
+<span id="L56"><span class="lineNum">      56</span> <span class="tlaGNC">          17 :     }</span></span>
 <span id="L57"><span class="lineNum">      57</span>              : </span>
 <span id="L58"><span class="lineNum">      58</span> <span class="tlaGNC">           8 :     basic_multipoint(point_iterator first, point_iterator last)</span></span>
 <span id="L59"><span class="lineNum">      59</span> <span class="tlaGNC">          16 :         : base_type(first, last)</span></span>
@@ -177,15 +177,15 @@
 <span id="L115"><span class="lineNum">     115</span>              : </span>
 <span id="L116"><span class="lineNum">     116</span>              :     // polyline</span>
 <span id="L117"><span class="lineNum">     117</span>              : </span>
-<span id="L118"><span class="lineNum">     118</span>              :     static basic_multipoint&lt;T&gt; from_polyline(const std::string&amp; polyline, std::int32_t precision = 5)</span>
+<span id="L118"><span class="lineNum">     118</span> <span class="tlaGNC tlaBgGNC">           1 :     static basic_multipoint&lt;T&gt; from_polyline(const std::string&amp; polyline, std::int32_t precision = 5)</span></span>
 <span id="L119"><span class="lineNum">     119</span>              :     {</span>
 <span id="L120"><span class="lineNum">     120</span>              :         static_assert(is_basic_point&lt;T&gt;::value, &quot;must contain XY points&quot;);</span>
 <span id="L121"><span class="lineNum">     121</span>              : </span>
-<span id="L122"><span class="lineNum">     122</span>              :         auto coords = polyline::decode(polyline, precision);</span>
-<span id="L123"><span class="lineNum">     123</span>              :         return {coords.begin(), coords.end()};</span>
-<span id="L124"><span class="lineNum">     124</span>              :     }</span>
+<span id="L122"><span class="lineNum">     122</span> <span class="tlaGNC">           1 :         auto coords = polyline::decode(polyline, precision);</span></span>
+<span id="L123"><span class="lineNum">     123</span> <span class="tlaGNC">           2 :         return basic_multipoint&lt;T&gt;(coords.begin(), coords.end());</span></span>
+<span id="L124"><span class="lineNum">     124</span> <span class="tlaGNC">           1 :     }</span></span>
 <span id="L125"><span class="lineNum">     125</span>              : </span>
-<span id="L126"><span class="lineNum">     126</span> <span class="tlaGNC tlaBgGNC">           1 :     std::string polyline(std::int32_t precision = 5) const</span></span>
+<span id="L126"><span class="lineNum">     126</span> <span class="tlaGNC">           1 :     std::string polyline(std::int32_t precision = 5) const</span></span>
 <span id="L127"><span class="lineNum">     127</span>              :     {</span>
 <span id="L128"><span class="lineNum">     128</span>              :         static_assert(is_basic_point&lt;T&gt;::value, &quot;must contain XY points&quot;);</span>
 <span id="L129"><span class="lineNum">     129</span>              : </span>
@@ -208,7 +208,7 @@
 <span id="L146"><span class="lineNum">     146</span>              :     friend class basic_geometry&lt;basic_multipoint&lt;T&gt;&gt;;</span>
 <span id="L147"><span class="lineNum">     147</span>              : </span>
 <span id="L148"><span class="lineNum">     148</span>              :     /// @private</span>
-<span id="L149"><span class="lineNum">     149</span> <span class="tlaGNC tlaBgGNC">          75 :     geometry_type geom_type_() const noexcept</span></span>
+<span id="L149"><span class="lineNum">     149</span> <span class="tlaGNC tlaBgGNC">          78 :     geometry_type geom_type_() const noexcept</span></span>
 <span id="L150"><span class="lineNum">     150</span>              :     {</span>
 <span id="L151"><span class="lineNum">     151</span>              :         if (is_basic_point_z&lt;T&gt;::value)</span>
 <span id="L152"><span class="lineNum">     152</span>              :         {</span>
@@ -222,7 +222,7 @@
 <span id="L160"><span class="lineNum">     160</span>              :         {</span>
 <span id="L161"><span class="lineNum">     161</span> <span class="tlaGNC">          18 :             return geometry_type::MULTIPOINTZM;</span></span>
 <span id="L162"><span class="lineNum">     162</span>              :         }</span>
-<span id="L163"><span class="lineNum">     163</span> <span class="tlaGNC">          24 :         return geometry_type::MULTIPOINT;</span></span>
+<span id="L163"><span class="lineNum">     163</span> <span class="tlaGNC">          27 :         return geometry_type::MULTIPOINT;</span></span>
 <span id="L164"><span class="lineNum">     164</span>              :     }</span>
 <span id="L165"><span class="lineNum">     165</span>              : </span>
 <span id="L166"><span class="lineNum">     166</span>              :     /// @private</span>
@@ -333,45 +333,45 @@
 <span id="L271"><span class="lineNum">     271</span> <span class="tlaGNC">          21 :     }</span></span>
 <span id="L272"><span class="lineNum">     272</span>              : </span>
 <span id="L273"><span class="lineNum">     273</span>              :     /// @private</span>
-<span id="L274"><span class="lineNum">     274</span> <span class="tlaGNC">           8 :     std::string wkt_(std::int32_t precision = -1) const</span></span>
+<span id="L274"><span class="lineNum">     274</span> <span class="tlaGNC">           9 :     std::string wkt_(std::int32_t precision = -1) const</span></span>
 <span id="L275"><span class="lineNum">     275</span>              :     {</span>
-<span id="L276"><span class="lineNum">     276</span> <span class="tlaGNC">           8 :         std::stringstream ss;</span></span>
-<span id="L277"><span class="lineNum">     277</span> <span class="tlaGNC">           8 :         if (precision &gt;= 0)</span></span>
+<span id="L276"><span class="lineNum">     276</span> <span class="tlaGNC">           9 :         std::stringstream ss;</span></span>
+<span id="L277"><span class="lineNum">     277</span> <span class="tlaGNC">           9 :         if (precision &gt;= 0)</span></span>
 <span id="L278"><span class="lineNum">     278</span>              :         {</span>
 <span id="L279"><span class="lineNum">     279</span> <span class="tlaUNC tlaBgUNC">           0 :             ss &lt;&lt; std::setprecision(precision);</span></span>
 <span id="L280"><span class="lineNum">     280</span>              :         }</span>
-<span id="L281"><span class="lineNum">     281</span> <span class="tlaGNC tlaBgGNC">           8 :         ss &lt;&lt; &quot;MULTIPOINT&quot;;</span></span>
-<span id="L282"><span class="lineNum">     282</span> <span class="tlaGNC">           8 :         if (this-&gt;has_z())</span></span>
+<span id="L281"><span class="lineNum">     281</span> <span class="tlaGNC tlaBgGNC">           9 :         ss &lt;&lt; &quot;MULTIPOINT&quot;;</span></span>
+<span id="L282"><span class="lineNum">     282</span> <span class="tlaGNC">           9 :         if (this-&gt;has_z())</span></span>
 <span id="L283"><span class="lineNum">     283</span>              :         {</span>
 <span id="L284"><span class="lineNum">     284</span> <span class="tlaGNC">           4 :             ss &lt;&lt; &quot;Z&quot;;</span></span>
 <span id="L285"><span class="lineNum">     285</span>              :         }</span>
-<span id="L286"><span class="lineNum">     286</span> <span class="tlaGNC">           8 :         if (this-&gt;has_m())</span></span>
+<span id="L286"><span class="lineNum">     286</span> <span class="tlaGNC">           9 :         if (this-&gt;has_m())</span></span>
 <span id="L287"><span class="lineNum">     287</span>              :         {</span>
 <span id="L288"><span class="lineNum">     288</span> <span class="tlaGNC">           4 :             ss &lt;&lt; &quot;M&quot;;</span></span>
 <span id="L289"><span class="lineNum">     289</span>              :         }</span>
-<span id="L290"><span class="lineNum">     290</span> <span class="tlaGNC">           8 :         ss &lt;&lt; &quot;(&quot;;</span></span>
-<span id="L291"><span class="lineNum">     291</span> <span class="tlaGNC">           8 :         int i = 0;</span></span>
-<span id="L292"><span class="lineNum">     292</span> <span class="tlaGNC">          32 :         for (const auto&amp; p : *this)</span></span>
+<span id="L290"><span class="lineNum">     290</span> <span class="tlaGNC">           9 :         ss &lt;&lt; &quot;(&quot;;</span></span>
+<span id="L291"><span class="lineNum">     291</span> <span class="tlaGNC">           9 :         int i = 0;</span></span>
+<span id="L292"><span class="lineNum">     292</span> <span class="tlaGNC">          36 :         for (const auto&amp; p : *this)</span></span>
 <span id="L293"><span class="lineNum">     293</span>              :         {</span>
-<span id="L294"><span class="lineNum">     294</span> <span class="tlaGNC">          24 :             if (i &gt; 0)</span></span>
+<span id="L294"><span class="lineNum">     294</span> <span class="tlaGNC">          27 :             if (i &gt; 0)</span></span>
 <span id="L295"><span class="lineNum">     295</span>              :             {</span>
-<span id="L296"><span class="lineNum">     296</span> <span class="tlaGNC">          16 :                 ss &lt;&lt; &quot;,&quot;;</span></span>
+<span id="L296"><span class="lineNum">     296</span> <span class="tlaGNC">          18 :                 ss &lt;&lt; &quot;,&quot;;</span></span>
 <span id="L297"><span class="lineNum">     297</span>              :             }</span>
-<span id="L298"><span class="lineNum">     298</span> <span class="tlaGNC">          24 :             ss &lt;&lt; &quot;(&quot;;</span></span>
-<span id="L299"><span class="lineNum">     299</span> <span class="tlaGNC">          96 :             for (size_t j = 0; j &lt; p.size(); ++j)</span></span>
+<span id="L298"><span class="lineNum">     298</span> <span class="tlaGNC">          27 :             ss &lt;&lt; &quot;(&quot;;</span></span>
+<span id="L299"><span class="lineNum">     299</span> <span class="tlaGNC">         105 :             for (size_t j = 0; j &lt; p.size(); ++j)</span></span>
 <span id="L300"><span class="lineNum">     300</span>              :             {</span>
-<span id="L301"><span class="lineNum">     301</span> <span class="tlaGNC">          72 :                 if (j &gt; 0)</span></span>
+<span id="L301"><span class="lineNum">     301</span> <span class="tlaGNC">          78 :                 if (j &gt; 0)</span></span>
 <span id="L302"><span class="lineNum">     302</span>              :                 {</span>
-<span id="L303"><span class="lineNum">     303</span> <span class="tlaGNC">          48 :                     ss &lt;&lt; &quot; &quot;;</span></span>
+<span id="L303"><span class="lineNum">     303</span> <span class="tlaGNC">          51 :                     ss &lt;&lt; &quot; &quot;;</span></span>
 <span id="L304"><span class="lineNum">     304</span>              :                 }</span>
-<span id="L305"><span class="lineNum">     305</span> <span class="tlaGNC">          72 :                 ss &lt;&lt; p.coords[j];</span></span>
+<span id="L305"><span class="lineNum">     305</span> <span class="tlaGNC">          78 :                 ss &lt;&lt; p.coords[j];</span></span>
 <span id="L306"><span class="lineNum">     306</span>              :             }</span>
-<span id="L307"><span class="lineNum">     307</span> <span class="tlaGNC">          24 :             ss &lt;&lt; &quot;)&quot;;</span></span>
-<span id="L308"><span class="lineNum">     308</span> <span class="tlaGNC">          24 :             ++i;</span></span>
+<span id="L307"><span class="lineNum">     307</span> <span class="tlaGNC">          27 :             ss &lt;&lt; &quot;)&quot;;</span></span>
+<span id="L308"><span class="lineNum">     308</span> <span class="tlaGNC">          27 :             ++i;</span></span>
 <span id="L309"><span class="lineNum">     309</span>              :         }</span>
-<span id="L310"><span class="lineNum">     310</span> <span class="tlaGNC">           8 :         ss &lt;&lt; &quot;)&quot;;</span></span>
-<span id="L311"><span class="lineNum">     311</span> <span class="tlaGNC">          16 :         return ss.str();</span></span>
-<span id="L312"><span class="lineNum">     312</span> <span class="tlaGNC">           8 :     }</span></span>
+<span id="L310"><span class="lineNum">     310</span> <span class="tlaGNC">           9 :         ss &lt;&lt; &quot;)&quot;;</span></span>
+<span id="L311"><span class="lineNum">     311</span> <span class="tlaGNC">          18 :         return ss.str();</span></span>
+<span id="L312"><span class="lineNum">     312</span> <span class="tlaGNC">           9 :     }</span></span>
 <span id="L313"><span class="lineNum">     313</span>              : };</span>
 <span id="L314"><span class="lineNum">     314</span>              : </span>
 <span id="L315"><span class="lineNum">     315</span>              : template &lt;typename&gt;</span>
