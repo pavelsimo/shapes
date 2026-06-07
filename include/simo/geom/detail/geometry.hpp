@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ciso646>
+#include <cstdint>
 #include <vector>
 #include <memory>
 #include <simo/shapes_fwd.hpp>

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ciso646>
+#include <cstring>
 #include <string>
 #include <vector>
 #include <unordered_map>

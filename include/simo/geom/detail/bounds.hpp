@@ -2,6 +2,7 @@
 
 #include <ciso646>
 #include <algorithm>
+#include <limits>
 #include <tuple>
 
 namespace simo

@@ -77,6 +77,7 @@ class Bounds;
 
 
 #include <ciso646>
+#include <cstdint>
 #include <vector>
 #include <memory>
 // #include <simo/shapes_fwd.hpp>
@@ -86,6 +87,7 @@ class Bounds;
 
 #include <ciso646>
 #include <algorithm>
+#include <limits>
 #include <tuple>
 
 namespace simo
@@ -275,6 +277,7 @@ struct bounds_t
 
 }  // namespace shapes
 }  // namespace simo
+
 // #include <simo/geom/detail/types.hpp>
 
 
@@ -2326,6 +2329,7 @@ class basic_geometry
 
 }  // namespace shapes
 }  // namespace simo
+
 // #include <simo/geom/point.hpp>
 
 
@@ -2348,6 +2352,7 @@ class basic_geometry
 
 
 #include <ciso646>
+#include <cstring>
 #include <string>
 #include <vector>
 #include <unordered_map>
