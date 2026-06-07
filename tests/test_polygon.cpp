@@ -359,6 +359,8 @@ TEST_CASE("Polygon")
                 CHECK_THROWS(PolygonZ::from_wkt("polygon z ((35 10 -20, 45 45 -20, 15 40 -20, 10 20 -20, 35 10 -20), (20 30 -20, 35 35 -20, 30 20 -20, 20 30 -3010.5)) @@"));
                 CHECK_THROWS(PolygonZM::from_wkt("polygon zm ((35 10, 45 45, 15 40, 10 20, 35 10), (20 30, 35 35, 30 20, 20 30))"));
                 CHECK_THROWS(PolygonZ::from_wkt("polygon z ((35 10, 45 45, 15 40, 10 20, 35 10), (20 30, 35 35, 30 20, 20 30))"));
+                CHECK_THROWS(Polygon::from_wkt("POLYGON ((0 0, 1 0, 1 1, 0 1))"));
+                CHECK_THROWS(Polygon::from_wkt("POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0), (1 1, 2 1, 2 2, 1 2))"));
             }
         }
     }

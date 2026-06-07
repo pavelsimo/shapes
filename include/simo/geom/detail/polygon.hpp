@@ -134,6 +134,15 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
     /// for allow basic_geometry to access basic_polygon private members
     friend class basic_geometry<basic_polygon<T>>;
 
+    static bool ring_is_closed(const T& ring) noexcept
+    {
+        if (ring.empty())
+        {
+            return true;
+        }
+        return ring.front().x == ring.back().x and ring.front().y == ring.back().y;
+    }
+
     /// @private
     geometry_type geom_type_() const noexcept
     {
@@ -159,13 +168,41 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
         {
             return true;
         }
-        return *this[0] == *this[this->size() - 1];
+        for (const auto& ring : *this)
+        {
+            if (not ring_is_closed(ring))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /// @private
     void throw_for_invalid_() const
     {
-        /// @todo (pavel) add checks
+        for (const auto& ring : *this)
+        {
+            if (ring.empty())
+            {
+                throw exceptions::geometry_error("Polygon rings should not be empty");
+            }
+            if (ring.size() < 4)
+            {
+                throw exceptions::geometry_error("Polygon rings should have 4 or more points");
+            }
+            if (not ring_is_closed(ring))
+            {
+                throw exceptions::geometry_error("Polygon rings should be closed");
+            }
+            for (const auto& point : ring)
+            {
+                if (point.empty())
+                {
+                    throw exceptions::geometry_error("Polygon rings should not contain empty points");
+                }
+            }
+        }
     }
 
     /// @private
@@ -284,8 +321,10 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
         {
             throw exceptions::parse_error("invalid wkt string");
         }
-        return basic_polygon<T>(result.data.coords.begin(), result.data.coords.end(), result.data.offsets.begin(),
-                                result.data.offsets.end());
+        auto polygon = basic_polygon<T>(result.data.coords.begin(), result.data.coords.end(),
+                                        result.data.ring_offsets.begin(), result.data.ring_offsets.end());
+        polygon.throw_for_invalid();
+        return polygon;
     }
 
     /// @private

@@ -16,6 +16,48 @@ TEST_CASE("Point")
             CHECK(p.dim() == dimension_type::XY);
             CHECK(p.geom_type() == geometry_type::POINT);
             CHECK(p.tagged_text() == "Point");
+            CHECK(p.empty());
+            CHECK(p.size() == 0);
+        }
+
+        SECTION("empty - xyz")
+        {
+            PointZ p;
+            CHECK(p.x == 0);
+            CHECK(p.y == 0);
+            CHECK(p.z == 0);
+            CHECK(p.dim() == dimension_type::XYZ);
+            CHECK(p.geom_type() == geometry_type::POINTZ);
+            CHECK(p.tagged_text() == "Point Z");
+            CHECK(p.empty());
+            CHECK(p.size() == 0);
+        }
+
+        SECTION("empty - xym")
+        {
+            PointM p;
+            CHECK(p.x == 0);
+            CHECK(p.y == 0);
+            CHECK(p.m == 0);
+            CHECK(p.dim() == dimension_type::XYM);
+            CHECK(p.geom_type() == geometry_type::POINTM);
+            CHECK(p.tagged_text() == "Point M");
+            CHECK(p.empty());
+            CHECK(p.size() == 0);
+        }
+
+        SECTION("empty - xyzm")
+        {
+            PointZM p;
+            CHECK(p.x == 0);
+            CHECK(p.y == 0);
+            CHECK(p.z == 0);
+            CHECK(p.m == 0);
+            CHECK(p.dim() == dimension_type::XYZM);
+            CHECK(p.geom_type() == geometry_type::POINTZM);
+            CHECK(p.tagged_text() == "Point ZM");
+            CHECK(p.empty());
+            CHECK(p.size() == 0);
         }
 
         SECTION("xy - constructor")
@@ -26,6 +68,8 @@ TEST_CASE("Point")
             CHECK(p.dim() == dimension_type::XY);
             CHECK(p.geom_type() == geometry_type::POINT);
             CHECK(p.tagged_text() == "Point");
+            CHECK(not p.empty());
+            CHECK(p.size() == 2);
         }
 
         SECTION("xyz - constructor")
@@ -37,6 +81,8 @@ TEST_CASE("Point")
             CHECK(p.dim() == dimension_type::XYZ);
             CHECK(p.geom_type() == geometry_type::POINTZ);
             CHECK(p.tagged_text() == "Point Z");
+            CHECK(not p.empty());
+            CHECK(p.size() == 3);
         }
 
         SECTION("xym - constructor")
@@ -54,6 +100,8 @@ TEST_CASE("Point")
             CHECK(p.dim() == dimension_type::XYZM);
             CHECK(p.geom_type() == geometry_type::POINTZM);
             CHECK(p.tagged_text() == "Point ZM");
+            CHECK(not p.empty());
+            CHECK(p.size() == 4);
         }
 
         SECTION("xy - initializer list")
@@ -64,6 +112,7 @@ TEST_CASE("Point")
             CHECK(p.dim() == dimension_type::XY);
             CHECK(p.geom_type() == geometry_type::POINT);
             CHECK(p.tagged_text() == "Point");
+            CHECK(not p.empty());
         }
 
         SECTION("xyz - initializer list")
@@ -75,6 +124,7 @@ TEST_CASE("Point")
             CHECK(p.dim() == dimension_type::XYZ);
             CHECK(p.geom_type() == geometry_type::POINTZ);
             CHECK(p.tagged_text() == "Point Z");
+            CHECK(not p.empty());
         }
 
         SECTION("xym - initializer list")
@@ -86,6 +136,7 @@ TEST_CASE("Point")
             CHECK(p.dim() == dimension_type::XYM);
             CHECK(p.geom_type() == geometry_type::POINTM);
             CHECK(p.tagged_text() == "Point M");
+            CHECK(not p.empty());
         }
 
         SECTION("xyzm - initializer list")
@@ -98,6 +149,7 @@ TEST_CASE("Point")
             CHECK(p.dim() == dimension_type::XYZM);
             CHECK(p.geom_type() == geometry_type::POINTZM);
             CHECK(p.tagged_text() == "Point ZM");
+            CHECK(not p.empty());
         }
     }
 
@@ -113,6 +165,22 @@ TEST_CASE("Point")
                 CHECK(p.dim() == dimension_type::XY);
                 CHECK(p.geom_type() == geometry_type::POINT);
                 CHECK(p.tagged_text() == "Point");
+            }
+
+            SECTION("empty - from json")
+            {
+                auto p = Point::from_json(R"({"type": "Point", "coordinates": []})");
+                CHECK(p.empty());
+                CHECK(p.size() == 0);
+                CHECK(p.wkt() == "POINT EMPTY");
+                CHECK(p.json() == R"({"type":"Point","coordinates":[]})");
+            }
+
+            SECTION("empty typed - from json")
+            {
+                CHECK(PointZ::from_json(R"({"type": "Point", "coordinates": []})").wkt() == "POINT Z EMPTY");
+                CHECK(PointM::from_json(R"({"type": "Point", "coordinates": []})").wkt() == "POINT M EMPTY");
+                CHECK(PointZM::from_json(R"({"type": "Point", "coordinates": []})").wkt() == "POINT ZM EMPTY");
             }
 
             SECTION("xyz - from json")
@@ -192,8 +260,12 @@ TEST_CASE("Point")
                     auto p = Point::from_wkt("POINT EMPTY");
                     CHECK(p.x == 0);
                     CHECK(p.y == 0);
+                    CHECK(p.empty());
+                    CHECK(p.size() == 0);
                     CHECK(p.geom_type() == geometry_type::POINT);
                     CHECK(p.dim() == dimension_type::XY);
+                    CHECK(p.wkt() == "POINT EMPTY");
+                    CHECK(p.json() == R"({"type":"Point","coordinates":[]})");
                 }
 
                 SECTION("empty - xyz")
@@ -202,8 +274,12 @@ TEST_CASE("Point")
                     CHECK(p.x == 0);
                     CHECK(p.y == 0);
                     CHECK(p.z == 0);
+                    CHECK(p.empty());
+                    CHECK(p.size() == 0);
                     CHECK(p.geom_type() == geometry_type::POINTZ);
                     CHECK(p.dim() == dimension_type::XYZ);
+                    CHECK(p.wkt() == "POINT Z EMPTY");
+                    CHECK(p.json() == R"({"type":"Point","coordinates":[]})");
                 }
 
                 SECTION("empty - xym")
@@ -212,8 +288,12 @@ TEST_CASE("Point")
                     CHECK(p.x == 0);
                     CHECK(p.y == 0);
                     CHECK(p.m == 0);
+                    CHECK(p.empty());
+                    CHECK(p.size() == 0);
                     CHECK(p.geom_type() == geometry_type::POINTM);
                     CHECK(p.dim() == dimension_type::XYM);
+                    CHECK(p.wkt() == "POINT M EMPTY");
+                    CHECK(p.json() == R"({"type":"Point","coordinates":[]})");
                 }
 
                 SECTION("empty - xyzm")
@@ -223,8 +303,12 @@ TEST_CASE("Point")
                     CHECK(p.y == 0);
                     CHECK(p.z == 0);
                     CHECK(p.m == 0);
+                    CHECK(p.empty());
+                    CHECK(p.size() == 0);
                     CHECK(p.geom_type() == geometry_type::POINTZM);
                     CHECK(p.dim() == dimension_type::XYZM);
+                    CHECK(p.wkt() == "POINT ZM EMPTY");
+                    CHECK(p.json() == R"({"type":"Point","coordinates":[]})");
                 }
             }
 
@@ -469,21 +553,21 @@ TEST_CASE("Point")
 
     SECTION("sizeof")
     {
-        CHECK(sizeof(point_t<double>) == 2 * sizeof(double));
-        CHECK(sizeof(point_t<float>) == 2 * sizeof(float));
-        CHECK(sizeof(point_t<int>) == 2 * sizeof(int));
-        CHECK(sizeof(point_t<char>) == 2 * sizeof(char));
-        CHECK(sizeof(point_z_t<double>) == 3 * sizeof(double));
-        CHECK(sizeof(point_z_t<float>) == 3 * sizeof(float));
-        CHECK(sizeof(point_z_t<int>) == 3 * sizeof(int));
-        CHECK(sizeof(point_z_t<char>) == 3 * sizeof(char));
-        CHECK(sizeof(point_m_t<double>) == 3 * sizeof(double));
-        CHECK(sizeof(point_m_t<float>) == 3 * sizeof(float));
-        CHECK(sizeof(point_m_t<int>) == 3 * sizeof(int));
-        CHECK(sizeof(point_m_t<char>) == 3 * sizeof(char));
-        CHECK(sizeof(point_zm_t<double>) == 4 * sizeof(double));
-        CHECK(sizeof(point_zm_t<float>) == 4 * sizeof(float));
-        CHECK(sizeof(point_zm_t<int>) == 4 * sizeof(int));
-        CHECK(sizeof(point_zm_t<char>) == 4 * sizeof(char));
+        CHECK(sizeof(point_t<double>) > 2 * sizeof(double));
+        CHECK(sizeof(point_t<float>) > 2 * sizeof(float));
+        CHECK(sizeof(point_t<int>) > 2 * sizeof(int));
+        CHECK(sizeof(point_t<char>) > 2 * sizeof(char));
+        CHECK(sizeof(point_z_t<double>) > 3 * sizeof(double));
+        CHECK(sizeof(point_z_t<float>) > 3 * sizeof(float));
+        CHECK(sizeof(point_z_t<int>) > 3 * sizeof(int));
+        CHECK(sizeof(point_z_t<char>) > 3 * sizeof(char));
+        CHECK(sizeof(point_m_t<double>) > 3 * sizeof(double));
+        CHECK(sizeof(point_m_t<float>) > 3 * sizeof(float));
+        CHECK(sizeof(point_m_t<int>) > 3 * sizeof(int));
+        CHECK(sizeof(point_m_t<char>) > 3 * sizeof(char));
+        CHECK(sizeof(point_zm_t<double>) > 4 * sizeof(double));
+        CHECK(sizeof(point_zm_t<float>) > 4 * sizeof(float));
+        CHECK(sizeof(point_zm_t<int>) > 4 * sizeof(int));
+        CHECK(sizeof(point_zm_t<char>) > 4 * sizeof(char));
     }
 }

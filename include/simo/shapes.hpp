@@ -48,6 +48,7 @@ SOFTWARE.
 #include <simo/geom/multilinestring.hpp>
 #include <simo/geom/polygon.hpp>
 #include <simo/geom/multipolygon.hpp>
+#include <simo/geom/geometrycollection.hpp>
 #include <simo/geom/linearring.hpp>
 #include <simo/io/polyline.hpp>
 #include <simo/algorithm/measurements.hpp>

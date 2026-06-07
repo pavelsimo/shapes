@@ -246,7 +246,7 @@ class basic_multilinestring
             throw exceptions::parse_error("invalid wkt string");
         }
         return basic_multilinestring<T>(result.data.coords.begin(), result.data.coords.end(),
-                                        result.data.offsets.begin(), result.data.offsets.end());
+                                        result.data.line_offsets.begin(), result.data.line_offsets.end());
     }
 
     /// @private

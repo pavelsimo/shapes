@@ -25,8 +25,14 @@ struct wkt_data
     /// the coordinates as a sequence of numbers
     std::vector<double> coords;
 
-    /// the offsets in the coordinates sequence
-    std::vector<std::size_t> offsets;
+    /// the offsets in the coordinates sequence for line-like geometries
+    std::vector<std::size_t> line_offsets;
+
+    /// the offsets in the coordinates sequence for polygon rings
+    std::vector<std::size_t> ring_offsets;
+
+    /// the offsets in the ring sequence for multipolygon polygons
+    std::vector<std::size_t> polygon_offsets;
 };
 
 /*!
@@ -43,4 +49,3 @@ struct wkt_result
     /// the parser result data
     wkt_data data;
 };
-

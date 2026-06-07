@@ -76,11 +76,13 @@ class basic_point : public basic_geometry<basic_point<T>>
         T coords[N];
     };
 
+    bool m_empty;
+
     /*!
      * @brief Creates a empty point
      */
     basic_point()
-        : x(0), y(0) {}
+        : x(0), y(0), m_empty(true) {}
 
     /*!
      * @brief Creates a point from the given coordinates
@@ -88,33 +90,45 @@ class basic_point : public basic_geometry<basic_point<T>>
      * @param y the y-coordinate
      */
     basic_point(T x, T y)
-        : x(x), y(y) {}
+        : x(x), y(y), m_empty(false) {}
 
     explicit basic_point(coord_iterator begin, coord_iterator end)
+        : x(0), y(0), m_empty(true)
     {
         /// @todo (pavel) deal with repetition
-        assert(std::distance(begin, end) == N);
+        assert(std::distance(begin, end) == 0 or std::distance(begin, end) == N);
+        if (begin == end)
+        {
+            return;
+        }
         size_t i = 0;
         for (auto it = begin; it != end; ++it)
         {
             coords[i++] = *it;
         }
+        m_empty = false;
     }
 
     explicit basic_point(coord_const_iterator begin, coord_const_iterator end)
+        : x(0), y(0), m_empty(true)
     {
         /// @todo (pavel) deal with repetition
-        assert(std::distance(begin, end) == N);
+        assert(std::distance(begin, end) == 0 or std::distance(begin, end) == N);
+        if (begin == end)
+        {
+            return;
+        }
         size_t i = 0;
         for (auto it = begin; it != end; ++it)
         {
             coords[i++] = *it;
         }
+        m_empty = false;
     }
 
     size_type size() const noexcept
     {
-        return this->ndim();
+        return m_empty ? 0 : this->ndim();
     }
 
     // operators
@@ -127,6 +141,14 @@ class basic_point : public basic_geometry<basic_point<T>>
 
     friend bool operator==(const basic_point<T>& lhs, const basic_point<T>& rhs)
     {
+        if (lhs.m_empty != rhs.m_empty)
+        {
+            return false;
+        }
+        if (lhs.m_empty)
+        {
+            return true;
+        }
         return lhs.x == rhs.x and lhs.y == rhs.y;
     }
 
@@ -157,9 +179,9 @@ class basic_point : public basic_geometry<basic_point<T>>
         return N;
     }
 
-    bool empty()
+    bool empty() const noexcept
     {
-        return begin() == end();
+        return m_empty;
     }
 
     // iterators
@@ -171,7 +193,7 @@ class basic_point : public basic_geometry<basic_point<T>>
 
     iterator end()
     {
-        return coords + N;
+        return coords + size();
     }
 
     const_iterator begin() const
@@ -180,7 +202,7 @@ class basic_point : public basic_geometry<basic_point<T>>
     }
     const_iterator end() const
     {
-        return coords + N;
+        return coords + size();
     }
 
     reverse_iterator rbegin() noexcept
@@ -238,6 +260,10 @@ class basic_point : public basic_geometry<basic_point<T>>
     /// @private
     bounds_t bounds_() const
     {
+        if (m_empty)
+        {
+            return {};
+        }
         return {x, y, x, y};
     }
 
@@ -255,6 +281,14 @@ class basic_point : public basic_geometry<basic_point<T>>
                 throw exceptions::parse_error("invalid geometry type");
             }
             auto coords = j.at("coordinates").as_double_array();
+            if (coords.empty())
+            {
+                return {};
+            }
+            if (coords.size() != N)
+            {
+                throw exceptions::parse_error("invalid coordinate count");
+            }
             return {static_cast<T>(coords.at(0)), static_cast<T>(coords.at(1))};
         }
         catch (const std::out_of_range& e)
@@ -279,6 +313,11 @@ class basic_point : public basic_geometry<basic_point<T>>
         {
             ss << std::setprecision(precision);
         }
+        if (m_empty)
+        {
+            ss << "{\"type\":\"Point\",\"coordinates\":[]}";
+            return ss.str();
+        }
         ss << "{\"type\":\"Point\",\"coordinates\":"
            << "[" << x << "," << y << "]}";
         return ss.str();
@@ -296,6 +335,10 @@ class basic_point : public basic_geometry<basic_point<T>>
         {
             throw exceptions::parse_error("invalid wkt string");
         }
+        if (data.coords.empty())
+        {
+            return {};
+        }
         return {data.coords[0], data.coords[1]};
     }
 
@@ -306,6 +349,11 @@ class basic_point : public basic_geometry<basic_point<T>>
         if (precision >= 0)
         {
             ss << std::setprecision(precision);
+        }
+        if (m_empty)
+        {
+            ss << "POINT EMPTY";
+            return ss.str();
         }
         ss << "POINT "
            << "(" << x << " " << y << ")";
@@ -355,35 +403,49 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
         T coords[N];
     };
 
+    bool m_empty;
+
     basic_point_z()
-        : x(0), y(0), z(0) {}
+        : x(0), y(0), z(0), m_empty(true) {}
 
     basic_point_z(T x, T y, T z)
-        : x(x), y(y), z(z) {}
+        : x(x), y(y), z(z), m_empty(false) {}
 
     explicit basic_point_z(coord_iterator begin, coord_iterator end)
+        : x(0), y(0), z(0), m_empty(true)
     {
-        assert(std::distance(begin, end) == N);
+        assert(std::distance(begin, end) == 0 or std::distance(begin, end) == N);
+        if (begin == end)
+        {
+            return;
+        }
         size_t i = 0;
         for (auto it = begin; it != end; ++it)
         {
             coords[i++] = *it;
         }
+        m_empty = false;
     }
 
     explicit basic_point_z(coord_const_iterator begin, coord_const_iterator end)
+        : x(0), y(0), z(0), m_empty(true)
     {
-        assert(std::distance(begin, end) == N);
+        assert(std::distance(begin, end) == 0 or std::distance(begin, end) == N);
+        if (begin == end)
+        {
+            return;
+        }
         size_t i = 0;
         for (auto it = begin; it != end; ++it)
         {
             coords[i++] = *it;
         }
+        m_empty = false;
     }
 
     std::size_t size() const noexcept
     {
-        return this->ndim();
+        return m_empty ? 0 : this->ndim();
     }
 
     // operators
@@ -396,6 +458,14 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
 
     friend bool operator==(const basic_point_z<T>& lhs, const basic_point_z<T>& rhs)
     {
+        if (lhs.m_empty != rhs.m_empty)
+        {
+            return false;
+        }
+        if (lhs.m_empty)
+        {
+            return true;
+        }
         return lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z;
     }
 
@@ -409,9 +479,9 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
         return N;
     }
 
-    bool empty()
+    bool empty() const noexcept
     {
-        return begin() == end();
+        return m_empty;
     }
 
     // iterators
@@ -423,7 +493,7 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
 
     iterator end()
     {
-        return coords + N;
+        return coords + size();
     }
 
     const_iterator begin() const
@@ -432,7 +502,7 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
     }
     const_iterator end() const
     {
-        return coords + N;
+        return coords + size();
     }
 
     reverse_iterator rbegin() noexcept
@@ -490,6 +560,10 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
     /// @private
     bounds_t bounds_() const
     {
+        if (m_empty)
+        {
+            return {};
+        }
         return {x, y, x, y};
     }
 
@@ -509,6 +583,14 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
                 throw exceptions::parse_error("invalid geometry type");
             }
             auto coords = j.at("coordinates").as_double_array();
+            if (coords.empty())
+            {
+                return {};
+            }
+            if (coords.size() != N)
+            {
+                throw exceptions::parse_error("invalid coordinate count");
+            }
             return {static_cast<T>(coords.at(0)), static_cast<T>(coords.at(1)), static_cast<T>(coords.at(2))};
         }
         catch (const std::out_of_range& e)
@@ -533,6 +615,11 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
         {
             ss << std::setprecision(precision);
         }
+        if (m_empty)
+        {
+            ss << "{\"type\":\"Point\",\"coordinates\":[]}";
+            return ss.str();
+        }
         ss << "{\"type\":\"Point\",\"coordinates\":"
            << "[" << x << "," << y << "," << z << "]}";
         return ss.str();
@@ -550,6 +637,10 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
         {
             throw exceptions::parse_error("invalid wkt string");
         }
+        if (data.coords.empty())
+        {
+            return {};
+        }
         return {data.coords[0], data.coords[1], data.coords[2]};
     }
 
@@ -560,6 +651,11 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
         if (precision >= 0)
         {
             ss << std::setprecision(precision);
+        }
+        if (m_empty)
+        {
+            ss << "POINT Z EMPTY";
+            return ss.str();
         }
         ss << "POINT Z "
            << "(" << x << " " << y << " " << z << ")";
@@ -609,35 +705,49 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
         T coords[N];
     };
 
+    bool m_empty;
+
     basic_point_m()
-        : x(0), y(0), m(0) {}
+        : x(0), y(0), m(0), m_empty(true) {}
 
     basic_point_m(T x, T y, T m)
-        : x(x), y(y), m(m) {}
+        : x(x), y(y), m(m), m_empty(false) {}
 
     explicit basic_point_m(coord_iterator begin, coord_iterator end)
+        : x(0), y(0), m(0), m_empty(true)
     {
-        assert(std::distance(begin, end) == N);
+        assert(std::distance(begin, end) == 0 or std::distance(begin, end) == N);
+        if (begin == end)
+        {
+            return;
+        }
         size_t i = 0;
         for (auto it = begin; it != end; ++it)
         {
             coords[i++] = *it;
         }
+        m_empty = false;
     }
 
     explicit basic_point_m(coord_const_iterator begin, coord_const_iterator end)
+        : x(0), y(0), m(0), m_empty(true)
     {
-        assert(std::distance(begin, end) == N);
+        assert(std::distance(begin, end) == 0 or std::distance(begin, end) == N);
+        if (begin == end)
+        {
+            return;
+        }
         size_t i = 0;
         for (auto it = begin; it != end; ++it)
         {
             coords[i++] = *it;
         }
+        m_empty = false;
     }
 
     std::size_t size() const noexcept
     {
-        return this->ndim();
+        return m_empty ? 0 : this->ndim();
     }
 
     // operators
@@ -650,6 +760,14 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
 
     friend bool operator==(const basic_point_m<T>& lhs, const basic_point_m<T>& rhs)
     {
+        if (lhs.m_empty != rhs.m_empty)
+        {
+            return false;
+        }
+        if (lhs.m_empty)
+        {
+            return true;
+        }
         return lhs.x == rhs.x and lhs.y == rhs.y and lhs.m == rhs.m;
     }
 
@@ -663,9 +781,9 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
         return N;
     }
 
-    bool empty()
+    bool empty() const noexcept
     {
-        return begin() == end();
+        return m_empty;
     }
 
     // iterators
@@ -677,7 +795,7 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
 
     iterator end()
     {
-        return coords + N;
+        return coords + size();
     }
 
     const_iterator begin() const
@@ -686,7 +804,7 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
     }
     const_iterator end() const
     {
-        return coords + N;
+        return coords + size();
     }
 
     reverse_iterator rbegin() noexcept
@@ -744,6 +862,10 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
     /// @private
     bounds_t bounds_() const
     {
+        if (m_empty)
+        {
+            return {};
+        }
         return {x, y, x, y};
     }
 
@@ -763,6 +885,14 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
                 throw exceptions::parse_error("invalid geometry type");
             }
             auto coords = j.at("coordinates").as_double_array();
+            if (coords.empty())
+            {
+                return {};
+            }
+            if (coords.size() != N)
+            {
+                throw exceptions::parse_error("invalid coordinate count");
+            }
             return {static_cast<T>(coords.at(0)), static_cast<T>(coords.at(1)), static_cast<T>(coords.at(2))};
         }
         catch (const std::out_of_range& e)
@@ -787,6 +917,11 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
         {
             ss << std::setprecision(precision);
         }
+        if (m_empty)
+        {
+            ss << "{\"type\":\"Point\",\"coordinates\":[]}";
+            return ss.str();
+        }
         ss << "{\"type\":\"Point\",\"coordinates\":"
            << "[" << x << "," << y << "," << m << "]}";
         return ss.str();
@@ -804,6 +939,10 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
         {
             throw exceptions::parse_error("invalid wkt string");
         }
+        if (data.coords.empty())
+        {
+            return {};
+        }
         return {data.coords[0], data.coords[1], data.coords[2]};
     }
 
@@ -813,6 +952,11 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
         if (precision >= 0)
         {
             ss << std::setprecision(precision);
+        }
+        if (m_empty)
+        {
+            ss << "POINT M EMPTY";
+            return ss.str();
         }
         ss << "POINT M "
            << "(" << x << " " << y << " " << m << ")";
@@ -864,35 +1008,49 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
         T coords[N];
     };
 
+    bool m_empty;
+
     basic_point_zm()
-        : x(0), y(0), z(0), m(0) {}
+        : x(0), y(0), z(0), m(0), m_empty(true) {}
 
     basic_point_zm(T x, T y, T z, T m)
-        : x(x), y(y), z(z), m(m) {}
+        : x(x), y(y), z(z), m(m), m_empty(false) {}
 
     explicit basic_point_zm(coord_iterator begin, coord_iterator end)
+        : x(0), y(0), z(0), m(0), m_empty(true)
     {
-        assert(std::distance(begin, end) == N);
+        assert(std::distance(begin, end) == 0 or std::distance(begin, end) == N);
+        if (begin == end)
+        {
+            return;
+        }
         size_t i = 0;
         for (auto it = begin; it != end; ++it)
         {
             coords[i++] = *it;
         }
+        m_empty = false;
     }
 
     explicit basic_point_zm(coord_const_iterator begin, coord_const_iterator end)
+        : x(0), y(0), z(0), m(0), m_empty(true)
     {
-        assert(std::distance(begin, end) == N);
+        assert(std::distance(begin, end) == 0 or std::distance(begin, end) == N);
+        if (begin == end)
+        {
+            return;
+        }
         size_t i = 0;
         for (auto it = begin; it != end; ++it)
         {
             coords[i++] = *it;
         }
+        m_empty = false;
     }
 
     std::size_t size() const noexcept
     {
-        return this->ndim();
+        return m_empty ? 0 : this->ndim();
     }
 
     // operators
@@ -905,6 +1063,14 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
 
     friend bool operator==(const basic_point_zm<T>& lhs, const basic_point_zm<T>& rhs)
     {
+        if (lhs.m_empty != rhs.m_empty)
+        {
+            return false;
+        }
+        if (lhs.m_empty)
+        {
+            return true;
+        }
         return lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z and lhs.m == rhs.m;
     }
 
@@ -918,9 +1084,9 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
         return N;
     }
 
-    bool empty()
+    bool empty() const noexcept
     {
-        return begin() == end();
+        return m_empty;
     }
 
     // iterators
@@ -932,7 +1098,7 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
 
     iterator end()
     {
-        return coords + N;
+        return coords + size();
     }
 
     const_iterator begin() const
@@ -941,7 +1107,7 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
     }
     const_iterator end() const
     {
-        return coords + N;
+        return coords + size();
     }
 
     reverse_iterator rbegin() noexcept
@@ -999,6 +1165,10 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
     /// @private
     bounds_t bounds_() const
     {
+        if (m_empty)
+        {
+            return {};
+        }
         return {x, y, x, y};
     }
 
@@ -1018,6 +1188,14 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
                 throw exceptions::parse_error("invalid geometry type");
             }
             auto coords = j.at("coordinates").as_double_array();
+            if (coords.empty())
+            {
+                return {};
+            }
+            if (coords.size() != N)
+            {
+                throw exceptions::parse_error("invalid coordinate count");
+            }
             return {static_cast<T>(coords.at(0)), static_cast<T>(coords.at(1)), static_cast<T>(coords.at(2)), static_cast<T>(coords.at(3))};
         }
         catch (const std::out_of_range& e)
@@ -1042,6 +1220,11 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
         {
             ss << std::setprecision(precision);
         }
+        if (m_empty)
+        {
+            ss << "{\"type\":\"Point\",\"coordinates\":[]}";
+            return ss.str();
+        }
         ss << "{\"type\":\"Point\",\"coordinates\":"
            << "[" << x << "," << y << "," << z << "," << m << "]}";
         return ss.str();
@@ -1059,6 +1242,10 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
         {
             throw exceptions::parse_error("invalid wkt string");
         }
+        if (data.coords.empty())
+        {
+            return {};
+        }
         return {data.coords[0], data.coords[1], data.coords[2], data.coords[3]};
     }
 
@@ -1069,6 +1256,11 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
         if (precision >= 0)
         {
             ss << std::setprecision(precision);
+        }
+        if (m_empty)
+        {
+            ss << "POINT ZM EMPTY";
+            return ss.str();
         }
         ss << "POINT ZM "
            << "(" << x << " " << y << " " << z << " " << m << ")";

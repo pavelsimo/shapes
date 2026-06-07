@@ -19,8 +19,6 @@ namespace shapes
 
 //class MultiLineString;
 
-class GeometryCollection;
-
 class Bounds;
 
 }  // namespace shapes

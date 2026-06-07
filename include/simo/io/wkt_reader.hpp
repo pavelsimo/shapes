@@ -1,6 +1,8 @@
 #pragma once
 
+#include <algorithm>
 #include <ciso646>
+#include <cctype>
 #include <simo/geom/geometry.hpp>
 #include <simo/exceptions.hpp>
 #include <simo/io/wkt_parser.hpp>
@@ -89,10 +91,93 @@ class wkt_reader
         {
             throw exceptions::parse_error("parser error");
         }
+        normalize_result(wkt, result);
         return result;
     }
 
   private:
+    static std::string compact_upper(const std::string& text)
+    {
+        std::string res;
+        res.reserve(text.size());
+        for (char c : text)
+        {
+            if (std::isspace(static_cast<unsigned char>(c)))
+            {
+                continue;
+            }
+            res.push_back(static_cast<char>(std::toupper(static_cast<unsigned char>(c))));
+        }
+        return res;
+    }
+
+    static std::vector<std::size_t> multipolygon_polygon_offsets(const std::string& wkt)
+    {
+        std::vector<std::size_t> res;
+        auto first_paren = wkt.find('(');
+        if (first_paren == std::string::npos)
+        {
+            return res;
+        }
+
+        int depth = 0;
+        std::size_t ring_count = 0;
+        for (auto it = wkt.begin() + static_cast<std::ptrdiff_t>(first_paren); it != wkt.end(); ++it)
+        {
+            if (*it == '(')
+            {
+                ++depth;
+            }
+            else if (*it == ')')
+            {
+                if (depth == 3)
+                {
+                    ++ring_count;
+                }
+                else if (depth == 2)
+                {
+                    res.push_back(ring_count);
+                }
+                --depth;
+            }
+        }
+        return res;
+    }
+
+    static void normalize_result(const std::string& wkt, wkt_result& result)
+    {
+        auto& data = result.data;
+        const auto compact = compact_upper(wkt);
+
+        if (utils::is_point(data.geom_type) and compact.find("EMPTY") != std::string::npos)
+        {
+            data.coords.clear();
+        }
+
+        if (utils::is_linestring(data.geom_type) or utils::is_multilinestring(data.geom_type))
+        {
+            return;
+        }
+
+        if (utils::is_polygon(data.geom_type) and not data.ring_offsets.empty() and data.polygon_offsets.empty())
+        {
+            data.polygon_offsets.push_back(data.ring_offsets.size());
+        }
+
+        if (utils::is_multipolygon(data.geom_type) and data.polygon_offsets.empty())
+        {
+            data.polygon_offsets = multipolygon_polygon_offsets(wkt);
+        }
+
+        if (utils::get_geom_type(data.geom_type) == geometry_type::GEOMETRYCOLLECTION)
+        {
+            data.coords.clear();
+            data.line_offsets.clear();
+            data.ring_offsets.clear();
+            data.polygon_offsets.clear();
+        }
+    }
+
     /// pointer to the parser
     void* m_parser = nullptr;
 };

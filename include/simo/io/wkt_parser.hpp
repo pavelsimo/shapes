@@ -25,8 +25,14 @@ struct wkt_data
     /// the coordinates as a sequence of numbers
     std::vector<double> coords;
 
-    /// the offsets in the coordinates sequence
-    std::vector<std::size_t> offsets;
+    /// the offsets in the coordinates sequence for line-like geometries
+    std::vector<std::size_t> line_offsets;
+
+    /// the offsets in the coordinates sequence for polygon rings
+    std::vector<std::size_t> ring_offsets;
+
+    /// the offsets in the ring sequence for multipolygon polygons
+    std::vector<std::size_t> polygon_offsets;
 };
 
 /*!
@@ -1301,8 +1307,6 @@ static void yy_reduce(
         break;
       case 30: /* point ::= WKT_POINT_TAGGED_TEXT WKT_EMPTY_SET */
 {
-    result->data.coords.push_back(0);
-    result->data.coords.push_back(0);
     result->data.geom_type = geometry_type::POINT;
 }
         break;
@@ -1313,9 +1317,6 @@ static void yy_reduce(
         break;
       case 32: /* point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_EMPTY_SET */
 {
-    result->data.coords.push_back(0);
-    result->data.coords.push_back(0);
-    result->data.coords.push_back(0);
     result->data.geom_type = geometry_type::POINTZ;
 }
         break;
@@ -1326,9 +1327,6 @@ static void yy_reduce(
         break;
       case 34: /* point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_EMPTY_SET */
 {
-    result->data.coords.push_back(0);
-    result->data.coords.push_back(0);
-    result->data.coords.push_back(0);
     result->data.geom_type = geometry_type::POINTM;
 }
         break;
@@ -1339,10 +1337,6 @@ static void yy_reduce(
         break;
       case 36: /* point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_EMPTY_SET */
 {
-    result->data.coords.push_back(0);
-    result->data.coords.push_back(0);
-    result->data.coords.push_back(0);
-    result->data.coords.push_back(0);
     result->data.geom_type = geometry_type::POINTZM;
 }
         break;
@@ -1405,12 +1399,16 @@ static void yy_reduce(
       case 83: /* linestring_text_z ::= WKT_LPAREN coord_xyz WKT_COMMA coord_xyz coord_xyz_repeated WKT_RPAREN */ yytestcase(yyruleno==83);
       case 84: /* linestring_text_m ::= WKT_LPAREN coord_xym WKT_COMMA coord_xym coord_xym_repeated WKT_RPAREN */ yytestcase(yyruleno==84);
       case 85: /* linestring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN */ yytestcase(yyruleno==85);
+{
+    result->data.line_offsets.push_back(result->data.coords.size());
+}
+        break;
       case 114: /* ring_text ::= WKT_LPAREN coord_xy WKT_COMMA coord_xy WKT_COMMA coord_xy WKT_COMMA coord_xy coord_xy_repeated WKT_RPAREN */ yytestcase(yyruleno==114);
       case 115: /* ring_text_z ::= WKT_LPAREN coord_xyz WKT_COMMA coord_xyz WKT_COMMA coord_xyz WKT_COMMA coord_xyz coord_xyz_repeated WKT_RPAREN */ yytestcase(yyruleno==115);
       case 116: /* ring_text_m ::= WKT_LPAREN coord_xym WKT_COMMA coord_xym WKT_COMMA coord_xym WKT_COMMA coord_xym coord_xym_repeated WKT_RPAREN */ yytestcase(yyruleno==116);
       case 117: /* ring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm WKT_COMMA coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN */ yytestcase(yyruleno==117);
 {
-    result->data.offsets.push_back(result->data.coords.size());
+    result->data.ring_offsets.push_back(result->data.coords.size());
 }
         break;
       case 94: /* linestring ::= WKT_LINESTRING_TAGGED_TEXT WKT_EMPTY_SET */
@@ -1459,6 +1457,14 @@ static void yy_reduce(
       case 113: /* multilinestring_zm ::= WKT_MULTILINESTRING_ZM_TAGGED_TEXT multilinestring_text_zm */ yytestcase(yyruleno==113);
 {
     result->data.geom_type = geometry_type::MULTILINESTRINGZM;
+}
+        break;
+      case 126: /* polygon_text ::= WKT_LPAREN ring_text ring_text_repeated WKT_RPAREN */
+      case 127: /* polygon_text_z ::= WKT_LPAREN ring_text_z ring_text_z_repeated WKT_RPAREN */ yytestcase(yyruleno==127);
+      case 128: /* polygon_text_m ::= WKT_LPAREN ring_text_m ring_text_m_repeated WKT_RPAREN */ yytestcase(yyruleno==128);
+      case 129: /* polygon_text_zm ::= WKT_LPAREN ring_text_zm ring_text_zm_repeated WKT_RPAREN */ yytestcase(yyruleno==129);
+{
+    result->data.polygon_offsets.push_back(result->data.ring_offsets.size());
 }
         break;
       case 138: /* polygon ::= WKT_POLYGON_TAGGED_TEXT WKT_EMPTY_SET */

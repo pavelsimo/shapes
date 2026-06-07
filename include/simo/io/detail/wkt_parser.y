@@ -83,8 +83,6 @@ coord(A) ::= WKT_NUM(B). { A = B; }
 
 point ::= WKT_POINT_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.coords.push_back(0);
-    result->data.coords.push_back(0);
     result->data.geom_type = geometry_type::POINT;
 }
 
@@ -97,9 +95,6 @@ point ::= WKT_POINT_TAGGED_TEXT point_text.
 
 point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.coords.push_back(0);
-    result->data.coords.push_back(0);
-    result->data.coords.push_back(0);
     result->data.geom_type = geometry_type::POINTZ;
 }
 
@@ -112,9 +107,6 @@ point_z ::= WKT_POINT_Z_TAGGED_TEXT point_text_z.
 
 point_m ::= WKT_POINT_M_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.coords.push_back(0);
-    result->data.coords.push_back(0);
-    result->data.coords.push_back(0);
     result->data.geom_type = geometry_type::POINTM;
 }
 
@@ -127,10 +119,6 @@ point_m ::= WKT_POINT_M_TAGGED_TEXT point_text_m.
 
 point_zm ::= WKT_POINT_ZM_TAGGED_TEXT WKT_EMPTY_SET.
 {
-    result->data.coords.push_back(0);
-    result->data.coords.push_back(0);
-    result->data.coords.push_back(0);
-    result->data.coords.push_back(0);
     result->data.geom_type = geometry_type::POINTZM;
 }
 
@@ -295,22 +283,22 @@ multipoint_zm ::= WKT_MULTIPOINT_ZM_TAGGED_TEXT WKT_LPAREN coord_xyzm multipoint
 
 linestring_text ::= WKT_LPAREN coord_xy  WKT_COMMA coord_xy  coord_xy_repeated WKT_RPAREN.
 {
-    result->data.offsets.push_back(result->data.coords.size());
+    result->data.line_offsets.push_back(result->data.coords.size());
 }
 
 linestring_text_z ::= WKT_LPAREN coord_xyz  WKT_COMMA coord_xyz  coord_xyz_repeated WKT_RPAREN.
 {
-    result->data.offsets.push_back(result->data.coords.size());
+    result->data.line_offsets.push_back(result->data.coords.size());
 }
 
 linestring_text_m ::= WKT_LPAREN coord_xym  WKT_COMMA coord_xym  coord_xym_repeated WKT_RPAREN.
 {
-    result->data.offsets.push_back(result->data.coords.size());
+    result->data.line_offsets.push_back(result->data.coords.size());
 }
 
 linestring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN.
 {
-    result->data.offsets.push_back(result->data.coords.size());
+    result->data.line_offsets.push_back(result->data.coords.size());
 }
 
 linestring_text_repeated ::= .
@@ -437,22 +425,22 @@ multilinestring_zm ::= WKT_MULTILINESTRING_ZM_TAGGED_TEXT multilinestring_text_z
 
 ring_text ::= WKT_LPAREN coord_xy WKT_COMMA coord_xy WKT_COMMA coord_xy WKT_COMMA coord_xy coord_xy_repeated WKT_RPAREN.
 {
-    result->data.offsets.push_back(result->data.coords.size());
+    result->data.ring_offsets.push_back(result->data.coords.size());
 }
 
 ring_text_z ::= WKT_LPAREN coord_xyz  WKT_COMMA coord_xyz WKT_COMMA coord_xyz WKT_COMMA coord_xyz coord_xyz_repeated WKT_RPAREN.
 {
-    result->data.offsets.push_back(result->data.coords.size());
+    result->data.ring_offsets.push_back(result->data.coords.size());
 }
 
 ring_text_m ::= WKT_LPAREN coord_xym  WKT_COMMA coord_xym WKT_COMMA coord_xym WKT_COMMA coord_xym coord_xym_repeated WKT_RPAREN.
 {
-    result->data.offsets.push_back(result->data.coords.size());
+    result->data.ring_offsets.push_back(result->data.coords.size());
 }
 
 ring_text_zm ::= WKT_LPAREN coord_xyzm WKT_COMMA coord_xyzm WKT_COMMA coord_xyzm WKT_COMMA coord_xyzm coord_xyzm_repeated WKT_RPAREN.
 {
-    result->data.offsets.push_back(result->data.coords.size());
+    result->data.ring_offsets.push_back(result->data.coords.size());
 }
 
 ring_text_repeated ::= .
@@ -468,9 +456,24 @@ ring_text_zm_repeated ::= .
 ring_text_zm_repeated ::= WKT_COMMA ring_text_zm ring_text_zm_repeated.
 
 polygon_text    ::=  WKT_LPAREN ring_text ring_text_repeated WKT_RPAREN.
+{
+    result->data.polygon_offsets.push_back(result->data.ring_offsets.size());
+}
+
 polygon_text_z  ::=  WKT_LPAREN ring_text_z ring_text_z_repeated WKT_RPAREN.
+{
+    result->data.polygon_offsets.push_back(result->data.ring_offsets.size());
+}
+
 polygon_text_m  ::=  WKT_LPAREN ring_text_m ring_text_m_repeated WKT_RPAREN.
+{
+    result->data.polygon_offsets.push_back(result->data.ring_offsets.size());
+}
+
 polygon_text_zm ::=  WKT_LPAREN ring_text_zm ring_text_zm_repeated WKT_RPAREN.
+{
+    result->data.polygon_offsets.push_back(result->data.ring_offsets.size());
+}
 
 polygon_text_repeated ::= .
 polygon_text_repeated ::= WKT_COMMA polygon_text polygon_text_repeated.

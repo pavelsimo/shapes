@@ -95,5 +95,52 @@ TEST_CASE("Geometry")
             std::cout << p->x << std::endl;
             std::cout << p->y << std::endl;
         }
+
+        SECTION("geometrycollection from wkt")
+        {
+            SECTION("empty")
+            {
+                auto geom = geometry::from_wkt("GEOMETRYCOLLECTION EMPTY");
+                CHECK(geom.is_geometrycollection());
+                auto gc = geom.get_geometrycollection();
+                REQUIRE(gc != nullptr);
+                CHECK(gc->empty());
+                CHECK(gc->wkt() == "GEOMETRYCOLLECTION EMPTY");
+                CHECK(gc->json() == R"({"type":"GeometryCollection","geometries":[]})");
+            }
+
+            SECTION("mixed children")
+            {
+                auto gc = GeometryCollection::from_wkt("GEOMETRYCOLLECTION (POINT (1 2), LINESTRING (0 0, 1 1), POLYGON ((0 0, 1 0, 1 1, 0 0)))");
+                REQUIRE(gc.size() == 3);
+                CHECK(gc[0].wkt() == "POINT (1 2)");
+                CHECK(gc[1].wkt() == "LINESTRING(0 0,1 1)");
+                CHECK(gc[2].wkt() == "POLYGON((0 0,1 0,1 1,0 0))");
+            }
+
+            SECTION("nested")
+            {
+                auto geom = geometry::from_wkt("GEOMETRYCOLLECTION (POINT EMPTY, GEOMETRYCOLLECTION (POINT Z (1 2 3)))");
+                auto gc = geom.get_geometrycollection();
+                REQUIRE(gc != nullptr);
+                REQUIRE(gc->size() == 2);
+                CHECK((*gc)[0].wkt() == "POINT EMPTY");
+                CHECK((*gc)[1].is_geometrycollection());
+                auto nested = (*gc)[1].get_geometrycollection();
+                REQUIRE(nested != nullptr);
+                REQUIRE(nested->size() == 1);
+                CHECK((*nested)[0].wkt() == "POINT Z (1 2 3)");
+            }
+
+            SECTION("collection dimension preserves child tags")
+            {
+                auto geom = geometry::from_wkt("GEOMETRYCOLLECTION Z (POINT (1 2), POINT Z (3 4 5))");
+                CHECK(geom.is_geometrycollection_z());
+                auto gc = geom.get_geometrycollection_z();
+                REQUIRE(gc != nullptr);
+                REQUIRE(gc->size() == 2);
+                CHECK(gc->wkt() == "GEOMETRYCOLLECTIONZ(POINT (1 2),POINT Z (3 4 5))");
+            }
+        }
     }
 }

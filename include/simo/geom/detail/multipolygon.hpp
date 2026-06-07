@@ -67,6 +67,37 @@ class basic_multipolygon
         }
     }
 
+    template <typename CoordIterator, typename RingOffsetIterator, typename PolygonOffsetIterator>
+    basic_multipolygon(CoordIterator coord_first, CoordIterator coord_last,
+                       RingOffsetIterator ring_offset_first, RingOffsetIterator ring_offset_last,
+                       PolygonOffsetIterator polygon_offset_first, PolygonOffsetIterator polygon_offset_last)
+    {
+        if (std::distance(coord_first, coord_last) > 0)
+        {
+            using ring_type = typename T::value_type;
+
+            this->reserve(static_cast<size_t>(std::distance(polygon_offset_first, polygon_offset_last)));
+            size_t coord_lo = 0;
+            size_t ring_lo  = 0;
+            for (auto polygon_it = polygon_offset_first; polygon_it != polygon_offset_last; ++polygon_it)
+            {
+                size_t ring_hi = *polygon_it;
+                std::vector<ring_type> rings;
+                rings.reserve(ring_hi - ring_lo);
+                for (size_t ring_index = ring_lo; ring_index < ring_hi; ++ring_index)
+                {
+                    size_t coord_hi = *(ring_offset_first + static_cast<std::ptrdiff_t>(ring_index));
+                    rings.emplace_back(coord_first + static_cast<std::ptrdiff_t>(coord_lo),
+                                       coord_first + static_cast<std::ptrdiff_t>(coord_hi));
+                    coord_lo = coord_hi;
+                }
+                this->emplace_back(rings.begin(), rings.end());
+                ring_lo = ring_hi;
+            }
+        }
+        (void)ring_offset_last;
+    }
+
     // operators
 
     friend bool operator==(const basic_multipolygon<T>& lhs, const basic_multipolygon<T>& rhs)
@@ -130,7 +161,14 @@ class basic_multipolygon
         {
             return true;
         }
-        return *this[0] == *this[this->size() - 1];
+        for (const auto& polygon : *this)
+        {
+            if (not polygon.is_closed())
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     /// @private
@@ -148,7 +186,7 @@ class basic_multipolygon
         bounds_t res{};
         for (const auto& p : *this)
         {
-            res.extend(p.x, p.y);
+            res.extend(p.bounds());
         }
         return res;
     }
@@ -271,7 +309,11 @@ class basic_multipolygon
         {
             throw exceptions::parse_error("invalid wkt string");
         }
-        return basic_multipolygon<T>(data.coords.begin(), data.coords.end(), data.offsets.begin(), data.offsets.end());
+        auto multipolygon = basic_multipolygon<T>(data.coords.begin(), data.coords.end(),
+                                                  data.ring_offsets.begin(), data.ring_offsets.end(),
+                                                  data.polygon_offsets.begin(), data.polygon_offsets.end());
+        multipolygon.throw_for_invalid();
+        return multipolygon;
     }
 
     /// @private
@@ -341,7 +383,7 @@ struct is_basic_multipolygon : std::false_type
 {};
 
 template <typename T>
-struct is_basic_multipolygon<basic_multipolygon<basic_polygon<basic_point<T>>>> : std::true_type
+struct is_basic_multipolygon<basic_multipolygon<basic_polygon<basic_linestring<basic_point<T>>>>> : std::true_type
 {};
 
 template <typename>
@@ -349,7 +391,7 @@ struct is_basic_multipolygon_z : std::false_type
 {};
 
 template <typename T>
-struct is_basic_multipolygon_z<basic_multipolygon<basic_polygon<basic_point_z<T>>>> : std::true_type
+struct is_basic_multipolygon_z<basic_multipolygon<basic_polygon<basic_linestring<basic_point_z<T>>>>> : std::true_type
 {};
 
 template <typename>
@@ -357,7 +399,7 @@ struct is_basic_multipolygon_m : std::false_type
 {};
 
 template <typename T>
-struct is_basic_multipolygon_m<basic_multipolygon<basic_polygon<basic_point_m<T>>>> : std::true_type
+struct is_basic_multipolygon_m<basic_multipolygon<basic_polygon<basic_linestring<basic_point_m<T>>>>> : std::true_type
 {};
 
 template <typename>
@@ -365,7 +407,7 @@ struct is_basic_multipolygon_zm : std::false_type
 {};
 
 template <typename T>
-struct is_basic_multipolygon_zm<basic_multipolygon<basic_polygon<basic_point_zm<T>>>> : std::true_type
+struct is_basic_multipolygon_zm<basic_multipolygon<basic_polygon<basic_linestring<basic_point_zm<T>>>>> : std::true_type
 {};
 
 }  // namespace shapes

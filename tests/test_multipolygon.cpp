@@ -114,19 +114,35 @@ TEST_CASE("MultiPolygon")
             SECTION("xy - from wkt")
             {
                 auto mpg = MultiPolygon::from_wkt(R"(MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)),((20 35, 10 30, 10 10, 30 5, 45 20, 20 35),(30 20, 20 15, 20 25, 30 20))))");
-                CHECK(mpg.size() == 3);
+                CHECK(mpg.size() == 2);
+                CHECK(mpg[0].size() == 1);
+                CHECK(mpg[1].size() == 2);
                 CHECK(mpg.dim() == dimension_type::XY);
                 CHECK(mpg.geom_type() == geometry_type::MULTIPOLYGON);
                 CHECK(mpg[0][0][0].x == 40.0);
                 CHECK(mpg[0][0][0].y == 40.0);
                 CHECK(mpg[1][0][0].x == 20.0);
                 CHECK(mpg[1][0][0].y == 35.0);
+                CHECK(mpg[1][1][0].x == 30.0);
+                CHECK(mpg[1][1][0].y == 20.0);
+            }
+
+            SECTION("xy - one polygon with holes from wkt")
+            {
+                auto mpg = MultiPolygon::from_wkt(R"(MULTIPOLYGON (((0 0, 4 0, 4 4, 0 4, 0 0),(1 1, 2 1, 2 2, 1 1),(3 3, 3 2, 2 3, 3 3))))");
+                CHECK(mpg.size() == 1);
+                CHECK(mpg[0].size() == 3);
+                CHECK(mpg[0][0].size() == 5);
+                CHECK(mpg[0][1].size() == 4);
+                CHECK(mpg[0][2].size() == 4);
             }
 
             SECTION("xyz - from wkt")
             {
                 auto mpg = MultiPolygonZ::from_wkt(R"(MULTIPOLYGON Z (((40 40 1, 20 45 2, 45 30 3, 40 40 4)),((20 35 1, 10 30 2, 10 10 3, 30 5 4, 45 20 5, 20 35 6),(30 20 1, 20 15 2, 20 25 3, 30 20 4))))");
-                CHECK(mpg.size() == 3);
+                CHECK(mpg.size() == 2);
+                CHECK(mpg[0].size() == 1);
+                CHECK(mpg[1].size() == 2);
                 CHECK(mpg.dim() == dimension_type::XYZ);
                 CHECK(mpg.geom_type() == geometry_type::MULTIPOLYGONZ);
                 CHECK(mpg[0][0][0].x == 40.0);
@@ -140,7 +156,9 @@ TEST_CASE("MultiPolygon")
             SECTION("xym - from wkt")
             {
                 auto mpg = MultiPolygonM::from_wkt(R"(MULTIPOLYGON M (((40 40 1, 20 45 2, 45 30 3, 40 40 4)),((20 35 1, 10 30 2, 10 10 3, 30 5 4, 45 20 5, 20 35 6),(30 20 1, 20 15 2, 20 25 3, 30 20 4))))");
-                CHECK(mpg.size() == 3);
+                CHECK(mpg.size() == 2);
+                CHECK(mpg[0].size() == 1);
+                CHECK(mpg[1].size() == 2);
                 CHECK(mpg.dim() == dimension_type::XYM);
                 CHECK(mpg.geom_type() == geometry_type::MULTIPOLYGONM);
                 CHECK(mpg[0][0][0].x == 40.0);
@@ -154,7 +172,9 @@ TEST_CASE("MultiPolygon")
             SECTION("xyzm - from wkt")
             {
                 auto mpg = MultiPolygonZM::from_wkt(R"(MULTIPOLYGON ZM (((40 40 1 -1, 20 45 2 -2, 45 30 3 -3, 40 40 4 -4)),((20 35 1 -1, 10 30 2 -2, 10 10 3 -3, 30 5 4 -4, 45 20 5 -5, 20 35 6 -6),(30 20 1 -1, 20 15 2 -2, 20 25 3 -3, 30 20 4 -4))))");
-                CHECK(mpg.size() == 3);
+                CHECK(mpg.size() == 2);
+                CHECK(mpg[0].size() == 1);
+                CHECK(mpg[1].size() == 2);
                 CHECK(mpg.dim() == dimension_type::XYZM);
                 CHECK(mpg.geom_type() == geometry_type::MULTIPOLYGONZM);
                 CHECK(mpg[0][0][0].x == 40.0);
