@@ -1,0 +1,106 @@
+name: build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: ubuntu-gcc
+            os: ubuntu-latest
+            cc: gcc
+            cxx: g++
+          - name: ubuntu-clang
+            os: ubuntu-latest
+            cc: clang
+            cxx: clang++
+          - name: macos-appleclang
+            os: macos-latest
+            cc: clang
+            cxx: clang++
+          - name: windows-msvc
+            os: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure
+        if: runner.os != 'Windows'
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Configure
+        if: runner.os == 'Windows'
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Test
+        run: ctest --test-dir build --build-config Release --output-on-failure
+
+  coverage:
+    name: coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install coverage tools
+        run: sudo apt-get update && sudo apt-get install --yes lcov
+
+      - name: Configure
+        env:
+          CC: gcc
+          CXX: g++
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DSHAPES_ENABLE_COVERAGE=ON
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Generate coverage report
+        run: |
+          lcov --directory build --capture --output-file build/coverage.info
+          lcov --remove build/coverage.info '/usr/*' '*/tests/*' '*/thirdparty/*' --output-file build/coverage.info
+          lcov --list build/coverage.info
+          genhtml build/coverage.info --output-directory build/coverage
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            build/coverage.info
+            build/coverage
+
+  documentation:
+    name: documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Doxygen
+        run: sudo apt-get update && sudo apt-get install --yes doxygen
+
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build documentation
+        run: cmake --build build --target shapes_documentation
