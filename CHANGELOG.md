@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.0.1] - 2026-06-07
+## [0.1.0] - 2026-06-07
 
 ### Added
 - provide a header-only C++14 geometry library
@@ -16,5 +16,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - provide measurement, predicate, constructive operation, and affine transformation algorithms
 - expose a CMake interface target and single-header distribution support
 
-[Unreleased]: https://github.com/pavelsimo/shapes/compare/v0.0.1...HEAD
-[0.0.1]: https://github.com/pavelsimo/shapes/releases/tag/v0.0.1
+[Unreleased]: https://github.com/pavelsimo/shapes/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/pavelsimo/shapes/releases/tag/v0.1.0

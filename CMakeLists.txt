@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(shapes VERSION 0.0.1 LANGUAGES CXX)
+project(shapes VERSION 0.1.0 LANGUAGES CXX)
 set(SHAPES_LIBRARY ${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 14)
@@ -55,9 +55,6 @@ endif()
 add_library(${SHAPES_LIBRARY} INTERFACE)
 add_library(${SHAPES_LIBRARY}::${SHAPES_LIBRARY} ALIAS ${SHAPES_LIBRARY})
 target_compile_features(${SHAPES_LIBRARY} INTERFACE cxx_std_14)
-if(SHAPES_SINGLE_HEADER)
-  add_dependencies(${SHAPES_LIBRARY} amalgamate)
-endif()
 
 target_include_directories(${SHAPES_LIBRARY}
                            INTERFACE $<BUILD_INTERFACE:${SHAPES_INCLUDE_DIR}> $<INSTALL_INTERFACE:include>)
@@ -98,6 +95,10 @@ add_custom_target(shapes_amalgamate
                   COMMAND python ${PROJECT_SOURCE_DIR}/thirdparty/amalgamate/amalgamate.py -c
                           ${PROJECT_SOURCE_DIR}/thirdparty/amalgamate/config.json -s .
                           --verbose=yes)
+
+if(SHAPES_SINGLE_HEADER)
+  add_dependencies(${SHAPES_LIBRARY} shapes_amalgamate)
+endif()
 
 #
 # re2c lexer

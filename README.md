@@ -23,11 +23,11 @@ using namespace simo::shapes;
 ```
 
 Release builds attach the amalgamated header as `shapes.hpp` on GitHub Releases.
-To publish a release, create and push a version tag:
+To publish a release, create and push an annotated version tag:
 
 ```sh
-git tag -a vX.Y.Z -m "Release vX.Y.Z"
-git push origin vX.Y.Z
+git tag -a v0.1.0 -m "release v0.1.0"
+git push origin v0.1.0
 ```
 
 ## Examples
