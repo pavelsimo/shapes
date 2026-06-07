@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <ciso646>
 #include <cctype>
+#include <stdexcept>
 #include <sstream>
 #include <simo/geom/detail/geometry.hpp>
 #include <simo/geom/point.hpp>
@@ -47,6 +48,20 @@ struct is_basic_geometrycollection_m;
 
 template <typename>
 struct is_basic_geometrycollection_zm;
+
+namespace io
+{
+namespace detail
+{
+
+template <typename T>
+geometry_t<T> geometry_from_geojson_value(const geojson_value& value);
+
+template <typename T, geometry_type GeometryType, typename AllocatorType>
+basic_geometrycollection<T, GeometryType, AllocatorType> geometrycollection_from_geojson_value(const geojson_value& value);
+
+}  // namespace detail
+}  // namespace io
 
 template <typename T>
 class geometry_t : public basic_geometry<geometry_t<T>>
@@ -895,9 +910,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_point;
     }
 
+    const point_t<T>* get_point() const
+    {
+        assert(m_geom_type == geometry_type::POINT);
+        return m_value.m_point;
+    }
+
     point_z_t<T>* get_point_z()
     {
         assert(is_point_z());
+        return m_value.m_point_z;
+    }
+
+    const point_z_t<T>* get_point_z() const
+    {
+        assert(m_geom_type == geometry_type::POINTZ);
         return m_value.m_point_z;
     }
 
@@ -907,9 +934,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_point_m;
     }
 
+    const point_m_t<T>* get_point_m() const
+    {
+        assert(m_geom_type == geometry_type::POINTM);
+        return m_value.m_point_m;
+    }
+
     point_zm_t<T>* get_point_zm()
     {
         assert(is_point_zm());
+        return m_value.m_point_zm;
+    }
+
+    const point_zm_t<T>* get_point_zm() const
+    {
+        assert(m_geom_type == geometry_type::POINTZM);
         return m_value.m_point_zm;
     }
 
@@ -921,9 +960,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_multipoint;
     }
 
+    const multipoint_t<T>* get_multipoint() const
+    {
+        assert(m_geom_type == geometry_type::MULTIPOINT);
+        return m_value.m_multipoint;
+    }
+
     multipoint_z_t<T>* get_multipoint_z()
     {
         assert(is_multipoint_z());
+        return m_value.m_multipoint_z;
+    }
+
+    const multipoint_z_t<T>* get_multipoint_z() const
+    {
+        assert(m_geom_type == geometry_type::MULTIPOINTZ);
         return m_value.m_multipoint_z;
     }
 
@@ -933,9 +984,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_multipoint_m;
     }
 
+    const multipoint_m_t<T>* get_multipoint_m() const
+    {
+        assert(m_geom_type == geometry_type::MULTIPOINTM);
+        return m_value.m_multipoint_m;
+    }
+
     multipoint_zm_t<T>* get_multipoint_zm()
     {
         assert(is_multipoint_zm());
+        return m_value.m_multipoint_zm;
+    }
+
+    const multipoint_zm_t<T>* get_multipoint_zm() const
+    {
+        assert(m_geom_type == geometry_type::MULTIPOINTZM);
         return m_value.m_multipoint_zm;
     }
 
@@ -947,9 +1010,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_linestring;
     }
 
+    const linestring_t<T>* get_linestring() const
+    {
+        assert(m_geom_type == geometry_type::LINESTRING);
+        return m_value.m_linestring;
+    }
+
     linestring_z_t<T>* get_linestring_z()
     {
         assert(is_linestring_z());
+        return m_value.m_linestring_z;
+    }
+
+    const linestring_z_t<T>* get_linestring_z() const
+    {
+        assert(m_geom_type == geometry_type::LINESTRINGZ);
         return m_value.m_linestring_z;
     }
 
@@ -959,9 +1034,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_linestring_m;
     }
 
+    const linestring_m_t<T>* get_linestring_m() const
+    {
+        assert(m_geom_type == geometry_type::LINESTRINGM);
+        return m_value.m_linestring_m;
+    }
+
     linestring_zm_t<T>* get_linestring_zm()
     {
         assert(is_linestring_zm());
+        return m_value.m_linestring_zm;
+    }
+
+    const linestring_zm_t<T>* get_linestring_zm() const
+    {
+        assert(m_geom_type == geometry_type::LINESTRINGZM);
         return m_value.m_linestring_zm;
     }
 
@@ -973,9 +1060,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_multilinestring;
     }
 
+    const multilinestring_t<T>* get_multilinestring() const
+    {
+        assert(m_geom_type == geometry_type::MULTILINESTRING);
+        return m_value.m_multilinestring;
+    }
+
     multilinestring_z_t<T>* get_multilinestring_z()
     {
         assert(is_multilinestring_z());
+        return m_value.m_multilinestring_z;
+    }
+
+    const multilinestring_z_t<T>* get_multilinestring_z() const
+    {
+        assert(m_geom_type == geometry_type::MULTILINESTRINGZ);
         return m_value.m_multilinestring_z;
     }
 
@@ -985,9 +1084,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_multilinestring_m;
     }
 
+    const multilinestring_m_t<T>* get_multilinestring_m() const
+    {
+        assert(m_geom_type == geometry_type::MULTILINESTRINGM);
+        return m_value.m_multilinestring_m;
+    }
+
     multilinestring_zm_t<T>* get_multilinestring_zm()
     {
         assert(is_multilinestring_zm());
+        return m_value.m_multilinestring_zm;
+    }
+
+    const multilinestring_zm_t<T>* get_multilinestring_zm() const
+    {
+        assert(m_geom_type == geometry_type::MULTILINESTRINGZM);
         return m_value.m_multilinestring_zm;
     }
 
@@ -999,9 +1110,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_polygon;
     }
 
+    const polygon_t<T>* get_polygon() const
+    {
+        assert(m_geom_type == geometry_type::POLYGON);
+        return m_value.m_polygon;
+    }
+
     polygon_z_t<T>* get_polygon_z()
     {
         assert(is_polygon_z());
+        return m_value.m_polygon_z;
+    }
+
+    const polygon_z_t<T>* get_polygon_z() const
+    {
+        assert(m_geom_type == geometry_type::POLYGONZ);
         return m_value.m_polygon_z;
     }
 
@@ -1011,9 +1134,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_polygon_m;
     }
 
+    const polygon_m_t<T>* get_polygon_m() const
+    {
+        assert(m_geom_type == geometry_type::POLYGONM);
+        return m_value.m_polygon_m;
+    }
+
     polygon_zm_t<T>* get_polygon_zm()
     {
         assert(is_polygon_zm());
+        return m_value.m_polygon_zm;
+    }
+
+    const polygon_zm_t<T>* get_polygon_zm() const
+    {
+        assert(m_geom_type == geometry_type::POLYGONZM);
         return m_value.m_polygon_zm;
     }
 
@@ -1025,9 +1160,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_multipolygon;
     }
 
+    const multipolygon_t<T>* get_multipolygon() const
+    {
+        assert(m_geom_type == geometry_type::MULTIPOLYGON);
+        return m_value.m_multipolygon;
+    }
+
     multipolygon_z_t<T>* get_multipolygon_z()
     {
         assert(is_multipolygon_z());
+        return m_value.m_multipolygon_z;
+    }
+
+    const multipolygon_z_t<T>* get_multipolygon_z() const
+    {
+        assert(m_geom_type == geometry_type::MULTIPOLYGONZ);
         return m_value.m_multipolygon_z;
     }
 
@@ -1037,9 +1184,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_multipolygon_m;
     }
 
+    const multipolygon_m_t<T>* get_multipolygon_m() const
+    {
+        assert(m_geom_type == geometry_type::MULTIPOLYGONM);
+        return m_value.m_multipolygon_m;
+    }
+
     multipolygon_zm_t<T>* get_multipolygon_zm()
     {
         assert(is_multipolygon_zm());
+        return m_value.m_multipolygon_zm;
+    }
+
+    const multipolygon_zm_t<T>* get_multipolygon_zm() const
+    {
+        assert(m_geom_type == geometry_type::MULTIPOLYGONZM);
         return m_value.m_multipolygon_zm;
     }
 
@@ -1047,11 +1206,19 @@ class geometry_t : public basic_geometry<geometry_t<T>>
 
     geometrycollection_t<T>* get_geometrycollection();
 
+    const geometrycollection_t<T>* get_geometrycollection() const;
+
     geometrycollection_z_t<T>* get_geometrycollection_z();
+
+    const geometrycollection_z_t<T>* get_geometrycollection_z() const;
 
     geometrycollection_m_t<T>* get_geometrycollection_m();
 
+    const geometrycollection_m_t<T>* get_geometrycollection_m() const;
+
     geometrycollection_zm_t<T>* get_geometrycollection_zm();
+
+    const geometrycollection_zm_t<T>* get_geometrycollection_zm() const;
 
   private:
     /// for allow basic_geometry to access basic_point_zm private members
@@ -1295,10 +1462,25 @@ class geometry_t : public basic_geometry<geometry_t<T>>
     // json
 
     /// @private
-    static geometry_t<T> from_json_(const std::string& /*json*/)
+    static geometry_t<T> from_json_(const std::string& json)
     {
-        geometry_t<T> res;
-        return res;
+        try
+        {
+            auto j = io::geojson_parser::parse(json);
+            return io::detail::geometry_from_geojson_value<T>(j);
+        }
+        catch (const std::out_of_range& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const io::geojson_parse_error& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const exceptions::geometry_error& e)
+        {
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
+        }
     }
 
     /// @private
@@ -1831,9 +2013,25 @@ class basic_geometrycollection
         return res;
     }
 
-    static basic_geometrycollection<T, GeometryType, AllocatorType> from_json_(const std::string& /*json*/)
+    static basic_geometrycollection<T, GeometryType, AllocatorType> from_json_(const std::string& json)
     {
-        throw exceptions::not_implemented_error("GeometryCollection from_json is not implemented");
+        try
+        {
+            auto j = io::geojson_parser::parse(json);
+            return io::detail::geometrycollection_from_geojson_value<T, GeometryType, AllocatorType>(j);
+        }
+        catch (const std::out_of_range& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const io::geojson_parse_error& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const exceptions::geometry_error& e)
+        {
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
+        }
     }
 
     std::string json_(std::int32_t precision = -1) const
@@ -1907,6 +2105,331 @@ class basic_geometrycollection
         return ss.str();
     }
 };
+
+namespace io
+{
+namespace detail
+{
+
+inline void require_geojson_object(const geojson_value& value)
+{
+    if (not value.is_object())
+    {
+        throw exceptions::parse_error("GeoJSON geometry must be an object");
+    }
+}
+
+inline const geojson_value& require_geojson_member(const geojson_value& value, const std::string& key)
+{
+    require_geojson_object(value);
+    if (not value.has_key(key))
+    {
+        throw exceptions::parse_error("GeoJSON object is missing '" + key + "'");
+    }
+    return value.at(key);
+}
+
+inline void update_geojson_dimension(int& dimension, int candidate)
+{
+    if (candidate != 2 and candidate != 3 and candidate != 4)
+    {
+        throw exceptions::parse_error("invalid coordinate count");
+    }
+    if (dimension == 0)
+    {
+        dimension = candidate;
+        return;
+    }
+    if (dimension != candidate)
+    {
+        throw exceptions::parse_error("mixed coordinate dimensions");
+    }
+}
+
+inline void scan_geojson_coordinate_dimensions(const geojson_value& value, int& dimension)
+{
+    if (not value.is_array())
+    {
+        throw exceptions::parse_error("coordinates must be an array");
+    }
+    if (value.empty())
+    {
+        return;
+    }
+
+    const auto& values = value.as_array();
+    if (values[0].is_number())
+    {
+        for (const auto& coord : values)
+        {
+            if (not coord.is_number())
+            {
+                throw exceptions::parse_error("mixed coordinate values");
+            }
+        }
+        update_geojson_dimension(dimension, static_cast<int>(values.size()));
+        return;
+    }
+
+    for (const auto& child : values)
+    {
+        scan_geojson_coordinate_dimensions(child, dimension);
+    }
+}
+
+inline int infer_geojson_dimension(const geojson_value& coordinates)
+{
+    int dimension = 0;
+    scan_geojson_coordinate_dimensions(coordinates, dimension);
+    return dimension == 0 ? 2 : dimension;
+}
+
+template <typename PointType>
+PointType make_geojson_point(const geojson_value& value)
+{
+    auto values = value.as_double_array();
+    if (values.empty())
+    {
+        return PointType();
+    }
+    if (values.size() != PointType::N)
+    {
+        throw exceptions::parse_error("invalid coordinate count");
+    }
+
+    std::vector<typename PointType::coord_type> coords;
+    coords.reserve(values.size());
+    for (auto coord : values)
+    {
+        coords.push_back(static_cast<typename PointType::coord_type>(coord));
+    }
+    return PointType(coords.begin(), coords.end());
+}
+
+template <typename LineStringType>
+LineStringType make_geojson_linestring(const geojson_value& value)
+{
+    const auto& values = value.as_array();
+    using point_type = typename LineStringType::point_type;
+
+    std::vector<point_type> points;
+    points.reserve(values.size());
+    for (const auto& coord : values)
+    {
+        points.emplace_back(make_geojson_point<point_type>(coord));
+    }
+    return LineStringType(points.begin(), points.end());
+}
+
+template <typename PolygonType>
+PolygonType make_geojson_polygon(const geojson_value& value)
+{
+    const auto& values = value.as_array();
+    using ring_type = typename PolygonType::value_type;
+
+    std::vector<ring_type> rings;
+    rings.reserve(values.size());
+    for (const auto& ring : values)
+    {
+        rings.emplace_back(make_geojson_linestring<ring_type>(ring));
+    }
+    return PolygonType(rings.begin(), rings.end());
+}
+
+template <typename MultiLineStringType>
+MultiLineStringType make_geojson_multilinestring(const geojson_value& value)
+{
+    const auto& values = value.as_array();
+    using linestring_type = typename MultiLineStringType::value_type;
+
+    std::vector<linestring_type> linestrings;
+    linestrings.reserve(values.size());
+    for (const auto& linestring : values)
+    {
+        linestrings.emplace_back(make_geojson_linestring<linestring_type>(linestring));
+    }
+    return MultiLineStringType(linestrings.begin(), linestrings.end());
+}
+
+template <typename MultiPolygonType>
+MultiPolygonType make_geojson_multipolygon(const geojson_value& value)
+{
+    const auto& values = value.as_array();
+    using polygon_type = typename MultiPolygonType::polygon_type;
+
+    std::vector<polygon_type> polygons;
+    polygons.reserve(values.size());
+    for (const auto& polygon : values)
+    {
+        polygons.emplace_back(make_geojson_polygon<polygon_type>(polygon));
+    }
+    return MultiPolygonType(polygons.begin(), polygons.end());
+}
+
+template <typename T>
+geometry_t<T> point_from_geojson_coordinates(const geojson_value& coordinates, int dimension)
+{
+    switch (dimension)
+    {
+        case 2:
+            return geometry_t<T>(make_geojson_point<point_t<T>>(coordinates));
+        case 3:
+            return geometry_t<T>(make_geojson_point<point_z_t<T>>(coordinates));
+        case 4:
+            return geometry_t<T>(make_geojson_point<point_zm_t<T>>(coordinates));
+        default:
+            throw exceptions::parse_error("invalid coordinate count");
+    }
+}
+
+template <typename T>
+geometry_t<T> multipoint_from_geojson_coordinates(const geojson_value& coordinates, int dimension)
+{
+    switch (dimension)
+    {
+        case 2:
+            return geometry_t<T>(make_geojson_linestring<multipoint_t<T>>(coordinates));
+        case 3:
+            return geometry_t<T>(make_geojson_linestring<multipoint_z_t<T>>(coordinates));
+        case 4:
+            return geometry_t<T>(make_geojson_linestring<multipoint_zm_t<T>>(coordinates));
+        default:
+            throw exceptions::parse_error("invalid coordinate count");
+    }
+}
+
+template <typename T>
+geometry_t<T> linestring_from_geojson_coordinates(const geojson_value& coordinates, int dimension)
+{
+    switch (dimension)
+    {
+        case 2:
+            return geometry_t<T>(make_geojson_linestring<linestring_t<T>>(coordinates));
+        case 3:
+            return geometry_t<T>(make_geojson_linestring<linestring_z_t<T>>(coordinates));
+        case 4:
+            return geometry_t<T>(make_geojson_linestring<linestring_zm_t<T>>(coordinates));
+        default:
+            throw exceptions::parse_error("invalid coordinate count");
+    }
+}
+
+template <typename T>
+geometry_t<T> multilinestring_from_geojson_coordinates(const geojson_value& coordinates, int dimension)
+{
+    switch (dimension)
+    {
+        case 2:
+            return geometry_t<T>(make_geojson_multilinestring<multilinestring_t<T>>(coordinates));
+        case 3:
+            return geometry_t<T>(make_geojson_multilinestring<multilinestring_z_t<T>>(coordinates));
+        case 4:
+            return geometry_t<T>(make_geojson_multilinestring<multilinestring_zm_t<T>>(coordinates));
+        default:
+            throw exceptions::parse_error("invalid coordinate count");
+    }
+}
+
+template <typename T>
+geometry_t<T> polygon_from_geojson_coordinates(const geojson_value& coordinates, int dimension)
+{
+    switch (dimension)
+    {
+        case 2:
+            return geometry_t<T>(make_geojson_polygon<polygon_t<T>>(coordinates));
+        case 3:
+            return geometry_t<T>(make_geojson_polygon<polygon_z_t<T>>(coordinates));
+        case 4:
+            return geometry_t<T>(make_geojson_polygon<polygon_zm_t<T>>(coordinates));
+        default:
+            throw exceptions::parse_error("invalid coordinate count");
+    }
+}
+
+template <typename T>
+geometry_t<T> multipolygon_from_geojson_coordinates(const geojson_value& coordinates, int dimension)
+{
+    switch (dimension)
+    {
+        case 2:
+            return geometry_t<T>(make_geojson_multipolygon<multipolygon_t<T>>(coordinates));
+        case 3:
+            return geometry_t<T>(make_geojson_multipolygon<multipolygon_z_t<T>>(coordinates));
+        case 4:
+            return geometry_t<T>(make_geojson_multipolygon<multipolygon_zm_t<T>>(coordinates));
+        default:
+            throw exceptions::parse_error("invalid coordinate count");
+    }
+}
+
+template <typename T, geometry_type GeometryType, typename AllocatorType>
+basic_geometrycollection<T, GeometryType, AllocatorType> geometrycollection_from_geojson_value(const geojson_value& value)
+{
+    require_geojson_object(value);
+    const auto geom_type = require_geojson_member(value, "type").as_string();
+    if (geom_type != "GeometryCollection")
+    {
+        throw exceptions::parse_error("invalid geometry type: " + geom_type);
+    }
+
+    const auto& geometries = require_geojson_member(value, "geometries").as_array();
+    basic_geometrycollection<T, GeometryType, AllocatorType> res;
+    res.reserve(geometries.size());
+    for (const auto& geometry : geometries)
+    {
+        if (geometry.is_null())
+        {
+            throw exceptions::parse_error("GeometryCollection contains null geometry");
+        }
+        res.emplace_back(geometry_from_geojson_value<T>(geometry));
+    }
+    return res;
+}
+
+template <typename T>
+geometry_t<T> geometry_from_geojson_value(const geojson_value& value)
+{
+    require_geojson_object(value);
+    const auto geom_type = require_geojson_member(value, "type").as_string();
+
+    if (geom_type == "GeometryCollection")
+    {
+        return geometry_t<T>(geometrycollection_from_geojson_value<T, geometry_type::GEOMETRYCOLLECTION, std::allocator<geometry_t<T>>>(value));
+    }
+
+    const auto& coordinates = require_geojson_member(value, "coordinates");
+    const auto dimension = infer_geojson_dimension(coordinates);
+
+    if (geom_type == "Point")
+    {
+        return point_from_geojson_coordinates<T>(coordinates, dimension);
+    }
+    if (geom_type == "MultiPoint")
+    {
+        return multipoint_from_geojson_coordinates<T>(coordinates, dimension);
+    }
+    if (geom_type == "LineString")
+    {
+        return linestring_from_geojson_coordinates<T>(coordinates, dimension);
+    }
+    if (geom_type == "MultiLineString")
+    {
+        return multilinestring_from_geojson_coordinates<T>(coordinates, dimension);
+    }
+    if (geom_type == "Polygon")
+    {
+        return polygon_from_geojson_coordinates<T>(coordinates, dimension);
+    }
+    if (geom_type == "MultiPolygon")
+    {
+        return multipolygon_from_geojson_coordinates<T>(coordinates, dimension);
+    }
+
+    throw exceptions::parse_error("unsupported GeoJSON geometry type: " + geom_type);
+}
+
+}  // namespace detail
+}  // namespace io
 
 template <typename T>
 geometry_t<T>::geometry_t(const geometrycollection_t<T>& value)
@@ -2082,9 +2605,23 @@ geometrycollection_t<T>* geometry_t<T>::get_geometrycollection()
 }
 
 template <typename T>
+const geometrycollection_t<T>* geometry_t<T>::get_geometrycollection() const
+{
+    assert(m_geom_type == geometry_type::GEOMETRYCOLLECTION);
+    return m_geometrycollection.get();
+}
+
+template <typename T>
 geometrycollection_z_t<T>* geometry_t<T>::get_geometrycollection_z()
 {
     assert(is_geometrycollection_z());
+    return m_geometrycollection_z.get();
+}
+
+template <typename T>
+const geometrycollection_z_t<T>* geometry_t<T>::get_geometrycollection_z() const
+{
+    assert(m_geom_type == geometry_type::GEOMETRYCOLLECTIONZ);
     return m_geometrycollection_z.get();
 }
 
@@ -2096,9 +2633,23 @@ geometrycollection_m_t<T>* geometry_t<T>::get_geometrycollection_m()
 }
 
 template <typename T>
+const geometrycollection_m_t<T>* geometry_t<T>::get_geometrycollection_m() const
+{
+    assert(m_geom_type == geometry_type::GEOMETRYCOLLECTIONM);
+    return m_geometrycollection_m.get();
+}
+
+template <typename T>
 geometrycollection_zm_t<T>* geometry_t<T>::get_geometrycollection_zm()
 {
     assert(is_geometrycollection_zm());
+    return m_geometrycollection_zm.get();
+}
+
+template <typename T>
+const geometrycollection_zm_t<T>* geometry_t<T>::get_geometrycollection_zm() const
+{
+    assert(m_geom_type == geometry_type::GEOMETRYCOLLECTIONZM);
     return m_geometrycollection_zm.get();
 }
 

@@ -72,6 +72,7 @@ class Bounds;
 #include <algorithm>
 #include <ciso646>
 #include <cctype>
+#include <stdexcept>
 #include <sstream>
 // #include <simo/geom/detail/geometry.hpp>
 
@@ -9716,6 +9717,20 @@ struct is_basic_geometrycollection_m;
 template <typename>
 struct is_basic_geometrycollection_zm;
 
+namespace io
+{
+namespace detail
+{
+
+template <typename T>
+geometry_t<T> geometry_from_geojson_value(const geojson_value& value);
+
+template <typename T, geometry_type GeometryType, typename AllocatorType>
+basic_geometrycollection<T, GeometryType, AllocatorType> geometrycollection_from_geojson_value(const geojson_value& value);
+
+}  // namespace detail
+}  // namespace io
+
 template <typename T>
 class geometry_t : public basic_geometry<geometry_t<T>>
 {
@@ -10563,9 +10578,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_point;
     }
 
+    const point_t<T>* get_point() const
+    {
+        assert(m_geom_type == geometry_type::POINT);
+        return m_value.m_point;
+    }
+
     point_z_t<T>* get_point_z()
     {
         assert(is_point_z());
+        return m_value.m_point_z;
+    }
+
+    const point_z_t<T>* get_point_z() const
+    {
+        assert(m_geom_type == geometry_type::POINTZ);
         return m_value.m_point_z;
     }
 
@@ -10575,9 +10602,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_point_m;
     }
 
+    const point_m_t<T>* get_point_m() const
+    {
+        assert(m_geom_type == geometry_type::POINTM);
+        return m_value.m_point_m;
+    }
+
     point_zm_t<T>* get_point_zm()
     {
         assert(is_point_zm());
+        return m_value.m_point_zm;
+    }
+
+    const point_zm_t<T>* get_point_zm() const
+    {
+        assert(m_geom_type == geometry_type::POINTZM);
         return m_value.m_point_zm;
     }
 
@@ -10589,9 +10628,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_multipoint;
     }
 
+    const multipoint_t<T>* get_multipoint() const
+    {
+        assert(m_geom_type == geometry_type::MULTIPOINT);
+        return m_value.m_multipoint;
+    }
+
     multipoint_z_t<T>* get_multipoint_z()
     {
         assert(is_multipoint_z());
+        return m_value.m_multipoint_z;
+    }
+
+    const multipoint_z_t<T>* get_multipoint_z() const
+    {
+        assert(m_geom_type == geometry_type::MULTIPOINTZ);
         return m_value.m_multipoint_z;
     }
 
@@ -10601,9 +10652,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_multipoint_m;
     }
 
+    const multipoint_m_t<T>* get_multipoint_m() const
+    {
+        assert(m_geom_type == geometry_type::MULTIPOINTM);
+        return m_value.m_multipoint_m;
+    }
+
     multipoint_zm_t<T>* get_multipoint_zm()
     {
         assert(is_multipoint_zm());
+        return m_value.m_multipoint_zm;
+    }
+
+    const multipoint_zm_t<T>* get_multipoint_zm() const
+    {
+        assert(m_geom_type == geometry_type::MULTIPOINTZM);
         return m_value.m_multipoint_zm;
     }
 
@@ -10615,9 +10678,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_linestring;
     }
 
+    const linestring_t<T>* get_linestring() const
+    {
+        assert(m_geom_type == geometry_type::LINESTRING);
+        return m_value.m_linestring;
+    }
+
     linestring_z_t<T>* get_linestring_z()
     {
         assert(is_linestring_z());
+        return m_value.m_linestring_z;
+    }
+
+    const linestring_z_t<T>* get_linestring_z() const
+    {
+        assert(m_geom_type == geometry_type::LINESTRINGZ);
         return m_value.m_linestring_z;
     }
 
@@ -10627,9 +10702,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_linestring_m;
     }
 
+    const linestring_m_t<T>* get_linestring_m() const
+    {
+        assert(m_geom_type == geometry_type::LINESTRINGM);
+        return m_value.m_linestring_m;
+    }
+
     linestring_zm_t<T>* get_linestring_zm()
     {
         assert(is_linestring_zm());
+        return m_value.m_linestring_zm;
+    }
+
+    const linestring_zm_t<T>* get_linestring_zm() const
+    {
+        assert(m_geom_type == geometry_type::LINESTRINGZM);
         return m_value.m_linestring_zm;
     }
 
@@ -10641,9 +10728,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_multilinestring;
     }
 
+    const multilinestring_t<T>* get_multilinestring() const
+    {
+        assert(m_geom_type == geometry_type::MULTILINESTRING);
+        return m_value.m_multilinestring;
+    }
+
     multilinestring_z_t<T>* get_multilinestring_z()
     {
         assert(is_multilinestring_z());
+        return m_value.m_multilinestring_z;
+    }
+
+    const multilinestring_z_t<T>* get_multilinestring_z() const
+    {
+        assert(m_geom_type == geometry_type::MULTILINESTRINGZ);
         return m_value.m_multilinestring_z;
     }
 
@@ -10653,9 +10752,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_multilinestring_m;
     }
 
+    const multilinestring_m_t<T>* get_multilinestring_m() const
+    {
+        assert(m_geom_type == geometry_type::MULTILINESTRINGM);
+        return m_value.m_multilinestring_m;
+    }
+
     multilinestring_zm_t<T>* get_multilinestring_zm()
     {
         assert(is_multilinestring_zm());
+        return m_value.m_multilinestring_zm;
+    }
+
+    const multilinestring_zm_t<T>* get_multilinestring_zm() const
+    {
+        assert(m_geom_type == geometry_type::MULTILINESTRINGZM);
         return m_value.m_multilinestring_zm;
     }
 
@@ -10667,9 +10778,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_polygon;
     }
 
+    const polygon_t<T>* get_polygon() const
+    {
+        assert(m_geom_type == geometry_type::POLYGON);
+        return m_value.m_polygon;
+    }
+
     polygon_z_t<T>* get_polygon_z()
     {
         assert(is_polygon_z());
+        return m_value.m_polygon_z;
+    }
+
+    const polygon_z_t<T>* get_polygon_z() const
+    {
+        assert(m_geom_type == geometry_type::POLYGONZ);
         return m_value.m_polygon_z;
     }
 
@@ -10679,9 +10802,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_polygon_m;
     }
 
+    const polygon_m_t<T>* get_polygon_m() const
+    {
+        assert(m_geom_type == geometry_type::POLYGONM);
+        return m_value.m_polygon_m;
+    }
+
     polygon_zm_t<T>* get_polygon_zm()
     {
         assert(is_polygon_zm());
+        return m_value.m_polygon_zm;
+    }
+
+    const polygon_zm_t<T>* get_polygon_zm() const
+    {
+        assert(m_geom_type == geometry_type::POLYGONZM);
         return m_value.m_polygon_zm;
     }
 
@@ -10693,9 +10828,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_multipolygon;
     }
 
+    const multipolygon_t<T>* get_multipolygon() const
+    {
+        assert(m_geom_type == geometry_type::MULTIPOLYGON);
+        return m_value.m_multipolygon;
+    }
+
     multipolygon_z_t<T>* get_multipolygon_z()
     {
         assert(is_multipolygon_z());
+        return m_value.m_multipolygon_z;
+    }
+
+    const multipolygon_z_t<T>* get_multipolygon_z() const
+    {
+        assert(m_geom_type == geometry_type::MULTIPOLYGONZ);
         return m_value.m_multipolygon_z;
     }
 
@@ -10705,9 +10852,21 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         return m_value.m_multipolygon_m;
     }
 
+    const multipolygon_m_t<T>* get_multipolygon_m() const
+    {
+        assert(m_geom_type == geometry_type::MULTIPOLYGONM);
+        return m_value.m_multipolygon_m;
+    }
+
     multipolygon_zm_t<T>* get_multipolygon_zm()
     {
         assert(is_multipolygon_zm());
+        return m_value.m_multipolygon_zm;
+    }
+
+    const multipolygon_zm_t<T>* get_multipolygon_zm() const
+    {
+        assert(m_geom_type == geometry_type::MULTIPOLYGONZM);
         return m_value.m_multipolygon_zm;
     }
 
@@ -10715,11 +10874,19 @@ class geometry_t : public basic_geometry<geometry_t<T>>
 
     geometrycollection_t<T>* get_geometrycollection();
 
+    const geometrycollection_t<T>* get_geometrycollection() const;
+
     geometrycollection_z_t<T>* get_geometrycollection_z();
+
+    const geometrycollection_z_t<T>* get_geometrycollection_z() const;
 
     geometrycollection_m_t<T>* get_geometrycollection_m();
 
+    const geometrycollection_m_t<T>* get_geometrycollection_m() const;
+
     geometrycollection_zm_t<T>* get_geometrycollection_zm();
+
+    const geometrycollection_zm_t<T>* get_geometrycollection_zm() const;
 
   private:
     /// for allow basic_geometry to access basic_point_zm private members
@@ -10963,10 +11130,25 @@ class geometry_t : public basic_geometry<geometry_t<T>>
     // json
 
     /// @private
-    static geometry_t<T> from_json_(const std::string& /*json*/)
+    static geometry_t<T> from_json_(const std::string& json)
     {
-        geometry_t<T> res;
-        return res;
+        try
+        {
+            auto j = io::geojson_parser::parse(json);
+            return io::detail::geometry_from_geojson_value<T>(j);
+        }
+        catch (const std::out_of_range& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const io::geojson_parse_error& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const exceptions::geometry_error& e)
+        {
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
+        }
     }
 
     /// @private
@@ -11499,9 +11681,25 @@ class basic_geometrycollection
         return res;
     }
 
-    static basic_geometrycollection<T, GeometryType, AllocatorType> from_json_(const std::string& /*json*/)
+    static basic_geometrycollection<T, GeometryType, AllocatorType> from_json_(const std::string& json)
     {
-        throw exceptions::not_implemented_error("GeometryCollection from_json is not implemented");
+        try
+        {
+            auto j = io::geojson_parser::parse(json);
+            return io::detail::geometrycollection_from_geojson_value<T, GeometryType, AllocatorType>(j);
+        }
+        catch (const std::out_of_range& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const io::geojson_parse_error& e)
+        {
+            throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+        }
+        catch (const exceptions::geometry_error& e)
+        {
+            throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
+        }
     }
 
     std::string json_(std::int32_t precision = -1) const
@@ -11575,6 +11773,331 @@ class basic_geometrycollection
         return ss.str();
     }
 };
+
+namespace io
+{
+namespace detail
+{
+
+inline void require_geojson_object(const geojson_value& value)
+{
+    if (not value.is_object())
+    {
+        throw exceptions::parse_error("GeoJSON geometry must be an object");
+    }
+}
+
+inline const geojson_value& require_geojson_member(const geojson_value& value, const std::string& key)
+{
+    require_geojson_object(value);
+    if (not value.has_key(key))
+    {
+        throw exceptions::parse_error("GeoJSON object is missing '" + key + "'");
+    }
+    return value.at(key);
+}
+
+inline void update_geojson_dimension(int& dimension, int candidate)
+{
+    if (candidate != 2 and candidate != 3 and candidate != 4)
+    {
+        throw exceptions::parse_error("invalid coordinate count");
+    }
+    if (dimension == 0)
+    {
+        dimension = candidate;
+        return;
+    }
+    if (dimension != candidate)
+    {
+        throw exceptions::parse_error("mixed coordinate dimensions");
+    }
+}
+
+inline void scan_geojson_coordinate_dimensions(const geojson_value& value, int& dimension)
+{
+    if (not value.is_array())
+    {
+        throw exceptions::parse_error("coordinates must be an array");
+    }
+    if (value.empty())
+    {
+        return;
+    }
+
+    const auto& values = value.as_array();
+    if (values[0].is_number())
+    {
+        for (const auto& coord : values)
+        {
+            if (not coord.is_number())
+            {
+                throw exceptions::parse_error("mixed coordinate values");
+            }
+        }
+        update_geojson_dimension(dimension, static_cast<int>(values.size()));
+        return;
+    }
+
+    for (const auto& child : values)
+    {
+        scan_geojson_coordinate_dimensions(child, dimension);
+    }
+}
+
+inline int infer_geojson_dimension(const geojson_value& coordinates)
+{
+    int dimension = 0;
+    scan_geojson_coordinate_dimensions(coordinates, dimension);
+    return dimension == 0 ? 2 : dimension;
+}
+
+template <typename PointType>
+PointType make_geojson_point(const geojson_value& value)
+{
+    auto values = value.as_double_array();
+    if (values.empty())
+    {
+        return PointType();
+    }
+    if (values.size() != PointType::N)
+    {
+        throw exceptions::parse_error("invalid coordinate count");
+    }
+
+    std::vector<typename PointType::coord_type> coords;
+    coords.reserve(values.size());
+    for (auto coord : values)
+    {
+        coords.push_back(static_cast<typename PointType::coord_type>(coord));
+    }
+    return PointType(coords.begin(), coords.end());
+}
+
+template <typename LineStringType>
+LineStringType make_geojson_linestring(const geojson_value& value)
+{
+    const auto& values = value.as_array();
+    using point_type = typename LineStringType::point_type;
+
+    std::vector<point_type> points;
+    points.reserve(values.size());
+    for (const auto& coord : values)
+    {
+        points.emplace_back(make_geojson_point<point_type>(coord));
+    }
+    return LineStringType(points.begin(), points.end());
+}
+
+template <typename PolygonType>
+PolygonType make_geojson_polygon(const geojson_value& value)
+{
+    const auto& values = value.as_array();
+    using ring_type = typename PolygonType::value_type;
+
+    std::vector<ring_type> rings;
+    rings.reserve(values.size());
+    for (const auto& ring : values)
+    {
+        rings.emplace_back(make_geojson_linestring<ring_type>(ring));
+    }
+    return PolygonType(rings.begin(), rings.end());
+}
+
+template <typename MultiLineStringType>
+MultiLineStringType make_geojson_multilinestring(const geojson_value& value)
+{
+    const auto& values = value.as_array();
+    using linestring_type = typename MultiLineStringType::value_type;
+
+    std::vector<linestring_type> linestrings;
+    linestrings.reserve(values.size());
+    for (const auto& linestring : values)
+    {
+        linestrings.emplace_back(make_geojson_linestring<linestring_type>(linestring));
+    }
+    return MultiLineStringType(linestrings.begin(), linestrings.end());
+}
+
+template <typename MultiPolygonType>
+MultiPolygonType make_geojson_multipolygon(const geojson_value& value)
+{
+    const auto& values = value.as_array();
+    using polygon_type = typename MultiPolygonType::polygon_type;
+
+    std::vector<polygon_type> polygons;
+    polygons.reserve(values.size());
+    for (const auto& polygon : values)
+    {
+        polygons.emplace_back(make_geojson_polygon<polygon_type>(polygon));
+    }
+    return MultiPolygonType(polygons.begin(), polygons.end());
+}
+
+template <typename T>
+geometry_t<T> point_from_geojson_coordinates(const geojson_value& coordinates, int dimension)
+{
+    switch (dimension)
+    {
+        case 2:
+            return geometry_t<T>(make_geojson_point<point_t<T>>(coordinates));
+        case 3:
+            return geometry_t<T>(make_geojson_point<point_z_t<T>>(coordinates));
+        case 4:
+            return geometry_t<T>(make_geojson_point<point_zm_t<T>>(coordinates));
+        default:
+            throw exceptions::parse_error("invalid coordinate count");
+    }
+}
+
+template <typename T>
+geometry_t<T> multipoint_from_geojson_coordinates(const geojson_value& coordinates, int dimension)
+{
+    switch (dimension)
+    {
+        case 2:
+            return geometry_t<T>(make_geojson_linestring<multipoint_t<T>>(coordinates));
+        case 3:
+            return geometry_t<T>(make_geojson_linestring<multipoint_z_t<T>>(coordinates));
+        case 4:
+            return geometry_t<T>(make_geojson_linestring<multipoint_zm_t<T>>(coordinates));
+        default:
+            throw exceptions::parse_error("invalid coordinate count");
+    }
+}
+
+template <typename T>
+geometry_t<T> linestring_from_geojson_coordinates(const geojson_value& coordinates, int dimension)
+{
+    switch (dimension)
+    {
+        case 2:
+            return geometry_t<T>(make_geojson_linestring<linestring_t<T>>(coordinates));
+        case 3:
+            return geometry_t<T>(make_geojson_linestring<linestring_z_t<T>>(coordinates));
+        case 4:
+            return geometry_t<T>(make_geojson_linestring<linestring_zm_t<T>>(coordinates));
+        default:
+            throw exceptions::parse_error("invalid coordinate count");
+    }
+}
+
+template <typename T>
+geometry_t<T> multilinestring_from_geojson_coordinates(const geojson_value& coordinates, int dimension)
+{
+    switch (dimension)
+    {
+        case 2:
+            return geometry_t<T>(make_geojson_multilinestring<multilinestring_t<T>>(coordinates));
+        case 3:
+            return geometry_t<T>(make_geojson_multilinestring<multilinestring_z_t<T>>(coordinates));
+        case 4:
+            return geometry_t<T>(make_geojson_multilinestring<multilinestring_zm_t<T>>(coordinates));
+        default:
+            throw exceptions::parse_error("invalid coordinate count");
+    }
+}
+
+template <typename T>
+geometry_t<T> polygon_from_geojson_coordinates(const geojson_value& coordinates, int dimension)
+{
+    switch (dimension)
+    {
+        case 2:
+            return geometry_t<T>(make_geojson_polygon<polygon_t<T>>(coordinates));
+        case 3:
+            return geometry_t<T>(make_geojson_polygon<polygon_z_t<T>>(coordinates));
+        case 4:
+            return geometry_t<T>(make_geojson_polygon<polygon_zm_t<T>>(coordinates));
+        default:
+            throw exceptions::parse_error("invalid coordinate count");
+    }
+}
+
+template <typename T>
+geometry_t<T> multipolygon_from_geojson_coordinates(const geojson_value& coordinates, int dimension)
+{
+    switch (dimension)
+    {
+        case 2:
+            return geometry_t<T>(make_geojson_multipolygon<multipolygon_t<T>>(coordinates));
+        case 3:
+            return geometry_t<T>(make_geojson_multipolygon<multipolygon_z_t<T>>(coordinates));
+        case 4:
+            return geometry_t<T>(make_geojson_multipolygon<multipolygon_zm_t<T>>(coordinates));
+        default:
+            throw exceptions::parse_error("invalid coordinate count");
+    }
+}
+
+template <typename T, geometry_type GeometryType, typename AllocatorType>
+basic_geometrycollection<T, GeometryType, AllocatorType> geometrycollection_from_geojson_value(const geojson_value& value)
+{
+    require_geojson_object(value);
+    const auto geom_type = require_geojson_member(value, "type").as_string();
+    if (geom_type != "GeometryCollection")
+    {
+        throw exceptions::parse_error("invalid geometry type: " + geom_type);
+    }
+
+    const auto& geometries = require_geojson_member(value, "geometries").as_array();
+    basic_geometrycollection<T, GeometryType, AllocatorType> res;
+    res.reserve(geometries.size());
+    for (const auto& geometry : geometries)
+    {
+        if (geometry.is_null())
+        {
+            throw exceptions::parse_error("GeometryCollection contains null geometry");
+        }
+        res.emplace_back(geometry_from_geojson_value<T>(geometry));
+    }
+    return res;
+}
+
+template <typename T>
+geometry_t<T> geometry_from_geojson_value(const geojson_value& value)
+{
+    require_geojson_object(value);
+    const auto geom_type = require_geojson_member(value, "type").as_string();
+
+    if (geom_type == "GeometryCollection")
+    {
+        return geometry_t<T>(geometrycollection_from_geojson_value<T, geometry_type::GEOMETRYCOLLECTION, std::allocator<geometry_t<T>>>(value));
+    }
+
+    const auto& coordinates = require_geojson_member(value, "coordinates");
+    const auto dimension = infer_geojson_dimension(coordinates);
+
+    if (geom_type == "Point")
+    {
+        return point_from_geojson_coordinates<T>(coordinates, dimension);
+    }
+    if (geom_type == "MultiPoint")
+    {
+        return multipoint_from_geojson_coordinates<T>(coordinates, dimension);
+    }
+    if (geom_type == "LineString")
+    {
+        return linestring_from_geojson_coordinates<T>(coordinates, dimension);
+    }
+    if (geom_type == "MultiLineString")
+    {
+        return multilinestring_from_geojson_coordinates<T>(coordinates, dimension);
+    }
+    if (geom_type == "Polygon")
+    {
+        return polygon_from_geojson_coordinates<T>(coordinates, dimension);
+    }
+    if (geom_type == "MultiPolygon")
+    {
+        return multipolygon_from_geojson_coordinates<T>(coordinates, dimension);
+    }
+
+    throw exceptions::parse_error("unsupported GeoJSON geometry type: " + geom_type);
+}
+
+}  // namespace detail
+}  // namespace io
 
 template <typename T>
 geometry_t<T>::geometry_t(const geometrycollection_t<T>& value)
@@ -11750,9 +12273,23 @@ geometrycollection_t<T>* geometry_t<T>::get_geometrycollection()
 }
 
 template <typename T>
+const geometrycollection_t<T>* geometry_t<T>::get_geometrycollection() const
+{
+    assert(m_geom_type == geometry_type::GEOMETRYCOLLECTION);
+    return m_geometrycollection.get();
+}
+
+template <typename T>
 geometrycollection_z_t<T>* geometry_t<T>::get_geometrycollection_z()
 {
     assert(is_geometrycollection_z());
+    return m_geometrycollection_z.get();
+}
+
+template <typename T>
+const geometrycollection_z_t<T>* geometry_t<T>::get_geometrycollection_z() const
+{
+    assert(m_geom_type == geometry_type::GEOMETRYCOLLECTIONZ);
     return m_geometrycollection_z.get();
 }
 
@@ -11764,9 +12301,23 @@ geometrycollection_m_t<T>* geometry_t<T>::get_geometrycollection_m()
 }
 
 template <typename T>
+const geometrycollection_m_t<T>* geometry_t<T>::get_geometrycollection_m() const
+{
+    assert(m_geom_type == geometry_type::GEOMETRYCOLLECTIONM);
+    return m_geometrycollection_m.get();
+}
+
+template <typename T>
 geometrycollection_zm_t<T>* geometry_t<T>::get_geometrycollection_zm()
 {
     assert(is_geometrycollection_zm());
+    return m_geometrycollection_zm.get();
+}
+
+template <typename T>
+const geometrycollection_zm_t<T>* geometry_t<T>::get_geometrycollection_zm() const
+{
+    assert(m_geom_type == geometry_type::GEOMETRYCOLLECTIONZM);
     return m_geometrycollection_zm.get();
 }
 
@@ -11842,6 +12393,992 @@ using Geometry = geometry_t<double>;
 // #include <simo/geom/linearring.hpp>
 
 // #include <simo/io/polyline.hpp>
+
+// #include <simo/io/io.hpp>
+
+
+#include <ciso646>
+#include <cstdint>
+#include <string>
+#include <vector>
+// #include <simo/geom/geometry.hpp>
+
+// #include <simo/io/wkb_reader.hpp>
+
+
+#include <ciso646>
+#include <cmath>
+#include <cstdint>
+#include <cstring>
+#include <limits>
+#include <vector>
+// #include <simo/geom/geometry.hpp>
+
+
+namespace simo
+{
+namespace shapes
+{
+namespace io
+{
+namespace detail
+{
+
+template <typename T>
+class wkb_reader
+{
+  public:
+    explicit wkb_reader(const std::vector<std::uint8_t>& bytes)
+        : bytes_(bytes), offset_(0) {}
+
+    geometry_t<T> read()
+    {
+        auto geometry = read_geometry();
+        if (offset_ != bytes_.size())
+        {
+            throw exceptions::parse_error("unexpected trailing WKB bytes");
+        }
+        return geometry;
+    }
+
+  private:
+    std::vector<std::uint8_t> bytes_;
+    std::size_t offset_;
+
+    void require(std::size_t count) const
+    {
+        if (bytes_.size() - offset_ < count)
+        {
+            throw exceptions::parse_error("truncated WKB");
+        }
+    }
+
+    std::uint8_t read_u8()
+    {
+        require(1);
+        return bytes_[offset_++];
+    }
+
+    std::uint32_t read_u32(bool little_endian)
+    {
+        require(4);
+        std::uint32_t value = 0;
+        if (little_endian)
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                value |= static_cast<std::uint32_t>(bytes_[offset_ + static_cast<std::size_t>(i)]) << (i * 8);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                value = (value << 8) | static_cast<std::uint32_t>(bytes_[offset_ + static_cast<std::size_t>(i)]);
+            }
+        }
+        offset_ += 4;
+        return value;
+    }
+
+    std::uint64_t read_u64(bool little_endian)
+    {
+        require(8);
+        std::uint64_t value = 0;
+        if (little_endian)
+        {
+            for (int i = 0; i < 8; ++i)
+            {
+                value |= static_cast<std::uint64_t>(bytes_[offset_ + static_cast<std::size_t>(i)]) << (i * 8);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 8; ++i)
+            {
+                value = (value << 8) | static_cast<std::uint64_t>(bytes_[offset_ + static_cast<std::size_t>(i)]);
+            }
+        }
+        offset_ += 8;
+        return value;
+    }
+
+    double read_double(bool little_endian)
+    {
+        const auto bits = read_u64(little_endian);
+        double value = 0.0;
+        std::memcpy(&value, &bits, sizeof(value));
+        return value;
+    }
+
+    geometry_type decode_type(std::uint32_t type_id) const
+    {
+        const auto base = type_id % 1000;
+        if (base < 1 or base > 7)
+        {
+            throw exceptions::parse_error("unsupported WKB geometry type");
+        }
+
+        if (type_id >= 1 and type_id <= 7)
+        {
+            return static_cast<geometry_type>(type_id);
+        }
+        if (type_id >= 1001 and type_id <= 1007)
+        {
+            return static_cast<geometry_type>(type_id);
+        }
+        if (type_id >= 2001 and type_id <= 2007)
+        {
+            return static_cast<geometry_type>(type_id);
+        }
+        if (type_id >= 3001 and type_id <= 3007)
+        {
+            return static_cast<geometry_type>(type_id);
+        }
+
+        throw exceptions::parse_error("unsupported WKB geometry type");
+    }
+
+    template <typename PointType>
+    PointType read_point_coordinates(bool little_endian)
+    {
+        std::vector<typename PointType::coord_type> coords;
+        coords.reserve(PointType::N);
+
+        bool all_nan = true;
+        for (std::size_t i = 0; i < PointType::N; ++i)
+        {
+            const auto value = read_double(little_endian);
+            all_nan = all_nan and std::isnan(value);
+            coords.push_back(static_cast<typename PointType::coord_type>(value));
+        }
+
+        if (all_nan)
+        {
+            return PointType();
+        }
+        return PointType(coords.begin(), coords.end());
+    }
+
+    template <typename LineStringType>
+    LineStringType read_linestring_coordinates(bool little_endian)
+    {
+        using point_type = typename LineStringType::point_type;
+
+        const auto count = read_u32(little_endian);
+        std::vector<point_type> points;
+        points.reserve(static_cast<std::size_t>(count));
+        for (std::uint32_t i = 0; i < count; ++i)
+        {
+            points.emplace_back(read_point_coordinates<point_type>(little_endian));
+        }
+        return LineStringType(points.begin(), points.end());
+    }
+
+    template <typename PolygonType>
+    PolygonType read_polygon_coordinates(bool little_endian)
+    {
+        using ring_type = typename PolygonType::value_type;
+
+        const auto count = read_u32(little_endian);
+        std::vector<ring_type> rings;
+        rings.reserve(static_cast<std::size_t>(count));
+        for (std::uint32_t i = 0; i < count; ++i)
+        {
+            rings.emplace_back(read_linestring_coordinates<ring_type>(little_endian));
+        }
+        return PolygonType(rings.begin(), rings.end());
+    }
+
+    template <typename MultiType, typename ChildType>
+    MultiType read_geometry_children(bool little_endian, geometry_type expected_type)
+    {
+        const auto count = read_u32(little_endian);
+        std::vector<ChildType> children;
+        children.reserve(static_cast<std::size_t>(count));
+        for (std::uint32_t i = 0; i < count; ++i)
+        {
+            auto child = read_geometry();
+            if (child.geom_type() != expected_type)
+            {
+                throw exceptions::parse_error("unexpected WKB child geometry type");
+            }
+            children.emplace_back(*child.template get<ChildType>());
+        }
+        return MultiType(children.begin(), children.end());
+    }
+
+    template <typename CollectionType>
+    CollectionType read_collection_children(bool little_endian)
+    {
+        const auto count = read_u32(little_endian);
+        std::vector<geometry_t<T>> children;
+        children.reserve(static_cast<std::size_t>(count));
+        for (std::uint32_t i = 0; i < count; ++i)
+        {
+            children.emplace_back(read_geometry());
+        }
+        return CollectionType(children.begin(), children.end());
+    }
+
+    geometry_t<T> read_geometry()
+    {
+        const auto order = read_u8();
+        if (order != 0 and order != 1)
+        {
+            throw exceptions::parse_error("invalid WKB byte order");
+        }
+        const bool little_endian = order == 1;
+        const auto geom_type = decode_type(read_u32(little_endian));
+
+        switch (geom_type)
+        {
+            case geometry_type::POINT:
+                return geometry_t<T>(read_point_coordinates<point_t<T>>(little_endian));
+            case geometry_type::POINTZ:
+                return geometry_t<T>(read_point_coordinates<point_z_t<T>>(little_endian));
+            case geometry_type::POINTM:
+                return geometry_t<T>(read_point_coordinates<point_m_t<T>>(little_endian));
+            case geometry_type::POINTZM:
+                return geometry_t<T>(read_point_coordinates<point_zm_t<T>>(little_endian));
+
+            case geometry_type::LINESTRING:
+                return geometry_t<T>(read_linestring_coordinates<linestring_t<T>>(little_endian));
+            case geometry_type::LINESTRINGZ:
+                return geometry_t<T>(read_linestring_coordinates<linestring_z_t<T>>(little_endian));
+            case geometry_type::LINESTRINGM:
+                return geometry_t<T>(read_linestring_coordinates<linestring_m_t<T>>(little_endian));
+            case geometry_type::LINESTRINGZM:
+                return geometry_t<T>(read_linestring_coordinates<linestring_zm_t<T>>(little_endian));
+
+            case geometry_type::POLYGON:
+                return geometry_t<T>(read_polygon_coordinates<polygon_t<T>>(little_endian));
+            case geometry_type::POLYGONZ:
+                return geometry_t<T>(read_polygon_coordinates<polygon_z_t<T>>(little_endian));
+            case geometry_type::POLYGONM:
+                return geometry_t<T>(read_polygon_coordinates<polygon_m_t<T>>(little_endian));
+            case geometry_type::POLYGONZM:
+                return geometry_t<T>(read_polygon_coordinates<polygon_zm_t<T>>(little_endian));
+
+            case geometry_type::MULTIPOINT:
+                return geometry_t<T>(read_geometry_children<multipoint_t<T>, point_t<T>>(little_endian, geometry_type::POINT));
+            case geometry_type::MULTIPOINTZ:
+                return geometry_t<T>(read_geometry_children<multipoint_z_t<T>, point_z_t<T>>(little_endian, geometry_type::POINTZ));
+            case geometry_type::MULTIPOINTM:
+                return geometry_t<T>(read_geometry_children<multipoint_m_t<T>, point_m_t<T>>(little_endian, geometry_type::POINTM));
+            case geometry_type::MULTIPOINTZM:
+                return geometry_t<T>(read_geometry_children<multipoint_zm_t<T>, point_zm_t<T>>(little_endian, geometry_type::POINTZM));
+
+            case geometry_type::MULTILINESTRING:
+                return geometry_t<T>(read_geometry_children<multilinestring_t<T>, linestring_t<T>>(little_endian, geometry_type::LINESTRING));
+            case geometry_type::MULTILINESTRINGZ:
+                return geometry_t<T>(read_geometry_children<multilinestring_z_t<T>, linestring_z_t<T>>(little_endian, geometry_type::LINESTRINGZ));
+            case geometry_type::MULTILINESTRINGM:
+                return geometry_t<T>(read_geometry_children<multilinestring_m_t<T>, linestring_m_t<T>>(little_endian, geometry_type::LINESTRINGM));
+            case geometry_type::MULTILINESTRINGZM:
+                return geometry_t<T>(read_geometry_children<multilinestring_zm_t<T>, linestring_zm_t<T>>(little_endian, geometry_type::LINESTRINGZM));
+
+            case geometry_type::MULTIPOLYGON:
+                return geometry_t<T>(read_geometry_children<multipolygon_t<T>, polygon_t<T>>(little_endian, geometry_type::POLYGON));
+            case geometry_type::MULTIPOLYGONZ:
+                return geometry_t<T>(read_geometry_children<multipolygon_z_t<T>, polygon_z_t<T>>(little_endian, geometry_type::POLYGONZ));
+            case geometry_type::MULTIPOLYGONM:
+                return geometry_t<T>(read_geometry_children<multipolygon_m_t<T>, polygon_m_t<T>>(little_endian, geometry_type::POLYGONM));
+            case geometry_type::MULTIPOLYGONZM:
+                return geometry_t<T>(read_geometry_children<multipolygon_zm_t<T>, polygon_zm_t<T>>(little_endian, geometry_type::POLYGONZM));
+
+            case geometry_type::GEOMETRYCOLLECTION:
+                return geometry_t<T>(read_collection_children<geometrycollection_t<T>>(little_endian));
+            case geometry_type::GEOMETRYCOLLECTIONZ:
+                return geometry_t<T>(read_collection_children<geometrycollection_z_t<T>>(little_endian));
+            case geometry_type::GEOMETRYCOLLECTIONM:
+                return geometry_t<T>(read_collection_children<geometrycollection_m_t<T>>(little_endian));
+            case geometry_type::GEOMETRYCOLLECTIONZM:
+                return geometry_t<T>(read_collection_children<geometrycollection_zm_t<T>>(little_endian));
+
+            default:
+                throw exceptions::parse_error("unsupported WKB geometry type");
+        }
+    }
+};
+
+template <typename T, typename Iterator>
+geometry_t<T> read_wkb(Iterator first, Iterator last)
+{
+    std::vector<std::uint8_t> bytes;
+    for (auto it = first; it != last; ++it)
+    {
+        bytes.push_back(static_cast<std::uint8_t>(*it));
+    }
+    return wkb_reader<T>(bytes).read();
+}
+
+}  // namespace detail
+}  // namespace io
+}  // namespace shapes
+}  // namespace simo
+
+// #include <simo/io/wkb_writer.hpp>
+
+
+#include <ciso646>
+#include <cstdint>
+#include <cstring>
+#include <limits>
+#include <vector>
+// #include <simo/geom/geometry.hpp>
+
+
+namespace simo
+{
+namespace shapes
+{
+
+enum class byte_order
+{
+    native,
+    little_endian,
+    big_endian
+};
+
+struct wkb_options
+{
+    byte_order order = byte_order::native;
+    int output_dimension = 0;
+};
+
+namespace io
+{
+namespace detail
+{
+
+enum class wkb_dimension_kind
+{
+    xy,
+    z,
+    m,
+    zm
+};
+
+inline bool host_is_little_endian()
+{
+    const std::uint16_t value = 1;
+    return *reinterpret_cast<const std::uint8_t*>(&value) == 1;
+}
+
+inline bool geometry_type_has_z(geometry_type type)
+{
+    const auto value = static_cast<int>(type);
+    return (value >= 1000 and value < 2000) or value >= 3000;
+}
+
+inline bool geometry_type_has_m(geometry_type type)
+{
+    return static_cast<int>(type) >= 2000;
+}
+
+inline wkb_dimension_kind inferred_dimension_kind(geometry_type type)
+{
+    if (geometry_type_has_z(type) and geometry_type_has_m(type))
+    {
+        return wkb_dimension_kind::zm;
+    }
+    if (geometry_type_has_z(type))
+    {
+        return wkb_dimension_kind::z;
+    }
+    if (geometry_type_has_m(type))
+    {
+        return wkb_dimension_kind::m;
+    }
+    return wkb_dimension_kind::xy;
+}
+
+inline std::size_t dimension_size(wkb_dimension_kind kind)
+{
+    switch (kind)
+    {
+        case wkb_dimension_kind::zm:
+            return 4;
+        case wkb_dimension_kind::z:
+        case wkb_dimension_kind::m:
+            return 3;
+        default:
+            return 2;
+    }
+}
+
+template <typename PointType>
+double point_z_value(const PointType&)
+{
+    throw exceptions::parse_error("requested WKB Z coordinate is unavailable");
+}
+
+template <typename T, typename Enable>
+double point_z_value(const basic_point_z<T, Enable>& point)
+{
+    return static_cast<double>(point.z);
+}
+
+template <typename T, typename Enable>
+double point_z_value(const basic_point_zm<T, Enable>& point)
+{
+    return static_cast<double>(point.z);
+}
+
+template <typename PointType>
+double point_m_value(const PointType&)
+{
+    throw exceptions::parse_error("requested WKB M coordinate is unavailable");
+}
+
+template <typename T, typename Enable>
+double point_m_value(const basic_point_m<T, Enable>& point)
+{
+    return static_cast<double>(point.m);
+}
+
+template <typename T, typename Enable>
+double point_m_value(const basic_point_zm<T, Enable>& point)
+{
+    return static_cast<double>(point.m);
+}
+
+class wkb_writer
+{
+  public:
+    explicit wkb_writer(const wkb_options& options)
+        : options_(options), little_endian_(resolve_byte_order(options.order)) {}
+
+    template <typename T, typename Enable>
+    void write_geometry(const basic_point<T, Enable>& point)
+    {
+        const auto kind = output_kind(point.geom_type());
+        write_header(point.geom_type(), kind);
+        write_position(point, kind);
+    }
+
+    template <typename T, typename Enable>
+    void write_geometry(const basic_point_z<T, Enable>& point)
+    {
+        const auto kind = output_kind(point.geom_type());
+        write_header(point.geom_type(), kind);
+        write_position(point, kind);
+    }
+
+    template <typename T, typename Enable>
+    void write_geometry(const basic_point_m<T, Enable>& point)
+    {
+        const auto kind = output_kind(point.geom_type());
+        write_header(point.geom_type(), kind);
+        write_position(point, kind);
+    }
+
+    template <typename T, typename Enable>
+    void write_geometry(const basic_point_zm<T, Enable>& point)
+    {
+        const auto kind = output_kind(point.geom_type());
+        write_header(point.geom_type(), kind);
+        write_position(point, kind);
+    }
+
+    template <typename T, typename AllocatorType>
+    void write_geometry(const basic_multipoint<T, AllocatorType>& multipoint)
+    {
+        const auto kind = output_kind(multipoint.geom_type());
+        write_header(multipoint.geom_type(), kind);
+        write_count(multipoint.size());
+        for (const auto& point : multipoint)
+        {
+            write_geometry(point);
+        }
+    }
+
+    template <typename T, typename AllocatorType>
+    void write_geometry(const basic_linestring<T, AllocatorType>& linestring)
+    {
+        const auto kind = output_kind(linestring.geom_type());
+        write_header(linestring.geom_type(), kind);
+        write_linestring_coordinates(linestring, kind);
+    }
+
+    template <typename T, typename AllocatorType>
+    void write_geometry(const basic_multilinestring<T, AllocatorType>& multilinestring)
+    {
+        const auto kind = output_kind(multilinestring.geom_type());
+        write_header(multilinestring.geom_type(), kind);
+        write_count(multilinestring.size());
+        for (const auto& linestring : multilinestring)
+        {
+            write_geometry(linestring);
+        }
+    }
+
+    template <typename T, typename AllocatorType>
+    void write_geometry(const basic_polygon<T, AllocatorType>& polygon)
+    {
+        const auto kind = output_kind(polygon.geom_type());
+        write_header(polygon.geom_type(), kind);
+        write_polygon_coordinates(polygon, kind);
+    }
+
+    template <typename T, typename AllocatorType>
+    void write_geometry(const basic_multipolygon<T, AllocatorType>& multipolygon)
+    {
+        const auto kind = output_kind(multipolygon.geom_type());
+        write_header(multipolygon.geom_type(), kind);
+        write_count(multipolygon.size());
+        for (const auto& polygon : multipolygon)
+        {
+            write_geometry(polygon);
+        }
+    }
+
+    template <typename T, geometry_type GeometryType, typename AllocatorType>
+    void write_geometry(const basic_geometrycollection<T, GeometryType, AllocatorType>& collection)
+    {
+        const auto kind = output_kind(collection.geom_type());
+        write_header(collection.geom_type(), kind);
+        write_count(collection.size());
+        for (const auto& geometry : collection)
+        {
+            write_geometry(geometry);
+        }
+    }
+
+    template <typename T>
+    void write_geometry(const geometry_t<T>& geometry)
+    {
+        switch (geometry.geom_type())
+        {
+            case geometry_type::POINT:
+                write_geometry(*geometry.get_point());
+                break;
+            case geometry_type::POINTZ:
+                write_geometry(*geometry.get_point_z());
+                break;
+            case geometry_type::POINTM:
+                write_geometry(*geometry.get_point_m());
+                break;
+            case geometry_type::POINTZM:
+                write_geometry(*geometry.get_point_zm());
+                break;
+
+            case geometry_type::MULTIPOINT:
+                write_geometry(*geometry.get_multipoint());
+                break;
+            case geometry_type::MULTIPOINTZ:
+                write_geometry(*geometry.get_multipoint_z());
+                break;
+            case geometry_type::MULTIPOINTM:
+                write_geometry(*geometry.get_multipoint_m());
+                break;
+            case geometry_type::MULTIPOINTZM:
+                write_geometry(*geometry.get_multipoint_zm());
+                break;
+
+            case geometry_type::LINESTRING:
+                write_geometry(*geometry.get_linestring());
+                break;
+            case geometry_type::LINESTRINGZ:
+                write_geometry(*geometry.get_linestring_z());
+                break;
+            case geometry_type::LINESTRINGM:
+                write_geometry(*geometry.get_linestring_m());
+                break;
+            case geometry_type::LINESTRINGZM:
+                write_geometry(*geometry.get_linestring_zm());
+                break;
+
+            case geometry_type::MULTILINESTRING:
+                write_geometry(*geometry.get_multilinestring());
+                break;
+            case geometry_type::MULTILINESTRINGZ:
+                write_geometry(*geometry.get_multilinestring_z());
+                break;
+            case geometry_type::MULTILINESTRINGM:
+                write_geometry(*geometry.get_multilinestring_m());
+                break;
+            case geometry_type::MULTILINESTRINGZM:
+                write_geometry(*geometry.get_multilinestring_zm());
+                break;
+
+            case geometry_type::POLYGON:
+                write_geometry(*geometry.get_polygon());
+                break;
+            case geometry_type::POLYGONZ:
+                write_geometry(*geometry.get_polygon_z());
+                break;
+            case geometry_type::POLYGONM:
+                write_geometry(*geometry.get_polygon_m());
+                break;
+            case geometry_type::POLYGONZM:
+                write_geometry(*geometry.get_polygon_zm());
+                break;
+
+            case geometry_type::MULTIPOLYGON:
+                write_geometry(*geometry.get_multipolygon());
+                break;
+            case geometry_type::MULTIPOLYGONZ:
+                write_geometry(*geometry.get_multipolygon_z());
+                break;
+            case geometry_type::MULTIPOLYGONM:
+                write_geometry(*geometry.get_multipolygon_m());
+                break;
+            case geometry_type::MULTIPOLYGONZM:
+                write_geometry(*geometry.get_multipolygon_zm());
+                break;
+
+            case geometry_type::GEOMETRYCOLLECTION:
+                write_geometry(*geometry.get_geometrycollection());
+                break;
+            case geometry_type::GEOMETRYCOLLECTIONZ:
+                write_geometry(*geometry.get_geometrycollection_z());
+                break;
+            case geometry_type::GEOMETRYCOLLECTIONM:
+                write_geometry(*geometry.get_geometrycollection_m());
+                break;
+            case geometry_type::GEOMETRYCOLLECTIONZM:
+                write_geometry(*geometry.get_geometrycollection_zm());
+                break;
+
+            default:
+                throw exceptions::parse_error("unsupported WKB geometry type");
+        }
+    }
+
+    std::vector<std::uint8_t> bytes() const
+    {
+        return bytes_;
+    }
+
+  private:
+    wkb_options options_;
+    bool little_endian_;
+    std::vector<std::uint8_t> bytes_;
+
+    static bool resolve_byte_order(byte_order order)
+    {
+        switch (order)
+        {
+            case byte_order::little_endian:
+                return true;
+            case byte_order::big_endian:
+                return false;
+            default:
+                return host_is_little_endian();
+        }
+    }
+
+    wkb_dimension_kind output_kind(geometry_type type) const
+    {
+        switch (options_.output_dimension)
+        {
+            case 0:
+                return inferred_dimension_kind(type);
+            case 2:
+                return wkb_dimension_kind::xy;
+            case 3:
+                if (geometry_type_has_z(type))
+                {
+                    return wkb_dimension_kind::z;
+                }
+                if (geometry_type_has_m(type))
+                {
+                    return wkb_dimension_kind::m;
+                }
+                throw exceptions::parse_error("requested WKB output dimension is unavailable");
+            case 4:
+                if (geometry_type_has_z(type) and geometry_type_has_m(type))
+                {
+                    return wkb_dimension_kind::zm;
+                }
+                throw exceptions::parse_error("requested WKB output dimension is unavailable");
+            default:
+                throw exceptions::parse_error("invalid WKB output dimension");
+        }
+    }
+
+    std::uint32_t type_id(geometry_type type, wkb_dimension_kind kind) const
+    {
+        const auto base_type = utils::get_geom_type(type);
+        const auto base = static_cast<std::uint32_t>(base_type);
+        if (base < 1 or base > 7)
+        {
+            throw exceptions::parse_error("unsupported WKB geometry type");
+        }
+
+        switch (kind)
+        {
+            case wkb_dimension_kind::z:
+                return 1000 + base;
+            case wkb_dimension_kind::m:
+                return 2000 + base;
+            case wkb_dimension_kind::zm:
+                return 3000 + base;
+            default:
+                return base;
+        }
+    }
+
+    void write_header(geometry_type type, wkb_dimension_kind kind)
+    {
+        bytes_.push_back(little_endian_ ? 1 : 0);
+        write_u32(type_id(type, kind));
+    }
+
+    void write_count(std::size_t count)
+    {
+        if (count > static_cast<std::size_t>(std::numeric_limits<std::uint32_t>::max()))
+        {
+            throw exceptions::parse_error("WKB geometry count exceeds uint32 range");
+        }
+        write_u32(static_cast<std::uint32_t>(count));
+    }
+
+    void write_u32(std::uint32_t value)
+    {
+        if (little_endian_)
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                bytes_.push_back(static_cast<std::uint8_t>((value >> (i * 8)) & 0xff));
+            }
+            return;
+        }
+
+        for (int i = 3; i >= 0; --i)
+        {
+            bytes_.push_back(static_cast<std::uint8_t>((value >> (i * 8)) & 0xff));
+        }
+    }
+
+    void write_u64(std::uint64_t value)
+    {
+        if (little_endian_)
+        {
+            for (int i = 0; i < 8; ++i)
+            {
+                bytes_.push_back(static_cast<std::uint8_t>((value >> (i * 8)) & 0xff));
+            }
+            return;
+        }
+
+        for (int i = 7; i >= 0; --i)
+        {
+            bytes_.push_back(static_cast<std::uint8_t>((value >> (i * 8)) & 0xff));
+        }
+    }
+
+    void write_double(double value)
+    {
+        std::uint64_t bits = 0;
+        std::memcpy(&bits, &value, sizeof(value));
+        write_u64(bits);
+    }
+
+    template <typename PointType>
+    void write_position(const PointType& point, wkb_dimension_kind kind)
+    {
+        if (point.empty())
+        {
+            const auto nan = std::numeric_limits<double>::quiet_NaN();
+            for (std::size_t i = 0; i < dimension_size(kind); ++i)
+            {
+                write_double(nan);
+            }
+            return;
+        }
+
+        write_double(static_cast<double>(point.x));
+        write_double(static_cast<double>(point.y));
+        if (kind == wkb_dimension_kind::z)
+        {
+            write_double(point_z_value(point));
+        }
+        else if (kind == wkb_dimension_kind::m)
+        {
+            write_double(point_m_value(point));
+        }
+        else if (kind == wkb_dimension_kind::zm)
+        {
+            write_double(point_z_value(point));
+            write_double(point_m_value(point));
+        }
+    }
+
+    template <typename LineStringType>
+    void write_linestring_coordinates(const LineStringType& linestring, wkb_dimension_kind kind)
+    {
+        write_count(linestring.size());
+        for (const auto& point : linestring)
+        {
+            write_position(point, kind);
+        }
+    }
+
+    template <typename PolygonType>
+    void write_polygon_coordinates(const PolygonType& polygon, wkb_dimension_kind kind)
+    {
+        write_count(polygon.size());
+        for (const auto& ring : polygon)
+        {
+            write_linestring_coordinates(ring, kind);
+        }
+    }
+};
+
+template <typename Geometry>
+std::vector<std::uint8_t> write_wkb(const Geometry& geometry, const wkb_options& options)
+{
+    wkb_writer writer(options);
+    writer.write_geometry(geometry);
+    return writer.bytes();
+}
+
+}  // namespace detail
+}  // namespace io
+}  // namespace shapes
+}  // namespace simo
+
+
+namespace simo
+{
+namespace shapes
+{
+namespace io
+{
+namespace detail
+{
+
+template <typename T>
+geometry_t<T> geometry_from_geojson_feature_value(const geojson_value& value)
+{
+    require_geojson_object(value);
+    const auto type = require_geojson_member(value, "type").as_string();
+    if (type != "Feature")
+    {
+        throw exceptions::parse_error("GeoJSON object is not a Feature");
+    }
+    const auto& geometry = require_geojson_member(value, "geometry");
+    if (geometry.is_null())
+    {
+        throw exceptions::parse_error("GeoJSON Feature geometry is null");
+    }
+    return geometry_from_geojson_value<T>(geometry);
+}
+
+}  // namespace detail
+}  // namespace io
+
+template <typename T = double>
+geometry_t<T> from_wkt(const std::string& text)
+{
+    return geometry_t<T>::from_wkt(text);
+}
+
+template <typename Geometry>
+std::string to_wkt(const Geometry& geometry, std::int32_t precision = -1)
+{
+    return geometry.wkt(precision);
+}
+
+template <typename T = double>
+geometry_t<T> from_geojson(const std::string& text)
+{
+    return geometry_t<T>::from_json(text);
+}
+
+template <typename Geometry>
+std::string to_geojson(const Geometry& geometry, std::int32_t precision = -1)
+{
+    return geometry.json(precision);
+}
+
+template <typename T = double>
+geometry_t<T> from_geojson_feature(const std::string& text)
+{
+    try
+    {
+        auto value = io::geojson_parser::parse(text);
+        return io::detail::geometry_from_geojson_feature_value<T>(value);
+    }
+    catch (const std::out_of_range& e)
+    {
+        throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+    }
+    catch (const io::geojson_parse_error& e)
+    {
+        throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+    }
+    catch (const exceptions::geometry_error& e)
+    {
+        throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
+    }
+}
+
+template <typename T = double>
+std::vector<geometry_t<T>> from_geojson_feature_collection(const std::string& text)
+{
+    try
+    {
+        auto value = io::geojson_parser::parse(text);
+        io::detail::require_geojson_object(value);
+        const auto type = io::detail::require_geojson_member(value, "type").as_string();
+        if (type != "FeatureCollection")
+        {
+            throw exceptions::parse_error("GeoJSON object is not a FeatureCollection");
+        }
+
+        const auto& features = io::detail::require_geojson_member(value, "features").as_array();
+        std::vector<geometry_t<T>> geometries;
+        geometries.reserve(features.size());
+        for (const auto& feature : features)
+        {
+            geometries.emplace_back(io::detail::geometry_from_geojson_feature_value<T>(feature));
+        }
+        return geometries;
+    }
+    catch (const std::out_of_range& e)
+    {
+        throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+    }
+    catch (const io::geojson_parse_error& e)
+    {
+        throw exceptions::parse_error("invalid json: " + std::string(e.what()));
+    }
+    catch (const exceptions::geometry_error& e)
+    {
+        throw exceptions::parse_error("invalid geometry: " + std::string(e.what()));
+    }
+}
+
+template <typename T = double>
+geometry_t<T> from_wkb(const std::vector<std::uint8_t>& bytes)
+{
+    return io::detail::read_wkb<T>(bytes.begin(), bytes.end());
+}
+
+template <typename T = double, typename Iterator>
+geometry_t<T> from_wkb(Iterator first, Iterator last)
+{
+    return io::detail::read_wkb<T>(first, last);
+}
+
+template <typename Geometry>
+std::vector<std::uint8_t> to_wkb(const Geometry& geometry)
+{
+    return io::detail::write_wkb(geometry, wkb_options{});
+}
+
+template <typename Geometry>
+std::vector<std::uint8_t> to_wkb(const Geometry& geometry, const wkb_options& options)
+{
+    return io::detail::write_wkb(geometry, options);
+}
+
+}  // namespace shapes
+}  // namespace simo
 
 // #include <simo/algorithm/measurements.hpp>
 

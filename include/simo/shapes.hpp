@@ -51,6 +51,7 @@ SOFTWARE.
 #include <simo/geom/geometrycollection.hpp>
 #include <simo/geom/linearring.hpp>
 #include <simo/io/polyline.hpp>
+#include <simo/io/io.hpp>
 #include <simo/algorithm/measurements.hpp>
 #include <simo/algorithm/predicates.hpp>
 #include <simo/algorithm/operations.hpp>

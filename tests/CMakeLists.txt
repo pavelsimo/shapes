@@ -13,6 +13,7 @@ endif()
 set(TEST_FILES
   test_geometry.cpp
   test_geojson_parser.cpp
+  test_io.cpp
   test_linearring.cpp
   test_linestring.cpp
   test_measurements.cpp
@@ -26,6 +27,7 @@ set(TEST_FILES
   test_predicates.cpp
   test_transformations.cpp
   test_utils.cpp
+  test_wkb.cpp
 )
 
 foreach(file ${TEST_FILES})
@@ -41,4 +43,3 @@ foreach(file ${TEST_FILES})
   endif()
 
 endforeach()
-
