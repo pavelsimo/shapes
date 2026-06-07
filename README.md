@@ -22,6 +22,14 @@ A lightweight header-only geometry library for Modern C++14
 using namespace simo::shapes;
 ```
 
+Release builds attach the amalgamated header as `shapes.hpp` on GitHub Releases.
+To publish a release, create and push a version tag:
+
+```sh
+git tag -a vX.Y.Z -m "Release vX.Y.Z"
+git push origin vX.Y.Z
+```
+
 ## Examples
 
 Building a `Point` from GeoJSON:
