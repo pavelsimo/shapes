@@ -216,7 +216,7 @@ class basic_multipolygon
         {
             ss << std::setprecision(precision);
         }
-        ss << "{\"type\":\"Multipolygon\",\"coordinates\":[";
+        ss << "{\"type\":\"MultiPolygon\",\"coordinates\":[";
         for (size_t polygon_index = 0; polygon_index < this->size(); ++polygon_index)
         {
             const auto& pg = (*this)[polygon_index];
