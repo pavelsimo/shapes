@@ -634,147 +634,80 @@ TEST_CASE("Polygon")
 
     SECTION("coords")
     {
+        auto flatten = [](const auto& polygon) {
+            std::vector<std::vector<double>> coords;
+            for (const auto& ring : polygon)
+            {
+                for (const auto& point : ring)
+                {
+                    coords.emplace_back(point.begin(), point.end());
+                }
+            }
+            return coords;
+        };
+
         SECTION("xy - coords")
         {
-            //            auto p = Polygon{
-            //                {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
-            //                {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}};
-            //            auto coords = p.coords();
-            //            CHECK(coords.size() == 6);
-            //            double x, y;
-            //            x = coords[0][0];
-            //            y = coords[0][1];
-            //            CHECK(x == 1.0);
-            //            CHECK(y == 2.0);
-            //            x = coords[1][0];
-            //            y = coords[1][1];
-            //            CHECK(x == 4.0);
-            //            CHECK(y == 5.0);
-            //            x = coords[2][0];
-            //            y = coords[2][1];
-            //            CHECK(x == 7.0);
-            //            CHECK(y == 8.0);
-            //            x = coords[3][0];
-            //            y = coords[3][1];
-            //            CHECK(x == 11.0);
-            //            CHECK(y == 12.0);
-            //            x = coords[4][0];
-            //            y = coords[4][1];
-            //            CHECK(x == 13.0);
-            //            CHECK(y == 14.0);
-            //            x = coords[5][0];
-            //            y = coords[5][1];
-            //            CHECK(x == 16.0);
-            //            CHECK(y == 17.0);
+            auto p = Polygon{
+                {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
+                {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}};
+            auto coords = flatten(p);
+            CHECK(coords.size() == 6);
+            CHECK(coords[0].size() == 2);
+            CHECK(coords[0][0] == 1.0);
+            CHECK(coords[0][1] == 2.0);
+            CHECK(coords[5][0] == 16.0);
+            CHECK(coords[5][1] == 17.0);
         }
 
         SECTION("xyz - coords")
         {
-            //            auto p = Polygon{
-            //                {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
-            //                {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
-            //            auto coords = p.coords();
-            //            CHECK(coords.size() == 6);
-            //            double x, y, z;
-            //            x = coords[0][0];
-            //            y = coords[0][1];
-            //            z = coords[0][2];
-            //            CHECK(x == 1.0);
-            //            CHECK(y == 2.0);
-            //            CHECK(z == 3.0);
-            //            x = coords[1][0];
-            //            y = coords[1][1];
-            //            z = coords[1][2];
-            //            CHECK(x == 4.0);
-            //            CHECK(y == 5.0);
-            //            CHECK(z == 6.0);
-            //            x = coords[2][0];
-            //            y = coords[2][1];
-            //            z = coords[2][2];
-            //            CHECK(x == 7.0);
-            //            CHECK(y == 8.0);
-            //            CHECK(z == 9.0);
-            //            x = coords[3][0];
-            //            y = coords[3][1];
-            //            z = coords[3][2];
-            //            CHECK(x == 11.0);
-            //            CHECK(y == 12.0);
-            //            CHECK(z == 13.0);
-            //            x = coords[4][0];
-            //            y = coords[4][1];
-            //            z = coords[4][2];
-            //            CHECK(x == 13.0);
-            //            CHECK(y == 14.0);
-            //            CHECK(z == 15.0);
-            //            x = coords[5][0];
-            //            y = coords[5][1];
-            //            z = coords[5][2];
-            //            CHECK(x == 16.0);
-            //            CHECK(y == 17.0);
-            //            CHECK(z == 18.0);
+            auto p = PolygonZ{
+                {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+                {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
+            auto coords = flatten(p);
+            CHECK(coords.size() == 6);
+            CHECK(coords[0].size() == 3);
+            CHECK(coords[0][0] == 1.0);
+            CHECK(coords[0][1] == 2.0);
+            CHECK(coords[0][2] == 3.0);
+            CHECK(coords[5][0] == 16.0);
+            CHECK(coords[5][1] == 17.0);
+            CHECK(coords[5][2] == 18.0);
         }
 
         SECTION("xym - coords")
         {
-            /// @todo add test
+            auto p = PolygonM{
+                {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+                {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
+            auto coords = flatten(p);
+            CHECK(coords.size() == 6);
+            CHECK(coords[0].size() == 3);
+            CHECK(coords[0][0] == 1.0);
+            CHECK(coords[0][1] == 2.0);
+            CHECK(coords[0][2] == 3.0);
+            CHECK(coords[5][0] == 16.0);
+            CHECK(coords[5][1] == 17.0);
+            CHECK(coords[5][2] == 18.0);
         }
 
         SECTION("xyzm - coords")
         {
-            //            auto ml = Polygon{
-            //                {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
-            //                {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}};
-            //            auto coords = ml.coords();
-            //            CHECK(coords.size() == 6);
-            //            double x, y, z, m;
-            //            x = coords[0][0];
-            //            y = coords[0][1];
-            //            z = coords[0][2];
-            //            m = coords[0][3];
-            //            CHECK(x == 1.0);
-            //            CHECK(y == 2.0);
-            //            CHECK(z == 3.0);
-            //            CHECK(m == -1.5);
-            //            x = coords[1][0];
-            //            y = coords[1][1];
-            //            z = coords[1][2];
-            //            m = coords[1][3];
-            //            CHECK(x == 4.0);
-            //            CHECK(y == 5.0);
-            //            CHECK(z == 6.0);
-            //            CHECK(m == -2.5);
-            //            x = coords[2][0];
-            //            y = coords[2][1];
-            //            z = coords[2][2];
-            //            m = coords[2][3];
-            //            CHECK(x == 7.0);
-            //            CHECK(y == 8.0);
-            //            CHECK(z == 9.0);
-            //            CHECK(m == -3.5);
-            //            x = coords[3][0];
-            //            y = coords[3][1];
-            //            z = coords[3][2];
-            //            m = coords[3][3];
-            //            CHECK(x == 11.0);
-            //            CHECK(y == 12.0);
-            //            CHECK(z == 13.0);
-            //            CHECK(m == -10.5);
-            //            x = coords[4][0];
-            //            y = coords[4][1];
-            //            z = coords[4][2];
-            //            m = coords[4][3];
-            //            CHECK(x == 13.0);
-            //            CHECK(y == 14.0);
-            //            CHECK(z == 15.0);
-            //            CHECK(m == -11.5);
-            //            x = coords[5][0];
-            //            y = coords[5][1];
-            //            z = coords[5][2];
-            //            m = coords[5][3];
-            //            CHECK(x == 16.0);
-            //            CHECK(y == 17.0);
-            //            CHECK(z == 18.0);
-            //            CHECK(m == -12.5);
+            auto p = PolygonZM{
+                {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
+                {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}};
+            auto coords = flatten(p);
+            CHECK(coords.size() == 6);
+            CHECK(coords[0].size() == 4);
+            CHECK(coords[0][0] == 1.0);
+            CHECK(coords[0][1] == 2.0);
+            CHECK(coords[0][2] == 3.0);
+            CHECK(coords[0][3] == -1.5);
+            CHECK(coords[5][0] == 16.0);
+            CHECK(coords[5][1] == 17.0);
+            CHECK(coords[5][2] == 18.0);
+            CHECK(coords[5][3] == -12.5);
         }
     }
 }

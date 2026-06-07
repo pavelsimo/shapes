@@ -570,96 +570,80 @@ TEST_CASE("MultiLineString")
 
     SECTION("coords")
     {
+        auto flatten = [](const auto& multilinestring) {
+            std::vector<std::vector<double>> coords;
+            for (const auto& linestring : multilinestring)
+            {
+                for (const auto& point : linestring)
+                {
+                    coords.emplace_back(point.begin(), point.end());
+                }
+            }
+            return coords;
+        };
+
         SECTION("xy - coords")
         {
-            //            auto ml = MultiLineString{
-            //                {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
-            //                {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}};
-            //            auto coords = ml.coords();
-            //            CHECK(coords.size() == 6);
-            //
-            //            double x, y;
-            //            x = coords[0][0];
-            //            y = coords[0][1];
-            //            CHECK(x == 1.0);
-            //            CHECK(y == 2.0);
-            //            x = coords[1][0];
-            //            y = coords[1][1];
-            //            CHECK(x == 4.0);
-            //            CHECK(y == 5.0);
-            //            x = coords[2][0];
-            //            y = coords[2][1];
-            //            CHECK(x == 7.0);
-            //            CHECK(y == 8.0);
+            auto ml = MultiLineString{
+                {{1.0, 2.0}, {4.0, 5.0}, {7.0, 8.0}},
+                {{11.0, 12.0}, {13.0, 14.0}, {16.0, 17.0}}};
+            auto coords = flatten(ml);
+            CHECK(coords.size() == 6);
+            CHECK(coords[0].size() == 2);
+            CHECK(coords[0][0] == 1.0);
+            CHECK(coords[0][1] == 2.0);
+            CHECK(coords[5][0] == 16.0);
+            CHECK(coords[5][1] == 17.0);
         }
 
         SECTION("xyz - coords")
         {
-            //            auto ml = MultiLineString{
-            //                {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
-            //                {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
-            //            auto coords = ml.coords();
-            //            CHECK(coords.size() == 6);
-            //
-            //            double x, y, z;
-            //            x = coords[0][0];
-            //            y = coords[0][1];
-            //            z = coords[0][2];
-            //            CHECK(x == 1.0);
-            //            CHECK(y == 2.0);
-            //            CHECK(z == 3.0);
-            //            x = coords[1][0];
-            //            y = coords[1][1];
-            //            z = coords[1][2];
-            //            CHECK(x == 4.0);
-            //            CHECK(y == 5.0);
-            //            CHECK(z == 6.0);
-            //            x = coords[2][0];
-            //            y = coords[2][1];
-            //            z = coords[2][2];
-            //            CHECK(x == 7.0);
-            //            CHECK(y == 8.0);
-            //            CHECK(z == 9.0);
+            auto ml = MultiLineStringZ{
+                {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+                {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
+            auto coords = flatten(ml);
+            CHECK(coords.size() == 6);
+            CHECK(coords[0].size() == 3);
+            CHECK(coords[0][0] == 1.0);
+            CHECK(coords[0][1] == 2.0);
+            CHECK(coords[0][2] == 3.0);
+            CHECK(coords[5][0] == 16.0);
+            CHECK(coords[5][1] == 17.0);
+            CHECK(coords[5][2] == 18.0);
         }
 
         SECTION("xym - coords")
         {
-            /// @todo add test
+            auto ml = MultiLineStringM{
+                {{1.0, 2.0, 3.0}, {4.0, 5.0, 6.0}, {7.0, 8.0, 9.0}},
+                {{11.0, 12.0, 13.0}, {13.0, 14.0, 15.0}, {16.0, 17.0, 18.0}}};
+            auto coords = flatten(ml);
+            CHECK(coords.size() == 6);
+            CHECK(coords[0].size() == 3);
+            CHECK(coords[0][0] == 1.0);
+            CHECK(coords[0][1] == 2.0);
+            CHECK(coords[0][2] == 3.0);
+            CHECK(coords[5][0] == 16.0);
+            CHECK(coords[5][1] == 17.0);
+            CHECK(coords[5][2] == 18.0);
         }
 
         SECTION("xyzm - coords")
         {
-            //            auto ml = MultiLineString{
-            //                {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
-            //                {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}};
-            //            auto coords = ml.coords();
-            //            CHECK(coords.size() == 6);
-            //
-            //            double x, y, z, m;
-            //            x = coords[0][0];
-            //            y = coords[0][1];
-            //            z = coords[0][2];
-            //            m = coords[0][3];
-            //            CHECK(x == 1.0);
-            //            CHECK(y == 2.0);
-            //            CHECK(z == 3.0);
-            //            CHECK(m == -1.5);
-            //            x = coords[1][0];
-            //            y = coords[1][1];
-            //            z = coords[1][2];
-            //            m = coords[1][3];
-            //            CHECK(x == 4.0);
-            //            CHECK(y == 5.0);
-            //            CHECK(z == 6.0);
-            //            CHECK(m == -2.5);
-            //            x = coords[2][0];
-            //            y = coords[2][1];
-            //            z = coords[2][2];
-            //            m = coords[2][3];
-            //            CHECK(x == 7.0);
-            //            CHECK(y == 8.0);
-            //            CHECK(z == 9.0);
-            //            CHECK(m == -3.5);
+            auto ml = MultiLineStringZM{
+                {{1.0, 2.0, 3.0, -1.5}, {4.0, 5.0, 6.0, -2.5}, {7.0, 8.0, 9.0, -3.5}},
+                {{11.0, 12.0, 13.0, -10.5}, {13.0, 14.0, 15.0, -11.5}, {16.0, 17.0, 18.0, -12.5}}};
+            auto coords = flatten(ml);
+            CHECK(coords.size() == 6);
+            CHECK(coords[0].size() == 4);
+            CHECK(coords[0][0] == 1.0);
+            CHECK(coords[0][1] == 2.0);
+            CHECK(coords[0][2] == 3.0);
+            CHECK(coords[0][3] == -1.5);
+            CHECK(coords[5][0] == 16.0);
+            CHECK(coords[5][1] == 17.0);
+            CHECK(coords[5][2] == 18.0);
+            CHECK(coords[5][3] == -12.5);
         }
     }
 }
