@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-06-07 15:35:56</td>
+            <td class="headerValue">2026-06-07 17:53:22</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryMed">88.9&nbsp;%</td>
@@ -99,18 +99,18 @@
 <span id="L37"><span class="lineNum">      37</span> <span class="tlaGNC tlaBgGNC">           1 :     basic_multipolygon()</span></span>
 <span id="L38"><span class="lineNum">      38</span> <span class="tlaGNC">           1 :         : base_type() {}</span></span>
 <span id="L39"><span class="lineNum">      39</span>              : </span>
-<span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">           6 :     basic_multipolygon(polygon_iterator first, polygon_iterator last)</span></span>
-<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC">          12 :         : base_type(first, last)</span></span>
+<span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">           9 :     basic_multipolygon(polygon_iterator first, polygon_iterator last)</span></span>
+<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC">          18 :         : base_type(first, last)</span></span>
 <span id="L42"><span class="lineNum">      42</span>              :     {</span>
-<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">           6 :     }</span></span>
+<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">           9 :     }</span></span>
 <span id="L44"><span class="lineNum">      44</span>              : </span>
 <span id="L45"><span class="lineNum">      45</span>              :     basic_multipolygon(polygon_const_iterator first, polygon_const_iterator last)</span>
 <span id="L46"><span class="lineNum">      46</span>              :         : base_type(first, last)</span>
 <span id="L47"><span class="lineNum">      47</span>              :     {</span>
 <span id="L48"><span class="lineNum">      48</span>              :     }</span>
 <span id="L49"><span class="lineNum">      49</span>              : </span>
-<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">          14 :     basic_multipolygon(std::initializer_list&lt;T&gt; init)</span></span>
-<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">          42 :         : base_type(init.begin(), init.end()) {}</span></span>
+<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">          15 :     basic_multipolygon(std::initializer_list&lt;T&gt; init)</span></span>
+<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">          45 :         : base_type(init.begin(), init.end()) {}</span></span>
 <span id="L52"><span class="lineNum">      52</span>              : </span>
 <span id="L53"><span class="lineNum">      53</span>              :     template &lt;typename CoordIterator, typename OffsetIterator&gt;</span>
 <span id="L54"><span class="lineNum">      54</span>              :     basic_multipolygon(CoordIterator coord_first, CoordIterator coord_last, OffsetIterator offset_first, OffsetIterator offset_last)</span>
@@ -199,7 +199,7 @@
 <span id="L137"><span class="lineNum">     137</span>              :     friend class basic_geometry&lt;basic_multipolygon&lt;T&gt;&gt;;</span>
 <span id="L138"><span class="lineNum">     138</span>              : </span>
 <span id="L139"><span class="lineNum">     139</span>              :     /// @private</span>
-<span id="L140"><span class="lineNum">     140</span> <span class="tlaGNC">          31 :     geometry_type geom_type_() const noexcept</span></span>
+<span id="L140"><span class="lineNum">     140</span> <span class="tlaGNC">          37 :     geometry_type geom_type_() const noexcept</span></span>
 <span id="L141"><span class="lineNum">     141</span>              :     {</span>
 <span id="L142"><span class="lineNum">     142</span>              :         if (is_basic_polygon_z&lt;T&gt;::value)</span>
 <span id="L143"><span class="lineNum">     143</span>              :         {</span>
@@ -213,7 +213,7 @@
 <span id="L151"><span class="lineNum">     151</span>              :         {</span>
 <span id="L152"><span class="lineNum">     152</span> <span class="tlaGNC">           8 :             return geometry_type::MULTIPOLYGONZM;</span></span>
 <span id="L153"><span class="lineNum">     153</span>              :         }</span>
-<span id="L154"><span class="lineNum">     154</span> <span class="tlaGNC">          13 :         return geometry_type::MULTIPOLYGON;</span></span>
+<span id="L154"><span class="lineNum">     154</span> <span class="tlaGNC">          19 :         return geometry_type::MULTIPOLYGON;</span></span>
 <span id="L155"><span class="lineNum">     155</span>              :     }</span>
 <span id="L156"><span class="lineNum">     156</span>              : </span>
 <span id="L157"><span class="lineNum">     157</span>              :     /// @private</span>
@@ -379,65 +379,65 @@
 <span id="L317"><span class="lineNum">     317</span> <span class="tlaGNC">           5 :     }</span></span>
 <span id="L318"><span class="lineNum">     318</span>              : </span>
 <span id="L319"><span class="lineNum">     319</span>              :     /// @private</span>
-<span id="L320"><span class="lineNum">     320</span> <span class="tlaGNC">           3 :     std::string wkt_(std::int32_t precision = -1) const</span></span>
+<span id="L320"><span class="lineNum">     320</span> <span class="tlaGNC">           5 :     std::string wkt_(std::int32_t precision = -1) const</span></span>
 <span id="L321"><span class="lineNum">     321</span>              :     {</span>
-<span id="L322"><span class="lineNum">     322</span> <span class="tlaGNC">           3 :         std::stringstream ss;</span></span>
-<span id="L323"><span class="lineNum">     323</span> <span class="tlaGNC">           3 :         if (precision &gt;= 0)</span></span>
+<span id="L322"><span class="lineNum">     322</span> <span class="tlaGNC">           5 :         std::stringstream ss;</span></span>
+<span id="L323"><span class="lineNum">     323</span> <span class="tlaGNC">           5 :         if (precision &gt;= 0)</span></span>
 <span id="L324"><span class="lineNum">     324</span>              :         {</span>
 <span id="L325"><span class="lineNum">     325</span> <span class="tlaUNC tlaBgUNC">           0 :             ss &lt;&lt; std::setprecision(precision);</span></span>
 <span id="L326"><span class="lineNum">     326</span>              :         }</span>
-<span id="L327"><span class="lineNum">     327</span> <span class="tlaGNC tlaBgGNC">           3 :         ss &lt;&lt; &quot;MULTIPOLYGON&quot;;</span></span>
-<span id="L328"><span class="lineNum">     328</span> <span class="tlaGNC">           3 :         if (this-&gt;has_z())</span></span>
+<span id="L327"><span class="lineNum">     327</span> <span class="tlaGNC tlaBgGNC">           5 :         ss &lt;&lt; &quot;MULTIPOLYGON&quot;;</span></span>
+<span id="L328"><span class="lineNum">     328</span> <span class="tlaGNC">           5 :         if (this-&gt;has_z())</span></span>
 <span id="L329"><span class="lineNum">     329</span>              :         {</span>
 <span id="L330"><span class="lineNum">     330</span> <span class="tlaGNC">           1 :             ss &lt;&lt; &quot;Z&quot;;</span></span>
 <span id="L331"><span class="lineNum">     331</span>              :         }</span>
-<span id="L332"><span class="lineNum">     332</span> <span class="tlaGNC">           3 :         if (this-&gt;has_m())</span></span>
+<span id="L332"><span class="lineNum">     332</span> <span class="tlaGNC">           5 :         if (this-&gt;has_m())</span></span>
 <span id="L333"><span class="lineNum">     333</span>              :         {</span>
 <span id="L334"><span class="lineNum">     334</span> <span class="tlaGNC">           1 :             ss &lt;&lt; &quot;M&quot;;</span></span>
 <span id="L335"><span class="lineNum">     335</span>              :         }</span>
-<span id="L336"><span class="lineNum">     336</span> <span class="tlaGNC">           3 :         size_t polygon_index = 0;</span></span>
-<span id="L337"><span class="lineNum">     337</span> <span class="tlaGNC">           3 :         ss &lt;&lt; &quot;(&quot;;</span></span>
-<span id="L338"><span class="lineNum">     338</span> <span class="tlaGNC">           8 :         for (const auto&amp; pg : *this)</span></span>
+<span id="L336"><span class="lineNum">     336</span> <span class="tlaGNC">           5 :         size_t polygon_index = 0;</span></span>
+<span id="L337"><span class="lineNum">     337</span> <span class="tlaGNC">           5 :         ss &lt;&lt; &quot;(&quot;;</span></span>
+<span id="L338"><span class="lineNum">     338</span> <span class="tlaGNC">          12 :         for (const auto&amp; pg : *this)</span></span>
 <span id="L339"><span class="lineNum">     339</span>              :         {</span>
-<span id="L340"><span class="lineNum">     340</span> <span class="tlaGNC">           5 :             if (polygon_index &gt; 0)</span></span>
+<span id="L340"><span class="lineNum">     340</span> <span class="tlaGNC">           7 :             if (polygon_index &gt; 0)</span></span>
 <span id="L341"><span class="lineNum">     341</span>              :             {</span>
 <span id="L342"><span class="lineNum">     342</span> <span class="tlaGNC">           2 :                 ss &lt;&lt; &quot;,&quot;;</span></span>
 <span id="L343"><span class="lineNum">     343</span>              :             }</span>
-<span id="L344"><span class="lineNum">     344</span> <span class="tlaGNC">           5 :             ss &lt;&lt; &quot;(&quot;;</span></span>
-<span id="L345"><span class="lineNum">     345</span> <span class="tlaGNC">           5 :             size_t ring_index = 0;</span></span>
-<span id="L346"><span class="lineNum">     346</span> <span class="tlaGNC">          13 :             for (const auto&amp; ring : pg)</span></span>
+<span id="L344"><span class="lineNum">     344</span> <span class="tlaGNC">           7 :             ss &lt;&lt; &quot;(&quot;;</span></span>
+<span id="L345"><span class="lineNum">     345</span> <span class="tlaGNC">           7 :             size_t ring_index = 0;</span></span>
+<span id="L346"><span class="lineNum">     346</span> <span class="tlaGNC">          17 :             for (const auto&amp; ring : pg)</span></span>
 <span id="L347"><span class="lineNum">     347</span>              :             {</span>
-<span id="L348"><span class="lineNum">     348</span> <span class="tlaGNC">           8 :                 if (ring_index &gt; 0)</span></span>
+<span id="L348"><span class="lineNum">     348</span> <span class="tlaGNC">          10 :                 if (ring_index &gt; 0)</span></span>
 <span id="L349"><span class="lineNum">     349</span>              :                 {</span>
 <span id="L350"><span class="lineNum">     350</span> <span class="tlaGNC">           3 :                     ss &lt;&lt; &quot;,&quot;;</span></span>
 <span id="L351"><span class="lineNum">     351</span>              :                 }</span>
-<span id="L352"><span class="lineNum">     352</span> <span class="tlaGNC">           8 :                 ss &lt;&lt; &quot;(&quot;;</span></span>
-<span id="L353"><span class="lineNum">     353</span> <span class="tlaGNC">           8 :                 size_t point_index = 0;</span></span>
-<span id="L354"><span class="lineNum">     354</span> <span class="tlaGNC">          38 :                 for (const auto&amp; p : ring)</span></span>
+<span id="L352"><span class="lineNum">     352</span> <span class="tlaGNC">          10 :                 ss &lt;&lt; &quot;(&quot;;</span></span>
+<span id="L353"><span class="lineNum">     353</span> <span class="tlaGNC">          10 :                 size_t point_index = 0;</span></span>
+<span id="L354"><span class="lineNum">     354</span> <span class="tlaGNC">          48 :                 for (const auto&amp; p : ring)</span></span>
 <span id="L355"><span class="lineNum">     355</span>              :                 {</span>
-<span id="L356"><span class="lineNum">     356</span> <span class="tlaGNC">          30 :                     if (point_index &gt; 0)</span></span>
+<span id="L356"><span class="lineNum">     356</span> <span class="tlaGNC">          38 :                     if (point_index &gt; 0)</span></span>
 <span id="L357"><span class="lineNum">     357</span>              :                     {</span>
-<span id="L358"><span class="lineNum">     358</span> <span class="tlaGNC">          22 :                         ss &lt;&lt; &quot;,&quot;;</span></span>
+<span id="L358"><span class="lineNum">     358</span> <span class="tlaGNC">          28 :                         ss &lt;&lt; &quot;,&quot;;</span></span>
 <span id="L359"><span class="lineNum">     359</span>              :                     }</span>
-<span id="L360"><span class="lineNum">     360</span> <span class="tlaGNC">         102 :                     for (size_t k = 0; k &lt; p.ndim(); ++k)</span></span>
+<span id="L360"><span class="lineNum">     360</span> <span class="tlaGNC">         126 :                     for (size_t k = 0; k &lt; p.ndim(); ++k)</span></span>
 <span id="L361"><span class="lineNum">     361</span>              :                     {</span>
-<span id="L362"><span class="lineNum">     362</span> <span class="tlaGNC">          72 :                         if (k &gt; 0)</span></span>
+<span id="L362"><span class="lineNum">     362</span> <span class="tlaGNC">          88 :                         if (k &gt; 0)</span></span>
 <span id="L363"><span class="lineNum">     363</span>              :                         {</span>
-<span id="L364"><span class="lineNum">     364</span> <span class="tlaGNC">          42 :                             ss &lt;&lt; &quot; &quot;;</span></span>
+<span id="L364"><span class="lineNum">     364</span> <span class="tlaGNC">          50 :                             ss &lt;&lt; &quot; &quot;;</span></span>
 <span id="L365"><span class="lineNum">     365</span>              :                         }</span>
-<span id="L366"><span class="lineNum">     366</span> <span class="tlaGNC">          72 :                         ss &lt;&lt; p.coords[k];</span></span>
+<span id="L366"><span class="lineNum">     366</span> <span class="tlaGNC">          88 :                         ss &lt;&lt; p.coords[k];</span></span>
 <span id="L367"><span class="lineNum">     367</span>              :                     }</span>
-<span id="L368"><span class="lineNum">     368</span> <span class="tlaGNC">          30 :                     ++point_index;</span></span>
+<span id="L368"><span class="lineNum">     368</span> <span class="tlaGNC">          38 :                     ++point_index;</span></span>
 <span id="L369"><span class="lineNum">     369</span>              :                 }</span>
-<span id="L370"><span class="lineNum">     370</span> <span class="tlaGNC">           8 :                 ss &lt;&lt; &quot;)&quot;;</span></span>
-<span id="L371"><span class="lineNum">     371</span> <span class="tlaGNC">           8 :                 ++ring_index;</span></span>
+<span id="L370"><span class="lineNum">     370</span> <span class="tlaGNC">          10 :                 ss &lt;&lt; &quot;)&quot;;</span></span>
+<span id="L371"><span class="lineNum">     371</span> <span class="tlaGNC">          10 :                 ++ring_index;</span></span>
 <span id="L372"><span class="lineNum">     372</span>              :             }</span>
-<span id="L373"><span class="lineNum">     373</span> <span class="tlaGNC">           5 :             ss &lt;&lt; &quot;)&quot;;</span></span>
-<span id="L374"><span class="lineNum">     374</span> <span class="tlaGNC">           5 :             ++polygon_index;</span></span>
+<span id="L373"><span class="lineNum">     373</span> <span class="tlaGNC">           7 :             ss &lt;&lt; &quot;)&quot;;</span></span>
+<span id="L374"><span class="lineNum">     374</span> <span class="tlaGNC">           7 :             ++polygon_index;</span></span>
 <span id="L375"><span class="lineNum">     375</span>              :         }</span>
-<span id="L376"><span class="lineNum">     376</span> <span class="tlaGNC">           3 :         ss &lt;&lt; &quot;)&quot;;</span></span>
-<span id="L377"><span class="lineNum">     377</span> <span class="tlaGNC">           6 :         return ss.str();</span></span>
-<span id="L378"><span class="lineNum">     378</span> <span class="tlaGNC">           3 :     }</span></span>
+<span id="L376"><span class="lineNum">     376</span> <span class="tlaGNC">           5 :         ss &lt;&lt; &quot;)&quot;;</span></span>
+<span id="L377"><span class="lineNum">     377</span> <span class="tlaGNC">          10 :         return ss.str();</span></span>
+<span id="L378"><span class="lineNum">     378</span> <span class="tlaGNC">           5 :     }</span></span>
 <span id="L379"><span class="lineNum">     379</span>              : };</span>
 <span id="L380"><span class="lineNum">     380</span>              : </span>
 <span id="L381"><span class="lineNum">     381</span>              : template &lt;typename&gt;</span>

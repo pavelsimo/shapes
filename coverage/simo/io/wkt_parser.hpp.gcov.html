@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-06-07 15:35:56</td>
+            <td class="headerValue">2026-06-07 17:53:22</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryMed">85.7&nbsp;%</td>
@@ -841,11 +841,11 @@
 <span id="L779"><span class="lineNum">     779</span>              : ** A pointer to a parser.  This pointer is used in subsequent calls</span>
 <span id="L780"><span class="lineNum">     780</span>              : ** to Parse and ParseFree.</span>
 <span id="L781"><span class="lineNum">     781</span>              : */</span>
-<span id="L782"><span class="lineNum">     782</span> <span class="tlaGNC tlaBgGNC">         150 : void *ParseAlloc(void *(*mallocProc)(size_t)){</span></span>
+<span id="L782"><span class="lineNum">     782</span> <span class="tlaGNC tlaBgGNC">         152 : void *ParseAlloc(void *(*mallocProc)(size_t)){</span></span>
 <span id="L783"><span class="lineNum">     783</span>              :   yyParser *pParser;</span>
-<span id="L784"><span class="lineNum">     784</span> <span class="tlaGNC">         150 :   pParser = (yyParser*)(*mallocProc)( (size_t)sizeof(yyParser) );</span></span>
-<span id="L785"><span class="lineNum">     785</span> <span class="tlaGNC">         150 :   if( pParser ){</span></span>
-<span id="L786"><span class="lineNum">     786</span> <span class="tlaGNC">         150 :     pParser-&gt;yyidx = -1;</span></span>
+<span id="L784"><span class="lineNum">     784</span> <span class="tlaGNC">         152 :   pParser = (yyParser*)(*mallocProc)( (size_t)sizeof(yyParser) );</span></span>
+<span id="L785"><span class="lineNum">     785</span> <span class="tlaGNC">         152 :   if( pParser ){</span></span>
+<span id="L786"><span class="lineNum">     786</span> <span class="tlaGNC">         152 :     pParser-&gt;yyidx = -1;</span></span>
 <span id="L787"><span class="lineNum">     787</span>              : #ifdef YYTRACKMAXSTACKDEPTH</span>
 <span id="L788"><span class="lineNum">     788</span>              :     pParser-&gt;yyidxMax = 0;</span>
 <span id="L789"><span class="lineNum">     789</span>              : #endif</span>
@@ -855,7 +855,7 @@
 <span id="L793"><span class="lineNum">     793</span>              :     yyGrowStack(pParser);</span>
 <span id="L794"><span class="lineNum">     794</span>              : #endif</span>
 <span id="L795"><span class="lineNum">     795</span>              :   }</span>
-<span id="L796"><span class="lineNum">     796</span> <span class="tlaGNC">         150 :   return pParser;</span></span>
+<span id="L796"><span class="lineNum">     796</span> <span class="tlaGNC">         152 :   return pParser;</span></span>
 <span id="L797"><span class="lineNum">     797</span>              : }</span>
 <span id="L798"><span class="lineNum">     798</span>              : </span>
 <span id="L799"><span class="lineNum">     799</span>              : /* The following function deletes the value associated with a</span>
@@ -863,13 +863,13 @@
 <span id="L801"><span class="lineNum">     801</span>              : ** &quot;yymajor&quot; is the symbol code, and &quot;yypminor&quot; is a pointer to</span>
 <span id="L802"><span class="lineNum">     802</span>              : ** the value.</span>
 <span id="L803"><span class="lineNum">     803</span>              : */</span>
-<span id="L804"><span class="lineNum">     804</span> <span class="tlaGNC">         345 : static void yy_destructor(</span></span>
+<span id="L804"><span class="lineNum">     804</span> <span class="tlaGNC">         347 : static void yy_destructor(</span></span>
 <span id="L805"><span class="lineNum">     805</span>              :   yyParser *yypParser,    /* The parser */</span>
 <span id="L806"><span class="lineNum">     806</span>              :   YYCODETYPE yymajor,     /* Type code for object to destroy */</span>
 <span id="L807"><span class="lineNum">     807</span>              :   YYMINORTYPE *yypminor   /* The object to be destroyed */</span>
 <span id="L808"><span class="lineNum">     808</span>              : ){</span>
-<span id="L809"><span class="lineNum">     809</span> <span class="tlaGNC">         345 :   ParseARG_FETCH;</span></span>
-<span id="L810"><span class="lineNum">     810</span> <span class="tlaGNC">         345 :   switch( yymajor ){</span></span>
+<span id="L809"><span class="lineNum">     809</span> <span class="tlaGNC">         347 :   ParseARG_FETCH;</span></span>
+<span id="L810"><span class="lineNum">     810</span> <span class="tlaGNC">         347 :   switch( yymajor ){</span></span>
 <span id="L811"><span class="lineNum">     811</span>              :     /* Here is inserted the actions which take place when a</span>
 <span id="L812"><span class="lineNum">     812</span>              :     ** terminal or non-terminal is destroyed.  This can happen</span>
 <span id="L813"><span class="lineNum">     813</span>              :     ** when the symbol is popped from the stack during a</span>
@@ -880,9 +880,9 @@
 <span id="L818"><span class="lineNum">     818</span>              :     ** which appear on the RHS of the rule, but which are not used</span>
 <span id="L819"><span class="lineNum">     819</span>              :     ** inside the C code.</span>
 <span id="L820"><span class="lineNum">     820</span>              :     */</span>
-<span id="L821"><span class="lineNum">     821</span> <span class="tlaGNC">         345 :     default:  break;   /* If no destructor action specified: do nothing */</span></span>
+<span id="L821"><span class="lineNum">     821</span> <span class="tlaGNC">         347 :     default:  break;   /* If no destructor action specified: do nothing */</span></span>
 <span id="L822"><span class="lineNum">     822</span>              :   }</span>
-<span id="L823"><span class="lineNum">     823</span> <span class="tlaGNC">         345 : }</span></span>
+<span id="L823"><span class="lineNum">     823</span> <span class="tlaGNC">         347 : }</span></span>
 <span id="L824"><span class="lineNum">     824</span>              : </span>
 <span id="L825"><span class="lineNum">     825</span>              : /*</span>
 <span id="L826"><span class="lineNum">     826</span>              : ** Pop the parser's stack once.</span>
@@ -892,22 +892,22 @@
 <span id="L830"><span class="lineNum">     830</span>              : **</span>
 <span id="L831"><span class="lineNum">     831</span>              : ** Return the major token number for the symbol popped.</span>
 <span id="L832"><span class="lineNum">     832</span>              : */</span>
-<span id="L833"><span class="lineNum">     833</span> <span class="tlaGNC">         306 : static int yy_pop_parser_stack(yyParser *pParser){</span></span>
+<span id="L833"><span class="lineNum">     833</span> <span class="tlaGNC">         308 : static int yy_pop_parser_stack(yyParser *pParser){</span></span>
 <span id="L834"><span class="lineNum">     834</span>              :   YYCODETYPE yymajor;</span>
-<span id="L835"><span class="lineNum">     835</span> <span class="tlaGNC">         306 :   yyStackEntry *yytos = &amp;pParser-&gt;yystack[pParser-&gt;yyidx];</span></span>
+<span id="L835"><span class="lineNum">     835</span> <span class="tlaGNC">         308 :   yyStackEntry *yytos = &amp;pParser-&gt;yystack[pParser-&gt;yyidx];</span></span>
 <span id="L836"><span class="lineNum">     836</span>              : </span>
-<span id="L837"><span class="lineNum">     837</span> <span class="tlaGNC">         306 :   if( pParser-&gt;yyidx&lt;0 ) return 0;</span></span>
+<span id="L837"><span class="lineNum">     837</span> <span class="tlaGNC">         308 :   if( pParser-&gt;yyidx&lt;0 ) return 0;</span></span>
 <span id="L838"><span class="lineNum">     838</span>              : #ifndef NDEBUG</span>
-<span id="L839"><span class="lineNum">     839</span> <span class="tlaGNC">         306 :   if( yyTraceFILE &amp;&amp; pParser-&gt;yyidx&gt;=0 ){</span></span>
+<span id="L839"><span class="lineNum">     839</span> <span class="tlaGNC">         308 :   if( yyTraceFILE &amp;&amp; pParser-&gt;yyidx&gt;=0 ){</span></span>
 <span id="L840"><span class="lineNum">     840</span> <span class="tlaUNC tlaBgUNC">           0 :     fprintf(yyTraceFILE,&quot;%sPopping %s\n&quot;,</span></span>
 <span id="L841"><span class="lineNum">     841</span>              :       yyTracePrompt,</span>
 <span id="L842"><span class="lineNum">     842</span> <span class="tlaUNC">           0 :       yyTokenName[yytos-&gt;major]);</span></span>
 <span id="L843"><span class="lineNum">     843</span>              :   }</span>
 <span id="L844"><span class="lineNum">     844</span>              : #endif</span>
-<span id="L845"><span class="lineNum">     845</span> <span class="tlaGNC tlaBgGNC">         306 :   yymajor = yytos-&gt;major;</span></span>
-<span id="L846"><span class="lineNum">     846</span> <span class="tlaGNC">         306 :   yy_destructor(pParser, yymajor, &amp;yytos-&gt;minor);</span></span>
-<span id="L847"><span class="lineNum">     847</span> <span class="tlaGNC">         306 :   pParser-&gt;yyidx--;</span></span>
-<span id="L848"><span class="lineNum">     848</span> <span class="tlaGNC">         306 :   return yymajor;</span></span>
+<span id="L845"><span class="lineNum">     845</span> <span class="tlaGNC tlaBgGNC">         308 :   yymajor = yytos-&gt;major;</span></span>
+<span id="L846"><span class="lineNum">     846</span> <span class="tlaGNC">         308 :   yy_destructor(pParser, yymajor, &amp;yytos-&gt;minor);</span></span>
+<span id="L847"><span class="lineNum">     847</span> <span class="tlaGNC">         308 :   pParser-&gt;yyidx--;</span></span>
+<span id="L848"><span class="lineNum">     848</span> <span class="tlaGNC">         308 :   return yymajor;</span></span>
 <span id="L849"><span class="lineNum">     849</span>              : }</span>
 <span id="L850"><span class="lineNum">     850</span>              : </span>
 <span id="L851"><span class="lineNum">     851</span>              : /* </span>
@@ -922,17 +922,17 @@
 <span id="L860"><span class="lineNum">     860</span>              : **       from malloc.</span>
 <span id="L861"><span class="lineNum">     861</span>              : ** &lt;/ul&gt;</span>
 <span id="L862"><span class="lineNum">     862</span>              : */</span>
-<span id="L863"><span class="lineNum">     863</span> <span class="tlaGNC">         150 : void ParseFree(</span></span>
+<span id="L863"><span class="lineNum">     863</span> <span class="tlaGNC">         152 : void ParseFree(</span></span>
 <span id="L864"><span class="lineNum">     864</span>              :   void *p,                    /* The parser to be deleted */</span>
 <span id="L865"><span class="lineNum">     865</span>              :   void (*freeProc)(void*)     /* Function used to reclaim memory */</span>
 <span id="L866"><span class="lineNum">     866</span>              : ){</span>
-<span id="L867"><span class="lineNum">     867</span> <span class="tlaGNC">         150 :   yyParser *pParser = (yyParser*)p;</span></span>
-<span id="L868"><span class="lineNum">     868</span> <span class="tlaGNC">         150 :   if( pParser==0 ) return;</span></span>
-<span id="L869"><span class="lineNum">     869</span> <span class="tlaGNC">         333 :   while( pParser-&gt;yyidx&gt;=0 ) yy_pop_parser_stack(pParser);</span></span>
+<span id="L867"><span class="lineNum">     867</span> <span class="tlaGNC">         152 :   yyParser *pParser = (yyParser*)p;</span></span>
+<span id="L868"><span class="lineNum">     868</span> <span class="tlaGNC">         152 :   if( pParser==0 ) return;</span></span>
+<span id="L869"><span class="lineNum">     869</span> <span class="tlaGNC">         335 :   while( pParser-&gt;yyidx&gt;=0 ) yy_pop_parser_stack(pParser);</span></span>
 <span id="L870"><span class="lineNum">     870</span>              : #if YYSTACKDEPTH&lt;=0</span>
 <span id="L871"><span class="lineNum">     871</span>              :   free(pParser-&gt;yystack);</span>
 <span id="L872"><span class="lineNum">     872</span>              : #endif</span>
-<span id="L873"><span class="lineNum">     873</span> <span class="tlaGNC">         150 :   (*freeProc)((void*)pParser);</span></span>
+<span id="L873"><span class="lineNum">     873</span> <span class="tlaGNC">         152 :   (*freeProc)((void*)pParser);</span></span>
 <span id="L874"><span class="lineNum">     874</span>              : }</span>
 <span id="L875"><span class="lineNum">     875</span>              : </span>
 <span id="L876"><span class="lineNum">     876</span>              : /*</span>
@@ -953,19 +953,19 @@
 <span id="L891"><span class="lineNum">     891</span>              : ** independent of the look-ahead.  If it is, return the action, otherwise</span>
 <span id="L892"><span class="lineNum">     892</span>              : ** return YY_NO_ACTION.</span>
 <span id="L893"><span class="lineNum">     893</span>              : */</span>
-<span id="L894"><span class="lineNum">     894</span> <span class="tlaGNC">        3584 : static int yy_find_shift_action(</span></span>
+<span id="L894"><span class="lineNum">     894</span> <span class="tlaGNC">        3608 : static int yy_find_shift_action(</span></span>
 <span id="L895"><span class="lineNum">     895</span>              :   yyParser *pParser,        /* The parser */</span>
 <span id="L896"><span class="lineNum">     896</span>              :   YYCODETYPE iLookAhead     /* The look-ahead token */</span>
 <span id="L897"><span class="lineNum">     897</span>              : ){</span>
 <span id="L898"><span class="lineNum">     898</span>              :   int i;</span>
-<span id="L899"><span class="lineNum">     899</span> <span class="tlaGNC">        3584 :   int stateno = pParser-&gt;yystack[pParser-&gt;yyidx].stateno;</span></span>
+<span id="L899"><span class="lineNum">     899</span> <span class="tlaGNC">        3608 :   int stateno = pParser-&gt;yystack[pParser-&gt;yyidx].stateno;</span></span>
 <span id="L900"><span class="lineNum">     900</span>              :  </span>
-<span id="L901"><span class="lineNum">     901</span> <span class="tlaGNC">        3584 :   if( stateno&gt;YY_SHIFT_MAX || (i = yy_shift_ofst[stateno])==YY_SHIFT_USE_DFLT ){</span></span>
-<span id="L902"><span class="lineNum">     902</span> <span class="tlaGNC">        1661 :     return yy_default[stateno];</span></span>
+<span id="L901"><span class="lineNum">     901</span> <span class="tlaGNC">        3608 :   if( stateno&gt;YY_SHIFT_MAX || (i = yy_shift_ofst[stateno])==YY_SHIFT_USE_DFLT ){</span></span>
+<span id="L902"><span class="lineNum">     902</span> <span class="tlaGNC">        1673 :     return yy_default[stateno];</span></span>
 <span id="L903"><span class="lineNum">     903</span>              :   }</span>
-<span id="L904"><span class="lineNum">     904</span> <span class="tlaGNC">        1923 :   assert( iLookAhead!=YYNOCODE );</span></span>
-<span id="L905"><span class="lineNum">     905</span> <span class="tlaGNC">        1923 :   i += iLookAhead;</span></span>
-<span id="L906"><span class="lineNum">     906</span> <span class="tlaGNC">        1923 :   if( i&lt;0 || i&gt;=YY_SZ_ACTTAB || yy_lookahead[i]!=iLookAhead ){</span></span>
+<span id="L904"><span class="lineNum">     904</span> <span class="tlaGNC">        1935 :   assert( iLookAhead!=YYNOCODE );</span></span>
+<span id="L905"><span class="lineNum">     905</span> <span class="tlaGNC">        1935 :   i += iLookAhead;</span></span>
+<span id="L906"><span class="lineNum">     906</span> <span class="tlaGNC">        1935 :   if( i&lt;0 || i&gt;=YY_SZ_ACTTAB || yy_lookahead[i]!=iLookAhead ){</span></span>
 <span id="L907"><span class="lineNum">     907</span>              :     if( iLookAhead&gt;0 ){</span>
 <span id="L908"><span class="lineNum">     908</span>              : #ifdef YYFALLBACK</span>
 <span id="L909"><span class="lineNum">     909</span>              :       YYCODETYPE iFallback;            /* Fallback token */</span>
@@ -997,7 +997,7 @@
 <span id="L935"><span class="lineNum">     935</span>              :     }</span>
 <span id="L936"><span class="lineNum">     936</span> <span class="tlaGNC">         148 :     return yy_default[stateno];</span></span>
 <span id="L937"><span class="lineNum">     937</span>              :   }else{</span>
-<span id="L938"><span class="lineNum">     938</span> <span class="tlaGNC">        1775 :     return yy_action[i];</span></span>
+<span id="L938"><span class="lineNum">     938</span> <span class="tlaGNC">        1787 :     return yy_action[i];</span></span>
 <span id="L939"><span class="lineNum">     939</span>              :   }</span>
 <span id="L940"><span class="lineNum">     940</span>              : }</span>
 <span id="L941"><span class="lineNum">     941</span>              : </span>
@@ -1009,7 +1009,7 @@
 <span id="L947"><span class="lineNum">     947</span>              : ** independent of the look-ahead.  If it is, return the action, otherwise</span>
 <span id="L948"><span class="lineNum">     948</span>              : ** return YY_NO_ACTION.</span>
 <span id="L949"><span class="lineNum">     949</span>              : */</span>
-<span id="L950"><span class="lineNum">     950</span> <span class="tlaGNC">        1877 : static int yy_find_reduce_action(</span></span>
+<span id="L950"><span class="lineNum">     950</span> <span class="tlaGNC">        1891 : static int yy_find_reduce_action(</span></span>
 <span id="L951"><span class="lineNum">     951</span>              :   int stateno,              /* Current state number */</span>
 <span id="L952"><span class="lineNum">     952</span>              :   YYCODETYPE iLookAhead     /* The look-ahead token */</span>
 <span id="L953"><span class="lineNum">     953</span>              : ){</span>
@@ -1019,21 +1019,21 @@
 <span id="L957"><span class="lineNum">     957</span>              :     return yy_default[stateno];</span>
 <span id="L958"><span class="lineNum">     958</span>              :   }</span>
 <span id="L959"><span class="lineNum">     959</span>              : #else</span>
-<span id="L960"><span class="lineNum">     960</span> <span class="tlaGNC">        1877 :   assert( stateno&lt;=YY_REDUCE_MAX );</span></span>
+<span id="L960"><span class="lineNum">     960</span> <span class="tlaGNC">        1891 :   assert( stateno&lt;=YY_REDUCE_MAX );</span></span>
 <span id="L961"><span class="lineNum">     961</span>              : #endif</span>
-<span id="L962"><span class="lineNum">     962</span> <span class="tlaGNC">        1877 :   i = yy_reduce_ofst[stateno];</span></span>
-<span id="L963"><span class="lineNum">     963</span> <span class="tlaGNC">        1877 :   assert( i!=YY_REDUCE_USE_DFLT );</span></span>
-<span id="L964"><span class="lineNum">     964</span> <span class="tlaGNC">        1877 :   assert( iLookAhead!=YYNOCODE );</span></span>
-<span id="L965"><span class="lineNum">     965</span> <span class="tlaGNC">        1877 :   i += iLookAhead;</span></span>
+<span id="L962"><span class="lineNum">     962</span> <span class="tlaGNC">        1891 :   i = yy_reduce_ofst[stateno];</span></span>
+<span id="L963"><span class="lineNum">     963</span> <span class="tlaGNC">        1891 :   assert( i!=YY_REDUCE_USE_DFLT );</span></span>
+<span id="L964"><span class="lineNum">     964</span> <span class="tlaGNC">        1891 :   assert( iLookAhead!=YYNOCODE );</span></span>
+<span id="L965"><span class="lineNum">     965</span> <span class="tlaGNC">        1891 :   i += iLookAhead;</span></span>
 <span id="L966"><span class="lineNum">     966</span>              : #ifdef YYERRORSYMBOL</span>
 <span id="L967"><span class="lineNum">     967</span>              :   if( i&lt;0 || i&gt;=YY_SZ_ACTTAB || yy_lookahead[i]!=iLookAhead ){</span>
 <span id="L968"><span class="lineNum">     968</span>              :     return yy_default[stateno];</span>
 <span id="L969"><span class="lineNum">     969</span>              :   }</span>
 <span id="L970"><span class="lineNum">     970</span>              : #else</span>
-<span id="L971"><span class="lineNum">     971</span> <span class="tlaGNC">        1877 :   assert( i&gt;=0 &amp;&amp; i&lt;YY_SZ_ACTTAB );</span></span>
-<span id="L972"><span class="lineNum">     972</span> <span class="tlaGNC">        1877 :   assert( yy_lookahead[i]==iLookAhead );</span></span>
+<span id="L971"><span class="lineNum">     971</span> <span class="tlaGNC">        1891 :   assert( i&gt;=0 &amp;&amp; i&lt;YY_SZ_ACTTAB );</span></span>
+<span id="L972"><span class="lineNum">     972</span> <span class="tlaGNC">        1891 :   assert( yy_lookahead[i]==iLookAhead );</span></span>
 <span id="L973"><span class="lineNum">     973</span>              : #endif</span>
-<span id="L974"><span class="lineNum">     974</span> <span class="tlaGNC">        1877 :   return yy_action[i];</span></span>
+<span id="L974"><span class="lineNum">     974</span> <span class="tlaGNC">        1891 :   return yy_action[i];</span></span>
 <span id="L975"><span class="lineNum">     975</span>              : }</span>
 <span id="L976"><span class="lineNum">     976</span>              : </span>
 <span id="L977"><span class="lineNum">     977</span>              : /*</span>
@@ -1058,21 +1058,21 @@
 <span id="L996"><span class="lineNum">     996</span>              : /*</span>
 <span id="L997"><span class="lineNum">     997</span>              : ** Perform a shift action.</span>
 <span id="L998"><span class="lineNum">     998</span>              : */</span>
-<span id="L999"><span class="lineNum">     999</span> <span class="tlaGNC tlaBgGNC">        3438 : static void yy_shift(</span></span>
+<span id="L999"><span class="lineNum">     999</span> <span class="tlaGNC tlaBgGNC">        3460 : static void yy_shift(</span></span>
 <span id="L1000"><span class="lineNum">    1000</span>              :   yyParser *yypParser,          /* The parser to be shifted */</span>
 <span id="L1001"><span class="lineNum">    1001</span>              :   int yyNewState,               /* The new state to shift in */</span>
 <span id="L1002"><span class="lineNum">    1002</span>              :   int yyMajor,                  /* The major token to shift in */</span>
 <span id="L1003"><span class="lineNum">    1003</span>              :   YYMINORTYPE *yypMinor         /* Pointer to the minor token to shift in */</span>
 <span id="L1004"><span class="lineNum">    1004</span>              : ){</span>
 <span id="L1005"><span class="lineNum">    1005</span>              :   yyStackEntry *yytos;</span>
-<span id="L1006"><span class="lineNum">    1006</span> <span class="tlaGNC">        3438 :   yypParser-&gt;yyidx++;</span></span>
+<span id="L1006"><span class="lineNum">    1006</span> <span class="tlaGNC">        3460 :   yypParser-&gt;yyidx++;</span></span>
 <span id="L1007"><span class="lineNum">    1007</span>              : #ifdef YYTRACKMAXSTACKDEPTH</span>
 <span id="L1008"><span class="lineNum">    1008</span>              :   if( yypParser-&gt;yyidx&gt;yypParser-&gt;yyidxMax ){</span>
 <span id="L1009"><span class="lineNum">    1009</span>              :     yypParser-&gt;yyidxMax = yypParser-&gt;yyidx;</span>
 <span id="L1010"><span class="lineNum">    1010</span>              :   }</span>
 <span id="L1011"><span class="lineNum">    1011</span>              : #endif</span>
 <span id="L1012"><span class="lineNum">    1012</span>              : #if YYSTACKDEPTH&gt;0 </span>
-<span id="L1013"><span class="lineNum">    1013</span> <span class="tlaGNC">        3438 :   if( yypParser-&gt;yyidx&gt;=YYSTACKDEPTH ){</span></span>
+<span id="L1013"><span class="lineNum">    1013</span> <span class="tlaGNC">        3460 :   if( yypParser-&gt;yyidx&gt;=YYSTACKDEPTH ){</span></span>
 <span id="L1014"><span class="lineNum">    1014</span> <span class="tlaUNC tlaBgUNC">           0 :     yyStackOverflow(yypParser, yypMinor);</span></span>
 <span id="L1015"><span class="lineNum">    1015</span> <span class="tlaUNC">           0 :     return;</span></span>
 <span id="L1016"><span class="lineNum">    1016</span>              :   }</span>
@@ -1085,12 +1085,12 @@
 <span id="L1023"><span class="lineNum">    1023</span>              :     }</span>
 <span id="L1024"><span class="lineNum">    1024</span>              :   }</span>
 <span id="L1025"><span class="lineNum">    1025</span>              : #endif</span>
-<span id="L1026"><span class="lineNum">    1026</span> <span class="tlaGNC tlaBgGNC">        3438 :   yytos = &amp;yypParser-&gt;yystack[yypParser-&gt;yyidx];</span></span>
-<span id="L1027"><span class="lineNum">    1027</span> <span class="tlaGNC">        3438 :   yytos-&gt;stateno = (YYACTIONTYPE)yyNewState;</span></span>
-<span id="L1028"><span class="lineNum">    1028</span> <span class="tlaGNC">        3438 :   yytos-&gt;major = (YYCODETYPE)yyMajor;</span></span>
-<span id="L1029"><span class="lineNum">    1029</span> <span class="tlaGNC">        3438 :   yytos-&gt;minor = *yypMinor;</span></span>
+<span id="L1026"><span class="lineNum">    1026</span> <span class="tlaGNC tlaBgGNC">        3460 :   yytos = &amp;yypParser-&gt;yystack[yypParser-&gt;yyidx];</span></span>
+<span id="L1027"><span class="lineNum">    1027</span> <span class="tlaGNC">        3460 :   yytos-&gt;stateno = (YYACTIONTYPE)yyNewState;</span></span>
+<span id="L1028"><span class="lineNum">    1028</span> <span class="tlaGNC">        3460 :   yytos-&gt;major = (YYCODETYPE)yyMajor;</span></span>
+<span id="L1029"><span class="lineNum">    1029</span> <span class="tlaGNC">        3460 :   yytos-&gt;minor = *yypMinor;</span></span>
 <span id="L1030"><span class="lineNum">    1030</span>              : #ifndef NDEBUG</span>
-<span id="L1031"><span class="lineNum">    1031</span> <span class="tlaGNC">        3438 :   if( yyTraceFILE &amp;&amp; yypParser-&gt;yyidx&gt;0 ){</span></span>
+<span id="L1031"><span class="lineNum">    1031</span> <span class="tlaGNC">        3460 :   if( yyTraceFILE &amp;&amp; yypParser-&gt;yyidx&gt;0 ){</span></span>
 <span id="L1032"><span class="lineNum">    1032</span>              :     int i;</span>
 <span id="L1033"><span class="lineNum">    1033</span> <span class="tlaUNC tlaBgUNC">           0 :     fprintf(yyTraceFILE,&quot;%sShift %d\n&quot;,yyTracePrompt,yyNewState);</span></span>
 <span id="L1034"><span class="lineNum">    1034</span> <span class="tlaUNC">           0 :     fprintf(yyTraceFILE,&quot;%sStack:&quot;,yyTracePrompt);</span></span>
@@ -1318,7 +1318,7 @@
 <span id="L1256"><span class="lineNum">    1256</span>              : ** Perform a reduce action and the shift that must immediately</span>
 <span id="L1257"><span class="lineNum">    1257</span>              : ** follow the reduce.</span>
 <span id="L1258"><span class="lineNum">    1258</span>              : */</span>
-<span id="L1259"><span class="lineNum">    1259</span> <span class="tlaGNC tlaBgGNC">        1877 : static void yy_reduce(</span></span>
+<span id="L1259"><span class="lineNum">    1259</span> <span class="tlaGNC tlaBgGNC">        1891 : static void yy_reduce(</span></span>
 <span id="L1260"><span class="lineNum">    1260</span>              :   yyParser *yypParser,         /* The parser */</span>
 <span id="L1261"><span class="lineNum">    1261</span>              :   int yyruleno                 /* Number of the rule by which to reduce */</span>
 <span id="L1262"><span class="lineNum">    1262</span>              : ){</span>
@@ -1327,10 +1327,10 @@
 <span id="L1265"><span class="lineNum">    1265</span>              :   YYMINORTYPE yygotominor;        /* The LHS of the rule reduced */</span>
 <span id="L1266"><span class="lineNum">    1266</span>              :   yyStackEntry *yymsp;            /* The top of the parser's stack */</span>
 <span id="L1267"><span class="lineNum">    1267</span>              :   int yysize;                     /* Amount to pop the stack */</span>
-<span id="L1268"><span class="lineNum">    1268</span> <span class="tlaGNC">        1877 :   ParseARG_FETCH;</span></span>
-<span id="L1269"><span class="lineNum">    1269</span> <span class="tlaGNC">        1877 :   yymsp = &amp;yypParser-&gt;yystack[yypParser-&gt;yyidx];</span></span>
+<span id="L1268"><span class="lineNum">    1268</span> <span class="tlaGNC">        1891 :   ParseARG_FETCH;</span></span>
+<span id="L1269"><span class="lineNum">    1269</span> <span class="tlaGNC">        1891 :   yymsp = &amp;yypParser-&gt;yystack[yypParser-&gt;yyidx];</span></span>
 <span id="L1270"><span class="lineNum">    1270</span>              : #ifndef NDEBUG</span>
-<span id="L1271"><span class="lineNum">    1271</span> <span class="tlaGNC">        1877 :   if( yyTraceFILE &amp;&amp; yyruleno&gt;=0 </span></span>
+<span id="L1271"><span class="lineNum">    1271</span> <span class="tlaGNC">        1891 :   if( yyTraceFILE &amp;&amp; yyruleno&gt;=0 </span></span>
 <span id="L1272"><span class="lineNum">    1272</span> <span class="tlaUNC tlaBgUNC">           0 :         &amp;&amp; yyruleno&lt;(int)(sizeof(yyRuleName)/sizeof(yyRuleName[0])) ){</span></span>
 <span id="L1273"><span class="lineNum">    1273</span> <span class="tlaUNC">           0 :     fprintf(yyTraceFILE, &quot;%sReduce [%s].\n&quot;, yyTracePrompt,</span></span>
 <span id="L1274"><span class="lineNum">    1274</span> <span class="tlaUNC">           0 :       yyRuleName[yyruleno]);</span></span>
@@ -1352,10 +1352,10 @@
 <span id="L1290"><span class="lineNum">    1290</span>              :   ** that it has not been previously stressed...  (SQLite ticket #2172)</span>
 <span id="L1291"><span class="lineNum">    1291</span>              :   */</span>
 <span id="L1292"><span class="lineNum">    1292</span>              :   /*memset(&amp;yygotominor, 0, sizeof(yygotominor));*/</span>
-<span id="L1293"><span class="lineNum">    1293</span> <span class="tlaGNC tlaBgGNC">        1877 :   yygotominor = yyzerominor;</span></span>
+<span id="L1293"><span class="lineNum">    1293</span> <span class="tlaGNC tlaBgGNC">        1891 :   yygotominor = yyzerominor;</span></span>
 <span id="L1294"><span class="lineNum">    1294</span>              : </span>
 <span id="L1295"><span class="lineNum">    1295</span>              : </span>
-<span id="L1296"><span class="lineNum">    1296</span> <span class="tlaGNC">        1877 :   switch( yyruleno ){</span></span>
+<span id="L1296"><span class="lineNum">    1296</span> <span class="tlaGNC">        1891 :   switch( yyruleno ){</span></span>
 <span id="L1297"><span class="lineNum">    1297</span>              :   /* Beginning here are the reduction cases.  A typical example</span>
 <span id="L1298"><span class="lineNum">    1298</span>              :   ** follows:</span>
 <span id="L1299"><span class="lineNum">    1299</span>              :   **   case 0:</span>
@@ -1364,19 +1364,19 @@
 <span id="L1302"><span class="lineNum">    1302</span>              :   **  #line &lt;lineno&gt; &lt;thisfile&gt;</span>
 <span id="L1303"><span class="lineNum">    1303</span>              :   **     break;</span>
 <span id="L1304"><span class="lineNum">    1304</span>              :   */</span>
-<span id="L1305"><span class="lineNum">    1305</span> <span class="tlaGNC">         899 :       case 29: /* coord ::= WKT_NUM */</span></span>
-<span id="L1306"><span class="lineNum">    1306</span> <span class="tlaGNC">         899 : { yygotominor.yy0 = yymsp[0].minor.yy0; }</span></span>
-<span id="L1307"><span class="lineNum">    1307</span> <span class="tlaGNC">         899 :         break;</span></span>
+<span id="L1305"><span class="lineNum">    1305</span> <span class="tlaGNC">         903 :       case 29: /* coord ::= WKT_NUM */</span></span>
+<span id="L1306"><span class="lineNum">    1306</span> <span class="tlaGNC">         903 : { yygotominor.yy0 = yymsp[0].minor.yy0; }</span></span>
+<span id="L1307"><span class="lineNum">    1307</span> <span class="tlaGNC">         903 :         break;</span></span>
 <span id="L1308"><span class="lineNum">    1308</span> <span class="tlaGNC">           5 :       case 30: /* point ::= WKT_POINT_TAGGED_TEXT WKT_EMPTY_SET */</span></span>
 <span id="L1309"><span class="lineNum">    1309</span>              : {</span>
 <span id="L1310"><span class="lineNum">    1310</span> <span class="tlaGNC">           5 :     result-&gt;data.geom_type = geometry_type::POINT;</span></span>
 <span id="L1311"><span class="lineNum">    1311</span>              : }</span>
 <span id="L1312"><span class="lineNum">    1312</span> <span class="tlaGNC">           5 :         break;</span></span>
-<span id="L1313"><span class="lineNum">    1313</span> <span class="tlaGNC">          10 :       case 31: /* point ::= WKT_POINT_TAGGED_TEXT point_text */</span></span>
+<span id="L1313"><span class="lineNum">    1313</span> <span class="tlaGNC">          12 :       case 31: /* point ::= WKT_POINT_TAGGED_TEXT point_text */</span></span>
 <span id="L1314"><span class="lineNum">    1314</span>              : {</span>
-<span id="L1315"><span class="lineNum">    1315</span> <span class="tlaGNC">          10 :     result-&gt;data.geom_type = geometry_type::POINT;</span></span>
+<span id="L1315"><span class="lineNum">    1315</span> <span class="tlaGNC">          12 :     result-&gt;data.geom_type = geometry_type::POINT;</span></span>
 <span id="L1316"><span class="lineNum">    1316</span>              : }</span>
-<span id="L1317"><span class="lineNum">    1317</span> <span class="tlaGNC">          10 :         break;</span></span>
+<span id="L1317"><span class="lineNum">    1317</span> <span class="tlaGNC">          12 :         break;</span></span>
 <span id="L1318"><span class="lineNum">    1318</span> <span class="tlaGNC">           3 :       case 32: /* point_z ::= WKT_POINT_Z_TAGGED_TEXT WKT_EMPTY_SET */</span></span>
 <span id="L1319"><span class="lineNum">    1319</span>              : {</span>
 <span id="L1320"><span class="lineNum">    1320</span> <span class="tlaGNC">           3 :     result-&gt;data.geom_type = geometry_type::POINTZ;</span></span>
@@ -1407,12 +1407,12 @@
 <span id="L1345"><span class="lineNum">    1345</span> <span class="tlaGNC">           7 :     result-&gt;data.geom_type = geometry_type::POINTZM;</span></span>
 <span id="L1346"><span class="lineNum">    1346</span>              : }</span>
 <span id="L1347"><span class="lineNum">    1347</span> <span class="tlaGNC">           7 :         break;</span></span>
-<span id="L1348"><span class="lineNum">    1348</span> <span class="tlaGNC">         132 :       case 38: /* coord_xy ::= coord coord */</span></span>
+<span id="L1348"><span class="lineNum">    1348</span> <span class="tlaGNC">         134 :       case 38: /* coord_xy ::= coord coord */</span></span>
 <span id="L1349"><span class="lineNum">    1349</span>              : {</span>
-<span id="L1350"><span class="lineNum">    1350</span> <span class="tlaGNC">         132 :     result-&gt;data.coords.push_back(yymsp[-1].minor.yy0);</span></span>
-<span id="L1351"><span class="lineNum">    1351</span> <span class="tlaGNC">         132 :     result-&gt;data.coords.push_back(yymsp[0].minor.yy0);</span></span>
+<span id="L1350"><span class="lineNum">    1350</span> <span class="tlaGNC">         134 :     result-&gt;data.coords.push_back(yymsp[-1].minor.yy0);</span></span>
+<span id="L1351"><span class="lineNum">    1351</span> <span class="tlaGNC">         134 :     result-&gt;data.coords.push_back(yymsp[0].minor.yy0);</span></span>
 <span id="L1352"><span class="lineNum">    1352</span>              : }</span>
-<span id="L1353"><span class="lineNum">    1353</span> <span class="tlaGNC">         132 :         break;</span></span>
+<span id="L1353"><span class="lineNum">    1353</span> <span class="tlaGNC">         134 :         break;</span></span>
 <span id="L1354"><span class="lineNum">    1354</span> <span class="tlaGNC">         125 :       case 39: /* coord_xyz ::= coord coord coord */</span></span>
 <span id="L1355"><span class="lineNum">    1355</span>              :       case 40: /* coord_xym ::= coord coord coord */ yytestcase(yyruleno==40);</span>
 <span id="L1356"><span class="lineNum">    1356</span>              : {</span>
@@ -1601,7 +1601,7 @@
 <span id="L1539"><span class="lineNum">    1539</span> <span class="tlaUNC">           0 :     result-&gt;data.geom_type = geometry_type::GEOMETRYCOLLECTIONZM;</span></span>
 <span id="L1540"><span class="lineNum">    1540</span>              : }</span>
 <span id="L1541"><span class="lineNum">    1541</span> <span class="tlaUNC">           0 :         break;</span></span>
-<span id="L1542"><span class="lineNum">    1542</span> <span class="tlaGNC tlaBgGNC">         475 :       default:</span></span>
+<span id="L1542"><span class="lineNum">    1542</span> <span class="tlaGNC tlaBgGNC">         481 :       default:</span></span>
 <span id="L1543"><span class="lineNum">    1543</span>              :       /* (0) program ::= wkt_text */ yytestcase(yyruleno==0);</span>
 <span id="L1544"><span class="lineNum">    1544</span>              :       /* (1) wkt_text ::= point */ yytestcase(yyruleno==1);</span>
 <span id="L1545"><span class="lineNum">    1545</span>              :       /* (2) wkt_text ::= point_z */ yytestcase(yyruleno==2);</span>
@@ -1731,13 +1731,13 @@
 <span id="L1669"><span class="lineNum">    1669</span>              :       /* (191) geometrycollection_text_z ::= WKT_LPAREN geometry_text_z geometry_text_z_repeated WKT_RPAREN */ yytestcase(yyruleno==191);</span>
 <span id="L1670"><span class="lineNum">    1670</span>              :       /* (192) geometrycollection_text_m ::= WKT_LPAREN geometry_text_m geometry_text_m_repeated WKT_RPAREN */ yytestcase(yyruleno==192);</span>
 <span id="L1671"><span class="lineNum">    1671</span>              :       /* (193) geometrycollection_text_zm ::= WKT_LPAREN geometry_text_zm geometry_text_zm_repeated WKT_RPAREN */ yytestcase(yyruleno==193);</span>
-<span id="L1672"><span class="lineNum">    1672</span> <span class="tlaGNC">         475 :         break;</span></span>
+<span id="L1672"><span class="lineNum">    1672</span> <span class="tlaGNC">         481 :         break;</span></span>
 <span id="L1673"><span class="lineNum">    1673</span>              :   };</span>
-<span id="L1674"><span class="lineNum">    1674</span> <span class="tlaGNC">        1877 :   yygoto = yyRuleInfo[yyruleno].lhs;</span></span>
-<span id="L1675"><span class="lineNum">    1675</span> <span class="tlaGNC">        1877 :   yysize = yyRuleInfo[yyruleno].nrhs;</span></span>
-<span id="L1676"><span class="lineNum">    1676</span> <span class="tlaGNC">        1877 :   yypParser-&gt;yyidx -= yysize;</span></span>
-<span id="L1677"><span class="lineNum">    1677</span> <span class="tlaGNC">        1877 :   yyact = yy_find_reduce_action(yymsp[-yysize].stateno,(YYCODETYPE)yygoto);</span></span>
-<span id="L1678"><span class="lineNum">    1678</span> <span class="tlaGNC">        1877 :   if( yyact &lt; YYNSTATE ){</span></span>
+<span id="L1674"><span class="lineNum">    1674</span> <span class="tlaGNC">        1891 :   yygoto = yyRuleInfo[yyruleno].lhs;</span></span>
+<span id="L1675"><span class="lineNum">    1675</span> <span class="tlaGNC">        1891 :   yysize = yyRuleInfo[yyruleno].nrhs;</span></span>
+<span id="L1676"><span class="lineNum">    1676</span> <span class="tlaGNC">        1891 :   yypParser-&gt;yyidx -= yysize;</span></span>
+<span id="L1677"><span class="lineNum">    1677</span> <span class="tlaGNC">        1891 :   yyact = yy_find_reduce_action(yymsp[-yysize].stateno,(YYCODETYPE)yygoto);</span></span>
+<span id="L1678"><span class="lineNum">    1678</span> <span class="tlaGNC">        1891 :   if( yyact &lt; YYNSTATE ){</span></span>
 <span id="L1679"><span class="lineNum">    1679</span>              : #ifdef NDEBUG</span>
 <span id="L1680"><span class="lineNum">    1680</span>              :     /* If we are not debugging and the reduce action popped at least</span>
 <span id="L1681"><span class="lineNum">    1681</span>              :     ** one element off the stack, then we can push the new element back</span>
@@ -1752,13 +1752,13 @@
 <span id="L1690"><span class="lineNum">    1690</span>              :     }else</span>
 <span id="L1691"><span class="lineNum">    1691</span>              : #endif</span>
 <span id="L1692"><span class="lineNum">    1692</span>              :     {</span>
-<span id="L1693"><span class="lineNum">    1693</span> <span class="tlaGNC">        1770 :       yy_shift(yypParser,yyact,yygoto,&amp;yygotominor);</span></span>
+<span id="L1693"><span class="lineNum">    1693</span> <span class="tlaGNC">        1782 :       yy_shift(yypParser,yyact,yygoto,&amp;yygotominor);</span></span>
 <span id="L1694"><span class="lineNum">    1694</span>              :     }</span>
 <span id="L1695"><span class="lineNum">    1695</span>              :   }else{</span>
-<span id="L1696"><span class="lineNum">    1696</span> <span class="tlaGNC">         107 :     assert( yyact == YYNSTATE + YYNRULE + 1 );</span></span>
-<span id="L1697"><span class="lineNum">    1697</span> <span class="tlaGNC">         107 :     yy_accept(yypParser);</span></span>
+<span id="L1696"><span class="lineNum">    1696</span> <span class="tlaGNC">         109 :     assert( yyact == YYNSTATE + YYNRULE + 1 );</span></span>
+<span id="L1697"><span class="lineNum">    1697</span> <span class="tlaGNC">         109 :     yy_accept(yypParser);</span></span>
 <span id="L1698"><span class="lineNum">    1698</span>              :   }</span>
-<span id="L1699"><span class="lineNum">    1699</span> <span class="tlaGNC">        1877 : }</span></span>
+<span id="L1699"><span class="lineNum">    1699</span> <span class="tlaGNC">        1891 : }</span></span>
 <span id="L1700"><span class="lineNum">    1700</span>              : </span>
 <span id="L1701"><span class="lineNum">    1701</span>              : /*</span>
 <span id="L1702"><span class="lineNum">    1702</span>              : ** The following code executes when the parse fails</span>
@@ -1807,20 +1807,20 @@
 <span id="L1745"><span class="lineNum">    1745</span>              : /*</span>
 <span id="L1746"><span class="lineNum">    1746</span>              : ** The following is executed when the parser accepts</span>
 <span id="L1747"><span class="lineNum">    1747</span>              : */</span>
-<span id="L1748"><span class="lineNum">    1748</span> <span class="tlaGNC">         107 : static void yy_accept(</span></span>
+<span id="L1748"><span class="lineNum">    1748</span> <span class="tlaGNC">         109 : static void yy_accept(</span></span>
 <span id="L1749"><span class="lineNum">    1749</span>              :   yyParser *yypParser           /* The parser */</span>
 <span id="L1750"><span class="lineNum">    1750</span>              : ){</span>
-<span id="L1751"><span class="lineNum">    1751</span> <span class="tlaGNC">         107 :   ParseARG_FETCH;</span></span>
+<span id="L1751"><span class="lineNum">    1751</span> <span class="tlaGNC">         109 :   ParseARG_FETCH;</span></span>
 <span id="L1752"><span class="lineNum">    1752</span>              : #ifndef NDEBUG</span>
-<span id="L1753"><span class="lineNum">    1753</span> <span class="tlaGNC">         107 :   if( yyTraceFILE ){</span></span>
+<span id="L1753"><span class="lineNum">    1753</span> <span class="tlaGNC">         109 :   if( yyTraceFILE ){</span></span>
 <span id="L1754"><span class="lineNum">    1754</span> <span class="tlaUNC tlaBgUNC">           0 :     fprintf(yyTraceFILE,&quot;%sAccept!\n&quot;,yyTracePrompt);</span></span>
 <span id="L1755"><span class="lineNum">    1755</span>              :   }</span>
 <span id="L1756"><span class="lineNum">    1756</span>              : #endif</span>
-<span id="L1757"><span class="lineNum">    1757</span> <span class="tlaGNC tlaBgGNC">         214 :   while( yypParser-&gt;yyidx&gt;=0 ) yy_pop_parser_stack(yypParser);</span></span>
+<span id="L1757"><span class="lineNum">    1757</span> <span class="tlaGNC tlaBgGNC">         218 :   while( yypParser-&gt;yyidx&gt;=0 ) yy_pop_parser_stack(yypParser);</span></span>
 <span id="L1758"><span class="lineNum">    1758</span>              :   /* Here code is inserted which will be executed whenever the</span>
 <span id="L1759"><span class="lineNum">    1759</span>              :   ** parser accepts */</span>
-<span id="L1760"><span class="lineNum">    1760</span> <span class="tlaGNC">         107 :   ParseARG_STORE; /* Suppress warning about unused %extra_argument variable */</span></span>
-<span id="L1761"><span class="lineNum">    1761</span> <span class="tlaGNC">         107 : }</span></span>
+<span id="L1760"><span class="lineNum">    1760</span> <span class="tlaGNC">         109 :   ParseARG_STORE; /* Suppress warning about unused %extra_argument variable */</span></span>
+<span id="L1761"><span class="lineNum">    1761</span> <span class="tlaGNC">         109 : }</span></span>
 <span id="L1762"><span class="lineNum">    1762</span>              : </span>
 <span id="L1763"><span class="lineNum">    1763</span>              : /* The main parser program.</span>
 <span id="L1764"><span class="lineNum">    1764</span>              : ** The first argument is a pointer to a structure obtained from</span>
@@ -1841,7 +1841,7 @@
 <span id="L1779"><span class="lineNum">    1779</span>              : ** Outputs:</span>
 <span id="L1780"><span class="lineNum">    1780</span>              : ** None.</span>
 <span id="L1781"><span class="lineNum">    1781</span>              : */</span>
-<span id="L1782"><span class="lineNum">    1782</span> <span class="tlaGNC">        1814 : void Parse(</span></span>
+<span id="L1782"><span class="lineNum">    1782</span> <span class="tlaGNC">        1826 : void Parse(</span></span>
 <span id="L1783"><span class="lineNum">    1783</span>              :   void *yyp,                   /* The parser */</span>
 <span id="L1784"><span class="lineNum">    1784</span>              :   int yymajor,                 /* The major token code number */</span>
 <span id="L1785"><span class="lineNum">    1785</span>              :   ParseTOKENTYPE yyminor       /* The value for the token */</span>
@@ -1856,8 +1856,8 @@
 <span id="L1794"><span class="lineNum">    1794</span>              :   yyParser *yypParser;  /* The parser */</span>
 <span id="L1795"><span class="lineNum">    1795</span>              : </span>
 <span id="L1796"><span class="lineNum">    1796</span>              :   /* (re)initialize the parser, if necessary */</span>
-<span id="L1797"><span class="lineNum">    1797</span> <span class="tlaGNC">        1814 :   yypParser = (yyParser*)yyp;</span></span>
-<span id="L1798"><span class="lineNum">    1798</span> <span class="tlaGNC">        1814 :   if( yypParser-&gt;yyidx&lt;0 ){</span></span>
+<span id="L1797"><span class="lineNum">    1797</span> <span class="tlaGNC">        1826 :   yypParser = (yyParser*)yyp;</span></span>
+<span id="L1798"><span class="lineNum">    1798</span> <span class="tlaGNC">        1826 :   if( yypParser-&gt;yyidx&lt;0 ){</span></span>
 <span id="L1799"><span class="lineNum">    1799</span>              : #if YYSTACKDEPTH&lt;=0</span>
 <span id="L1800"><span class="lineNum">    1800</span>              :     if( yypParser-&gt;yystksz &lt;=0 ){</span>
 <span id="L1801"><span class="lineNum">    1801</span>              :       /*memset(&amp;yyminorunion, 0, sizeof(yyminorunion));*/</span>
@@ -1866,30 +1866,30 @@
 <span id="L1804"><span class="lineNum">    1804</span>              :       return;</span>
 <span id="L1805"><span class="lineNum">    1805</span>              :     }</span>
 <span id="L1806"><span class="lineNum">    1806</span>              : #endif</span>
-<span id="L1807"><span class="lineNum">    1807</span> <span class="tlaGNC">         150 :     yypParser-&gt;yyidx = 0;</span></span>
-<span id="L1808"><span class="lineNum">    1808</span> <span class="tlaGNC">         150 :     yypParser-&gt;yyerrcnt = -1;</span></span>
-<span id="L1809"><span class="lineNum">    1809</span> <span class="tlaGNC">         150 :     yypParser-&gt;yystack[0].stateno = 0;</span></span>
-<span id="L1810"><span class="lineNum">    1810</span> <span class="tlaGNC">         150 :     yypParser-&gt;yystack[0].major = 0;</span></span>
+<span id="L1807"><span class="lineNum">    1807</span> <span class="tlaGNC">         152 :     yypParser-&gt;yyidx = 0;</span></span>
+<span id="L1808"><span class="lineNum">    1808</span> <span class="tlaGNC">         152 :     yypParser-&gt;yyerrcnt = -1;</span></span>
+<span id="L1809"><span class="lineNum">    1809</span> <span class="tlaGNC">         152 :     yypParser-&gt;yystack[0].stateno = 0;</span></span>
+<span id="L1810"><span class="lineNum">    1810</span> <span class="tlaGNC">         152 :     yypParser-&gt;yystack[0].major = 0;</span></span>
 <span id="L1811"><span class="lineNum">    1811</span>              :   }</span>
-<span id="L1812"><span class="lineNum">    1812</span> <span class="tlaGNC">        1814 :   yyminorunion.yy0 = yyminor;</span></span>
-<span id="L1813"><span class="lineNum">    1813</span> <span class="tlaGNC">        1814 :   yyendofinput = (yymajor==0);</span></span>
-<span id="L1814"><span class="lineNum">    1814</span> <span class="tlaGNC">        1814 :   ParseARG_STORE;</span></span>
+<span id="L1812"><span class="lineNum">    1812</span> <span class="tlaGNC">        1826 :   yyminorunion.yy0 = yyminor;</span></span>
+<span id="L1813"><span class="lineNum">    1813</span> <span class="tlaGNC">        1826 :   yyendofinput = (yymajor==0);</span></span>
+<span id="L1814"><span class="lineNum">    1814</span> <span class="tlaGNC">        1826 :   ParseARG_STORE;</span></span>
 <span id="L1815"><span class="lineNum">    1815</span>              : </span>
 <span id="L1816"><span class="lineNum">    1816</span>              : #ifndef NDEBUG</span>
-<span id="L1817"><span class="lineNum">    1817</span> <span class="tlaGNC">        1814 :   if( yyTraceFILE ){</span></span>
+<span id="L1817"><span class="lineNum">    1817</span> <span class="tlaGNC">        1826 :   if( yyTraceFILE ){</span></span>
 <span id="L1818"><span class="lineNum">    1818</span> <span class="tlaUNC tlaBgUNC">           0 :     fprintf(yyTraceFILE,&quot;%sInput %s\n&quot;,yyTracePrompt,yyTokenName[yymajor]);</span></span>
 <span id="L1819"><span class="lineNum">    1819</span>              :   }</span>
 <span id="L1820"><span class="lineNum">    1820</span>              : #endif</span>
 <span id="L1821"><span class="lineNum">    1821</span>              : </span>
 <span id="L1822"><span class="lineNum">    1822</span>              :   do{</span>
-<span id="L1823"><span class="lineNum">    1823</span> <span class="tlaGNC tlaBgGNC">        3584 :     yyact = yy_find_shift_action(yypParser,(YYCODETYPE)yymajor);</span></span>
-<span id="L1824"><span class="lineNum">    1824</span> <span class="tlaGNC">        3584 :     if( yyact&lt;YYNSTATE ){</span></span>
-<span id="L1825"><span class="lineNum">    1825</span> <span class="tlaGNC">        1668 :       assert( !yyendofinput );  /* Impossible to shift the $ token */</span></span>
-<span id="L1826"><span class="lineNum">    1826</span> <span class="tlaGNC">        1668 :       yy_shift(yypParser,yyact,yymajor,&amp;yyminorunion);</span></span>
-<span id="L1827"><span class="lineNum">    1827</span> <span class="tlaGNC">        1668 :       yypParser-&gt;yyerrcnt--;</span></span>
-<span id="L1828"><span class="lineNum">    1828</span> <span class="tlaGNC">        1668 :       yymajor = YYNOCODE;</span></span>
-<span id="L1829"><span class="lineNum">    1829</span> <span class="tlaGNC">        1916 :     }else if( yyact &lt; YYNSTATE + YYNRULE ){</span></span>
-<span id="L1830"><span class="lineNum">    1830</span> <span class="tlaGNC">        1877 :       yy_reduce(yypParser,yyact-YYNSTATE);</span></span>
+<span id="L1823"><span class="lineNum">    1823</span> <span class="tlaGNC tlaBgGNC">        3608 :     yyact = yy_find_shift_action(yypParser,(YYCODETYPE)yymajor);</span></span>
+<span id="L1824"><span class="lineNum">    1824</span> <span class="tlaGNC">        3608 :     if( yyact&lt;YYNSTATE ){</span></span>
+<span id="L1825"><span class="lineNum">    1825</span> <span class="tlaGNC">        1678 :       assert( !yyendofinput );  /* Impossible to shift the $ token */</span></span>
+<span id="L1826"><span class="lineNum">    1826</span> <span class="tlaGNC">        1678 :       yy_shift(yypParser,yyact,yymajor,&amp;yyminorunion);</span></span>
+<span id="L1827"><span class="lineNum">    1827</span> <span class="tlaGNC">        1678 :       yypParser-&gt;yyerrcnt--;</span></span>
+<span id="L1828"><span class="lineNum">    1828</span> <span class="tlaGNC">        1678 :       yymajor = YYNOCODE;</span></span>
+<span id="L1829"><span class="lineNum">    1829</span> <span class="tlaGNC">        1930 :     }else if( yyact &lt; YYNSTATE + YYNRULE ){</span></span>
+<span id="L1830"><span class="lineNum">    1830</span> <span class="tlaGNC">        1891 :       yy_reduce(yypParser,yyact-YYNSTATE);</span></span>
 <span id="L1831"><span class="lineNum">    1831</span>              :     }else{</span>
 <span id="L1832"><span class="lineNum">    1832</span> <span class="tlaGNC">          39 :       assert( yyact == YY_ERROR_ACTION );</span></span>
 <span id="L1833"><span class="lineNum">    1833</span>              : #ifdef YYERRORSYMBOL</span>
@@ -1988,8 +1988,8 @@
 <span id="L1926"><span class="lineNum">    1926</span> <span class="tlaGNC">          39 :       yymajor = YYNOCODE;</span></span>
 <span id="L1927"><span class="lineNum">    1927</span>              : #endif</span>
 <span id="L1928"><span class="lineNum">    1928</span>              :     }</span>
-<span id="L1929"><span class="lineNum">    1929</span> <span class="tlaGNC">        3584 :   }while( yymajor!=YYNOCODE &amp;&amp; yypParser-&gt;yyidx&gt;=0 );</span></span>
-<span id="L1930"><span class="lineNum">    1930</span> <span class="tlaGNC">        3628 :   return;</span></span>
+<span id="L1929"><span class="lineNum">    1929</span> <span class="tlaGNC">        3608 :   }while( yymajor!=YYNOCODE &amp;&amp; yypParser-&gt;yyidx&gt;=0 );</span></span>
+<span id="L1930"><span class="lineNum">    1930</span> <span class="tlaGNC">        3652 :   return;</span></span>
 <span id="L1931"><span class="lineNum">    1931</span>              : }</span>
 <span id="L1932"><span class="lineNum">    1932</span>              : </span>
 <span id="L1933"><span class="lineNum">    1933</span>              : </span>
