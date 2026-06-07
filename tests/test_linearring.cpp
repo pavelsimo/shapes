@@ -1,5 +1,5 @@
 #include <ciso646>
-#include <catch/catch.hpp>
+#include <catch2/catch_amalgamated.hpp>
 #include <simo/shapes.hpp>
 
 using namespace simo::shapes;
@@ -17,8 +17,8 @@ TEST_CASE("LinearRing - Construction")
     {
         LinearRing ring{{0, 0}, {4, 0}, {4, 3}, {0, 3}, {0, 0}};
         REQUIRE(ring.size() == 5);
-        REQUIRE(ring[0].x == Approx(0.0));
-        REQUIRE(ring[0].y == Approx(0.0));
+        REQUIRE(ring[0].x == Catch::Approx(0.0));
+        REQUIRE(ring[0].y == Catch::Approx(0.0));
     }
 
     SECTION("construct from points")
@@ -134,9 +134,9 @@ TEST_CASE("LinearRing - Container Operations")
     {
         LinearRing ring{{0, 0}, {2, 0}, {2, 2}, {0, 2}, {0, 0}};
 
-        REQUIRE(ring[0].x == Approx(0.0));
-        REQUIRE(ring[1].x == Approx(2.0));
-        REQUIRE(ring[2].y == Approx(2.0));
+        REQUIRE(ring[0].x == Catch::Approx(0.0));
+        REQUIRE(ring[1].x == Catch::Approx(2.0));
+        REQUIRE(ring[2].y == Catch::Approx(2.0));
     }
 }
 
@@ -147,10 +147,10 @@ TEST_CASE("LinearRing - Geometry Properties")
         LinearRing ring{{0, 0}, {4, 0}, {4, 3}, {0, 3}, {0, 0}};
         auto b = ring.bounds();
 
-        REQUIRE(b.minx == Approx(0.0));
-        REQUIRE(b.maxx == Approx(4.0));
-        REQUIRE(b.miny == Approx(0.0));
-        REQUIRE(b.maxy == Approx(3.0));
+        REQUIRE(b.minx == Catch::Approx(0.0));
+        REQUIRE(b.maxx == Catch::Approx(4.0));
+        REQUIRE(b.miny == Catch::Approx(0.0));
+        REQUIRE(b.maxy == Catch::Approx(3.0));
     }
 
     SECTION("length of ring")
@@ -159,7 +159,7 @@ TEST_CASE("LinearRing - Geometry Properties")
         auto len = ring.length();
 
         // Perimeter: 3 + 4 + 3 + 4 = 14
-        REQUIRE(len == Approx(14.0));
+        REQUIRE(len == Catch::Approx(14.0));
     }
 
     SECTION("area interpretation")
@@ -171,7 +171,7 @@ TEST_CASE("LinearRing - Geometry Properties")
         using namespace simo::shapes::algorithm;
         auto signed_area = signed_area_ring(ring);
 
-        REQUIRE(std::abs(signed_area) == Approx(12.0));
+        REQUIRE(std::abs(signed_area) == Catch::Approx(12.0));
     }
 }
 
@@ -204,7 +204,7 @@ TEST_CASE("LinearRing - Serialization")
         auto parsed = LinearRing::from_wkt(wkt);
 
         REQUIRE(parsed.size() == ring.size());
-        REQUIRE(parsed[0].x == Approx(ring[0].x));
+        REQUIRE(parsed[0].x == Catch::Approx(ring[0].x));
     }
 
     SECTION("round-trip JSON")
@@ -214,8 +214,8 @@ TEST_CASE("LinearRing - Serialization")
         auto parsed = LinearRing::from_json(json);
 
         REQUIRE(parsed.size() == ring.size());
-        REQUIRE(parsed[0].x == Approx(ring[0].x));
-        REQUIRE(parsed[0].y == Approx(ring[0].y));
+        REQUIRE(parsed[0].x == Catch::Approx(ring[0].x));
+        REQUIRE(parsed[0].y == Catch::Approx(ring[0].y));
     }
 }
 
@@ -238,7 +238,7 @@ TEST_CASE("LinearRing - Special Cases")
 
         REQUIRE(ring.is_closed());
         auto b = ring.bounds();
-        REQUIRE(b.maxx - b.minx == Approx(0.001));
+        REQUIRE(b.maxx - b.minx == Catch::Approx(0.001));
     }
 
     SECTION("large coordinates")
@@ -247,7 +247,7 @@ TEST_CASE("LinearRing - Special Cases")
 
         REQUIRE(ring.is_closed());
         auto b = ring.bounds();
-        REQUIRE(b.maxx == Approx(1e6));
+        REQUIRE(b.maxx == Catch::Approx(1e6));
     }
 
     SECTION("negative coordinates")
@@ -256,7 +256,7 @@ TEST_CASE("LinearRing - Special Cases")
 
         REQUIRE(ring.is_closed());
         auto b = ring.bounds();
-        REQUIRE(b.minx == Approx(-10.0));
+        REQUIRE(b.minx == Catch::Approx(-10.0));
     }
 }
 
@@ -320,8 +320,8 @@ TEST_CASE("LinearRing - Algorithms")
         LinearRing ring{{0, 0}, {2, 0}, {2, 2}, {0, 2}, {0, 0}};
         auto translated = ring.translate(5.0, 10.0);
 
-        REQUIRE(translated[0].x == Approx(5.0));
-        REQUIRE(translated[0].y == Approx(10.0));
+        REQUIRE(translated[0].x == Catch::Approx(5.0));
+        REQUIRE(translated[0].y == Catch::Approx(10.0));
         REQUIRE(translated.is_closed());
     }
 

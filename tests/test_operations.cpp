@@ -1,4 +1,4 @@
-#include <catch/catch.hpp>
+#include <catch2/catch_amalgamated.hpp>
 #include <simo/shapes.hpp>
 
 using namespace simo::shapes;
@@ -88,8 +88,8 @@ TEST_CASE("Operations - Simplify (Douglas-Peucker)")
 
         // Should reduce to just endpoints
         REQUIRE(simplified.size() == 2);
-        REQUIRE(simplified[0].x == Approx(0.0));
-        REQUIRE(simplified[1].x == Approx(4.0));
+        REQUIRE(simplified[0].x == Catch::Approx(0.0));
+        REQUIRE(simplified[1].x == Catch::Approx(4.0));
     }
 
     SECTION("simplify zigzag with high tolerance")
@@ -117,10 +117,10 @@ TEST_CASE("Operations - Simplify (Douglas-Peucker)")
         auto simplified = simplify(ls, 1.0);
 
         // Endpoints must be preserved
-        REQUIRE(simplified.front().x == Approx(0.0));
-        REQUIRE(simplified.front().y == Approx(0.0));
-        REQUIRE(simplified.back().x == Approx(4.0));
-        REQUIRE(simplified.back().y == Approx(0.0));
+        REQUIRE(simplified.front().x == Catch::Approx(0.0));
+        REQUIRE(simplified.front().y == Catch::Approx(0.0));
+        REQUIRE(simplified.back().x == Catch::Approx(4.0));
+        REQUIRE(simplified.back().y == Catch::Approx(0.0));
     }
 
     SECTION("simplify via geometry method")
@@ -169,8 +169,8 @@ TEST_CASE("Operations - Envelope")
         // All corners should be at the point
         for (const auto& pt : env[0])
         {
-            REQUIRE(pt.x == Approx(2.0));
-            REQUIRE(pt.y == Approx(3.0));
+            REQUIRE(pt.x == Catch::Approx(2.0));
+            REQUIRE(pt.y == Catch::Approx(3.0));
         }
     }
 
@@ -180,10 +180,10 @@ TEST_CASE("Operations - Envelope")
         auto env = envelope<LineString, Polygon>(ls);
 
         auto bounds = ls.bounds();
-        REQUIRE(env[0][0].x == Approx(bounds.minx));
-        REQUIRE(env[0][0].y == Approx(bounds.miny));
-        REQUIRE(env[0][2].x == Approx(bounds.maxx));
-        REQUIRE(env[0][2].y == Approx(bounds.maxy));
+        REQUIRE(env[0][0].x == Catch::Approx(bounds.minx));
+        REQUIRE(env[0][0].y == Catch::Approx(bounds.miny));
+        REQUIRE(env[0][2].x == Catch::Approx(bounds.maxx));
+        REQUIRE(env[0][2].y == Catch::Approx(bounds.maxy));
     }
 
     SECTION("envelope of polygon")
@@ -194,10 +194,10 @@ TEST_CASE("Operations - Envelope")
         auto bounds = poly.bounds();
 
         // Check corners
-        REQUIRE(env[0][0].x == Approx(bounds.minx));
-        REQUIRE(env[0][0].y == Approx(bounds.miny));
-        REQUIRE(env[0][1].x == Approx(bounds.maxx));
-        REQUIRE(env[0][2].y == Approx(bounds.maxy));
+        REQUIRE(env[0][0].x == Catch::Approx(bounds.minx));
+        REQUIRE(env[0][0].y == Catch::Approx(bounds.miny));
+        REQUIRE(env[0][1].x == Catch::Approx(bounds.maxx));
+        REQUIRE(env[0][2].y == Catch::Approx(bounds.maxy));
     }
 
     SECTION("envelope forms valid polygon")
@@ -218,8 +218,8 @@ TEST_CASE("Operations - Centroid")
         Polygon square{{{0, 0}, {4, 0}, {4, 4}, {0, 4}, {0, 0}}};
         auto c = centroid<Polygon, Point>(square);
 
-        REQUIRE(c.x == Approx(2.0));
-        REQUIRE(c.y == Approx(2.0));
+        REQUIRE(c.x == Catch::Approx(2.0));
+        REQUIRE(c.y == Catch::Approx(2.0));
     }
 
     SECTION("centroid of triangle")
@@ -228,8 +228,8 @@ TEST_CASE("Operations - Centroid")
         auto c = centroid<Polygon, Point>(tri);
 
         // Centroid of triangle is average of vertices
-        REQUIRE(c.x == Approx(3.0));
-        REQUIRE(c.y == Approx(2.0));
+        REQUIRE(c.x == Catch::Approx(3.0));
+        REQUIRE(c.y == Catch::Approx(2.0));
     }
 
     SECTION("centroid of rectangle")
@@ -237,8 +237,8 @@ TEST_CASE("Operations - Centroid")
         Polygon rect{{{0, 0}, {8, 0}, {8, 4}, {0, 4}, {0, 0}}};
         auto c = centroid<Polygon, Point>(rect);
 
-        REQUIRE(c.x == Approx(4.0));
-        REQUIRE(c.y == Approx(2.0));
+        REQUIRE(c.x == Catch::Approx(4.0));
+        REQUIRE(c.y == Catch::Approx(2.0));
     }
 
     SECTION("centroid of empty polygon")
@@ -246,8 +246,8 @@ TEST_CASE("Operations - Centroid")
         Polygon empty;
         auto c = centroid<Polygon, Point>(empty);
 
-        REQUIRE(c.x == Approx(0.0));
-        REQUIRE(c.y == Approx(0.0));
+        REQUIRE(c.x == Catch::Approx(0.0));
+        REQUIRE(c.y == Catch::Approx(0.0));
     }
 
     SECTION("centroid of L-shaped polygon")
@@ -301,8 +301,8 @@ TEST_CASE("Operations - Complex Cases")
         auto c = centroid<Polygon, Point>(hex);
 
         // Should be near center
-        REQUIRE(c.x == Approx(1.5).margin(0.5));
-        REQUIRE(c.y == Approx(1.0).margin(0.5));
+        REQUIRE(c.x == Catch::Approx(1.5).margin(0.5));
+        REQUIRE(c.y == Catch::Approx(1.0).margin(0.5));
     }
 }
 

@@ -1,4 +1,4 @@
-#include <catch/catch.hpp>
+#include <catch2/catch_amalgamated.hpp>
 #include <simo/shapes.hpp>
 
 using namespace simo::shapes;

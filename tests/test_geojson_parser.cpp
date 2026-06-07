@@ -1,4 +1,4 @@
-#include <catch/catch.hpp>
+#include <catch2/catch_amalgamated.hpp>
 #include <simo/io/geojson_parser.hpp>
 #include <sstream>
 
@@ -30,21 +30,21 @@ TEST_CASE("GeoJSON Parser - Basic Types")
     {
         auto val = geojson_parser::parse("3.14159");
         REQUIRE(val.is_number());
-        REQUIRE(val.as_number() == Approx(3.14159));
+        REQUIRE(val.as_number() == Catch::Approx(3.14159));
     }
 
     SECTION("parse number - negative")
     {
         auto val = geojson_parser::parse("-123.456");
         REQUIRE(val.is_number());
-        REQUIRE(val.as_number() == Approx(-123.456));
+        REQUIRE(val.as_number() == Catch::Approx(-123.456));
     }
 
     SECTION("parse number - scientific notation")
     {
         auto val = geojson_parser::parse("1.5e10");
         REQUIRE(val.is_number());
-        REQUIRE(val.as_number() == Approx(1.5e10));
+        REQUIRE(val.as_number() == Catch::Approx(1.5e10));
     }
 
     SECTION("parse array - empty")
@@ -144,9 +144,9 @@ TEST_CASE("GeoJSON Parser - Coordinate Arrays")
         auto val = geojson_parser::parse("[1.5, 2.5, 3.5]");
         auto coords = val.as_double_array();
         REQUIRE(coords.size() == 3);
-        REQUIRE(coords[0] == Approx(1.5));
-        REQUIRE(coords[1] == Approx(2.5));
-        REQUIRE(coords[2] == Approx(3.5));
+        REQUIRE(coords[0] == Catch::Approx(1.5));
+        REQUIRE(coords[1] == Catch::Approx(2.5));
+        REQUIRE(coords[2] == Catch::Approx(3.5));
     }
 
     SECTION("nested coordinate arrays")

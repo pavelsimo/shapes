@@ -1,4 +1,4 @@
-#include <catch/catch.hpp>
+#include <catch2/catch_amalgamated.hpp>
 #include <simo/shapes.hpp>
 #include <cmath>
 
@@ -16,8 +16,8 @@ TEST_CASE("Transformations - Translate Point")
         Point p{1, 2};
         auto result = translate(p, 3.0, 4.0);
 
-        REQUIRE(result.x == Approx(4.0));
-        REQUIRE(result.y == Approx(6.0));
+        REQUIRE(result.x == Catch::Approx(4.0));
+        REQUIRE(result.y == Catch::Approx(6.0));
     }
 
     SECTION("translate point by negative offset")
@@ -25,8 +25,8 @@ TEST_CASE("Transformations - Translate Point")
         Point p{5, 8};
         auto result = translate(p, -2.0, -3.0);
 
-        REQUIRE(result.x == Approx(3.0));
-        REQUIRE(result.y == Approx(5.0));
+        REQUIRE(result.x == Catch::Approx(3.0));
+        REQUIRE(result.y == Catch::Approx(5.0));
     }
 
     SECTION("translate point by zero")
@@ -34,8 +34,8 @@ TEST_CASE("Transformations - Translate Point")
         Point p{3, 7};
         auto result = translate(p, 0.0, 0.0);
 
-        REQUIRE(result.x == Approx(3.0));
-        REQUIRE(result.y == Approx(7.0));
+        REQUIRE(result.x == Catch::Approx(3.0));
+        REQUIRE(result.y == Catch::Approx(7.0));
     }
 }
 
@@ -47,12 +47,12 @@ TEST_CASE("Transformations - Translate LineString")
         auto result = translate(ls, 10.0, 20.0);
 
         REQUIRE(result.size() == 3);
-        REQUIRE(result[0].x == Approx(10.0));
-        REQUIRE(result[0].y == Approx(20.0));
-        REQUIRE(result[1].x == Approx(11.0));
-        REQUIRE(result[1].y == Approx(21.0));
-        REQUIRE(result[2].x == Approx(12.0));
-        REQUIRE(result[2].y == Approx(20.0));
+        REQUIRE(result[0].x == Catch::Approx(10.0));
+        REQUIRE(result[0].y == Catch::Approx(20.0));
+        REQUIRE(result[1].x == Catch::Approx(11.0));
+        REQUIRE(result[1].y == Catch::Approx(21.0));
+        REQUIRE(result[2].x == Catch::Approx(12.0));
+        REQUIRE(result[2].y == Catch::Approx(20.0));
     }
 
     SECTION("translate via geometry method")
@@ -60,10 +60,10 @@ TEST_CASE("Transformations - Translate LineString")
         LineString ls{{0, 0}, {4, 4}};
         auto result = ls.translate(5.0, 5.0);
 
-        REQUIRE(result[0].x == Approx(5.0));
-        REQUIRE(result[0].y == Approx(5.0));
-        REQUIRE(result[1].x == Approx(9.0));
-        REQUIRE(result[1].y == Approx(9.0));
+        REQUIRE(result[0].x == Catch::Approx(5.0));
+        REQUIRE(result[0].y == Catch::Approx(5.0));
+        REQUIRE(result[1].x == Catch::Approx(9.0));
+        REQUIRE(result[1].y == Catch::Approx(9.0));
     }
 }
 
@@ -75,10 +75,10 @@ TEST_CASE("Transformations - Translate Polygon")
         auto result = translate(poly, 2.0, 5.0);
 
         REQUIRE(result.size() == 1);
-        REQUIRE(result[0][0].x == Approx(2.0));
-        REQUIRE(result[0][0].y == Approx(5.0));
-        REQUIRE(result[0][1].x == Approx(6.0));
-        REQUIRE(result[0][1].y == Approx(5.0));
+        REQUIRE(result[0][0].x == Catch::Approx(2.0));
+        REQUIRE(result[0][0].y == Catch::Approx(5.0));
+        REQUIRE(result[0][1].x == Catch::Approx(6.0));
+        REQUIRE(result[0][1].y == Catch::Approx(5.0));
     }
 
     SECTION("translate polygon with hole")
@@ -90,8 +90,8 @@ TEST_CASE("Transformations - Translate Polygon")
         auto result = translate(poly, 5.0, 5.0);
 
         REQUIRE(result.size() == 2);  // Exterior + hole
-        REQUIRE(result[0][0].x == Approx(5.0));
-        REQUIRE(result[1][0].x == Approx(7.0));  // Hole also translated
+        REQUIRE(result[0][0].x == Catch::Approx(5.0));
+        REQUIRE(result[1][0].x == Catch::Approx(7.0));  // Hole also translated
     }
 }
 
@@ -102,8 +102,8 @@ TEST_CASE("Transformations - Rotate Point")
         Point p{1, 0};
         auto result = rotate(p, M_PI / 2);  // 90 degrees
 
-        REQUIRE(result.x == Approx(0.0).margin(1e-10));
-        REQUIRE(result.y == Approx(1.0));
+        REQUIRE(result.x == Catch::Approx(0.0).margin(1e-10));
+        REQUIRE(result.y == Catch::Approx(1.0));
     }
 
     SECTION("rotate point 180 degrees")
@@ -111,8 +111,8 @@ TEST_CASE("Transformations - Rotate Point")
         Point p{1, 0};
         auto result = rotate(p, M_PI);  // 180 degrees
 
-        REQUIRE(result.x == Approx(-1.0));
-        REQUIRE(result.y == Approx(0.0).margin(1e-10));
+        REQUIRE(result.x == Catch::Approx(-1.0));
+        REQUIRE(result.y == Catch::Approx(0.0).margin(1e-10));
     }
 
     SECTION("rotate point 360 degrees")
@@ -120,8 +120,8 @@ TEST_CASE("Transformations - Rotate Point")
         Point p{3, 4};
         auto result = rotate(p, 2 * M_PI);  // 360 degrees
 
-        REQUIRE(result.x == Approx(3.0));
-        REQUIRE(result.y == Approx(4.0));
+        REQUIRE(result.x == Catch::Approx(3.0));
+        REQUIRE(result.y == Catch::Approx(4.0));
     }
 
     SECTION("rotate around custom origin")
@@ -130,8 +130,8 @@ TEST_CASE("Transformations - Rotate Point")
         Point origin{1, 0};
         auto result = rotate(p, M_PI / 2, origin);  // 90 degrees around (1,0)
 
-        REQUIRE(result.x == Approx(1.0));
-        REQUIRE(result.y == Approx(1.0));
+        REQUIRE(result.x == Catch::Approx(1.0));
+        REQUIRE(result.y == Catch::Approx(1.0));
     }
 
     SECTION("rotate via geometry method")
@@ -139,8 +139,8 @@ TEST_CASE("Transformations - Rotate Point")
         Point p{1, 0};
         auto result = p.rotate(M_PI / 2);
 
-        REQUIRE(result.x == Approx(0.0).margin(1e-10));
-        REQUIRE(result.y == Approx(1.0));
+        REQUIRE(result.x == Catch::Approx(0.0).margin(1e-10));
+        REQUIRE(result.y == Catch::Approx(1.0));
     }
 }
 
@@ -151,12 +151,12 @@ TEST_CASE("Transformations - Rotate LineString")
         LineString ls{{1, 0}, {0, 0}, {0, 1}};
         auto result = rotate(ls, M_PI / 2);
 
-        REQUIRE(result[0].x == Approx(0.0).margin(1e-10));
-        REQUIRE(result[0].y == Approx(1.0));
-        REQUIRE(result[1].x == Approx(0.0).margin(1e-10));
-        REQUIRE(result[1].y == Approx(0.0).margin(1e-10));
-        REQUIRE(result[2].x == Approx(-1.0));
-        REQUIRE(result[2].y == Approx(0.0).margin(1e-10));
+        REQUIRE(result[0].x == Catch::Approx(0.0).margin(1e-10));
+        REQUIRE(result[0].y == Catch::Approx(1.0));
+        REQUIRE(result[1].x == Catch::Approx(0.0).margin(1e-10));
+        REQUIRE(result[1].y == Catch::Approx(0.0).margin(1e-10));
+        REQUIRE(result[2].x == Catch::Approx(-1.0));
+        REQUIRE(result[2].y == Catch::Approx(0.0).margin(1e-10));
     }
 
     SECTION("rotate around center")
@@ -166,8 +166,8 @@ TEST_CASE("Transformations - Rotate LineString")
         auto result = rotate(ls, M_PI, center);  // 180 degrees around center
 
         // Points should swap positions
-        REQUIRE(result[0].x == Approx(2.0));
-        REQUIRE(result[1].x == Approx(0.0));
+        REQUIRE(result[0].x == Catch::Approx(2.0));
+        REQUIRE(result[1].x == Catch::Approx(0.0));
     }
 }
 
@@ -184,7 +184,7 @@ TEST_CASE("Transformations - Rotate Polygon")
 
         // After 45deg rotation, corners should move
         double sqrt2_2 = std::sqrt(2.0) / 2.0;
-        REQUIRE(result[0][1].x == Approx(sqrt2_2).margin(1e-10));
+        REQUIRE(result[0][1].x == Catch::Approx(sqrt2_2).margin(1e-10));
     }
 
     SECTION("rotate around polygon center")
@@ -205,8 +205,8 @@ TEST_CASE("Transformations - Scale Point")
         Point p{3, 4};
         auto result = scale(p, 2.0, 2.0);
 
-        REQUIRE(result.x == Approx(6.0));
-        REQUIRE(result.y == Approx(8.0));
+        REQUIRE(result.x == Catch::Approx(6.0));
+        REQUIRE(result.y == Catch::Approx(8.0));
     }
 
     SECTION("scale point by 0.5")
@@ -214,8 +214,8 @@ TEST_CASE("Transformations - Scale Point")
         Point p{8, 12};
         auto result = scale(p, 0.5, 0.5);
 
-        REQUIRE(result.x == Approx(4.0));
-        REQUIRE(result.y == Approx(6.0));
+        REQUIRE(result.x == Catch::Approx(4.0));
+        REQUIRE(result.y == Catch::Approx(6.0));
     }
 
     SECTION("scale with different factors")
@@ -223,8 +223,8 @@ TEST_CASE("Transformations - Scale Point")
         Point p{2, 3};
         auto result = scale(p, 3.0, 2.0);
 
-        REQUIRE(result.x == Approx(6.0));
-        REQUIRE(result.y == Approx(6.0));
+        REQUIRE(result.x == Catch::Approx(6.0));
+        REQUIRE(result.y == Catch::Approx(6.0));
     }
 
     SECTION("scale around custom origin")
@@ -234,8 +234,8 @@ TEST_CASE("Transformations - Scale Point")
         auto result = scale(p, 2.0, 2.0, origin);
 
         // Distance from origin should double
-        REQUIRE(result.x == Approx(6.0));  // 2 + 2*(4-2)
-        REQUIRE(result.y == Approx(6.0));
+        REQUIRE(result.x == Catch::Approx(6.0));  // 2 + 2*(4-2)
+        REQUIRE(result.y == Catch::Approx(6.0));
     }
 
     SECTION("scale via geometry method")
@@ -243,8 +243,8 @@ TEST_CASE("Transformations - Scale Point")
         Point p{1, 2};
         auto result = p.scale(3.0, 3.0);
 
-        REQUIRE(result.x == Approx(3.0));
-        REQUIRE(result.y == Approx(6.0));
+        REQUIRE(result.x == Catch::Approx(3.0));
+        REQUIRE(result.y == Catch::Approx(6.0));
     }
 
     SECTION("scale by negative factor (mirror)")
@@ -252,8 +252,8 @@ TEST_CASE("Transformations - Scale Point")
         Point p{3, 4};
         auto result = scale(p, -1.0, 1.0);
 
-        REQUIRE(result.x == Approx(-3.0));
-        REQUIRE(result.y == Approx(4.0));
+        REQUIRE(result.x == Catch::Approx(-3.0));
+        REQUIRE(result.y == Catch::Approx(4.0));
     }
 }
 
@@ -264,12 +264,12 @@ TEST_CASE("Transformations - Scale LineString")
         LineString ls{{0, 0}, {1, 1}, {2, 0}};
         auto result = scale(ls, 2.0, 2.0);
 
-        REQUIRE(result[0].x == Approx(0.0));
-        REQUIRE(result[0].y == Approx(0.0));
-        REQUIRE(result[1].x == Approx(2.0));
-        REQUIRE(result[1].y == Approx(2.0));
-        REQUIRE(result[2].x == Approx(4.0));
-        REQUIRE(result[2].y == Approx(0.0));
+        REQUIRE(result[0].x == Catch::Approx(0.0));
+        REQUIRE(result[0].y == Catch::Approx(0.0));
+        REQUIRE(result[1].x == Catch::Approx(2.0));
+        REQUIRE(result[1].y == Catch::Approx(2.0));
+        REQUIRE(result[2].x == Catch::Approx(4.0));
+        REQUIRE(result[2].y == Catch::Approx(0.0));
     }
 
     SECTION("scale with different x and y factors")
@@ -277,10 +277,10 @@ TEST_CASE("Transformations - Scale LineString")
         LineString ls{{1, 1}, {2, 2}};
         auto result = scale(ls, 2.0, 3.0);
 
-        REQUIRE(result[0].x == Approx(2.0));
-        REQUIRE(result[0].y == Approx(3.0));
-        REQUIRE(result[1].x == Approx(4.0));
-        REQUIRE(result[1].y == Approx(6.0));
+        REQUIRE(result[0].x == Catch::Approx(2.0));
+        REQUIRE(result[0].y == Catch::Approx(3.0));
+        REQUIRE(result[1].x == Catch::Approx(4.0));
+        REQUIRE(result[1].y == Catch::Approx(6.0));
     }
 }
 
@@ -295,7 +295,7 @@ TEST_CASE("Transformations - Scale Polygon")
         auto new_area = area(result);
 
         // Area should be 4x (2^2)
-        REQUIRE(new_area == Approx(orig_area * 4.0));
+        REQUIRE(new_area == Catch::Approx(orig_area * 4.0));
     }
 
     SECTION("scale rectangle with different factors")
@@ -305,7 +305,7 @@ TEST_CASE("Transformations - Scale Polygon")
 
         // Width halved, height doubled
         auto new_area = area(result);
-        REQUIRE(new_area == Approx(8.0));  // 2 * 4 (original was 8)
+        REQUIRE(new_area == Catch::Approx(8.0));  // 2 * 4 (original was 8)
     }
 
     SECTION("scale polygon around center")
@@ -315,8 +315,8 @@ TEST_CASE("Transformations - Scale Polygon")
         auto result = scale(square, 2.0, 2.0, origin);
 
         // Square centered at origin, scaled 2x
-        REQUIRE(result[0][0].x == Approx(-2.0));
-        REQUIRE(result[0][1].x == Approx(2.0));
+        REQUIRE(result[0][0].x == Catch::Approx(-2.0));
+        REQUIRE(result[0][1].x == Catch::Approx(2.0));
     }
 }
 
@@ -328,8 +328,8 @@ TEST_CASE("Transformations - Composition")
         auto translated = translate(p, 1.0, 0.0);  // Now at (2, 0)
         auto rotated = rotate(translated, M_PI / 2);  // Rotate 90deg
 
-        REQUIRE(rotated.x == Approx(0.0).margin(1e-10));
-        REQUIRE(rotated.y == Approx(2.0));
+        REQUIRE(rotated.x == Catch::Approx(0.0).margin(1e-10));
+        REQUIRE(rotated.y == Catch::Approx(2.0));
     }
 
     SECTION("rotate then translate")
@@ -338,8 +338,8 @@ TEST_CASE("Transformations - Composition")
         auto rotated = rotate(p, M_PI / 2);  // Now at (0, 1)
         auto translated = translate(rotated, 5.0, 5.0);  // Move to (5, 6)
 
-        REQUIRE(translated.x == Approx(5.0));
-        REQUIRE(translated.y == Approx(6.0));
+        REQUIRE(translated.x == Catch::Approx(5.0));
+        REQUIRE(translated.y == Catch::Approx(6.0));
     }
 
     SECTION("scale then translate")
@@ -348,8 +348,8 @@ TEST_CASE("Transformations - Composition")
         auto scaled = scale(p, 2.0, 2.0);  // Now at (4, 6)
         auto translated = translate(scaled, 1.0, 1.0);  // Move to (5, 7)
 
-        REQUIRE(translated.x == Approx(5.0));
-        REQUIRE(translated.y == Approx(7.0));
+        REQUIRE(translated.x == Catch::Approx(5.0));
+        REQUIRE(translated.y == Catch::Approx(7.0));
     }
 
     SECTION("translate, rotate, scale")
@@ -374,7 +374,7 @@ TEST_CASE("Transformations - Preserves Properties")
         auto translated = translate(ls, 10.0, 20.0);
         auto new_len = length(translated);
 
-        REQUIRE(new_len == Approx(orig_len));
+        REQUIRE(new_len == Catch::Approx(orig_len));
     }
 
     SECTION("rotation preserves distance")
@@ -385,7 +385,7 @@ TEST_CASE("Transformations - Preserves Properties")
         auto rotated = rotate(ls, M_PI / 4);
         auto new_len = length(rotated);
 
-        REQUIRE(new_len == Approx(orig_len));
+        REQUIRE(new_len == Catch::Approx(orig_len));
     }
 
     SECTION("uniform scaling multiplies distances")
@@ -396,7 +396,7 @@ TEST_CASE("Transformations - Preserves Properties")
         auto scaled = scale(ls, 2.0, 2.0);
         auto new_len = length(scaled);
 
-        REQUIRE(new_len == Approx(orig_len * 2.0));
+        REQUIRE(new_len == Catch::Approx(orig_len * 2.0));
     }
 
     SECTION("rotation preserves area")
@@ -407,7 +407,7 @@ TEST_CASE("Transformations - Preserves Properties")
         auto rotated = rotate(square, M_PI / 4);
         auto new_area = area(rotated);
 
-        REQUIRE(new_area == Approx(orig_area));
+        REQUIRE(new_area == Catch::Approx(orig_area));
     }
 
     SECTION("uniform scaling multiplies area by square")
@@ -418,7 +418,7 @@ TEST_CASE("Transformations - Preserves Properties")
         auto scaled = scale(square, 3.0, 3.0);
         auto new_area = area(scaled);
 
-        REQUIRE(new_area == Approx(orig_area * 9.0));  // 3^2
+        REQUIRE(new_area == Catch::Approx(orig_area * 9.0));  // 3^2
     }
 }
 
@@ -429,8 +429,8 @@ TEST_CASE("Transformations - Edge Cases")
         Point p{3, 4};
         auto result = rotate(p, 0.0);
 
-        REQUIRE(result.x == Approx(3.0));
-        REQUIRE(result.y == Approx(4.0));
+        REQUIRE(result.x == Catch::Approx(3.0));
+        REQUIRE(result.y == Catch::Approx(4.0));
     }
 
     SECTION("scale by 1 (identity)")
@@ -438,8 +438,8 @@ TEST_CASE("Transformations - Edge Cases")
         Point p{3, 4};
         auto result = scale(p, 1.0, 1.0);
 
-        REQUIRE(result.x == Approx(3.0));
-        REQUIRE(result.y == Approx(4.0));
+        REQUIRE(result.x == Catch::Approx(3.0));
+        REQUIRE(result.y == Catch::Approx(4.0));
     }
 
     SECTION("scale by 0")
@@ -447,8 +447,8 @@ TEST_CASE("Transformations - Edge Cases")
         Point p{3, 4};
         auto result = scale(p, 0.0, 0.0);
 
-        REQUIRE(result.x == Approx(0.0));
-        REQUIRE(result.y == Approx(0.0));
+        REQUIRE(result.x == Catch::Approx(0.0));
+        REQUIRE(result.y == Catch::Approx(0.0));
     }
 
     SECTION("translate empty geometry")

@@ -209,7 +209,7 @@ auto scaled = square.scale(2.0, 2.0);  // Area becomes 16
 
 This project would not have been possible without the following amazing tools, many thanks to its developers!
 
-- [Catch2](https://github.com/catchorg/Catch2) - Testing framework
+- [Catch2 v3.15.0](https://github.com/catchorg/Catch2) - Testing framework
 - [amalgamate.py](https://github.com/edlund/amalgamate) - Single-header generation
 - [polyline](https://github.com/mapbox/polyline) - Google Polyline encoding
 
