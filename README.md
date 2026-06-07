@@ -1,6 +1,6 @@
 # shapes
 [![build](https://github.com/pavelsimo/shapes/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/pavelsimo/shapes/actions/workflows/build.yml)
-[![coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fpavelsimo.github.io%2Fshapes%2Fcoverage%2Fbadge.json)](https://pavelsimo.github.io/shapes/coverage/)
+[![coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fpavelsimo%2Fshapes%2Fgh-pages%2Fcoverage%2Fbadge.json)](https://pavelsimo.github.io/shapes/coverage/)
 [![Documentation](https://img.shields.io/badge/docs-doxygen-blue.svg)](https://pavelsimo.github.io/shapes)
 [![](https://img.shields.io/github/license/pavelsimo/shapes.svg)](https://github.com/pavelsimo/shapes/blob/master/LICENSE)
 
