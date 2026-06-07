@@ -53,6 +53,8 @@ jobs:
   coverage:
     name: coverage
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
@@ -75,10 +77,29 @@ jobs:
 
       - name: Generate coverage report
         run: |
+          set -euo pipefail
           lcov --directory build --capture --output-file build/coverage.info
           lcov --remove build/coverage.info '/usr/*' '*/tests/*' '*/thirdparty/*' --output-file build/coverage.info
           lcov --list build/coverage.info
           genhtml build/coverage.info --output-directory build/coverage
+          coverage="$(lcov --summary build/coverage.info | awk '/lines\.*:/ { gsub(/%/, "", $2); print $2 }')"
+          test -n "${coverage}"
+          color="$(awk -v coverage="${coverage}" 'BEGIN {
+            if(coverage >= 90) {
+              print "brightgreen"
+            } else if(coverage >= 80) {
+              print "green"
+            } else if(coverage >= 70) {
+              print "yellowgreen"
+            } else if(coverage >= 60) {
+              print "yellow"
+            } else if(coverage >= 50) {
+              print "orange"
+            } else {
+              print "red"
+            }
+          }')"
+          printf '{"schemaVersion":1,"label":"coverage","message":"%s%%","color":"%s"}\n' "${coverage}" "${color}" > build/coverage/badge.json
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
@@ -87,6 +108,34 @@ jobs:
           path: |
             build/coverage.info
             build/coverage
+
+      - name: Publish coverage report
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          pages_repo="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads "${pages_repo}" gh-pages >/dev/null 2>&1; then
+            git clone --depth 1 --branch gh-pages "${pages_repo}" gh-pages
+          else
+            git init gh-pages
+            git -C gh-pages checkout -b gh-pages
+            git -C gh-pages remote add origin "${pages_repo}"
+          fi
+          rm -rf gh-pages/coverage
+          mkdir -p gh-pages/coverage
+          cp -R build/coverage/. gh-pages/coverage/
+          touch gh-pages/.nojekyll
+          git -C gh-pages add coverage .nojekyll
+          if git -C gh-pages diff --cached --quiet; then
+            echo "Coverage report is already up to date"
+            exit 0
+          fi
+          git -C gh-pages commit -m "Update coverage report"
+          git -C gh-pages push origin gh-pages
 
   documentation:
     name: documentation
