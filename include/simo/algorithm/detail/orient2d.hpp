@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ciso646>
+#include <algorithm>
 
 namespace simo
 {
@@ -12,7 +13,7 @@ namespace detail
 {
 
 /*!
- * @brief Robust 2D orientation test
+ * @brief Fast 2D orientation test
  *
  * Computes the orientation of three points p, q, r in 2D space.
  * Based on the sign of the determinant:
@@ -25,7 +26,8 @@ namespace detail
  * @param r Third point
  * @return > 0 if counter-clockwise, < 0 if clockwise, == 0 if collinear
  *
- * @note Uses exact arithmetic via cross product for robustness
+ * @note Uses plain floating-point arithmetic; nearly collinear inputs may be
+ *       misclassified due to rounding. Not a robust (exact) predicate.
  */
 template <typename Point>
 constexpr int orient2d(const Point& p, const Point& q, const Point& r) noexcept

@@ -144,3 +144,103 @@ TEST_CASE("Geometry")
         }
     }
 }
+
+TEST_CASE("Geometry - facade dispatch")
+{
+    SECTION("dim/ndim/has_z/has_m for a Z point")
+    {
+        auto geom = geometry::from_wkt("POINT Z (1 2 3)");
+        CHECK(geom.dim() == dimension_type::XYZ);
+        CHECK(geom.ndim() == 3);
+        CHECK(geom.has_z());
+        CHECK_FALSE(geom.has_m());
+    }
+
+    SECTION("bounds dispatches to the concrete geometry")
+    {
+        auto geom = geometry::from_wkt("LINESTRING(-3 -2,-1 -1)");
+        auto b    = geom.bounds();
+        CHECK(b.minx == -3.0);
+        CHECK(b.miny == -2.0);
+        CHECK(b.maxx == -1.0);
+        CHECK(b.maxy == -1.0);
+    }
+
+    SECTION("is_closed dispatches to the concrete geometry")
+    {
+        CHECK(geometry::from_wkt("LINESTRING(0 0,1 0,1 1,0 0)").is_closed());
+        CHECK_FALSE(geometry::from_wkt("LINESTRING(0 0,1 0,1 1)").is_closed());
+    }
+}
+
+TEST_CASE("Geometry - checked getters")
+{
+    SECTION("mismatched getter returns nullptr")
+    {
+        geometry geom(point(1, 2));
+        CHECK(geom.get_linestring() == nullptr);
+        CHECK(geom.get_multipoint() == nullptr);
+        CHECK(geom.get_point() != nullptr);
+    }
+
+    SECTION("const getters work on const geometries")
+    {
+        const geometry geom(point(1, 2));
+        CHECK(geom.is_point());
+        CHECK(geom.get_point() != nullptr);
+        CHECK(geom.get<point>() != nullptr);
+    }
+}
+
+TEST_CASE("Geometry - move semantics")
+{
+    SECTION("move assignment steals the container without copying")
+    {
+        geometry src(linestring{{1, 2}, {3, 4}});
+        auto* before = src.get_linestring();
+        geometry dst;
+        dst = std::move(src);
+        CHECK(dst.get_linestring() == before);
+    }
+
+    SECTION("move construction leaves the source empty")
+    {
+        geometry src(multipoint{{1, 2}, {3, 4}});
+        geometry dst(std::move(src));
+        CHECK(dst.is_multipoint());
+        CHECK(src.geom_type() == geometry_type::GEOMETRY);
+    }
+
+    SECTION("copies of collections are deep")
+    {
+        geometrycollection gc;
+        gc.emplace_back(geometry(point(1, 2)));
+        geometry a(gc);
+        geometry b(a);
+        CHECK(a.get_geometrycollection() != b.get_geometrycollection());
+        CHECK(a.wkt() == b.wkt());
+    }
+}
+
+TEST_CASE("Geometry - default precision round-trip")
+{
+    SECTION("high precision coordinates survive a wkt round-trip")
+    {
+        point p{-122.4194155, 37.7749295};
+        auto q = point::from_wkt(p.wkt());
+        CHECK(p == q);
+        CHECK(p.wkt() == "POINT (-122.4194155 37.7749295)");
+    }
+
+    SECTION("integer coordinates print without a decimal point")
+    {
+        CHECK(point(1, 2).wkt() == "POINT (1 2)");
+    }
+}
+
+TEST_CASE("Geometry - wkt reader is not copyable")
+{
+    static_assert(not std::is_copy_constructible<wkt_reader>::value, "wkt_reader must not be copyable");
+    static_assert(not std::is_copy_assignable<wkt_reader>::value, "wkt_reader must not be copy assignable");
+    static_assert(std::is_move_constructible<wkt_reader>::value, "wkt_reader should be movable");
+}

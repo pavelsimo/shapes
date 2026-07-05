@@ -131,12 +131,10 @@ rotate(const Point& point, double angle, const Point& origin = Point{0, 0})
     auto dx = point.x - origin.x;
     auto dy = point.y - origin.y;
 
-    // Rotate
-    Point result;
-    result.x = origin.x + dx * cos_a - dy * sin_a;
-    result.y = origin.y + dx * sin_a + dy * cos_a;
-
-    return result;
+    // Rotate; the value constructor keeps the result non-empty
+    using coord_type = typename Point::coord_type;
+    return Point{static_cast<coord_type>(origin.x + dx * cos_a - dy * sin_a),
+                 static_cast<coord_type>(origin.y + dx * sin_a + dy * cos_a)};
 }
 
 /*! @brief Rotate a linestring around origin by angle (in radians) */
@@ -183,10 +181,9 @@ typename std::enable_if<detail::is_point_like<Point>::value, Point>::type
 scale(const Point& point, typename Point::coord_type xfact, typename Point::coord_type yfact,
       const Point& origin = Point{0, 0})
 {
-    Point result;
-    result.x = origin.x + (point.x - origin.x) * xfact;
-    result.y = origin.y + (point.y - origin.y) * yfact;
-    return result;
+    // the value constructor keeps the result non-empty
+    return Point{origin.x + (point.x - origin.x) * xfact,
+                 origin.y + (point.y - origin.y) * yfact};
 }
 
 /*! @brief Scale a linestring by factors */

@@ -264,6 +264,19 @@ class basic_geometry
         return static_cast<const T*>(this)->json_(precision);
     }
 
+    /*!
+     * @brief Appends the geojson representation of the geometry to the given string
+     * @param out the output string
+     * @param precision the output precision
+     * @sa https://tools.ietf.org/html/rfc7946
+     *
+     * @since 0.1.1
+     */
+    void write_json(std::string& out, std::int32_t precision = -1) const
+    {
+        static_cast<const T*>(this)->write_json_(out, precision);
+    }
+
     // wkt
 
     /*!
@@ -290,6 +303,18 @@ class basic_geometry
     std::string wkt(std::int32_t precision = -1) const
     {
         return static_cast<const T*>(this)->wkt_(precision);
+    }
+
+    /*!
+     * @brief Appends the wkt representation of the geometry to the given string
+     * @param out the output string
+     * @param precision the output precision
+     *
+     * @since 0.1.1
+     */
+    void write_wkt(std::string& out, std::int32_t precision = -1) const
+    {
+        static_cast<const T*>(this)->write_wkt_(out, precision);
     }
 
     // Geometric algorithms (forward to algorithm namespace functions)

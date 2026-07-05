@@ -334,3 +334,64 @@ TEST_CASE("Operations - Edge Cases")
         REQUIRE(env[0].size() == 5);
     }
 }
+
+TEST_CASE("Operations - Convex Hull edge cases")
+{
+    SECTION("input containing the pivot point multiple times")
+    {
+        MultiPoint points{{0, 0}, {0, 0}, {0, 0}, {4, 0}, {2, 3}, {0, 0}};
+        auto hull = convex_hull<MultiPoint, Polygon>(points);
+        REQUIRE(hull.size() == 1);
+        REQUIRE(hull[0].size() >= 4);
+    }
+
+    SECTION("many duplicated points")
+    {
+        MultiPoint points;
+        for (int i = 0; i < 50; ++i)
+        {
+            points.emplace_back(0.0, 0.0);
+            points.emplace_back(4.0, 0.0);
+            points.emplace_back(2.0, 3.0);
+        }
+        auto hull = convex_hull<MultiPoint, Polygon>(points);
+        REQUIRE(hull.size() == 1);
+    }
+}
+
+TEST_CASE("Operations - Centroid degenerate polygons")
+{
+    SECTION("collinear ring falls back to vertex mean")
+    {
+        Polygon degenerate{{{0, 0}, {1, 1}, {2, 2}, {0, 0}}};
+        auto c = centroid<Polygon, Point>(degenerate);
+        REQUIRE(std::isfinite(c.x));
+        REQUIRE(std::isfinite(c.y));
+        REQUIRE(c.x == Catch::Approx(0.75));
+        REQUIRE(c.y == Catch::Approx(0.75));
+    }
+
+    SECTION("repeated point ring does not produce NaN")
+    {
+        Polygon degenerate{{{1, 1}, {1, 1}, {1, 1}}};
+        auto c = centroid<Polygon, Point>(degenerate);
+        REQUIRE(c.x == Catch::Approx(1.0));
+        REQUIRE(c.y == Catch::Approx(1.0));
+    }
+}
+
+TEST_CASE("Operations - Simplify large monotone input")
+{
+    SECTION("10k point zigzag does not overflow the stack")
+    {
+        LineString ls;
+        ls.reserve(10000);
+        for (int i = 0; i < 10000; ++i)
+        {
+            ls.emplace_back(static_cast<double>(i), (i % 2 == 0) ? 0.0 : 1.0);
+        }
+        auto simplified = simplify(ls, 0.5);
+        REQUIRE(simplified.size() >= 2);
+        REQUIRE(simplified.size() <= ls.size());
+    }
+}

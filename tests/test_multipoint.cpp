@@ -696,3 +696,24 @@ TEST_CASE("MultiPoint")
         CHECK(b.miny == 2.0);
     }
 }
+
+TEST_CASE("MultiPoint is_closed")
+{
+    SECTION("first equals last")
+    {
+        auto mp = multipoint{{1, 2}, {3, 4}, {1, 2}};
+        CHECK(mp.is_closed());
+    }
+
+    SECTION("first differs from last")
+    {
+        auto mp = multipoint{{1, 2}, {3, 4}};
+        CHECK_FALSE(mp.is_closed());
+    }
+
+    SECTION("empty multipoint is closed")
+    {
+        multipoint mp;
+        CHECK(mp.is_closed());
+    }
+}

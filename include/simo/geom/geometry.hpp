@@ -4,8 +4,10 @@
 #include <ciso646>
 #include <cctype>
 #include <stdexcept>
-#include <sstream>
+#include <type_traits>
+#include <utility>
 #include <simo/geom/detail/geometry.hpp>
+#include <simo/geom/detail/wkt_util.hpp>
 #include <simo/geom/point.hpp>
 #include <simo/geom/multipoint.hpp>
 #include <simo/geom/linestring.hpp>
@@ -68,173 +70,141 @@ class geometry_t : public basic_geometry<geometry_t<T>>
 {
   public:
     // default constructor
-    geometry_t()
-    {
-        std::cout << "DEFAULT CONSTRUCTOR" << std::endl;
-    }
+    geometry_t() = default;
 
-    // copy constructor:
+    // copy constructor
     geometry_t(const geometry_t& other)
+        : m_geom_type(other.m_geom_type)
     {
-        std::cout << "COPY CONSTRUCTOR" << std::endl;
-        m_geom_type = other.geom_type();
-        switch (other.geom_type())
+        switch (m_geom_type)
         {
-                // point
-
+            // point variants live inline in the union, a trivial copy suffices
             case geometry_type::POINT:
-            {
-                m_value = geom_value(*other.m_value.m_point);
-                break;
-            }
             case geometry_type::POINTZ:
-            {
-                m_value = geom_value(*other.m_value.m_point_z);
-                break;
-            }
             case geometry_type::POINTM:
-            {
-                m_value = geom_value(*other.m_value.m_point_m);
-                break;
-            }
             case geometry_type::POINTZM:
             {
-                m_value = geom_value(*other.m_value.m_point_zm);
+                m_value = other.m_value;
                 break;
             }
-
-                // multipoint
-
             case geometry_type::MULTIPOINT:
             {
-                m_value = geom_value(*other.m_value.m_multipoint);
+                m_value.m_multipoint = new multipoint_t<T>(*other.m_value.m_multipoint);
                 break;
             }
             case geometry_type::MULTIPOINTZ:
             {
-                m_value = geom_value(*other.m_value.m_multipoint_z);
+                m_value.m_multipoint_z = new multipoint_z_t<T>(*other.m_value.m_multipoint_z);
                 break;
             }
             case geometry_type::MULTIPOINTM:
             {
-                m_value = geom_value(*other.m_value.m_multipoint_m);
+                m_value.m_multipoint_m = new multipoint_m_t<T>(*other.m_value.m_multipoint_m);
                 break;
             }
             case geometry_type::MULTIPOINTZM:
             {
-                m_value = geom_value(*other.m_value.m_multipoint_zm);
+                m_value.m_multipoint_zm = new multipoint_zm_t<T>(*other.m_value.m_multipoint_zm);
                 break;
             }
-
-                // linestring
-
             case geometry_type::LINESTRING:
             {
-                m_value = geom_value(*other.m_value.m_linestring);
+                m_value.m_linestring = new linestring_t<T>(*other.m_value.m_linestring);
                 break;
             }
             case geometry_type::LINESTRINGZ:
             {
-                m_value = geom_value(*other.m_value.m_linestring_z);
+                m_value.m_linestring_z = new linestring_z_t<T>(*other.m_value.m_linestring_z);
                 break;
             }
             case geometry_type::LINESTRINGM:
             {
-                m_value = geom_value(*other.m_value.m_linestring_m);
+                m_value.m_linestring_m = new linestring_m_t<T>(*other.m_value.m_linestring_m);
                 break;
             }
             case geometry_type::LINESTRINGZM:
             {
-                m_value = geom_value(*other.m_value.m_linestring_zm);
+                m_value.m_linestring_zm = new linestring_zm_t<T>(*other.m_value.m_linestring_zm);
                 break;
             }
-
-                // multilinestring
-
             case geometry_type::MULTILINESTRING:
             {
-                m_value = geom_value(*other.m_value.m_multilinestring);
+                m_value.m_multilinestring = new multilinestring_t<T>(*other.m_value.m_multilinestring);
                 break;
             }
             case geometry_type::MULTILINESTRINGZ:
             {
-                m_value = geom_value(*other.m_value.m_multilinestring_z);
+                m_value.m_multilinestring_z = new multilinestring_z_t<T>(*other.m_value.m_multilinestring_z);
                 break;
             }
             case geometry_type::MULTILINESTRINGM:
             {
-                m_value = geom_value(*other.m_value.m_multilinestring_m);
+                m_value.m_multilinestring_m = new multilinestring_m_t<T>(*other.m_value.m_multilinestring_m);
                 break;
             }
             case geometry_type::MULTILINESTRINGZM:
             {
-                m_value = geom_value(*other.m_value.m_multilinestring_zm);
+                m_value.m_multilinestring_zm = new multilinestring_zm_t<T>(*other.m_value.m_multilinestring_zm);
                 break;
             }
-
-                // polygon
-
             case geometry_type::POLYGON:
             {
-                m_value = geom_value(*other.m_value.m_polygon);
+                m_value.m_polygon = new polygon_t<T>(*other.m_value.m_polygon);
                 break;
             }
             case geometry_type::POLYGONZ:
             {
-                m_value = geom_value(*other.m_value.m_polygon_z);
+                m_value.m_polygon_z = new polygon_z_t<T>(*other.m_value.m_polygon_z);
                 break;
             }
             case geometry_type::POLYGONM:
             {
-                m_value = geom_value(*other.m_value.m_polygon_m);
+                m_value.m_polygon_m = new polygon_m_t<T>(*other.m_value.m_polygon_m);
                 break;
             }
             case geometry_type::POLYGONZM:
             {
-                m_value = geom_value(*other.m_value.m_polygon_zm);
+                m_value.m_polygon_zm = new polygon_zm_t<T>(*other.m_value.m_polygon_zm);
                 break;
             }
-
-                // multipolygon
-
             case geometry_type::MULTIPOLYGON:
             {
-                m_value = geom_value(*other.m_value.m_multipolygon);
+                m_value.m_multipolygon = new multipolygon_t<T>(*other.m_value.m_multipolygon);
                 break;
             }
             case geometry_type::MULTIPOLYGONZ:
             {
-                m_value = geom_value(*other.m_value.m_multipolygon_z);
+                m_value.m_multipolygon_z = new multipolygon_z_t<T>(*other.m_value.m_multipolygon_z);
                 break;
             }
             case geometry_type::MULTIPOLYGONM:
             {
-                m_value = geom_value(*other.m_value.m_multipolygon_m);
+                m_value.m_multipolygon_m = new multipolygon_m_t<T>(*other.m_value.m_multipolygon_m);
                 break;
             }
             case geometry_type::MULTIPOLYGONZM:
             {
-                m_value = geom_value(*other.m_value.m_multipolygon_zm);
+                m_value.m_multipolygon_zm = new multipolygon_zm_t<T>(*other.m_value.m_multipolygon_zm);
                 break;
             }
             case geometry_type::GEOMETRYCOLLECTION:
             {
-                copy_geometrycollection_(other);
+                m_value.m_geometrycollection = new geometrycollection_t<T>(*other.m_value.m_geometrycollection);
                 break;
             }
             case geometry_type::GEOMETRYCOLLECTIONZ:
             {
-                copy_geometrycollection_z_(other);
+                m_value.m_geometrycollection_z = new geometrycollection_z_t<T>(*other.m_value.m_geometrycollection_z);
                 break;
             }
             case geometry_type::GEOMETRYCOLLECTIONM:
             {
-                copy_geometrycollection_m_(other);
+                m_value.m_geometrycollection_m = new geometrycollection_m_t<T>(*other.m_value.m_geometrycollection_m);
                 break;
             }
             case geometry_type::GEOMETRYCOLLECTIONZM:
             {
-                copy_geometrycollection_zm_(other);
+                m_value.m_geometrycollection_zm = new geometrycollection_zm_t<T>(*other.m_value.m_geometrycollection_zm);
                 break;
             }
             default:
@@ -243,10 +213,10 @@ class geometry_t : public basic_geometry<geometry_t<T>>
             }
         }
     }
+
     // copy assignment
     geometry_t& operator=(const geometry_t& other)
     {
-        std::cout << "COPY ASSIGNMENT" << std::endl;
         geometry_t temp(other);
         swap(*this, temp);
         return *this;
@@ -254,32 +224,35 @@ class geometry_t : public basic_geometry<geometry_t<T>>
 
     // move constructor
     geometry_t(geometry_t&& other) noexcept
-        : geometry_t()
+        : m_value(other.m_value), m_geom_type(other.m_geom_type)
     {
-        std::cout << "MOVE CONSTRUCTOR" << std::endl;
-        swap(*this, other);
+        other.m_value     = geom_value{};
+        other.m_geom_type = geometry_type::GEOMETRY;
     }
 
-    friend void swap(geometry_t& lhs, geometry_t& rhs)  // nothrow
+    // move assignment
+    geometry_t& operator=(geometry_t&& other) noexcept
+    {
+        swap(*this, other);
+        return *this;
+    }
+
+    friend void swap(geometry_t& lhs, geometry_t& rhs) noexcept
     {
         using std::swap;
         swap(lhs.m_value, rhs.m_value);
         swap(lhs.m_geom_type, rhs.m_geom_type);
-        swap(lhs.m_geometrycollection, rhs.m_geometrycollection);
-        swap(lhs.m_geometrycollection_z, rhs.m_geometrycollection_z);
-        swap(lhs.m_geometrycollection_m, rhs.m_geometrycollection_m);
-        swap(lhs.m_geometrycollection_zm, rhs.m_geometrycollection_zm);
     }
 
     // point
 
-    explicit geometry_t(const point_t<T>& p)
-        : m_value(p), m_geom_type(geometry_type::POINT)
+    explicit geometry_t(const point_t<T>& value)
+        : m_value(value), m_geom_type(geometry_type::POINT)
     {
     }
 
-    explicit geometry_t(const point_z_t<T>& p)
-        : m_value(p), m_geom_type(geometry_type::POINTZ)
+    explicit geometry_t(const point_z_t<T>& value)
+        : m_value(value), m_geom_type(geometry_type::POINTZ)
     {
     }
 
@@ -295,952 +268,592 @@ class geometry_t : public basic_geometry<geometry_t<T>>
 
     // multipoint
 
-    explicit geometry_t(const multipoint_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::MULTIPOINT)
+    explicit geometry_t(multipoint_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::MULTIPOINT)
     {
     }
 
-    explicit geometry_t(const multipoint_z_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::MULTIPOINTZ)
+    explicit geometry_t(multipoint_z_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::MULTIPOINTZ)
     {
     }
 
-    explicit geometry_t(const multipoint_m_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::MULTIPOINTM)
+    explicit geometry_t(multipoint_m_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::MULTIPOINTM)
     {
     }
 
-    explicit geometry_t(const multipoint_zm_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::MULTIPOINTZM)
+    explicit geometry_t(multipoint_zm_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::MULTIPOINTZM)
     {
     }
 
     // linestring
 
-    explicit geometry_t(const linestring_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::LINESTRING)
+    explicit geometry_t(linestring_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::LINESTRING)
     {
     }
 
-    explicit geometry_t(const linestring_z_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::LINESTRINGZ)
+    explicit geometry_t(linestring_z_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::LINESTRINGZ)
     {
     }
 
-    explicit geometry_t(const linestring_m_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::LINESTRINGM)
+    explicit geometry_t(linestring_m_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::LINESTRINGM)
     {
     }
 
-    explicit geometry_t(const linestring_zm_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::LINESTRINGZM)
+    explicit geometry_t(linestring_zm_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::LINESTRINGZM)
     {
     }
 
     // multilinestring
 
-    explicit geometry_t(const multilinestring_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::MULTILINESTRING)
+    explicit geometry_t(multilinestring_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::MULTILINESTRING)
     {
     }
 
-    explicit geometry_t(const multilinestring_z_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::MULTILINESTRINGZ)
+    explicit geometry_t(multilinestring_z_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::MULTILINESTRINGZ)
     {
     }
 
-    explicit geometry_t(const multilinestring_m_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::MULTILINESTRINGM)
+    explicit geometry_t(multilinestring_m_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::MULTILINESTRINGM)
     {
     }
 
-    explicit geometry_t(const multilinestring_zm_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::MULTILINESTRINGZM)
+    explicit geometry_t(multilinestring_zm_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::MULTILINESTRINGZM)
     {
     }
 
     // polygon
 
-    explicit geometry_t(const polygon_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::POLYGON)
+    explicit geometry_t(polygon_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::POLYGON)
     {
     }
 
-    explicit geometry_t(const polygon_z_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::POLYGONZ)
+    explicit geometry_t(polygon_z_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::POLYGONZ)
     {
     }
 
-    explicit geometry_t(const polygon_m_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::POLYGONM)
+    explicit geometry_t(polygon_m_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::POLYGONM)
     {
     }
 
-    explicit geometry_t(const polygon_zm_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::POLYGONZM)
+    explicit geometry_t(polygon_zm_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::POLYGONZM)
     {
     }
 
     // multipolygon
 
-    explicit geometry_t(const multipolygon_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::MULTIPOLYGON)
+    explicit geometry_t(multipolygon_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::MULTIPOLYGON)
     {
     }
 
-    explicit geometry_t(const multipolygon_z_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::MULTIPOLYGONZ)
+    explicit geometry_t(multipolygon_z_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::MULTIPOLYGONZ)
     {
     }
 
-    explicit geometry_t(const multipolygon_m_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::MULTIPOLYGONM)
+    explicit geometry_t(multipolygon_m_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::MULTIPOLYGONM)
     {
     }
 
-    explicit geometry_t(const multipolygon_zm_t<T>& value)
-        : m_value(value), m_geom_type(geometry_type::MULTIPOLYGONZM)
+    explicit geometry_t(multipolygon_zm_t<T> value)
+        : m_value(std::move(value)), m_geom_type(geometry_type::MULTIPOLYGONZM)
     {
     }
 
-    explicit geometry_t(const geometrycollection_t<T>& value);
+    // geometrycollection
 
-    explicit geometry_t(const geometrycollection_z_t<T>& value);
+    explicit geometry_t(geometrycollection_t<T> value);
 
-    explicit geometry_t(const geometrycollection_m_t<T>& value);
+    explicit geometry_t(geometrycollection_z_t<T> value);
 
-    explicit geometry_t(const geometrycollection_zm_t<T>& value);
+    explicit geometry_t(geometrycollection_m_t<T> value);
 
-    ~geometry_t()
-    {
-        switch (m_geom_type)
-        {
-                // point
+    explicit geometry_t(geometrycollection_zm_t<T> value);
 
-            case geometry_type::POINT:
-            {
-                delete m_value.m_point;
-                m_value.m_point = nullptr;
-                std::cout << "DELETE POINT" << std::endl;
-                break;
-            }
-            case geometry_type::POINTZ:
-            {
-                delete m_value.m_point_z;
-                m_value.m_point_z = nullptr;
-                std::cout << "DELETE POINT Z" << std::endl;
-                break;
-            }
-            case geometry_type::POINTM:
-            {
-                delete m_value.m_point_m;
-                m_value.m_point_m = nullptr;
-                std::cout << "DELETE POINT M" << std::endl;
-                break;
-            }
-            case geometry_type::POINTZM:
-            {
-                delete m_value.m_point_zm;
-                m_value.m_point_zm = nullptr;
-                std::cout << "DELETE POINT ZM" << std::endl;
-                break;
-            }
-
-                // multipoint
-
-            case geometry_type::MULTIPOINT:
-            {
-                delete m_value.m_multipoint;
-                m_value.m_multipoint = nullptr;
-                std::cout << "DELETE MULTIPOINT" << std::endl;
-                break;
-            }
-            case geometry_type::MULTIPOINTZ:
-            {
-                delete m_value.m_multipoint_z;
-                m_value.m_multipoint_z = nullptr;
-                std::cout << "DELETE MULTIPOINT Z" << std::endl;
-                break;
-            }
-            case geometry_type::MULTIPOINTM:
-            {
-                delete m_value.m_multipoint_m;
-                m_value.m_multipoint_m = nullptr;
-                std::cout << "DELETE MULTIPOINT M" << std::endl;
-                break;
-            }
-            case geometry_type::MULTIPOINTZM:
-            {
-                delete m_value.m_multipoint_zm;
-                m_value.m_multipoint_zm = nullptr;
-                std::cout << "DELETE MULTIPOINT ZM" << std::endl;
-                break;
-            }
-
-                // linestring
-
-            case geometry_type::LINESTRING:
-            {
-                delete m_value.m_linestring;
-                m_value.m_linestring = nullptr;
-                std::cout << "DELETE LINESTRING" << std::endl;
-                break;
-            }
-            case geometry_type::LINESTRINGZ:
-            {
-                delete m_value.m_linestring_z;
-                m_value.m_linestring_z = nullptr;
-                std::cout << "DELETE LINESTRING Z" << std::endl;
-                break;
-            }
-            case geometry_type::LINESTRINGM:
-            {
-                delete m_value.m_linestring_m;
-                m_value.m_linestring_m = nullptr;
-                std::cout << "DELETE LINESTRING M" << std::endl;
-                break;
-            }
-            case geometry_type::LINESTRINGZM:
-            {
-                delete m_value.m_linestring_zm;
-                m_value.m_linestring_zm = nullptr;
-                std::cout << "DELETE LINESTRING ZM" << std::endl;
-                break;
-            }
-
-                // multilinestring
-
-            case geometry_type::MULTILINESTRING:
-            {
-                delete m_value.m_multilinestring;
-                m_value.m_multilinestring = nullptr;
-                std::cout << "DELETE MULTILINESTRING" << std::endl;
-                break;
-            }
-            case geometry_type::MULTILINESTRINGZ:
-            {
-                delete m_value.m_multilinestring_z;
-                m_value.m_multilinestring_z = nullptr;
-                std::cout << "DELETE MULTILINESTRING Z" << std::endl;
-                break;
-            }
-            case geometry_type::MULTILINESTRINGM:
-            {
-                delete m_value.m_multilinestring_m;
-                m_value.m_multilinestring_m = nullptr;
-                std::cout << "DELETE MULTILINESTRING M" << std::endl;
-                break;
-            }
-            case geometry_type::MULTILINESTRINGZM:
-            {
-                delete m_value.m_multilinestring_zm;
-                m_value.m_multilinestring_zm = nullptr;
-                std::cout << "DELETE MULTILINESTRING ZM" << std::endl;
-                break;
-            }
-
-                // polygon
-
-            case geometry_type::POLYGON:
-            {
-                delete m_value.m_polygon;
-                m_value.m_polygon = nullptr;
-                std::cout << "DELETE POLYGON" << std::endl;
-                break;
-            }
-            case geometry_type::POLYGONZ:
-            {
-                delete m_value.m_polygon_z;
-                m_value.m_polygon_z = nullptr;
-                std::cout << "DELETE POLYGON Z" << std::endl;
-                break;
-            }
-            case geometry_type::POLYGONM:
-            {
-                delete m_value.m_polygon_m;
-                m_value.m_polygon_m = nullptr;
-                std::cout << "DELETE POLYGON M" << std::endl;
-                break;
-            }
-            case geometry_type::POLYGONZM:
-            {
-                delete m_value.m_polygon_zm;
-                m_value.m_polygon_zm = nullptr;
-                std::cout << "DELETE POLYGON ZM" << std::endl;
-                break;
-            }
-
-                // multipolygon
-
-            case geometry_type::MULTIPOLYGON:
-            {
-                delete m_value.m_multipolygon;
-                m_value.m_multipolygon = nullptr;
-                std::cout << "DELETE MULTIPOLYGON" << std::endl;
-                break;
-            }
-            case geometry_type::MULTIPOLYGONZ:
-            {
-                delete m_value.m_multipolygon_z;
-                m_value.m_multipolygon_z = nullptr;
-                std::cout << "DELETE MULTIPOLYGON Z" << std::endl;
-                break;
-            }
-            case geometry_type::MULTIPOLYGONM:
-            {
-                delete m_value.m_multipolygon_m;
-                m_value.m_multipolygon_m = nullptr;
-                std::cout << "DELETE MULTIPOLYGON M" << std::endl;
-                break;
-            }
-            case geometry_type::MULTIPOLYGONZM:
-            {
-                delete m_value.m_multipolygon_zm;
-                m_value.m_multipolygon_zm = nullptr;
-                std::cout << "DELETE MULTIPOLYGON ZM" << std::endl;
-                break;
-            }
-            default:
-            {
-                break;
-            }
-        }
-    }
+    ~geometry_t();
 
     // getters
 
     template <typename ReturnType>
     ReturnType* get()
     {
-        // point
+        return get_impl_(static_cast<ReturnType*>(nullptr));
+    }
 
-        if (is_basic_point<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_point());
-        }
-        if (is_basic_point_z<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_point_z());
-        }
-        if (is_basic_point_m<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_point_m());
-        }
-        if (is_basic_point_zm<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_point_zm());
-        }
-
-        // multipoint
-
-        if (is_basic_multipoint<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_multipoint());
-        }
-        if (is_basic_multipoint_z<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_multipoint_z());
-        }
-        if (is_basic_multipoint_m<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_multipoint_m());
-        }
-        if (is_basic_multipoint_zm<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_multipoint_zm());
-        }
-
-        // linestring
-
-        if (is_basic_linestring<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_linestring());
-        }
-        if (is_basic_linestring_z<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_linestring_z());
-        }
-        if (is_basic_linestring_m<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_linestring_m());
-        }
-        if (is_basic_linestring_zm<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_linestring_zm());
-        }
-
-        // multilinestring
-
-        if (is_basic_multilinestring<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_multilinestring());
-        }
-        if (is_basic_multilinestring_z<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_multilinestring_z());
-        }
-        if (is_basic_multilinestring_m<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_multilinestring_m());
-        }
-        if (is_basic_multilinestring_zm<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_multilinestring_zm());
-        }
-
-        // polygon
-
-        if (is_basic_polygon<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_polygon());
-        }
-        if (is_basic_polygon_z<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_polygon_z());
-        }
-        if (is_basic_polygon_m<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_polygon_m());
-        }
-        if (is_basic_polygon_zm<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_polygon_zm());
-        }
-
-        // multipolygon
-
-        if (is_basic_multipolygon<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_multipolygon());
-        }
-        if (is_basic_multipolygon_z<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_multipolygon_z());
-        }
-        if (is_basic_multipolygon_m<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_multipolygon_m());
-        }
-        if (is_basic_multipolygon_zm<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_multipolygon_zm());
-        }
-
-        // geometrycollection
-
-        if (is_basic_geometrycollection<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_geometrycollection());
-        }
-        if (is_basic_geometrycollection_z<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_geometrycollection_z());
-        }
-        if (is_basic_geometrycollection_m<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_geometrycollection_m());
-        }
-        if (is_basic_geometrycollection_zm<ReturnType>::value)
-        {
-            return reinterpret_cast<ReturnType*>(get_geometrycollection_zm());
-        }
-
-        return nullptr;
+    template <typename ReturnType>
+    const ReturnType* get() const
+    {
+        return get_impl_(static_cast<const ReturnType*>(nullptr));
     }
 
     // point
 
-    inline bool is_point()
+    inline bool is_point() const noexcept
     {
         return m_geom_type == geometry_type::POINT;
     }
 
-    inline bool is_point_z()
+    inline bool is_point_z() const noexcept
     {
         return m_geom_type == geometry_type::POINTZ;
     }
 
-    inline bool is_point_m()
+    inline bool is_point_m() const noexcept
     {
         return m_geom_type == geometry_type::POINTM;
     }
 
-    inline bool is_point_zm()
+    inline bool is_point_zm() const noexcept
     {
         return m_geom_type == geometry_type::POINTZM;
     }
 
     // multipoint
 
-    inline bool is_multipoint()
+    inline bool is_multipoint() const noexcept
     {
         return m_geom_type == geometry_type::MULTIPOINT;
     }
 
-    inline bool is_multipoint_z()
+    inline bool is_multipoint_z() const noexcept
     {
         return m_geom_type == geometry_type::MULTIPOINTZ;
     }
 
-    inline bool is_multipoint_m()
+    inline bool is_multipoint_m() const noexcept
     {
         return m_geom_type == geometry_type::MULTIPOINTM;
     }
 
-    inline bool is_multipoint_zm()
+    inline bool is_multipoint_zm() const noexcept
     {
         return m_geom_type == geometry_type::MULTIPOINTZM;
     }
 
     // linestring
 
-    inline bool is_linestring()
+    inline bool is_linestring() const noexcept
     {
         return m_geom_type == geometry_type::LINESTRING;
     }
 
-    inline bool is_linestring_z()
+    inline bool is_linestring_z() const noexcept
     {
         return m_geom_type == geometry_type::LINESTRINGZ;
     }
 
-    inline bool is_linestring_m()
+    inline bool is_linestring_m() const noexcept
     {
         return m_geom_type == geometry_type::LINESTRINGM;
     }
 
-    inline bool is_linestring_zm()
+    inline bool is_linestring_zm() const noexcept
     {
         return m_geom_type == geometry_type::LINESTRINGZM;
     }
 
     // multilinestring
 
-    inline bool is_multilinestring()
+    inline bool is_multilinestring() const noexcept
     {
         return m_geom_type == geometry_type::MULTILINESTRING;
     }
 
-    inline bool is_multilinestring_z()
+    inline bool is_multilinestring_z() const noexcept
     {
         return m_geom_type == geometry_type::MULTILINESTRINGZ;
     }
 
-    inline bool is_multilinestring_m()
+    inline bool is_multilinestring_m() const noexcept
     {
         return m_geom_type == geometry_type::MULTILINESTRINGM;
     }
 
-    inline bool is_multilinestring_zm()
+    inline bool is_multilinestring_zm() const noexcept
     {
         return m_geom_type == geometry_type::MULTILINESTRINGZM;
     }
 
     // polygon
 
-    inline bool is_polygon()
+    inline bool is_polygon() const noexcept
     {
         return m_geom_type == geometry_type::POLYGON;
     }
 
-    inline bool is_polygon_z()
+    inline bool is_polygon_z() const noexcept
     {
         return m_geom_type == geometry_type::POLYGONZ;
     }
 
-    inline bool is_polygon_m()
+    inline bool is_polygon_m() const noexcept
     {
         return m_geom_type == geometry_type::POLYGONM;
     }
 
-    inline bool is_polygon_zm()
+    inline bool is_polygon_zm() const noexcept
     {
         return m_geom_type == geometry_type::POLYGONZM;
     }
 
     // multipolygon
 
-    inline bool is_multipolygon()
+    inline bool is_multipolygon() const noexcept
     {
         return m_geom_type == geometry_type::MULTIPOLYGON;
     }
 
-    inline bool is_multipolygon_z()
+    inline bool is_multipolygon_z() const noexcept
     {
         return m_geom_type == geometry_type::MULTIPOLYGONZ;
     }
 
-    inline bool is_multipolygon_m()
+    inline bool is_multipolygon_m() const noexcept
     {
         return m_geom_type == geometry_type::MULTIPOLYGONM;
     }
 
-    inline bool is_multipolygon_zm()
+    inline bool is_multipolygon_zm() const noexcept
     {
         return m_geom_type == geometry_type::MULTIPOLYGONZM;
     }
 
     // geometrycollection
 
-    inline bool is_geometrycollection()
+    inline bool is_geometrycollection() const noexcept
     {
         return m_geom_type == geometry_type::GEOMETRYCOLLECTION;
     }
 
-    inline bool is_geometrycollection_z()
+    inline bool is_geometrycollection_z() const noexcept
     {
         return m_geom_type == geometry_type::GEOMETRYCOLLECTIONZ;
     }
 
-    inline bool is_geometrycollection_m()
+    inline bool is_geometrycollection_m() const noexcept
     {
         return m_geom_type == geometry_type::GEOMETRYCOLLECTIONM;
     }
 
-    inline bool is_geometrycollection_zm()
+    inline bool is_geometrycollection_zm() const noexcept
     {
         return m_geom_type == geometry_type::GEOMETRYCOLLECTIONZM;
     }
 
-    // point
+    // typed getters, they check the geometry type tag and return nullptr on mismatch
 
-    point_t<T>* get_point()
+    point_t<T>* get_point() noexcept
     {
-        assert(is_point());
-        return m_value.m_point;
+        return m_geom_type == geometry_type::POINT ? &m_value.m_point : nullptr;
     }
 
-    const point_t<T>* get_point() const
+    const point_t<T>* get_point() const noexcept
     {
-        assert(m_geom_type == geometry_type::POINT);
-        return m_value.m_point;
+        return m_geom_type == geometry_type::POINT ? &m_value.m_point : nullptr;
     }
 
-    point_z_t<T>* get_point_z()
+    point_z_t<T>* get_point_z() noexcept
     {
-        assert(is_point_z());
-        return m_value.m_point_z;
+        return m_geom_type == geometry_type::POINTZ ? &m_value.m_point_z : nullptr;
     }
 
-    const point_z_t<T>* get_point_z() const
+    const point_z_t<T>* get_point_z() const noexcept
     {
-        assert(m_geom_type == geometry_type::POINTZ);
-        return m_value.m_point_z;
+        return m_geom_type == geometry_type::POINTZ ? &m_value.m_point_z : nullptr;
     }
 
-    point_m_t<T>* get_point_m()
+    point_m_t<T>* get_point_m() noexcept
     {
-        assert(is_point_m());
-        return m_value.m_point_m;
+        return m_geom_type == geometry_type::POINTM ? &m_value.m_point_m : nullptr;
     }
 
-    const point_m_t<T>* get_point_m() const
+    const point_m_t<T>* get_point_m() const noexcept
     {
-        assert(m_geom_type == geometry_type::POINTM);
-        return m_value.m_point_m;
+        return m_geom_type == geometry_type::POINTM ? &m_value.m_point_m : nullptr;
     }
 
-    point_zm_t<T>* get_point_zm()
+    point_zm_t<T>* get_point_zm() noexcept
     {
-        assert(is_point_zm());
-        return m_value.m_point_zm;
+        return m_geom_type == geometry_type::POINTZM ? &m_value.m_point_zm : nullptr;
     }
 
-    const point_zm_t<T>* get_point_zm() const
+    const point_zm_t<T>* get_point_zm() const noexcept
     {
-        assert(m_geom_type == geometry_type::POINTZM);
-        return m_value.m_point_zm;
+        return m_geom_type == geometry_type::POINTZM ? &m_value.m_point_zm : nullptr;
     }
 
-    // multipoint
-
-    multipoint_t<T>* get_multipoint()
+    multipoint_t<T>* get_multipoint() noexcept
     {
-        assert(is_multipoint());
-        return m_value.m_multipoint;
+        return m_geom_type == geometry_type::MULTIPOINT ? m_value.m_multipoint : nullptr;
     }
 
-    const multipoint_t<T>* get_multipoint() const
+    const multipoint_t<T>* get_multipoint() const noexcept
     {
-        assert(m_geom_type == geometry_type::MULTIPOINT);
-        return m_value.m_multipoint;
+        return m_geom_type == geometry_type::MULTIPOINT ? m_value.m_multipoint : nullptr;
     }
 
-    multipoint_z_t<T>* get_multipoint_z()
+    multipoint_z_t<T>* get_multipoint_z() noexcept
     {
-        assert(is_multipoint_z());
-        return m_value.m_multipoint_z;
+        return m_geom_type == geometry_type::MULTIPOINTZ ? m_value.m_multipoint_z : nullptr;
     }
 
-    const multipoint_z_t<T>* get_multipoint_z() const
+    const multipoint_z_t<T>* get_multipoint_z() const noexcept
     {
-        assert(m_geom_type == geometry_type::MULTIPOINTZ);
-        return m_value.m_multipoint_z;
+        return m_geom_type == geometry_type::MULTIPOINTZ ? m_value.m_multipoint_z : nullptr;
     }
 
-    multipoint_m_t<T>* get_multipoint_m()
+    multipoint_m_t<T>* get_multipoint_m() noexcept
     {
-        assert(is_multipoint_m());
-        return m_value.m_multipoint_m;
+        return m_geom_type == geometry_type::MULTIPOINTM ? m_value.m_multipoint_m : nullptr;
     }
 
-    const multipoint_m_t<T>* get_multipoint_m() const
+    const multipoint_m_t<T>* get_multipoint_m() const noexcept
     {
-        assert(m_geom_type == geometry_type::MULTIPOINTM);
-        return m_value.m_multipoint_m;
+        return m_geom_type == geometry_type::MULTIPOINTM ? m_value.m_multipoint_m : nullptr;
     }
 
-    multipoint_zm_t<T>* get_multipoint_zm()
+    multipoint_zm_t<T>* get_multipoint_zm() noexcept
     {
-        assert(is_multipoint_zm());
-        return m_value.m_multipoint_zm;
+        return m_geom_type == geometry_type::MULTIPOINTZM ? m_value.m_multipoint_zm : nullptr;
     }
 
-    const multipoint_zm_t<T>* get_multipoint_zm() const
+    const multipoint_zm_t<T>* get_multipoint_zm() const noexcept
     {
-        assert(m_geom_type == geometry_type::MULTIPOINTZM);
-        return m_value.m_multipoint_zm;
+        return m_geom_type == geometry_type::MULTIPOINTZM ? m_value.m_multipoint_zm : nullptr;
     }
 
-    // linestring
-
-    linestring_t<T>* get_linestring()
+    linestring_t<T>* get_linestring() noexcept
     {
-        assert(is_linestring());
-        return m_value.m_linestring;
+        return m_geom_type == geometry_type::LINESTRING ? m_value.m_linestring : nullptr;
     }
 
-    const linestring_t<T>* get_linestring() const
+    const linestring_t<T>* get_linestring() const noexcept
     {
-        assert(m_geom_type == geometry_type::LINESTRING);
-        return m_value.m_linestring;
+        return m_geom_type == geometry_type::LINESTRING ? m_value.m_linestring : nullptr;
     }
 
-    linestring_z_t<T>* get_linestring_z()
+    linestring_z_t<T>* get_linestring_z() noexcept
     {
-        assert(is_linestring_z());
-        return m_value.m_linestring_z;
+        return m_geom_type == geometry_type::LINESTRINGZ ? m_value.m_linestring_z : nullptr;
     }
 
-    const linestring_z_t<T>* get_linestring_z() const
+    const linestring_z_t<T>* get_linestring_z() const noexcept
     {
-        assert(m_geom_type == geometry_type::LINESTRINGZ);
-        return m_value.m_linestring_z;
+        return m_geom_type == geometry_type::LINESTRINGZ ? m_value.m_linestring_z : nullptr;
     }
 
-    linestring_m_t<T>* get_linestring_m()
+    linestring_m_t<T>* get_linestring_m() noexcept
     {
-        assert(is_linestring_m());
-        return m_value.m_linestring_m;
+        return m_geom_type == geometry_type::LINESTRINGM ? m_value.m_linestring_m : nullptr;
     }
 
-    const linestring_m_t<T>* get_linestring_m() const
+    const linestring_m_t<T>* get_linestring_m() const noexcept
     {
-        assert(m_geom_type == geometry_type::LINESTRINGM);
-        return m_value.m_linestring_m;
+        return m_geom_type == geometry_type::LINESTRINGM ? m_value.m_linestring_m : nullptr;
     }
 
-    linestring_zm_t<T>* get_linestring_zm()
+    linestring_zm_t<T>* get_linestring_zm() noexcept
     {
-        assert(is_linestring_zm());
-        return m_value.m_linestring_zm;
+        return m_geom_type == geometry_type::LINESTRINGZM ? m_value.m_linestring_zm : nullptr;
     }
 
-    const linestring_zm_t<T>* get_linestring_zm() const
+    const linestring_zm_t<T>* get_linestring_zm() const noexcept
     {
-        assert(m_geom_type == geometry_type::LINESTRINGZM);
-        return m_value.m_linestring_zm;
+        return m_geom_type == geometry_type::LINESTRINGZM ? m_value.m_linestring_zm : nullptr;
     }
 
-    // multilinestring
-
-    multilinestring_t<T>* get_multilinestring()
+    multilinestring_t<T>* get_multilinestring() noexcept
     {
-        assert(is_multilinestring());
-        return m_value.m_multilinestring;
+        return m_geom_type == geometry_type::MULTILINESTRING ? m_value.m_multilinestring : nullptr;
     }
 
-    const multilinestring_t<T>* get_multilinestring() const
+    const multilinestring_t<T>* get_multilinestring() const noexcept
     {
-        assert(m_geom_type == geometry_type::MULTILINESTRING);
-        return m_value.m_multilinestring;
+        return m_geom_type == geometry_type::MULTILINESTRING ? m_value.m_multilinestring : nullptr;
     }
 
-    multilinestring_z_t<T>* get_multilinestring_z()
+    multilinestring_z_t<T>* get_multilinestring_z() noexcept
     {
-        assert(is_multilinestring_z());
-        return m_value.m_multilinestring_z;
+        return m_geom_type == geometry_type::MULTILINESTRINGZ ? m_value.m_multilinestring_z : nullptr;
     }
 
-    const multilinestring_z_t<T>* get_multilinestring_z() const
+    const multilinestring_z_t<T>* get_multilinestring_z() const noexcept
     {
-        assert(m_geom_type == geometry_type::MULTILINESTRINGZ);
-        return m_value.m_multilinestring_z;
+        return m_geom_type == geometry_type::MULTILINESTRINGZ ? m_value.m_multilinestring_z : nullptr;
     }
 
-    multilinestring_m_t<T>* get_multilinestring_m()
+    multilinestring_m_t<T>* get_multilinestring_m() noexcept
     {
-        assert(is_multilinestring_m());
-        return m_value.m_multilinestring_m;
+        return m_geom_type == geometry_type::MULTILINESTRINGM ? m_value.m_multilinestring_m : nullptr;
     }
 
-    const multilinestring_m_t<T>* get_multilinestring_m() const
+    const multilinestring_m_t<T>* get_multilinestring_m() const noexcept
     {
-        assert(m_geom_type == geometry_type::MULTILINESTRINGM);
-        return m_value.m_multilinestring_m;
+        return m_geom_type == geometry_type::MULTILINESTRINGM ? m_value.m_multilinestring_m : nullptr;
     }
 
-    multilinestring_zm_t<T>* get_multilinestring_zm()
+    multilinestring_zm_t<T>* get_multilinestring_zm() noexcept
     {
-        assert(is_multilinestring_zm());
-        return m_value.m_multilinestring_zm;
+        return m_geom_type == geometry_type::MULTILINESTRINGZM ? m_value.m_multilinestring_zm : nullptr;
     }
 
-    const multilinestring_zm_t<T>* get_multilinestring_zm() const
+    const multilinestring_zm_t<T>* get_multilinestring_zm() const noexcept
     {
-        assert(m_geom_type == geometry_type::MULTILINESTRINGZM);
-        return m_value.m_multilinestring_zm;
+        return m_geom_type == geometry_type::MULTILINESTRINGZM ? m_value.m_multilinestring_zm : nullptr;
     }
 
-    // polygon
-
-    polygon_t<T>* get_polygon()
+    polygon_t<T>* get_polygon() noexcept
     {
-        assert(is_polygon());
-        return m_value.m_polygon;
+        return m_geom_type == geometry_type::POLYGON ? m_value.m_polygon : nullptr;
     }
 
-    const polygon_t<T>* get_polygon() const
+    const polygon_t<T>* get_polygon() const noexcept
     {
-        assert(m_geom_type == geometry_type::POLYGON);
-        return m_value.m_polygon;
+        return m_geom_type == geometry_type::POLYGON ? m_value.m_polygon : nullptr;
     }
 
-    polygon_z_t<T>* get_polygon_z()
+    polygon_z_t<T>* get_polygon_z() noexcept
     {
-        assert(is_polygon_z());
-        return m_value.m_polygon_z;
+        return m_geom_type == geometry_type::POLYGONZ ? m_value.m_polygon_z : nullptr;
     }
 
-    const polygon_z_t<T>* get_polygon_z() const
+    const polygon_z_t<T>* get_polygon_z() const noexcept
     {
-        assert(m_geom_type == geometry_type::POLYGONZ);
-        return m_value.m_polygon_z;
+        return m_geom_type == geometry_type::POLYGONZ ? m_value.m_polygon_z : nullptr;
     }
 
-    polygon_m_t<T>* get_polygon_m()
+    polygon_m_t<T>* get_polygon_m() noexcept
     {
-        assert(is_polygon_m());
-        return m_value.m_polygon_m;
+        return m_geom_type == geometry_type::POLYGONM ? m_value.m_polygon_m : nullptr;
     }
 
-    const polygon_m_t<T>* get_polygon_m() const
+    const polygon_m_t<T>* get_polygon_m() const noexcept
     {
-        assert(m_geom_type == geometry_type::POLYGONM);
-        return m_value.m_polygon_m;
+        return m_geom_type == geometry_type::POLYGONM ? m_value.m_polygon_m : nullptr;
     }
 
-    polygon_zm_t<T>* get_polygon_zm()
+    polygon_zm_t<T>* get_polygon_zm() noexcept
     {
-        assert(is_polygon_zm());
-        return m_value.m_polygon_zm;
+        return m_geom_type == geometry_type::POLYGONZM ? m_value.m_polygon_zm : nullptr;
     }
 
-    const polygon_zm_t<T>* get_polygon_zm() const
+    const polygon_zm_t<T>* get_polygon_zm() const noexcept
     {
-        assert(m_geom_type == geometry_type::POLYGONZM);
-        return m_value.m_polygon_zm;
+        return m_geom_type == geometry_type::POLYGONZM ? m_value.m_polygon_zm : nullptr;
     }
 
-    // multipolygon
-
-    multipolygon_t<T>* get_multipolygon()
+    multipolygon_t<T>* get_multipolygon() noexcept
     {
-        assert(is_multipolygon());
-        return m_value.m_multipolygon;
+        return m_geom_type == geometry_type::MULTIPOLYGON ? m_value.m_multipolygon : nullptr;
     }
 
-    const multipolygon_t<T>* get_multipolygon() const
+    const multipolygon_t<T>* get_multipolygon() const noexcept
     {
-        assert(m_geom_type == geometry_type::MULTIPOLYGON);
-        return m_value.m_multipolygon;
+        return m_geom_type == geometry_type::MULTIPOLYGON ? m_value.m_multipolygon : nullptr;
     }
 
-    multipolygon_z_t<T>* get_multipolygon_z()
+    multipolygon_z_t<T>* get_multipolygon_z() noexcept
     {
-        assert(is_multipolygon_z());
-        return m_value.m_multipolygon_z;
+        return m_geom_type == geometry_type::MULTIPOLYGONZ ? m_value.m_multipolygon_z : nullptr;
     }
 
-    const multipolygon_z_t<T>* get_multipolygon_z() const
+    const multipolygon_z_t<T>* get_multipolygon_z() const noexcept
     {
-        assert(m_geom_type == geometry_type::MULTIPOLYGONZ);
-        return m_value.m_multipolygon_z;
+        return m_geom_type == geometry_type::MULTIPOLYGONZ ? m_value.m_multipolygon_z : nullptr;
     }
 
-    multipolygon_m_t<T>* get_multipolygon_m()
+    multipolygon_m_t<T>* get_multipolygon_m() noexcept
     {
-        assert(is_multipolygon_m());
-        return m_value.m_multipolygon_m;
+        return m_geom_type == geometry_type::MULTIPOLYGONM ? m_value.m_multipolygon_m : nullptr;
     }
 
-    const multipolygon_m_t<T>* get_multipolygon_m() const
+    const multipolygon_m_t<T>* get_multipolygon_m() const noexcept
     {
-        assert(m_geom_type == geometry_type::MULTIPOLYGONM);
-        return m_value.m_multipolygon_m;
+        return m_geom_type == geometry_type::MULTIPOLYGONM ? m_value.m_multipolygon_m : nullptr;
     }
 
-    multipolygon_zm_t<T>* get_multipolygon_zm()
+    multipolygon_zm_t<T>* get_multipolygon_zm() noexcept
     {
-        assert(is_multipolygon_zm());
-        return m_value.m_multipolygon_zm;
+        return m_geom_type == geometry_type::MULTIPOLYGONZM ? m_value.m_multipolygon_zm : nullptr;
     }
 
-    const multipolygon_zm_t<T>* get_multipolygon_zm() const
+    const multipolygon_zm_t<T>* get_multipolygon_zm() const noexcept
     {
-        assert(m_geom_type == geometry_type::MULTIPOLYGONZM);
-        return m_value.m_multipolygon_zm;
+        return m_geom_type == geometry_type::MULTIPOLYGONZM ? m_value.m_multipolygon_zm : nullptr;
     }
 
-    // geometrycollection
+    geometrycollection_t<T>* get_geometrycollection() noexcept
+    {
+        return m_geom_type == geometry_type::GEOMETRYCOLLECTION ? m_value.m_geometrycollection : nullptr;
+    }
 
-    geometrycollection_t<T>* get_geometrycollection();
+    const geometrycollection_t<T>* get_geometrycollection() const noexcept
+    {
+        return m_geom_type == geometry_type::GEOMETRYCOLLECTION ? m_value.m_geometrycollection : nullptr;
+    }
 
-    const geometrycollection_t<T>* get_geometrycollection() const;
+    geometrycollection_z_t<T>* get_geometrycollection_z() noexcept
+    {
+        return m_geom_type == geometry_type::GEOMETRYCOLLECTIONZ ? m_value.m_geometrycollection_z : nullptr;
+    }
 
-    geometrycollection_z_t<T>* get_geometrycollection_z();
+    const geometrycollection_z_t<T>* get_geometrycollection_z() const noexcept
+    {
+        return m_geom_type == geometry_type::GEOMETRYCOLLECTIONZ ? m_value.m_geometrycollection_z : nullptr;
+    }
 
-    const geometrycollection_z_t<T>* get_geometrycollection_z() const;
+    geometrycollection_m_t<T>* get_geometrycollection_m() noexcept
+    {
+        return m_geom_type == geometry_type::GEOMETRYCOLLECTIONM ? m_value.m_geometrycollection_m : nullptr;
+    }
 
-    geometrycollection_m_t<T>* get_geometrycollection_m();
+    const geometrycollection_m_t<T>* get_geometrycollection_m() const noexcept
+    {
+        return m_geom_type == geometry_type::GEOMETRYCOLLECTIONM ? m_value.m_geometrycollection_m : nullptr;
+    }
 
-    const geometrycollection_m_t<T>* get_geometrycollection_m() const;
+    geometrycollection_zm_t<T>* get_geometrycollection_zm() noexcept
+    {
+        return m_geom_type == geometry_type::GEOMETRYCOLLECTIONZM ? m_value.m_geometrycollection_zm : nullptr;
+    }
 
-    geometrycollection_zm_t<T>* get_geometrycollection_zm();
-
-    const geometrycollection_zm_t<T>* get_geometrycollection_zm() const;
+    const geometrycollection_zm_t<T>* get_geometrycollection_zm() const noexcept
+    {
+        return m_geom_type == geometry_type::GEOMETRYCOLLECTIONZM ? m_value.m_geometrycollection_zm : nullptr;
+    }
 
   private:
     /// for allow basic_geometry to access basic_point_zm private members
     friend class basic_geometry<geometry_t<T>>;
 
-    void copy_geometrycollection_(const geometry_t<T>& other);
-    void copy_geometrycollection_z_(const geometry_t<T>& other);
-    void copy_geometrycollection_m_(const geometry_t<T>& other);
-    void copy_geometrycollection_zm_(const geometry_t<T>& other);
-
-    static bool is_geometrycollection_wkt_(const std::string& wkt);
-    static geometry_type geometrycollection_type_from_wkt_(const std::string& wkt);
     static geometry_t<T> from_geometrycollection_wkt_(const std::string& wkt);
-    std::string geometrycollection_json_(std::int32_t precision) const;
-    std::string geometrycollection_wkt_(std::int32_t precision) const;
 
     union geom_value
     {
-        point_t<T>* m_point;
-        point_z_t<T>* m_point_z;
-        point_m_t<T>* m_point_m;
-        point_zm_t<T>* m_point_zm;
+        // point variants are stored inline, wrapping a point never allocates
+        point_t<T> m_point;
+        point_z_t<T> m_point_z;
+        point_m_t<T> m_point_m;
+        point_zm_t<T> m_point_zm;
+
+        // containers are heap-allocated and owned through raw pointers,
+        // released by the destructor switch on the geometry type tag
         multipoint_t<T>* m_multipoint;
         multipoint_z_t<T>* m_multipoint_z;
         multipoint_m_t<T>* m_multipoint_m;
@@ -1261,149 +874,150 @@ class geometry_t : public basic_geometry<geometry_t<T>>
         multipolygon_z_t<T>* m_multipolygon_z;
         multipolygon_m_t<T>* m_multipolygon_m;
         multipolygon_zm_t<T>* m_multipolygon_zm;
+        geometrycollection_t<T>* m_geometrycollection;
+        geometrycollection_z_t<T>* m_geometrycollection_z;
+        geometrycollection_m_t<T>* m_geometrycollection_m;
+        geometrycollection_zm_t<T>* m_geometrycollection_zm;
 
-        // default constructor
-        geom_value() = default;
+        // a defaulted constructor would be deleted because the point variants have
+        // a non-trivial default constructor, activate an empty point instead
+        geom_value()
+            : m_point()
+        {
+        }
 
         // point
 
         explicit geom_value(const point_t<T>& p)
-            : m_point(new point_t<T>(p))
+            : m_point(p)
         {
         }
 
         explicit geom_value(const point_z_t<T>& p)
-            : m_point_z(new point_z_t<T>(p))
+            : m_point_z(p)
         {
         }
 
         explicit geom_value(const point_m_t<T>& p)
-            : m_point_m(new point_m_t<T>(p))
+            : m_point_m(p)
         {
         }
 
         explicit geom_value(const point_zm_t<T>& p)
-            : m_point_zm(new point_zm_t<T>(p))
+            : m_point_zm(p)
         {
         }
 
-        // multipoint
+        // containers, taken by value and moved into the heap allocation
 
-        explicit geom_value(const multipoint_t<T>& p)
-            : m_multipoint(new multipoint_t<T>(p))
+        explicit geom_value(multipoint_t<T> v)
+            : m_multipoint(new multipoint_t<T>(std::move(v)))
         {
         }
 
-        explicit geom_value(const multipoint_z_t<T>& p)
-            : m_multipoint_z(new multipoint_z_t<T>(p))
+        explicit geom_value(multipoint_z_t<T> v)
+            : m_multipoint_z(new multipoint_z_t<T>(std::move(v)))
         {
         }
 
-        explicit geom_value(const multipoint_m_t<T>& p)
-            : m_multipoint_m(new multipoint_m_t<T>(p))
+        explicit geom_value(multipoint_m_t<T> v)
+            : m_multipoint_m(new multipoint_m_t<T>(std::move(v)))
         {
         }
 
-        explicit geom_value(const multipoint_zm_t<T>& p)
-            : m_multipoint_zm(new multipoint_zm_t<T>(p))
+        explicit geom_value(multipoint_zm_t<T> v)
+            : m_multipoint_zm(new multipoint_zm_t<T>(std::move(v)))
         {
         }
 
-        // linestring
-
-        explicit geom_value(const linestring_t<T>& p)
-            : m_linestring(new linestring_t<T>(p))
+        explicit geom_value(linestring_t<T> v)
+            : m_linestring(new linestring_t<T>(std::move(v)))
         {
         }
 
-        explicit geom_value(const linestring_z_t<T>& p)
-            : m_linestring_z(new linestring_z_t<T>(p))
+        explicit geom_value(linestring_z_t<T> v)
+            : m_linestring_z(new linestring_z_t<T>(std::move(v)))
         {
         }
 
-        explicit geom_value(const linestring_m_t<T>& p)
-            : m_linestring_m(new linestring_m_t<T>(p))
+        explicit geom_value(linestring_m_t<T> v)
+            : m_linestring_m(new linestring_m_t<T>(std::move(v)))
         {
         }
 
-        explicit geom_value(const linestring_zm_t<T>& p)
-            : m_linestring_zm(new linestring_zm_t<T>(p))
+        explicit geom_value(linestring_zm_t<T> v)
+            : m_linestring_zm(new linestring_zm_t<T>(std::move(v)))
         {
         }
 
-        // multilinestring
-
-        explicit geom_value(const multilinestring_t<T>& p)
-            : m_multilinestring(new multilinestring_t<T>(p))
+        explicit geom_value(multilinestring_t<T> v)
+            : m_multilinestring(new multilinestring_t<T>(std::move(v)))
         {
         }
 
-        explicit geom_value(const multilinestring_z_t<T>& p)
-            : m_multilinestring_z(new multilinestring_z_t<T>(p))
+        explicit geom_value(multilinestring_z_t<T> v)
+            : m_multilinestring_z(new multilinestring_z_t<T>(std::move(v)))
         {
         }
 
-        explicit geom_value(const multilinestring_m_t<T>& p)
-            : m_multilinestring_m(new multilinestring_m_t<T>(p))
+        explicit geom_value(multilinestring_m_t<T> v)
+            : m_multilinestring_m(new multilinestring_m_t<T>(std::move(v)))
         {
         }
 
-        explicit geom_value(const multilinestring_zm_t<T>& p)
-            : m_multilinestring_zm(new multilinestring_zm_t<T>(p))
+        explicit geom_value(multilinestring_zm_t<T> v)
+            : m_multilinestring_zm(new multilinestring_zm_t<T>(std::move(v)))
         {
         }
 
-        // polygon
-
-        explicit geom_value(const polygon_t<T>& p)
-            : m_polygon(new polygon_t<T>(p))
+        explicit geom_value(polygon_t<T> v)
+            : m_polygon(new polygon_t<T>(std::move(v)))
         {
         }
 
-        explicit geom_value(const polygon_z_t<T>& p)
-            : m_polygon_z(new polygon_z_t<T>(p))
+        explicit geom_value(polygon_z_t<T> v)
+            : m_polygon_z(new polygon_z_t<T>(std::move(v)))
         {
         }
 
-        explicit geom_value(const polygon_m_t<T>& p)
-            : m_polygon_m(new polygon_m_t<T>(p))
+        explicit geom_value(polygon_m_t<T> v)
+            : m_polygon_m(new polygon_m_t<T>(std::move(v)))
         {
         }
 
-        explicit geom_value(const polygon_zm_t<T>& p)
-            : m_polygon_zm(new polygon_zm_t<T>(p))
+        explicit geom_value(polygon_zm_t<T> v)
+            : m_polygon_zm(new polygon_zm_t<T>(std::move(v)))
         {
         }
 
-        // multipolygon
-
-        explicit geom_value(const multipolygon_t<T>& p)
-            : m_multipolygon(new multipolygon_t<T>(p))
+        explicit geom_value(multipolygon_t<T> v)
+            : m_multipolygon(new multipolygon_t<T>(std::move(v)))
         {
         }
 
-        explicit geom_value(const multipolygon_z_t<T>& p)
-            : m_multipolygon_z(new multipolygon_z_t<T>(p))
+        explicit geom_value(multipolygon_z_t<T> v)
+            : m_multipolygon_z(new multipolygon_z_t<T>(std::move(v)))
         {
         }
 
-        explicit geom_value(const multipolygon_m_t<T>& p)
-            : m_multipolygon_m(new multipolygon_m_t<T>(p))
+        explicit geom_value(multipolygon_m_t<T> v)
+            : m_multipolygon_m(new multipolygon_m_t<T>(std::move(v)))
         {
         }
 
-        explicit geom_value(const multipolygon_zm_t<T>& p)
-            : m_multipolygon_zm(new multipolygon_zm_t<T>(p))
+        explicit geom_value(multipolygon_zm_t<T> v)
+            : m_multipolygon_zm(new multipolygon_zm_t<T>(std::move(v)))
         {
         }
     };
 
     geom_value m_value        = {};
     geometry_type m_geom_type = geometry_type::GEOMETRY;
-    std::shared_ptr<geometrycollection_t<T>> m_geometrycollection;
-    std::shared_ptr<geometrycollection_z_t<T>> m_geometrycollection_z;
-    std::shared_ptr<geometrycollection_m_t<T>> m_geometrycollection_m;
-    std::shared_ptr<geometrycollection_zm_t<T>> m_geometrycollection_zm;
+
+    static_assert(std::is_trivially_copyable<point_t<T>>::value, "point_t must be trivially copyable for inline union storage");
+    static_assert(std::is_trivially_copyable<point_z_t<T>>::value, "point_z_t must be trivially copyable for inline union storage");
+    static_assert(std::is_trivially_copyable<point_m_t<T>>::value, "point_m_t must be trivially copyable for inline union storage");
+    static_assert(std::is_trivially_copyable<point_zm_t<T>>::value, "point_zm_t must be trivially copyable for inline union storage");
 
     /// @private
     geometry_type geom_type_() const noexcept
@@ -1412,51 +1026,382 @@ class geometry_t : public basic_geometry<geometry_t<T>>
     }
 
     /// @private
-    std::string tagged_text_() const noexcept
+    template <typename Visitor>
+    auto visit_(Visitor&& visitor) const -> decltype(visitor(std::declval<const point_t<T>&>()))
     {
-        return "Geometry";
-    }
-
-    /// @private
-    dimension_type dim_() const noexcept
-    {
-        return dimension_type::XY;
-    }
-
-    /// @private
-    int32_t ndim_() const noexcept
-    {
-        return 2;
+        switch (m_geom_type)
+        {
+            case geometry_type::POINT:
+                return visitor(m_value.m_point);
+            case geometry_type::POINTZ:
+                return visitor(m_value.m_point_z);
+            case geometry_type::POINTM:
+                return visitor(m_value.m_point_m);
+            case geometry_type::POINTZM:
+                return visitor(m_value.m_point_zm);
+            case geometry_type::MULTIPOINT:
+                return visitor(*m_value.m_multipoint);
+            case geometry_type::MULTIPOINTZ:
+                return visitor(*m_value.m_multipoint_z);
+            case geometry_type::MULTIPOINTM:
+                return visitor(*m_value.m_multipoint_m);
+            case geometry_type::MULTIPOINTZM:
+                return visitor(*m_value.m_multipoint_zm);
+            case geometry_type::LINESTRING:
+                return visitor(*m_value.m_linestring);
+            case geometry_type::LINESTRINGZ:
+                return visitor(*m_value.m_linestring_z);
+            case geometry_type::LINESTRINGM:
+                return visitor(*m_value.m_linestring_m);
+            case geometry_type::LINESTRINGZM:
+                return visitor(*m_value.m_linestring_zm);
+            case geometry_type::MULTILINESTRING:
+                return visitor(*m_value.m_multilinestring);
+            case geometry_type::MULTILINESTRINGZ:
+                return visitor(*m_value.m_multilinestring_z);
+            case geometry_type::MULTILINESTRINGM:
+                return visitor(*m_value.m_multilinestring_m);
+            case geometry_type::MULTILINESTRINGZM:
+                return visitor(*m_value.m_multilinestring_zm);
+            case geometry_type::POLYGON:
+                return visitor(*m_value.m_polygon);
+            case geometry_type::POLYGONZ:
+                return visitor(*m_value.m_polygon_z);
+            case geometry_type::POLYGONM:
+                return visitor(*m_value.m_polygon_m);
+            case geometry_type::POLYGONZM:
+                return visitor(*m_value.m_polygon_zm);
+            case geometry_type::MULTIPOLYGON:
+                return visitor(*m_value.m_multipolygon);
+            case geometry_type::MULTIPOLYGONZ:
+                return visitor(*m_value.m_multipolygon_z);
+            case geometry_type::MULTIPOLYGONM:
+                return visitor(*m_value.m_multipolygon_m);
+            case geometry_type::MULTIPOLYGONZM:
+                return visitor(*m_value.m_multipolygon_zm);
+            case geometry_type::GEOMETRYCOLLECTION:
+                return visitor(*m_value.m_geometrycollection);
+            case geometry_type::GEOMETRYCOLLECTIONZ:
+                return visitor(*m_value.m_geometrycollection_z);
+            case geometry_type::GEOMETRYCOLLECTIONM:
+                return visitor(*m_value.m_geometrycollection_m);
+            case geometry_type::GEOMETRYCOLLECTIONZM:
+                return visitor(*m_value.m_geometrycollection_zm);
+            default:
+                return visitor(m_value.m_point);
+        }
     }
 
     /// @private
     bool is_closed_() const noexcept
     {
-        return true;
+        if (m_geom_type == geometry_type::GEOMETRY)
+        {
+            return true;
+        }
+        return visit_([](const auto& g) { return g.is_closed(); });
     }
 
     /// @private
     void throw_for_invalid_() const
     {
-        // do nothing
+        if (m_geom_type == geometry_type::GEOMETRY)
+        {
+            return;
+        }
+        visit_([](const auto& g) { g.throw_for_invalid(); });
     }
 
     /// @private
     bounds_t bounds_() const
     {
-        return {};
+        if (m_geom_type == geometry_type::GEOMETRY)
+        {
+            return {};
+        }
+        return visit_([](const auto& g) { return g.bounds(); });
     }
 
-    /// @private
-    bool has_z_() const noexcept
+    // tag dispatch for get<>, one overload per supported type
+
+    point_t<T>* get_impl_(point_t<T>*) noexcept
     {
-        return true;
+        return get_point();
     }
 
-    /// @private
-    bool has_m_() const noexcept
+    const point_t<T>* get_impl_(const point_t<T>*) const noexcept
     {
-        return true;
+        return get_point();
+    }
+
+    point_z_t<T>* get_impl_(point_z_t<T>*) noexcept
+    {
+        return get_point_z();
+    }
+
+    const point_z_t<T>* get_impl_(const point_z_t<T>*) const noexcept
+    {
+        return get_point_z();
+    }
+
+    point_m_t<T>* get_impl_(point_m_t<T>*) noexcept
+    {
+        return get_point_m();
+    }
+
+    const point_m_t<T>* get_impl_(const point_m_t<T>*) const noexcept
+    {
+        return get_point_m();
+    }
+
+    point_zm_t<T>* get_impl_(point_zm_t<T>*) noexcept
+    {
+        return get_point_zm();
+    }
+
+    const point_zm_t<T>* get_impl_(const point_zm_t<T>*) const noexcept
+    {
+        return get_point_zm();
+    }
+
+    multipoint_t<T>* get_impl_(multipoint_t<T>*) noexcept
+    {
+        return get_multipoint();
+    }
+
+    const multipoint_t<T>* get_impl_(const multipoint_t<T>*) const noexcept
+    {
+        return get_multipoint();
+    }
+
+    multipoint_z_t<T>* get_impl_(multipoint_z_t<T>*) noexcept
+    {
+        return get_multipoint_z();
+    }
+
+    const multipoint_z_t<T>* get_impl_(const multipoint_z_t<T>*) const noexcept
+    {
+        return get_multipoint_z();
+    }
+
+    multipoint_m_t<T>* get_impl_(multipoint_m_t<T>*) noexcept
+    {
+        return get_multipoint_m();
+    }
+
+    const multipoint_m_t<T>* get_impl_(const multipoint_m_t<T>*) const noexcept
+    {
+        return get_multipoint_m();
+    }
+
+    multipoint_zm_t<T>* get_impl_(multipoint_zm_t<T>*) noexcept
+    {
+        return get_multipoint_zm();
+    }
+
+    const multipoint_zm_t<T>* get_impl_(const multipoint_zm_t<T>*) const noexcept
+    {
+        return get_multipoint_zm();
+    }
+
+    linestring_t<T>* get_impl_(linestring_t<T>*) noexcept
+    {
+        return get_linestring();
+    }
+
+    const linestring_t<T>* get_impl_(const linestring_t<T>*) const noexcept
+    {
+        return get_linestring();
+    }
+
+    linestring_z_t<T>* get_impl_(linestring_z_t<T>*) noexcept
+    {
+        return get_linestring_z();
+    }
+
+    const linestring_z_t<T>* get_impl_(const linestring_z_t<T>*) const noexcept
+    {
+        return get_linestring_z();
+    }
+
+    linestring_m_t<T>* get_impl_(linestring_m_t<T>*) noexcept
+    {
+        return get_linestring_m();
+    }
+
+    const linestring_m_t<T>* get_impl_(const linestring_m_t<T>*) const noexcept
+    {
+        return get_linestring_m();
+    }
+
+    linestring_zm_t<T>* get_impl_(linestring_zm_t<T>*) noexcept
+    {
+        return get_linestring_zm();
+    }
+
+    const linestring_zm_t<T>* get_impl_(const linestring_zm_t<T>*) const noexcept
+    {
+        return get_linestring_zm();
+    }
+
+    multilinestring_t<T>* get_impl_(multilinestring_t<T>*) noexcept
+    {
+        return get_multilinestring();
+    }
+
+    const multilinestring_t<T>* get_impl_(const multilinestring_t<T>*) const noexcept
+    {
+        return get_multilinestring();
+    }
+
+    multilinestring_z_t<T>* get_impl_(multilinestring_z_t<T>*) noexcept
+    {
+        return get_multilinestring_z();
+    }
+
+    const multilinestring_z_t<T>* get_impl_(const multilinestring_z_t<T>*) const noexcept
+    {
+        return get_multilinestring_z();
+    }
+
+    multilinestring_m_t<T>* get_impl_(multilinestring_m_t<T>*) noexcept
+    {
+        return get_multilinestring_m();
+    }
+
+    const multilinestring_m_t<T>* get_impl_(const multilinestring_m_t<T>*) const noexcept
+    {
+        return get_multilinestring_m();
+    }
+
+    multilinestring_zm_t<T>* get_impl_(multilinestring_zm_t<T>*) noexcept
+    {
+        return get_multilinestring_zm();
+    }
+
+    const multilinestring_zm_t<T>* get_impl_(const multilinestring_zm_t<T>*) const noexcept
+    {
+        return get_multilinestring_zm();
+    }
+
+    polygon_t<T>* get_impl_(polygon_t<T>*) noexcept
+    {
+        return get_polygon();
+    }
+
+    const polygon_t<T>* get_impl_(const polygon_t<T>*) const noexcept
+    {
+        return get_polygon();
+    }
+
+    polygon_z_t<T>* get_impl_(polygon_z_t<T>*) noexcept
+    {
+        return get_polygon_z();
+    }
+
+    const polygon_z_t<T>* get_impl_(const polygon_z_t<T>*) const noexcept
+    {
+        return get_polygon_z();
+    }
+
+    polygon_m_t<T>* get_impl_(polygon_m_t<T>*) noexcept
+    {
+        return get_polygon_m();
+    }
+
+    const polygon_m_t<T>* get_impl_(const polygon_m_t<T>*) const noexcept
+    {
+        return get_polygon_m();
+    }
+
+    polygon_zm_t<T>* get_impl_(polygon_zm_t<T>*) noexcept
+    {
+        return get_polygon_zm();
+    }
+
+    const polygon_zm_t<T>* get_impl_(const polygon_zm_t<T>*) const noexcept
+    {
+        return get_polygon_zm();
+    }
+
+    multipolygon_t<T>* get_impl_(multipolygon_t<T>*) noexcept
+    {
+        return get_multipolygon();
+    }
+
+    const multipolygon_t<T>* get_impl_(const multipolygon_t<T>*) const noexcept
+    {
+        return get_multipolygon();
+    }
+
+    multipolygon_z_t<T>* get_impl_(multipolygon_z_t<T>*) noexcept
+    {
+        return get_multipolygon_z();
+    }
+
+    const multipolygon_z_t<T>* get_impl_(const multipolygon_z_t<T>*) const noexcept
+    {
+        return get_multipolygon_z();
+    }
+
+    multipolygon_m_t<T>* get_impl_(multipolygon_m_t<T>*) noexcept
+    {
+        return get_multipolygon_m();
+    }
+
+    const multipolygon_m_t<T>* get_impl_(const multipolygon_m_t<T>*) const noexcept
+    {
+        return get_multipolygon_m();
+    }
+
+    multipolygon_zm_t<T>* get_impl_(multipolygon_zm_t<T>*) noexcept
+    {
+        return get_multipolygon_zm();
+    }
+
+    const multipolygon_zm_t<T>* get_impl_(const multipolygon_zm_t<T>*) const noexcept
+    {
+        return get_multipolygon_zm();
+    }
+
+    geometrycollection_t<T>* get_impl_(geometrycollection_t<T>*) noexcept
+    {
+        return get_geometrycollection();
+    }
+
+    const geometrycollection_t<T>* get_impl_(const geometrycollection_t<T>*) const noexcept
+    {
+        return get_geometrycollection();
+    }
+
+    geometrycollection_z_t<T>* get_impl_(geometrycollection_z_t<T>*) noexcept
+    {
+        return get_geometrycollection_z();
+    }
+
+    const geometrycollection_z_t<T>* get_impl_(const geometrycollection_z_t<T>*) const noexcept
+    {
+        return get_geometrycollection_z();
+    }
+
+    geometrycollection_m_t<T>* get_impl_(geometrycollection_m_t<T>*) noexcept
+    {
+        return get_geometrycollection_m();
+    }
+
+    const geometrycollection_m_t<T>* get_impl_(const geometrycollection_m_t<T>*) const noexcept
+    {
+        return get_geometrycollection_m();
+    }
+
+    geometrycollection_zm_t<T>* get_impl_(geometrycollection_zm_t<T>*) noexcept
+    {
+        return get_geometrycollection_zm();
+    }
+
+    const geometrycollection_zm_t<T>* get_impl_(const geometrycollection_zm_t<T>*) const noexcept
+    {
+        return get_geometrycollection_zm();
     }
 
     // json
@@ -1486,127 +1431,19 @@ class geometry_t : public basic_geometry<geometry_t<T>>
     /// @private
     std::string json_(std::int32_t precision = -1) const
     {
-        switch (m_geom_type)
+        std::string out;
+        write_json_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_json_(std::string& out, std::int32_t precision) const
+    {
+        if (m_geom_type == geometry_type::GEOMETRY)
         {
-            // point
-            case geometry_type::POINT:
-            {
-                return m_value.m_point->json(precision);
-            }
-            case geometry_type::POINTZ:
-            {
-                return m_value.m_point_z->json(precision);
-            }
-            case geometry_type::POINTM:
-            {
-                return m_value.m_point_m->json(precision);
-            }
-            case geometry_type::POINTZM:
-            {
-                return m_value.m_point_zm->json(precision);
-            }
-
-            // multipoint
-            case geometry_type::MULTIPOINT:
-            {
-                return m_value.m_multipoint->json(precision);
-            }
-            case geometry_type::MULTIPOINTZ:
-            {
-                return m_value.m_multipoint_z->json(precision);
-            }
-            case geometry_type::MULTIPOINTM:
-            {
-                return m_value.m_multipoint_m->json(precision);
-            }
-            case geometry_type::MULTIPOINTZM:
-            {
-                return m_value.m_multipoint_zm->json(precision);
-            }
-
-            // linestring
-            case geometry_type::LINESTRING:
-            {
-                return m_value.m_linestring->json(precision);
-            }
-            case geometry_type::LINESTRINGZ:
-            {
-                return m_value.m_linestring_z->json(precision);
-            }
-            case geometry_type::LINESTRINGM:
-            {
-                return m_value.m_linestring_m->json(precision);
-            }
-            case geometry_type::LINESTRINGZM:
-            {
-                return m_value.m_linestring_zm->json(precision);
-            }
-
-            // multilinestring
-            case geometry_type::MULTILINESTRING:
-            {
-                return m_value.m_multilinestring->json(precision);
-            }
-            case geometry_type::MULTILINESTRINGZ:
-            {
-                return m_value.m_multilinestring_z->json(precision);
-            }
-            case geometry_type::MULTILINESTRINGM:
-            {
-                return m_value.m_multilinestring_m->json(precision);
-            }
-            case geometry_type::MULTILINESTRINGZM:
-            {
-                return m_value.m_multilinestring_zm->json(precision);
-            }
-
-            // polygon
-            case geometry_type::POLYGON:
-            {
-                return m_value.m_polygon->json(precision);
-            }
-            case geometry_type::POLYGONZ:
-            {
-                return m_value.m_polygon_z->json(precision);
-            }
-            case geometry_type::POLYGONM:
-            {
-                return m_value.m_polygon_m->json(precision);
-            }
-            case geometry_type::POLYGONZM:
-            {
-                return m_value.m_polygon_zm->json(precision);
-            }
-
-            // multipolygon
-            case geometry_type::MULTIPOLYGON:
-            {
-                return m_value.m_multipolygon->json(precision);
-            }
-            case geometry_type::MULTIPOLYGONZ:
-            {
-                return m_value.m_multipolygon_z->json(precision);
-            }
-            case geometry_type::MULTIPOLYGONM:
-            {
-                return m_value.m_multipolygon_m->json(precision);
-            }
-            case geometry_type::MULTIPOLYGONZM:
-            {
-                return m_value.m_multipolygon_zm->json(precision);
-            }
-            case geometry_type::GEOMETRYCOLLECTION:
-            case geometry_type::GEOMETRYCOLLECTIONZ:
-            case geometry_type::GEOMETRYCOLLECTIONM:
-            case geometry_type::GEOMETRYCOLLECTIONZM:
-            {
-                return geometrycollection_json_(precision);
-            }
-            default:
-            {
-                return "";
-            }
+            return;
         }
+        visit_([&out, precision](const auto& g) { g.write_json(out, precision); });
     }
 
     // wkt
@@ -1614,196 +1451,186 @@ class geometry_t : public basic_geometry<geometry_t<T>>
     /// @private
     static geometry_t<T> from_wkt_(const std::string& wkt)
     {
-        if (is_geometrycollection_wkt_(wkt))
+        if (detail::wkt_starts_with_geometrycollection(wkt))
         {
             return from_geometrycollection_wkt_(wkt);
         }
 
+        // a single parse provides the geometry type, the coordinates and the offsets,
+        // the concrete geometry is built directly from them without re-parsing
         wkt_reader reader{};
-        auto result = reader.read(wkt);
-        auto data   = result.data;
+        auto result        = reader.read(wkt);
+        const auto& data   = result.data;
+        const auto& coords = data.coords;
         switch (data.geom_type)
         {
             case geometry_type::POINT:
-                return geometry_t<T>(point_t<T>::from_wkt(wkt));
+            {
+                if (coords.empty())
+                {
+                    return geometry_t<T>(point_t<T>{});
+                }
+                return geometry_t<T>(point_t<T>{coords[0], coords[1]});
+            }
             case geometry_type::POINTZ:
-                return geometry_t<T>(point_z_t<T>::from_wkt(wkt));
+            {
+                if (coords.empty())
+                {
+                    return geometry_t<T>(point_z_t<T>{});
+                }
+                return geometry_t<T>(point_z_t<T>{coords[0], coords[1], coords[2]});
+            }
             case geometry_type::POINTM:
-                return geometry_t<T>(point_m_t<T>::from_wkt(wkt));
+            {
+                if (coords.empty())
+                {
+                    return geometry_t<T>(point_m_t<T>{});
+                }
+                return geometry_t<T>(point_m_t<T>{coords[0], coords[1], coords[2]});
+            }
             case geometry_type::POINTZM:
-                return geometry_t<T>(point_zm_t<T>::from_wkt(wkt));
+            {
+                if (coords.empty())
+                {
+                    return geometry_t<T>(point_zm_t<T>{});
+                }
+                return geometry_t<T>(point_zm_t<T>{coords[0], coords[1], coords[2], coords[3]});
+            }
             case geometry_type::MULTIPOINT:
-                return geometry_t<T>(multipoint_t<T>::from_wkt(wkt));
+            {
+                return geometry_t<T>(multipoint_t<T>(coords.begin(), coords.end()));
+            }
             case geometry_type::MULTIPOINTZ:
-                return geometry_t<T>(multipoint_z_t<T>::from_wkt(wkt));
+            {
+                return geometry_t<T>(multipoint_z_t<T>(coords.begin(), coords.end()));
+            }
             case geometry_type::MULTIPOINTM:
-                return geometry_t<T>(multipoint_m_t<T>::from_wkt(wkt));
+            {
+                return geometry_t<T>(multipoint_m_t<T>(coords.begin(), coords.end()));
+            }
             case geometry_type::MULTIPOINTZM:
-                return geometry_t<T>(multipoint_zm_t<T>::from_wkt(wkt));
+            {
+                return geometry_t<T>(multipoint_zm_t<T>(coords.begin(), coords.end()));
+            }
             case geometry_type::LINESTRING:
-                return geometry_t<T>(linestring_t<T>::from_wkt(wkt));
+            {
+                return geometry_t<T>(linestring_t<T>(coords.begin(), coords.end()));
+            }
             case geometry_type::LINESTRINGZ:
-                return geometry_t<T>(linestring_z_t<T>::from_wkt(wkt));
+            {
+                return geometry_t<T>(linestring_z_t<T>(coords.begin(), coords.end()));
+            }
             case geometry_type::LINESTRINGM:
-                return geometry_t<T>(linestring_m_t<T>::from_wkt(wkt));
+            {
+                return geometry_t<T>(linestring_m_t<T>(coords.begin(), coords.end()));
+            }
             case geometry_type::LINESTRINGZM:
-                return geometry_t<T>(linestring_zm_t<T>::from_wkt(wkt));
+            {
+                return geometry_t<T>(linestring_zm_t<T>(coords.begin(), coords.end()));
+            }
             case geometry_type::MULTILINESTRING:
-                return geometry_t<T>(multilinestring_t<T>::from_wkt(wkt));
+            {
+                return geometry_t<T>(multilinestring_t<T>(coords.begin(), coords.end(),
+                                                             data.line_offsets.begin(), data.line_offsets.end()));
+            }
             case geometry_type::MULTILINESTRINGZ:
-                return geometry_t<T>(multilinestring_z_t<T>::from_wkt(wkt));
+            {
+                return geometry_t<T>(multilinestring_z_t<T>(coords.begin(), coords.end(),
+                                                             data.line_offsets.begin(), data.line_offsets.end()));
+            }
             case geometry_type::MULTILINESTRINGM:
-                return geometry_t<T>(multilinestring_m_t<T>::from_wkt(wkt));
+            {
+                return geometry_t<T>(multilinestring_m_t<T>(coords.begin(), coords.end(),
+                                                             data.line_offsets.begin(), data.line_offsets.end()));
+            }
             case geometry_type::MULTILINESTRINGZM:
-                return geometry_t<T>(multilinestring_zm_t<T>::from_wkt(wkt));
+            {
+                return geometry_t<T>(multilinestring_zm_t<T>(coords.begin(), coords.end(),
+                                                             data.line_offsets.begin(), data.line_offsets.end()));
+            }
             case geometry_type::POLYGON:
-                return geometry_t<T>(polygon_t<T>::from_wkt(wkt));
+            {
+                polygon_t<T> polygon(coords.begin(), coords.end(),
+                                        data.ring_offsets.begin(), data.ring_offsets.end());
+                polygon.throw_for_invalid();
+                return geometry_t<T>(std::move(polygon));
+            }
             case geometry_type::POLYGONZ:
-                return geometry_t<T>(polygon_z_t<T>::from_wkt(wkt));
+            {
+                polygon_z_t<T> polygon(coords.begin(), coords.end(),
+                                        data.ring_offsets.begin(), data.ring_offsets.end());
+                polygon.throw_for_invalid();
+                return geometry_t<T>(std::move(polygon));
+            }
             case geometry_type::POLYGONM:
-                return geometry_t<T>(polygon_m_t<T>::from_wkt(wkt));
+            {
+                polygon_m_t<T> polygon(coords.begin(), coords.end(),
+                                        data.ring_offsets.begin(), data.ring_offsets.end());
+                polygon.throw_for_invalid();
+                return geometry_t<T>(std::move(polygon));
+            }
             case geometry_type::POLYGONZM:
-                return geometry_t<T>(polygon_zm_t<T>::from_wkt(wkt));
+            {
+                polygon_zm_t<T> polygon(coords.begin(), coords.end(),
+                                        data.ring_offsets.begin(), data.ring_offsets.end());
+                polygon.throw_for_invalid();
+                return geometry_t<T>(std::move(polygon));
+            }
             case geometry_type::MULTIPOLYGON:
-                return geometry_t<T>(multipolygon_t<T>::from_wkt(wkt));
+            {
+                multipolygon_t<T> multipolygon(coords.begin(), coords.end(),
+                                                  data.ring_offsets.begin(), data.ring_offsets.end(),
+                                                  data.polygon_offsets.begin(), data.polygon_offsets.end());
+                multipolygon.throw_for_invalid();
+                return geometry_t<T>(std::move(multipolygon));
+            }
             case geometry_type::MULTIPOLYGONZ:
-                return geometry_t<T>(multipolygon_z_t<T>::from_wkt(wkt));
+            {
+                multipolygon_z_t<T> multipolygon(coords.begin(), coords.end(),
+                                                  data.ring_offsets.begin(), data.ring_offsets.end(),
+                                                  data.polygon_offsets.begin(), data.polygon_offsets.end());
+                multipolygon.throw_for_invalid();
+                return geometry_t<T>(std::move(multipolygon));
+            }
             case geometry_type::MULTIPOLYGONM:
-                return geometry_t<T>(multipolygon_m_t<T>::from_wkt(wkt));
+            {
+                multipolygon_m_t<T> multipolygon(coords.begin(), coords.end(),
+                                                  data.ring_offsets.begin(), data.ring_offsets.end(),
+                                                  data.polygon_offsets.begin(), data.polygon_offsets.end());
+                multipolygon.throw_for_invalid();
+                return geometry_t<T>(std::move(multipolygon));
+            }
             case geometry_type::MULTIPOLYGONZM:
-                return geometry_t<T>(multipolygon_zm_t<T>::from_wkt(wkt));
+            {
+                multipolygon_zm_t<T> multipolygon(coords.begin(), coords.end(),
+                                                  data.ring_offsets.begin(), data.ring_offsets.end(),
+                                                  data.polygon_offsets.begin(), data.polygon_offsets.end());
+                multipolygon.throw_for_invalid();
+                return geometry_t<T>(std::move(multipolygon));
+            }
             default:
             {
                 throw exceptions::parse_error("invalid wkt string");
             }
         }
-        return {};
     }
 
     /// @private
     std::string wkt_(std::int32_t precision = -1) const
     {
-        switch (m_geom_type)
+        std::string out;
+        write_wkt_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_wkt_(std::string& out, std::int32_t precision) const
+    {
+        if (m_geom_type == geometry_type::GEOMETRY)
         {
-            // point
-            case geometry_type::POINT:
-            {
-                return m_value.m_point->wkt(precision);
-            }
-            case geometry_type::POINTZ:
-            {
-                return m_value.m_point_z->wkt(precision);
-            }
-            case geometry_type::POINTM:
-            {
-                return m_value.m_point_m->wkt(precision);
-            }
-            case geometry_type::POINTZM:
-            {
-                return m_value.m_point_zm->wkt(precision);
-            }
-
-            // multipoint
-            case geometry_type::MULTIPOINT:
-            {
-                return m_value.m_multipoint->wkt(precision);
-            }
-            case geometry_type::MULTIPOINTZ:
-            {
-                return m_value.m_multipoint_z->wkt(precision);
-            }
-            case geometry_type::MULTIPOINTM:
-            {
-                return m_value.m_multipoint_m->wkt(precision);
-            }
-            case geometry_type::MULTIPOINTZM:
-            {
-                return m_value.m_multipoint_zm->wkt(precision);
-            }
-
-            // linestring
-            case geometry_type::LINESTRING:
-            {
-                return m_value.m_linestring->wkt(precision);
-            }
-            case geometry_type::LINESTRINGZ:
-            {
-                return m_value.m_linestring_z->wkt(precision);
-            }
-            case geometry_type::LINESTRINGM:
-            {
-                return m_value.m_linestring_m->wkt(precision);
-            }
-            case geometry_type::LINESTRINGZM:
-            {
-                return m_value.m_linestring_zm->wkt(precision);
-            }
-
-            // multilinestring
-            case geometry_type::MULTILINESTRING:
-            {
-                return m_value.m_multilinestring->wkt(precision);
-            }
-            case geometry_type::MULTILINESTRINGZ:
-            {
-                return m_value.m_multilinestring_z->wkt(precision);
-            }
-            case geometry_type::MULTILINESTRINGM:
-            {
-                return m_value.m_multilinestring_m->wkt(precision);
-            }
-            case geometry_type::MULTILINESTRINGZM:
-            {
-                return m_value.m_multilinestring_zm->wkt(precision);
-            }
-
-            // polygon
-            case geometry_type::POLYGON:
-            {
-                return m_value.m_polygon->wkt(precision);
-            }
-            case geometry_type::POLYGONZ:
-            {
-                return m_value.m_polygon_z->wkt(precision);
-            }
-            case geometry_type::POLYGONM:
-            {
-                return m_value.m_polygon_m->wkt(precision);
-            }
-            case geometry_type::POLYGONZM:
-            {
-                return m_value.m_polygon_zm->wkt(precision);
-            }
-
-            // multipolygon
-            case geometry_type::MULTIPOLYGON:
-            {
-                return m_value.m_multipolygon->wkt(precision);
-            }
-            case geometry_type::MULTIPOLYGONZ:
-            {
-                return m_value.m_multipolygon_z->wkt(precision);
-            }
-            case geometry_type::MULTIPOLYGONM:
-            {
-                return m_value.m_multipolygon_m->wkt(precision);
-            }
-            case geometry_type::MULTIPOLYGONZM:
-            {
-                return m_value.m_multipolygon_zm->wkt(precision);
-            }
-            case geometry_type::GEOMETRYCOLLECTION:
-            case geometry_type::GEOMETRYCOLLECTIONZ:
-            case geometry_type::GEOMETRYCOLLECTIONM:
-            case geometry_type::GEOMETRYCOLLECTIONZM:
-            {
-                return geometrycollection_wkt_(precision);
-            }
-            default:
-            {
-                return "";
-            }
+            return;
         }
+        visit_([&out, precision](const auto& g) { g.write_wkt(out, precision); });
     }
 };
 
@@ -1849,43 +1676,6 @@ class basic_geometrycollection
         }
 
         return std::string(begin, end);
-    }
-
-    static std::string compact_upper(const std::string& text)
-    {
-        std::string res;
-        res.reserve(text.size());
-        for (char c : text)
-        {
-            if (std::isspace(static_cast<unsigned char>(c)))
-            {
-                continue;
-            }
-            res.push_back(static_cast<char>(std::toupper(static_cast<unsigned char>(c))));
-        }
-        return res;
-    }
-
-    static geometry_type parse_collection_type(const std::string& wkt)
-    {
-        const auto compact = compact_upper(wkt);
-        if (compact.find("GEOMETRYCOLLECTIONZM") == 0)
-        {
-            return geometry_type::GEOMETRYCOLLECTIONZM;
-        }
-        if (compact.find("GEOMETRYCOLLECTIONZ") == 0)
-        {
-            return geometry_type::GEOMETRYCOLLECTIONZ;
-        }
-        if (compact.find("GEOMETRYCOLLECTIONM") == 0)
-        {
-            return geometry_type::GEOMETRYCOLLECTIONM;
-        }
-        if (compact.find("GEOMETRYCOLLECTION") == 0)
-        {
-            return geometry_type::GEOMETRYCOLLECTION;
-        }
-        throw exceptions::parse_error("invalid geometry collection wkt string");
     }
 
     static std::vector<std::string> split_children(const std::string& text)
@@ -1941,8 +1731,7 @@ class basic_geometrycollection
         const auto first_paren = text.find('(');
         if (first_paren == std::string::npos)
         {
-            const auto compact = compact_upper(text);
-            if (compact.find("EMPTY") != std::string::npos)
+            if (detail::wkt_contains_empty(text))
             {
                 return "";
             }
@@ -2036,23 +1825,30 @@ class basic_geometrycollection
 
     std::string json_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        ss << "{\"type\":\"GeometryCollection\",\"geometries\":[";
+        std::string out;
+        out.reserve(64 + this->size() * 64);
+        write_json_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_json_(std::string& out, std::int32_t precision) const
+    {
+        out += "{\"type\":\"GeometryCollection\",\"geometries\":[";
         for (size_t i = 0; i < this->size(); ++i)
         {
             if (i > 0)
             {
-                ss << ",";
+                out += ',';
             }
-            ss << (*this)[i].json(precision);
+            (*this)[i].write_json(out, precision);
         }
-        ss << "]}";
-        return ss.str();
+        out += "]}";
     }
 
     static basic_geometrycollection<T, GeometryType, AllocatorType> from_wkt_(const std::string& wkt)
     {
-        const auto parsed_type = parse_collection_type(wkt);
+        const auto parsed_type = detail::wkt_collection_type(wkt);
         if (parsed_type != GeometryType)
         {
             throw exceptions::parse_error("invalid wkt string");
@@ -2076,33 +1872,40 @@ class basic_geometrycollection
 
     std::string wkt_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        ss << "GEOMETRYCOLLECTION";
+        std::string out;
+        out.reserve(32 + this->size() * 64);
+        write_wkt_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_wkt_(std::string& out, std::int32_t precision) const
+    {
+        out += "GEOMETRYCOLLECTION";
         if (this->has_z())
         {
-            ss << "Z";
+            out += 'Z';
         }
         if (this->has_m())
         {
-            ss << "M";
+            out += 'M';
         }
         if (this->empty())
         {
-            ss << " EMPTY";
-            return ss.str();
+            out += " EMPTY";
+            return;
         }
 
-        ss << "(";
+        out += '(';
         for (size_t i = 0; i < this->size(); ++i)
         {
             if (i > 0)
             {
-                ss << ",";
+                out += ',';
             }
-            ss << (*this)[i].wkt(precision);
+            (*this)[i].write_wkt(out, precision);
         }
-        ss << ")";
-        return ss.str();
+        out += ')';
     }
 };
 
@@ -2432,121 +2235,120 @@ geometry_t<T> geometry_from_geojson_value(const geojson_value& value)
 }  // namespace io
 
 template <typename T>
-geometry_t<T>::geometry_t(const geometrycollection_t<T>& value)
-    : m_geom_type(geometry_type::GEOMETRYCOLLECTION),
-      m_geometrycollection(new geometrycollection_t<T>(value))
+geometry_t<T>::geometry_t(geometrycollection_t<T> value)
+    : m_geom_type(geometry_type::GEOMETRYCOLLECTION)
 {
+    m_value.m_geometrycollection = new geometrycollection_t<T>(std::move(value));
 }
 
 template <typename T>
-geometry_t<T>::geometry_t(const geometrycollection_z_t<T>& value)
-    : m_geom_type(geometry_type::GEOMETRYCOLLECTIONZ),
-      m_geometrycollection_z(new geometrycollection_z_t<T>(value))
+geometry_t<T>::geometry_t(geometrycollection_z_t<T> value)
+    : m_geom_type(geometry_type::GEOMETRYCOLLECTIONZ)
 {
+    m_value.m_geometrycollection_z = new geometrycollection_z_t<T>(std::move(value));
 }
 
 template <typename T>
-geometry_t<T>::geometry_t(const geometrycollection_m_t<T>& value)
-    : m_geom_type(geometry_type::GEOMETRYCOLLECTIONM),
-      m_geometrycollection_m(new geometrycollection_m_t<T>(value))
+geometry_t<T>::geometry_t(geometrycollection_m_t<T> value)
+    : m_geom_type(geometry_type::GEOMETRYCOLLECTIONM)
 {
+    m_value.m_geometrycollection_m = new geometrycollection_m_t<T>(std::move(value));
 }
 
 template <typename T>
-geometry_t<T>::geometry_t(const geometrycollection_zm_t<T>& value)
-    : m_geom_type(geometry_type::GEOMETRYCOLLECTIONZM),
-      m_geometrycollection_zm(new geometrycollection_zm_t<T>(value))
+geometry_t<T>::geometry_t(geometrycollection_zm_t<T> value)
+    : m_geom_type(geometry_type::GEOMETRYCOLLECTIONZM)
 {
+    m_value.m_geometrycollection_zm = new geometrycollection_zm_t<T>(std::move(value));
 }
 
 template <typename T>
-void geometry_t<T>::copy_geometrycollection_(const geometry_t<T>& other)
+geometry_t<T>::~geometry_t()
 {
-    if (other.m_geometrycollection)
+    switch (m_geom_type)
     {
-        m_geometrycollection.reset(new geometrycollection_t<T>(*other.m_geometrycollection));
+        // point variants are stored inline in the union, nothing to delete
+        case geometry_type::MULTIPOINT:
+            delete m_value.m_multipoint;
+            break;
+        case geometry_type::MULTIPOINTZ:
+            delete m_value.m_multipoint_z;
+            break;
+        case geometry_type::MULTIPOINTM:
+            delete m_value.m_multipoint_m;
+            break;
+        case geometry_type::MULTIPOINTZM:
+            delete m_value.m_multipoint_zm;
+            break;
+        case geometry_type::LINESTRING:
+            delete m_value.m_linestring;
+            break;
+        case geometry_type::LINESTRINGZ:
+            delete m_value.m_linestring_z;
+            break;
+        case geometry_type::LINESTRINGM:
+            delete m_value.m_linestring_m;
+            break;
+        case geometry_type::LINESTRINGZM:
+            delete m_value.m_linestring_zm;
+            break;
+        case geometry_type::MULTILINESTRING:
+            delete m_value.m_multilinestring;
+            break;
+        case geometry_type::MULTILINESTRINGZ:
+            delete m_value.m_multilinestring_z;
+            break;
+        case geometry_type::MULTILINESTRINGM:
+            delete m_value.m_multilinestring_m;
+            break;
+        case geometry_type::MULTILINESTRINGZM:
+            delete m_value.m_multilinestring_zm;
+            break;
+        case geometry_type::POLYGON:
+            delete m_value.m_polygon;
+            break;
+        case geometry_type::POLYGONZ:
+            delete m_value.m_polygon_z;
+            break;
+        case geometry_type::POLYGONM:
+            delete m_value.m_polygon_m;
+            break;
+        case geometry_type::POLYGONZM:
+            delete m_value.m_polygon_zm;
+            break;
+        case geometry_type::MULTIPOLYGON:
+            delete m_value.m_multipolygon;
+            break;
+        case geometry_type::MULTIPOLYGONZ:
+            delete m_value.m_multipolygon_z;
+            break;
+        case geometry_type::MULTIPOLYGONM:
+            delete m_value.m_multipolygon_m;
+            break;
+        case geometry_type::MULTIPOLYGONZM:
+            delete m_value.m_multipolygon_zm;
+            break;
+        case geometry_type::GEOMETRYCOLLECTION:
+            delete m_value.m_geometrycollection;
+            break;
+        case geometry_type::GEOMETRYCOLLECTIONZ:
+            delete m_value.m_geometrycollection_z;
+            break;
+        case geometry_type::GEOMETRYCOLLECTIONM:
+            delete m_value.m_geometrycollection_m;
+            break;
+        case geometry_type::GEOMETRYCOLLECTIONZM:
+            delete m_value.m_geometrycollection_zm;
+            break;
+        default:
+            break;
     }
-}
-
-template <typename T>
-void geometry_t<T>::copy_geometrycollection_z_(const geometry_t<T>& other)
-{
-    if (other.m_geometrycollection_z)
-    {
-        m_geometrycollection_z.reset(new geometrycollection_z_t<T>(*other.m_geometrycollection_z));
-    }
-}
-
-template <typename T>
-void geometry_t<T>::copy_geometrycollection_m_(const geometry_t<T>& other)
-{
-    if (other.m_geometrycollection_m)
-    {
-        m_geometrycollection_m.reset(new geometrycollection_m_t<T>(*other.m_geometrycollection_m));
-    }
-}
-
-template <typename T>
-void geometry_t<T>::copy_geometrycollection_zm_(const geometry_t<T>& other)
-{
-    if (other.m_geometrycollection_zm)
-    {
-        m_geometrycollection_zm.reset(new geometrycollection_zm_t<T>(*other.m_geometrycollection_zm));
-    }
-}
-
-template <typename T>
-bool geometry_t<T>::is_geometrycollection_wkt_(const std::string& wkt)
-{
-    std::string compact;
-    compact.reserve(wkt.size());
-    for (char c : wkt)
-    {
-        if (std::isspace(static_cast<unsigned char>(c)))
-        {
-            continue;
-        }
-        compact.push_back(static_cast<char>(std::toupper(static_cast<unsigned char>(c))));
-    }
-    return compact.find("GEOMETRYCOLLECTION") == 0;
-}
-
-template <typename T>
-geometry_type geometry_t<T>::geometrycollection_type_from_wkt_(const std::string& wkt)
-{
-    std::string compact;
-    compact.reserve(wkt.size());
-    for (char c : wkt)
-    {
-        if (std::isspace(static_cast<unsigned char>(c)))
-        {
-            continue;
-        }
-        compact.push_back(static_cast<char>(std::toupper(static_cast<unsigned char>(c))));
-    }
-    if (compact.find("GEOMETRYCOLLECTIONZM") == 0)
-    {
-        return geometry_type::GEOMETRYCOLLECTIONZM;
-    }
-    if (compact.find("GEOMETRYCOLLECTIONZ") == 0)
-    {
-        return geometry_type::GEOMETRYCOLLECTIONZ;
-    }
-    if (compact.find("GEOMETRYCOLLECTIONM") == 0)
-    {
-        return geometry_type::GEOMETRYCOLLECTIONM;
-    }
-    if (compact.find("GEOMETRYCOLLECTION") == 0)
-    {
-        return geometry_type::GEOMETRYCOLLECTION;
-    }
-    throw exceptions::parse_error("invalid geometry collection wkt string");
 }
 
 template <typename T>
 geometry_t<T> geometry_t<T>::from_geometrycollection_wkt_(const std::string& wkt)
 {
-    switch (geometrycollection_type_from_wkt_(wkt))
+    switch (detail::wkt_collection_type(wkt))
     {
         case geometry_type::GEOMETRYCOLLECTION:
             return geometry_t<T>(geometrycollection_t<T>::from_wkt(wkt));
@@ -2561,97 +2363,6 @@ geometry_t<T> geometry_t<T>::from_geometrycollection_wkt_(const std::string& wkt
     }
 }
 
-template <typename T>
-std::string geometry_t<T>::geometrycollection_json_(std::int32_t precision) const
-{
-    switch (m_geom_type)
-    {
-        case geometry_type::GEOMETRYCOLLECTION:
-            return m_geometrycollection->json(precision);
-        case geometry_type::GEOMETRYCOLLECTIONZ:
-            return m_geometrycollection_z->json(precision);
-        case geometry_type::GEOMETRYCOLLECTIONM:
-            return m_geometrycollection_m->json(precision);
-        case geometry_type::GEOMETRYCOLLECTIONZM:
-            return m_geometrycollection_zm->json(precision);
-        default:
-            return "";
-    }
-}
-
-template <typename T>
-std::string geometry_t<T>::geometrycollection_wkt_(std::int32_t precision) const
-{
-    switch (m_geom_type)
-    {
-        case geometry_type::GEOMETRYCOLLECTION:
-            return m_geometrycollection->wkt(precision);
-        case geometry_type::GEOMETRYCOLLECTIONZ:
-            return m_geometrycollection_z->wkt(precision);
-        case geometry_type::GEOMETRYCOLLECTIONM:
-            return m_geometrycollection_m->wkt(precision);
-        case geometry_type::GEOMETRYCOLLECTIONZM:
-            return m_geometrycollection_zm->wkt(precision);
-        default:
-            return "";
-    }
-}
-
-template <typename T>
-geometrycollection_t<T>* geometry_t<T>::get_geometrycollection()
-{
-    assert(is_geometrycollection());
-    return m_geometrycollection.get();
-}
-
-template <typename T>
-const geometrycollection_t<T>* geometry_t<T>::get_geometrycollection() const
-{
-    assert(m_geom_type == geometry_type::GEOMETRYCOLLECTION);
-    return m_geometrycollection.get();
-}
-
-template <typename T>
-geometrycollection_z_t<T>* geometry_t<T>::get_geometrycollection_z()
-{
-    assert(is_geometrycollection_z());
-    return m_geometrycollection_z.get();
-}
-
-template <typename T>
-const geometrycollection_z_t<T>* geometry_t<T>::get_geometrycollection_z() const
-{
-    assert(m_geom_type == geometry_type::GEOMETRYCOLLECTIONZ);
-    return m_geometrycollection_z.get();
-}
-
-template <typename T>
-geometrycollection_m_t<T>* geometry_t<T>::get_geometrycollection_m()
-{
-    assert(is_geometrycollection_m());
-    return m_geometrycollection_m.get();
-}
-
-template <typename T>
-const geometrycollection_m_t<T>* geometry_t<T>::get_geometrycollection_m() const
-{
-    assert(m_geom_type == geometry_type::GEOMETRYCOLLECTIONM);
-    return m_geometrycollection_m.get();
-}
-
-template <typename T>
-geometrycollection_zm_t<T>* geometry_t<T>::get_geometrycollection_zm()
-{
-    assert(is_geometrycollection_zm());
-    return m_geometrycollection_zm.get();
-}
-
-template <typename T>
-const geometrycollection_zm_t<T>* geometry_t<T>::get_geometrycollection_zm() const
-{
-    assert(m_geom_type == geometry_type::GEOMETRYCOLLECTIONZM);
-    return m_geometrycollection_zm.get();
-}
 
 template <typename>
 struct is_basic_geometrycollection : std::false_type

@@ -122,7 +122,13 @@ std::vector<geometry_t<T>> from_geojson_feature_collection(const std::string& te
 template <typename T = double>
 geometry_t<T> from_wkb(const std::vector<std::uint8_t>& bytes)
 {
-    return io::detail::read_wkb<T>(bytes.begin(), bytes.end());
+    return io::detail::read_wkb<T>(bytes.data(), bytes.size());
+}
+
+template <typename T = double>
+geometry_t<T> from_wkb(const std::uint8_t* data, std::size_t size)
+{
+    return io::detail::read_wkb<T>(data, size);
 }
 
 template <typename T = double, typename Iterator>

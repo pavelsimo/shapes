@@ -200,3 +200,31 @@ TEST_CASE("Utils")
         CHECK(not utils::is_multipolygon(geometry_type::GEOMETRYCOLLECTION));
     }
 }
+TEST_CASE("Bounds - negative quadrant")
+{
+    SECTION("bounds of an all-negative geometry are correct")
+    {
+        Point p{-3, -2};
+        auto b = p.bounds();
+        CHECK(b.minx == -3.0);
+        CHECK(b.miny == -2.0);
+        CHECK(b.maxx == -3.0);
+        CHECK(b.maxy == -2.0);
+    }
+
+    SECTION("default bounds are an inverted empty box")
+    {
+        bounds_t b{};
+        CHECK(b.minx > b.maxx);
+        CHECK(b.miny > b.maxy);
+    }
+
+    SECTION("bounds predicates are const")
+    {
+        const bounds_t a{0, 0, 2, 2};
+        const bounds_t b{1, 1, 3, 3};
+        CHECK(a.intersects(b));
+        CHECK(a.overlaps(b));
+        CHECK_FALSE(a.contains(b));
+    }
+}

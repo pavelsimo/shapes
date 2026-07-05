@@ -18,7 +18,7 @@ namespace utils
  *
  * @since 0.0.1
  */
-dimension_type get_dim(geometry_type geom_type) noexcept
+inline dimension_type get_dim(geometry_type geom_type) noexcept
 {
     int value = static_cast<int>(geom_type);
     if (value >= 1000 and value < 2000)
@@ -44,7 +44,7 @@ dimension_type get_dim(geometry_type geom_type) noexcept
  *
  * @since 0.0.1
  */
-dimension_type get_dim(int8_t ndim) noexcept
+inline dimension_type get_dim(int8_t ndim) noexcept
 {
     switch (ndim)
     {
@@ -65,7 +65,7 @@ dimension_type get_dim(int8_t ndim) noexcept
  *
  * @since 0.0.1
  */
-int8_t get_ndim(dimension_type dim_type) noexcept
+inline int8_t get_ndim(dimension_type dim_type) noexcept
 {
     switch (dim_type)
     {
@@ -87,7 +87,7 @@ int8_t get_ndim(dimension_type dim_type) noexcept
  *
  * @since 0.0.1
  */
-int8_t get_ndim(geometry_type geom_type) noexcept
+inline int8_t get_ndim(geometry_type geom_type) noexcept
 {
     return get_ndim(get_dim(geom_type));
 }
@@ -100,7 +100,7 @@ int8_t get_ndim(geometry_type geom_type) noexcept
  *
  * @since 0.0.1
  */
-geometry_type get_geom_type(geometry_type geom_type) noexcept
+inline geometry_type get_geom_type(geometry_type geom_type) noexcept
 {
     switch (geom_type)
     {
@@ -195,7 +195,7 @@ geometry_type get_geom_type(geometry_type geom_type) noexcept
  *
  * @since 0.0.1
  */
-bool is_point(geometry_type geom_type) noexcept
+inline bool is_point(geometry_type geom_type) noexcept
 {
     return geom_type == geometry_type::POINT or geom_type == geometry_type::POINTZ or geom_type == geometry_type::POINTM or geom_type == geometry_type::POINTZM;
 }
@@ -206,7 +206,7 @@ bool is_point(geometry_type geom_type) noexcept
  *
  * @since 0.0.1
  */
-bool is_multipoint(geometry_type geom_type) noexcept
+inline bool is_multipoint(geometry_type geom_type) noexcept
 {
     return geom_type == geometry_type::MULTIPOINT or geom_type == geometry_type::MULTIPOINTZ or geom_type == geometry_type::MULTIPOINTM or geom_type == geometry_type::MULTIPOINTZM;
 }
@@ -217,7 +217,7 @@ bool is_multipoint(geometry_type geom_type) noexcept
  *
  * @since 0.0.1
  */
-bool is_linestring(geometry_type geom_type) noexcept
+inline bool is_linestring(geometry_type geom_type) noexcept
 {
     return geom_type == geometry_type::LINESTRING or geom_type == geometry_type::LINESTRINGZ or geom_type == geometry_type::LINESTRINGM or geom_type == geometry_type::LINESTRINGZM;
 }
@@ -228,7 +228,7 @@ bool is_linestring(geometry_type geom_type) noexcept
  *
  * @since 0.0.1
  */
-bool is_multilinestring(geometry_type geom_type) noexcept
+inline bool is_multilinestring(geometry_type geom_type) noexcept
 {
     return geom_type == geometry_type::MULTILINESTRING or geom_type == geometry_type::MULTILINESTRINGZ or geom_type == geometry_type::MULTILINESTRINGM or geom_type == geometry_type::MULTILINESTRINGZM;
 }
@@ -239,7 +239,7 @@ bool is_multilinestring(geometry_type geom_type) noexcept
  *
  * @since 0.0.1
  */
-bool is_polygon(geometry_type geom_type) noexcept
+inline bool is_polygon(geometry_type geom_type) noexcept
 {
     return geom_type == geometry_type::POLYGON or geom_type == geometry_type::POLYGONZ or geom_type == geometry_type::POLYGONM or geom_type == geometry_type::POLYGONZM;
 }
@@ -250,7 +250,7 @@ bool is_polygon(geometry_type geom_type) noexcept
  *
  * @since 0.0.1
  */
-bool is_multipolygon(geometry_type geom_type) noexcept
+inline bool is_multipolygon(geometry_type geom_type) noexcept
 {
     return geom_type == geometry_type::MULTIPOLYGON or geom_type == geometry_type::MULTIPOLYGONZ or geom_type == geometry_type::MULTIPOLYGONM or geom_type == geometry_type::MULTIPOLYGONZM;
 }

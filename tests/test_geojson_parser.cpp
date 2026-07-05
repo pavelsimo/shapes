@@ -359,3 +359,66 @@ TEST_CASE("GeoJSON Parser - Real-World GeoJSON")
         REQUIRE(coords.size() == 2);
     }
 }
+
+TEST_CASE("GeoJSON parser handles unicode escapes")
+{
+    SECTION("basic escape")
+    {
+        auto val = geojson_parser::parse(R"({"name":"\u0041"})");
+        REQUIRE(val.at("name").as_string() == "A");
+    }
+
+    SECTION("surrogate pair decodes to 4-byte utf-8")
+    {
+        auto val = geojson_parser::parse(R"({"emoji":"\uD83D\uDE00"})");
+        REQUIRE(val.at("emoji").as_string() == "\xF0\x9F\x98\x80");
+    }
+
+    SECTION("two-byte and three-byte sequences")
+    {
+        auto val = geojson_parser::parse(R"({"s":"\u00e9\u20AC"})");
+        REQUIRE(val.at("s").as_string() == "\xC3\xA9\xE2\x82\xAC");
+    }
+
+    SECTION("invalid hex digits throw")
+    {
+        REQUIRE_THROWS_AS(geojson_parser::parse(R"({"s":"\uZZZZ"})"), geojson_parse_error);
+    }
+
+    SECTION("lone high surrogate throws")
+    {
+        REQUIRE_THROWS_AS(geojson_parser::parse(R"({"s":"\uD83D"})"), geojson_parse_error);
+    }
+
+    SECTION("lone low surrogate throws")
+    {
+        REQUIRE_THROWS_AS(geojson_parser::parse(R"({"s":"\uDE00"})"), geojson_parse_error);
+    }
+}
+
+TEST_CASE("GeoJSON parser rejects deeply nested input")
+{
+    SECTION("array nesting bomb throws instead of overflowing the stack")
+    {
+        std::string bomb(600, '[');
+        REQUIRE_THROWS_AS(geojson_parser::parse(bomb), geojson_parse_error);
+    }
+
+    SECTION("object nesting bomb throws")
+    {
+        std::string bomb;
+        for (int i = 0; i < 600; ++i)
+        {
+            bomb += "{\"a\":";
+        }
+        REQUIRE_THROWS_AS(geojson_parser::parse(bomb), geojson_parse_error);
+    }
+
+    SECTION("nesting below the limit still parses")
+    {
+        std::string ok(100, '[');
+        ok += std::string(100, ']');
+        auto val = geojson_parser::parse(ok);
+        REQUIRE(val.is_array());
+    }
+}

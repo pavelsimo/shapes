@@ -3,10 +3,9 @@
 #include <ciso646>
 #include <vector>
 #include <set>
-#include <sstream>
 #include <iterator>
-#include <iomanip>
 #include <simo/geom/detail/geometry.hpp>
+#include <simo/detail/number_util.hpp>
 #include <simo/geom/detail/bounds.hpp>
 
 namespace simo
@@ -249,52 +248,55 @@ class basic_multipolygon
     /// @private
     std::string json_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        if (precision >= 0)
-        {
-            ss << std::setprecision(precision);
-        }
-        ss << "{\"type\":\"MultiPolygon\",\"coordinates\":[";
+        std::string out;
+        out.reserve(64);
+        write_json_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_json_(std::string& out, std::int32_t precision) const
+    {
+        out += "{\"type\":\"MultiPolygon\",\"coordinates\":[";
         for (size_t polygon_index = 0; polygon_index < this->size(); ++polygon_index)
         {
             const auto& pg = (*this)[polygon_index];
             if (polygon_index > 0)
             {
-                ss << ",";
+                out += ',';
             }
-            ss << "[";
+            out += '[';
             for (size_t ring_index = 0; ring_index < pg.size(); ++ring_index)
             {
                 const auto& ring = pg[ring_index];
                 if (ring_index > 0)
                 {
-                    ss << ",";
+                    out += ',';
                 }
-                ss << "[";
+                out += '[';
                 for (size_t point_index = 0; point_index < ring.size(); ++point_index)
                 {
                     const auto& p = ring[point_index];
                     if (point_index > 0)
                     {
-                        ss << ",";
+                        out += ',';
                     }
-                    ss << "[";
+                    out += '[';
                     for (size_t coord_index = 0; coord_index < p.size(); ++coord_index)
                     {
                         if (coord_index > 0)
                         {
-                            ss << ",";
+                            out += ',';
                         }
-                        ss << p.coords[coord_index];
+                        detail::append_double(out, static_cast<double>(p.coords[coord_index]), precision);
                     }
-                    ss << "]";
+                    out += ']';
                 }
-                ss << "]";
+                out += ']';
             }
-            ss << "]";
+            out += ']';
         }
-        ss << "]}";
-        return ss.str();
+        out += "]}";
     }
 
     // wkt
@@ -319,62 +321,65 @@ class basic_multipolygon
     /// @private
     std::string wkt_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        if (precision >= 0)
-        {
-            ss << std::setprecision(precision);
-        }
-        ss << "MULTIPOLYGON";
+        std::string out;
+        out.reserve(64);
+        write_wkt_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_wkt_(std::string& out, std::int32_t precision) const
+    {
+        out += "MULTIPOLYGON";
         if (this->has_z())
         {
-            ss << "Z";
+            out += 'Z';
         }
         if (this->has_m())
         {
-            ss << "M";
+            out += 'M';
         }
         size_t polygon_index = 0;
-        ss << "(";
+        out += '(';
         for (const auto& pg : *this)
         {
             if (polygon_index > 0)
             {
-                ss << ",";
+                out += ',';
             }
-            ss << "(";
+            out += '(';
             size_t ring_index = 0;
             for (const auto& ring : pg)
             {
                 if (ring_index > 0)
                 {
-                    ss << ",";
+                    out += ',';
                 }
-                ss << "(";
+                out += '(';
                 size_t point_index = 0;
                 for (const auto& p : ring)
                 {
                     if (point_index > 0)
                     {
-                        ss << ",";
+                        out += ',';
                     }
                     for (size_t k = 0; k < p.ndim(); ++k)
                     {
                         if (k > 0)
                         {
-                            ss << " ";
+                            out += ' ';
                         }
-                        ss << p.coords[k];
+                        detail::append_double(out, static_cast<double>(p.coords[k]), precision);
                     }
                     ++point_index;
                 }
-                ss << ")";
+                out += ')';
                 ++ring_index;
             }
-            ss << ")";
+            out += ')';
             ++polygon_index;
         }
-        ss << ")";
-        return ss.str();
+        out += ')';
     }
 };
 

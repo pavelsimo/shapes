@@ -240,3 +240,43 @@ TEST_CASE("WKB writer")
         CHECK(parsed.wkt() == "POINT (1 2)");
     }
 }
+
+TEST_CASE("WKB rejects adversarial counts")
+{
+    SECTION("multipoint declaring 4 billion points throws instead of allocating")
+    {
+        std::vector<std::uint8_t> evil = {1, 4, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF};
+        REQUIRE_THROWS_AS(from_wkb(evil), exceptions::parse_error);
+    }
+
+    SECTION("linestring declaring a huge count throws")
+    {
+        std::vector<std::uint8_t> evil = {1, 2, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF};
+        REQUIRE_THROWS_AS(from_wkb(evil), exceptions::parse_error);
+    }
+
+    SECTION("polygon declaring a huge ring count throws")
+    {
+        std::vector<std::uint8_t> evil = {1, 3, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF};
+        REQUIRE_THROWS_AS(from_wkb(evil), exceptions::parse_error);
+    }
+
+    SECTION("deeply nested geometry collections hit the depth limit")
+    {
+        std::vector<std::uint8_t> nested;
+        for (int i = 0; i < 1000; ++i)
+        {
+            const std::uint8_t header[] = {1, 7, 0, 0, 0, 1, 0, 0, 0};
+            nested.insert(nested.end(), std::begin(header), std::end(header));
+        }
+        REQUIRE_THROWS_AS(from_wkb(nested), exceptions::parse_error);
+    }
+
+    SECTION("span overload round-trips")
+    {
+        auto g     = geometry::from_wkt("MULTIPOINT((1 2),(3 4))");
+        auto bytes = to_wkb(g);
+        auto h     = from_wkb(bytes.data(), bytes.size());
+        REQUIRE(h.wkt() == g.wkt());
+    }
+}

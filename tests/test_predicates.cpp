@@ -223,21 +223,20 @@ TEST_CASE("Predicates - Crosses")
     }
 }
 
-TEST_CASE("Predicates - Overlaps")
+TEST_CASE("Predicates - Bounds Overlap")
 {
     Polygon poly1{{{0, 0}, {4, 0}, {4, 4}, {0, 4}, {0, 0}}};
     Polygon poly2{{{2, 2}, {6, 2}, {6, 6}, {2, 6}, {2, 2}}};
 
-    SECTION("overlapping polygons")
+    SECTION("overlapping bounding boxes")
     {
-        // This is a simplified test - full overlap requires more complex logic
-        REQUIRE(overlaps(poly1, poly2));
+        REQUIRE(bounds_overlap(poly1, poly2));
     }
 
-    SECTION("non-overlapping polygons")
+    SECTION("non-overlapping bounding boxes")
     {
         Polygon poly3{{{10, 10}, {14, 10}, {14, 14}, {10, 14}, {10, 10}}};
-        REQUIRE_FALSE(overlaps(poly1, poly3));
+        REQUIRE_FALSE(bounds_overlap(poly1, poly3));
     }
 }
 
@@ -396,5 +395,33 @@ TEST_CASE("Predicates - Edge Cases")
         Polygon tiny{{{0, 0}, {0.00001, 0}, {0.00001, 0.00001}, {0, 0.00001}, {0, 0}}};
         Point p{0.000005, 0.000005};
         REQUIRE(contains(tiny, p));
+    }
+}
+
+TEST_CASE("Predicates - empty inputs")
+{
+    SECTION("intersects with empty linestrings returns false")
+    {
+        LineString empty;
+        LineString ls{{0, 0}, {1, 1}};
+        REQUIRE_FALSE(intersects(empty, ls));
+        REQUIRE_FALSE(intersects(ls, empty));
+        REQUIRE_FALSE(intersects(empty, empty));
+    }
+
+    SECTION("contains with an empty ring does not crash")
+    {
+        Polygon poly;
+        poly.push_back(LinearRing{});
+        Point p{1, 1};
+        REQUIRE_FALSE(contains(poly, p));
+    }
+
+    SECTION("touches with an empty ring does not crash")
+    {
+        Polygon poly;
+        poly.push_back(LinearRing{});
+        Point p{1, 1};
+        REQUIRE_FALSE(touches(p, poly));
     }
 }

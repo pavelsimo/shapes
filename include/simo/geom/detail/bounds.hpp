@@ -38,8 +38,8 @@ struct bounds_t
     bounds_t()
         : minx(std::numeric_limits<double>::max()),
           miny(std::numeric_limits<double>::max()),
-          maxx(std::numeric_limits<double>::min()),
-          maxy(std::numeric_limits<double>::min())
+          maxx(std::numeric_limits<double>::lowest()),
+          maxy(std::numeric_limits<double>::lowest())
     {
     }
 
@@ -162,7 +162,7 @@ struct bounds_t
      *
      * @since 0.0.1
      */
-    bool contains(const bounds_t& other)
+    bool contains(const bounds_t& other) const
     {
         return contains(other.minx, other.miny) && contains(other.maxx, other.maxy);
     }
@@ -173,7 +173,7 @@ struct bounds_t
      *
      * @since 0.0.1
      */
-    bool intersects(const bounds_t& other)
+    bool intersects(const bounds_t& other) const
     {
         return (other.maxx >= minx) && (other.minx <= maxx) && (other.maxy >= miny) && (other.miny <= maxy);
     }
@@ -184,7 +184,7 @@ struct bounds_t
      *
      * @since 0.0.1
      */
-    bool overlaps(const bounds_t& other)
+    bool overlaps(const bounds_t& other) const
     {
         return (other.maxx > minx) && (other.minx < maxx) && (other.maxy > miny) && (other.miny < maxy);
     }

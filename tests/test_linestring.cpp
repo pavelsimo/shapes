@@ -696,3 +696,31 @@ TEST_CASE("LineString")
         CHECK(b.miny == 2.0);
     }
 }
+
+TEST_CASE("LineString is_closed and is_valid")
+{
+    SECTION("closed linestring")
+    {
+        auto ls = linestring{{0, 0}, {1, 0}, {1, 1}, {0, 0}};
+        CHECK(ls.is_closed());
+    }
+
+    SECTION("open linestring")
+    {
+        auto ls = linestring{{0, 0}, {1, 0}, {1, 1}};
+        CHECK_FALSE(ls.is_closed());
+    }
+
+    SECTION("two equal points are invalid")
+    {
+        auto ls = linestring{{1, 2}, {1, 2}};
+        CHECK_FALSE(ls.is_valid());
+        CHECK_THROWS_AS(ls.throw_for_invalid(), exceptions::geometry_error);
+    }
+
+    SECTION("two distinct points are valid")
+    {
+        auto ls = linestring{{1, 2}, {3, 4}};
+        CHECK(ls.is_valid());
+    }
+}

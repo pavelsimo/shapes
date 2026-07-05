@@ -475,3 +475,25 @@ TEST_CASE("Transformations - Edge Cases")
         REQUIRE(result.empty());
     }
 }
+
+TEST_CASE("Transformations - results are not empty")
+{
+    SECTION("rotated point is not empty")
+    {
+        Point p{1, 0};
+        auto r = rotate(p, M_PI / 2);
+        CHECK_FALSE(r.empty());
+        CHECK(r.size() == 2);
+        CHECK(r.wkt() != "POINT EMPTY");
+    }
+
+    SECTION("scaled point is not empty")
+    {
+        Point p{1, 2};
+        auto s = scale(p, 2.0, 2.0);
+        CHECK_FALSE(s.empty());
+        CHECK(s.size() == 2);
+        CHECK(s.x == Catch::Approx(2.0));
+        CHECK(s.y == Catch::Approx(4.0));
+    }
+}

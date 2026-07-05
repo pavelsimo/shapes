@@ -3,8 +3,6 @@
 #include <ciso646>
 #include <vector>
 #include <set>
-#include <sstream>
-#include <iomanip>
 #include <utility>
 #include <simo/geom/geometry.hpp>
 #include <simo/geom/linearring.hpp>
@@ -50,7 +48,7 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
     {
         /// @todo deal with repetition
         size_t n = this->ndim();
-        this->reserve(std::distance(first, last));
+        this->reserve(static_cast<size_t>(std::distance(first, last)) / n);
         for (auto it = first; it != last; it += n)
         {
             this->emplace_back(it, it + n);
@@ -61,7 +59,7 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
     {
         /// @todo deal with repetition
         size_t n = this->ndim();
-        this->reserve(std::distance(first, last));
+        this->reserve(static_cast<size_t>(std::distance(first, last)) / n);
         for (auto it = first; it != last; it += n)
         {
             this->emplace_back(it, it + n);
@@ -269,44 +267,46 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
     /// @private
     std::string json_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        if (precision >= 0)
-        {
-            ss << std::setprecision(precision);
-        }
-        ss << "{\"type\":\"Polygon\",\"coordinates\":[";
-        int i = 0;
+        std::string out;
+        out.reserve(64);
+        write_json_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_json_(std::string& out, std::int32_t precision) const
+    {
+        out += "{\"type\":\"Polygon\",\"coordinates\":[";
+        size_t i = 0;
         for (const auto& ls : *this)
         {
             if (i > 0)
             {
-                ss << ",";
+                out += ',';
             }
-            ss << "[";
+            out += '[';
             for (size_t j = 0; j < ls.size(); ++j)
             {
                 if (j > 0)
                 {
-                    ss << ",";
+                    out += ',';
                 }
-                ss << "[";
+                out += '[';
                 const auto& p = ls[j];
                 for (size_t k = 0; k < p.size(); ++k)
                 {
                     if (k > 0)
                     {
-                        ss << ",";
+                        out += ',';
                     }
-                    ss << p.coords[k];
+                    detail::append_double(out, static_cast<double>(p.coords[k]), precision);
                 }
-                ss << "]";
-                ++i;
+                out += ']';
             }
-            ss << "]";
+            out += ']';
             ++i;
         }
-        ss << "]}";
-        return ss.str();
+        out += "]}";
     }
 
     // wkt
@@ -330,50 +330,53 @@ class basic_polygon : public std::vector<T, AllocatorType>, public basic_geometr
     /// @private
     std::string wkt_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        if (precision >= 0)
-        {
-            ss << std::setprecision(precision);
-        }
-        ss << "POLYGON";
+        std::string out;
+        out.reserve(64);
+        write_wkt_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_wkt_(std::string& out, std::int32_t precision) const
+    {
+        out += "POLYGON";
         if (this->has_z())
         {
-            ss << "Z";
+            out += 'Z';
         }
         if (this->has_m())
         {
-            ss << "M";
+            out += 'M';
         }
-        ss << "(";
-        int i = 0;
+        out += '(';
+        size_t i = 0;
         for (const auto& ls : *this)
         {
             if (i > 0)
             {
-                ss << ",";
+                out += ',';
             }
-            ss << "(";
+            out += '(';
             for (size_t j = 0; j < ls.size(); ++j)
             {
                 if (j > 0)
                 {
-                    ss << ",";
+                    out += ',';
                 }
                 const auto& p = ls[j];
                 for (size_t k = 0; k < p.size(); ++k)
                 {
                     if (k > 0)
                     {
-                        ss << " ";
+                        out += ' ';
                     }
-                    ss << p.coords[k];
+                    detail::append_double(out, static_cast<double>(p.coords[k]), precision);
                 }
             }
-            ss << ")";
+            out += ')';
             ++i;
         }
-        ss << ")";
-        return ss.str();
+        out += ')';
     }
 };
 

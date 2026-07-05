@@ -1,6 +1,11 @@
 #pragma once
 
 #include <ciso646>
+#include <cassert>
+#include <cmath>
+#include <cstdint>
+#include <string>
+#include <vector>
 #include <simo/exceptions.hpp>
 
 namespace simo
@@ -30,24 +35,24 @@ constexpr static const int32_t ASCII_OFFSET = 63;
  *
  * @since 0.0.1
  */
-std::string encode(double coord, int32_t precision = 5)
+inline std::string encode(double coord, int32_t precision = 5)
 {
     assert(precision >= 0);
     double pow10 = std::pow(10, precision);
     auto value   = static_cast<int32_t>(std::round(coord * pow10));
-    value <<= 1;
-    if (coord < 0)
+    auto chunks  = static_cast<uint32_t>(value) << 1;
+    if (value < 0)
     {
-        value = ~value;
+        chunks = ~chunks;
     }
     std::string res;
-    while (value >= CHUNK_THRESHOLD)
+    while (chunks >= static_cast<uint32_t>(CHUNK_THRESHOLD))
     {
-        int32_t ch = ((value & CHUNK_MASK) | CHUNK_THRESHOLD) + ASCII_OFFSET;
+        uint32_t ch = ((chunks & static_cast<uint32_t>(CHUNK_MASK)) | static_cast<uint32_t>(CHUNK_THRESHOLD)) + static_cast<uint32_t>(ASCII_OFFSET);
         res += static_cast<char>(ch);
-        value >>= CHUNK_SIZE;
+        chunks >>= CHUNK_SIZE;
     }
-    res += static_cast<char>(value + ASCII_OFFSET);
+    res += static_cast<char>(chunks + static_cast<uint32_t>(ASCII_OFFSET));
     return res;
 }
 
@@ -59,27 +64,25 @@ std::string encode(double coord, int32_t precision = 5)
  *
  * @since 0.0.1
  */
-int32_t advance(const std::string& text, size_t& index)
+inline int32_t advance(const std::string& text, size_t& index)
 {
-    int32_t res   = 0;
+    uint32_t res  = 0;
     int32_t shift = 0;
-    char ch       = 0;
     while (index < text.size())
     {
-        ch = text[index++] - ASCII_OFFSET;
-        res |= (ch & CHUNK_MASK) << shift;
+        int32_t ch = static_cast<int32_t>(text[index++]) - ASCII_OFFSET;
+        res |= static_cast<uint32_t>(ch & CHUNK_MASK) << shift;
         shift += CHUNK_SIZE;
         if (ch < CHUNK_THRESHOLD)
         {
             break;
         }
     }
-    if (res & 1)
+    if (res & 1u)
     {
-        res = ~res;
+        return static_cast<int32_t>(~(res >> 1));
     }
-    res >>= 1;
-    return res;
+    return static_cast<int32_t>(res >> 1);
 }
 
 /*!
@@ -91,7 +94,7 @@ int32_t advance(const std::string& text, size_t& index)
  *
  * @since 0.0.1
  */
-std::vector<double> decode(const std::string& text, int32_t precision = 5)
+inline std::vector<double> decode(const std::string& text, int32_t precision = 5)
 {
     assert(precision >= 0);
     double pow10 = std::pow(10, precision);

@@ -1,18 +1,15 @@
 #pragma once
 
 #include <ciso646>
-#include <iostream>
 #include <initializer_list>
 #include <stdexcept>
 #include <memory>
 #include <tuple>
 #include <string>
 #include <type_traits>
-#include <sstream>
-#include <iomanip>
-#include <regex>
 #include <simo/io/geojson_parser.hpp>
 #include <simo/geom/detail/geometry.hpp>
+#include <simo/detail/number_util.hpp>
 #include <simo/exceptions.hpp>
 #include <simo/io/wkt_reader.hpp>
 #include <simo/io/polyline.hpp>
@@ -139,6 +136,12 @@ class basic_point : public basic_geometry<basic_point<T>>
         return coords[pos];
     }
 
+    const_reference operator[](size_t pos) const
+    {
+        assert(pos < N);
+        return coords[pos];
+    }
+
     friend bool operator==(const basic_point<T>& lhs, const basic_point<T>& rhs)
     {
         if (lhs.m_empty != rhs.m_empty)
@@ -162,9 +165,9 @@ class basic_point : public basic_geometry<basic_point<T>>
     static basic_point<T> from_polyline(const std::string& polyline, std::int32_t precision = 5)
     {
         auto coords = polyline::decode(polyline, precision);
-        if (coords.size() > N)
+        if (coords.size() != N)
         {
-            throw exceptions::parse_error("too many points");
+            throw exceptions::parse_error("invalid polyline point");
         }
         return {coords[0], coords[1]};
     }
@@ -308,19 +311,25 @@ class basic_point : public basic_geometry<basic_point<T>>
     /// @private
     std::string json_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        if (precision >= 0)
-        {
-            ss << std::setprecision(precision);
-        }
+        std::string out;
+        out.reserve(64);
+        write_json_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_json_(std::string& out, std::int32_t precision) const
+    {
         if (m_empty)
         {
-            ss << "{\"type\":\"Point\",\"coordinates\":[]}";
-            return ss.str();
+            out += "{\"type\":\"Point\",\"coordinates\":[]}";
+            return;
         }
-        ss << "{\"type\":\"Point\",\"coordinates\":"
-           << "[" << x << "," << y << "]}";
-        return ss.str();
+        out += "{\"type\":\"Point\",\"coordinates\":[";
+        detail::append_double(out, static_cast<double>(x), precision);
+        out += ',';
+        detail::append_double(out, static_cast<double>(y), precision);
+        out += "]}";
     }
 
     // wkt
@@ -345,19 +354,25 @@ class basic_point : public basic_geometry<basic_point<T>>
     /// @private
     std::string wkt_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        if (precision >= 0)
-        {
-            ss << std::setprecision(precision);
-        }
+        std::string out;
+        out.reserve(64);
+        write_wkt_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_wkt_(std::string& out, std::int32_t precision) const
+    {
         if (m_empty)
         {
-            ss << "POINT EMPTY";
-            return ss.str();
+            out += "POINT EMPTY";
+            return;
         }
-        ss << "POINT "
-           << "(" << x << " " << y << ")";
-        return ss.str();
+        out += "POINT (";
+        detail::append_double(out, static_cast<double>(x), precision);
+        out += ' ';
+        detail::append_double(out, static_cast<double>(y), precision);
+        out += ')';
     }
 };
 
@@ -451,6 +466,12 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
     // operators
 
     T& operator[](size_t pos)
+    {
+        assert(pos < N);
+        return coords[pos];
+    }
+
+    const T& operator[](size_t pos) const
     {
         assert(pos < N);
         return coords[pos];
@@ -610,19 +631,27 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
     /// @private
     std::string json_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        if (precision >= 0)
-        {
-            ss << std::setprecision(precision);
-        }
+        std::string out;
+        out.reserve(64);
+        write_json_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_json_(std::string& out, std::int32_t precision) const
+    {
         if (m_empty)
         {
-            ss << "{\"type\":\"Point\",\"coordinates\":[]}";
-            return ss.str();
+            out += "{\"type\":\"Point\",\"coordinates\":[]}";
+            return;
         }
-        ss << "{\"type\":\"Point\",\"coordinates\":"
-           << "[" << x << "," << y << "," << z << "]}";
-        return ss.str();
+        out += "{\"type\":\"Point\",\"coordinates\":[";
+        detail::append_double(out, static_cast<double>(x), precision);
+        out += ',';
+        detail::append_double(out, static_cast<double>(y), precision);
+        out += ',';
+        detail::append_double(out, static_cast<double>(z), precision);
+        out += "]}";
     }
 
     // wkt
@@ -647,19 +676,27 @@ class basic_point_z : public basic_geometry<basic_point_z<T>>
     /// @private
     std::string wkt_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        if (precision >= 0)
-        {
-            ss << std::setprecision(precision);
-        }
+        std::string out;
+        out.reserve(64);
+        write_wkt_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_wkt_(std::string& out, std::int32_t precision) const
+    {
         if (m_empty)
         {
-            ss << "POINT Z EMPTY";
-            return ss.str();
+            out += "POINT Z EMPTY";
+            return;
         }
-        ss << "POINT Z "
-           << "(" << x << " " << y << " " << z << ")";
-        return ss.str();
+        out += "POINT Z (";
+        detail::append_double(out, static_cast<double>(x), precision);
+        out += ' ';
+        detail::append_double(out, static_cast<double>(y), precision);
+        out += ' ';
+        detail::append_double(out, static_cast<double>(z), precision);
+        out += ')';
     }
 };
 
@@ -753,6 +790,12 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
     // operators
 
     T& operator[](size_t pos)
+    {
+        assert(pos < N);
+        return coords[pos];
+    }
+
+    const T& operator[](size_t pos) const
     {
         assert(pos < N);
         return coords[pos];
@@ -912,19 +955,27 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
     /// @private
     std::string json_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        if (precision >= 0)
-        {
-            ss << std::setprecision(precision);
-        }
+        std::string out;
+        out.reserve(64);
+        write_json_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_json_(std::string& out, std::int32_t precision) const
+    {
         if (m_empty)
         {
-            ss << "{\"type\":\"Point\",\"coordinates\":[]}";
-            return ss.str();
+            out += "{\"type\":\"Point\",\"coordinates\":[]}";
+            return;
         }
-        ss << "{\"type\":\"Point\",\"coordinates\":"
-           << "[" << x << "," << y << "," << m << "]}";
-        return ss.str();
+        out += "{\"type\":\"Point\",\"coordinates\":[";
+        detail::append_double(out, static_cast<double>(x), precision);
+        out += ',';
+        detail::append_double(out, static_cast<double>(y), precision);
+        out += ',';
+        detail::append_double(out, static_cast<double>(m), precision);
+        out += "]}";
     }
 
     // wkt
@@ -948,19 +999,27 @@ class basic_point_m : public basic_geometry<basic_point_m<T>>
 
     std::string wkt_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        if (precision >= 0)
-        {
-            ss << std::setprecision(precision);
-        }
+        std::string out;
+        out.reserve(64);
+        write_wkt_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_wkt_(std::string& out, std::int32_t precision) const
+    {
         if (m_empty)
         {
-            ss << "POINT M EMPTY";
-            return ss.str();
+            out += "POINT M EMPTY";
+            return;
         }
-        ss << "POINT M "
-           << "(" << x << " " << y << " " << m << ")";
-        return ss.str();
+        out += "POINT M (";
+        detail::append_double(out, static_cast<double>(x), precision);
+        out += ' ';
+        detail::append_double(out, static_cast<double>(y), precision);
+        out += ' ';
+        detail::append_double(out, static_cast<double>(m), precision);
+        out += ')';
     }
 };
 
@@ -1056,6 +1115,12 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
     // operators
 
     T& operator[](size_t pos)
+    {
+        assert(pos < N);
+        return coords[pos];
+    }
+
+    const T& operator[](size_t pos) const
     {
         assert(pos < N);
         return coords[pos];
@@ -1215,19 +1280,29 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
     /// @private
     std::string json_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        if (precision >= 0)
-        {
-            ss << std::setprecision(precision);
-        }
+        std::string out;
+        out.reserve(64);
+        write_json_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_json_(std::string& out, std::int32_t precision) const
+    {
         if (m_empty)
         {
-            ss << "{\"type\":\"Point\",\"coordinates\":[]}";
-            return ss.str();
+            out += "{\"type\":\"Point\",\"coordinates\":[]}";
+            return;
         }
-        ss << "{\"type\":\"Point\",\"coordinates\":"
-           << "[" << x << "," << y << "," << z << "," << m << "]}";
-        return ss.str();
+        out += "{\"type\":\"Point\",\"coordinates\":[";
+        detail::append_double(out, static_cast<double>(x), precision);
+        out += ',';
+        detail::append_double(out, static_cast<double>(y), precision);
+        out += ',';
+        detail::append_double(out, static_cast<double>(z), precision);
+        out += ',';
+        detail::append_double(out, static_cast<double>(m), precision);
+        out += "]}";
     }
 
     // wkt
@@ -1252,19 +1327,29 @@ class basic_point_zm : public basic_geometry<basic_point_zm<T>>
     /// @private
     std::string wkt_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        if (precision >= 0)
-        {
-            ss << std::setprecision(precision);
-        }
+        std::string out;
+        out.reserve(64);
+        write_wkt_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_wkt_(std::string& out, std::int32_t precision) const
+    {
         if (m_empty)
         {
-            ss << "POINT ZM EMPTY";
-            return ss.str();
+            out += "POINT ZM EMPTY";
+            return;
         }
-        ss << "POINT ZM "
-           << "(" << x << " " << y << " " << z << " " << m << ")";
-        return ss.str();
+        out += "POINT ZM (";
+        detail::append_double(out, static_cast<double>(x), precision);
+        out += ' ';
+        detail::append_double(out, static_cast<double>(y), precision);
+        out += ' ';
+        detail::append_double(out, static_cast<double>(z), precision);
+        out += ' ';
+        detail::append_double(out, static_cast<double>(m), precision);
+        out += ')';
     }
 };
 

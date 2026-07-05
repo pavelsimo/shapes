@@ -4,9 +4,8 @@
 #include <vector>
 #include <set>
 #include <iterator>
-#include <sstream>
-#include <iomanip>
 #include <simo/geom/detail/geometry.hpp>
+#include <simo/detail/number_util.hpp>
 #include <simo/geom/detail/utils.hpp>
 #include <simo/geom/detail/point.hpp>
 #include <simo/geom/detail/bounds.hpp>
@@ -40,7 +39,7 @@ class basic_linestring : public std::vector<T, AllocatorType>, public basic_geom
     {
         /// @todo deal with repetition
         size_t n = this->ndim();
-        this->reserve(std::distance(first, last));
+        this->reserve(static_cast<size_t>(std::distance(first, last)) / n);
         for (auto it = first; it != last; it += n)
         {
             this->emplace_back(it, it + n);
@@ -51,7 +50,7 @@ class basic_linestring : public std::vector<T, AllocatorType>, public basic_geom
     {
         /// @todo deal with repetition
         size_t n = this->ndim();
-        this->reserve(std::distance(first, last));
+        this->reserve(static_cast<size_t>(std::distance(first, last)) / n);
         for (auto it = first; it != last; it += n)
         {
             this->emplace_back(it, it + n);
@@ -209,7 +208,7 @@ class basic_linestring : public std::vector<T, AllocatorType>, public basic_geom
 
         if (this->size() == 2)
         {
-            if (*this[0] == *this[1])
+            if ((*this)[0] == (*this)[1])
             {
                 throw exceptions::geometry_error("LineString with exactly two equal points");
             }
@@ -263,33 +262,36 @@ class basic_linestring : public std::vector<T, AllocatorType>, public basic_geom
     /// @private
     std::string json_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        if (precision >= 0)
-        {
-            ss << std::setprecision(precision);
-        }
-        ss << "{\"type\":\"LineString\",\"coordinates\":[";
+        std::string out;
+        out.reserve(48 + this->size() * this->ndim() * 12);
+        write_json_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_json_(std::string& out, std::int32_t precision) const
+    {
+        out += "{\"type\":\"LineString\",\"coordinates\":[";
         int i = 0;
         for (const auto& p : *this)
         {
             if (i > 0)
             {
-                ss << ",";
+                out += ',';
             }
-            ss << "[";
+            out += '[';
             for (size_t j = 0; j < p.size(); ++j)
             {
                 if (j > 0)
                 {
-                    ss << ",";
+                    out += ',';
                 }
-                ss << p.coords[j];
+                detail::append_double(out, static_cast<double>(p.coords[j]), precision);
             }
-            ss << "]";
+            out += ']';
             ++i;
         }
-        ss << "]}";
-        return ss.str();
+        out += "]}";
     }
 
     // wkt
@@ -310,40 +312,43 @@ class basic_linestring : public std::vector<T, AllocatorType>, public basic_geom
     /// @private
     std::string wkt_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        if (precision >= 0)
-        {
-            ss << std::setprecision(precision);
-        }
-        ss << "LINESTRING";
+        std::string out;
+        out.reserve(32 + this->size() * this->ndim() * 12);
+        write_wkt_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_wkt_(std::string& out, std::int32_t precision) const
+    {
+        out += "LINESTRING";
         if (this->has_z())
         {
-            ss << "Z";
+            out += 'Z';
         }
         if (this->has_m())
         {
-            ss << "M";
+            out += 'M';
         }
-        ss << "(";
+        out += '(';
         int i = 0;
         for (const auto& p : *this)
         {
             if (i > 0)
             {
-                ss << ",";
+                out += ',';
             }
             for (size_t j = 0; j < p.size(); ++j)
             {
                 if (j > 0)
                 {
-                    ss << " ";
+                    out += ' ';
                 }
-                ss << p.coords[j];
+                detail::append_double(out, static_cast<double>(p.coords[j]), precision);
             }
             ++i;
         }
-        ss << ")";
-        return ss.str();
+        out += ')';
     }
 };
 

@@ -3,7 +3,10 @@
 #include <algorithm>
 #include <ciso646>
 #include <cctype>
+#include <utility>
 #include <simo/geom/geometry.hpp>
+#include <simo/geom/detail/wkt_util.hpp>
+#include <simo/detail/number_util.hpp>
 #include <simo/exceptions.hpp>
 #include <simo/io/wkt_parser.hpp>
 #include <simo/io/wkt_lexer.hpp>
@@ -35,7 +38,27 @@ class wkt_reader
     /// destructor
     ~wkt_reader()
     {
-        ParseFree(m_parser, free);
+        if (m_parser != nullptr)
+        {
+            ParseFree(m_parser, free);
+        }
+    }
+
+    wkt_reader(const wkt_reader&) = delete;
+    wkt_reader& operator=(const wkt_reader&) = delete;
+
+    /// move constructor
+    wkt_reader(wkt_reader&& other) noexcept
+        : m_parser(other.m_parser)
+    {
+        other.m_parser = nullptr;
+    }
+
+    /// move assignment
+    wkt_reader& operator=(wkt_reader&& other) noexcept
+    {
+        std::swap(m_parser, other.m_parser);
+        return *this;
     }
 
     /*!
@@ -73,7 +96,7 @@ class wkt_reader
 
             if (token == WKT_NUM)
             {
-                Parse(m_parser, token, std::stod(lexer.get_token()), &result);
+                Parse(m_parser, token, detail::parse_double(lexer.get_token().c_str()), &result);
             }
             else
             {
@@ -96,21 +119,6 @@ class wkt_reader
     }
 
   private:
-    static std::string compact_upper(const std::string& text)
-    {
-        std::string res;
-        res.reserve(text.size());
-        for (char c : text)
-        {
-            if (std::isspace(static_cast<unsigned char>(c)))
-            {
-                continue;
-            }
-            res.push_back(static_cast<char>(std::toupper(static_cast<unsigned char>(c))));
-        }
-        return res;
-    }
-
     static std::vector<std::size_t> multipolygon_polygon_offsets(const std::string& wkt)
     {
         std::vector<std::size_t> res;
@@ -147,9 +155,8 @@ class wkt_reader
     static void normalize_result(const std::string& wkt, wkt_result& result)
     {
         auto& data = result.data;
-        const auto compact = compact_upper(wkt);
 
-        if (utils::is_point(data.geom_type) and compact.find("EMPTY") != std::string::npos)
+        if (utils::is_point(data.geom_type) and detail::wkt_contains_empty(wkt))
         {
             data.coords.clear();
         }

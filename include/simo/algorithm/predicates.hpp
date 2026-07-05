@@ -63,6 +63,13 @@ bool bounds_intersect(const Bounds1& b1, const Bounds2& b2)
 template <typename LineString1, typename LineString2>
 bool intersects(const LineString1& ls1, const LineString2& ls2)
 {
+    // A linestring needs at least two points to form a segment; this also keeps the
+    // loops below from underflowing on empty inputs
+    if (ls1.size() < 2 || ls2.size() < 2)
+    {
+        return false;
+    }
+
     // Quick rejection test using bounding boxes
     auto b1 = ls1.bounds();
     auto b2 = ls2.bounds();
@@ -72,9 +79,9 @@ bool intersects(const LineString1& ls1, const LineString2& ls2)
     }
 
     // Test all segment pairs
-    for (size_t i = 0; i < ls1.size() - 1; ++i)
+    for (size_t i = 0; i + 1 < ls1.size(); ++i)
     {
-        for (size_t j = 0; j < ls2.size() - 1; ++j)
+        for (size_t j = 0; j + 1 < ls2.size(); ++j)
         {
             if (detail::segments_intersect(ls1[i], ls1[i + 1], ls2[j], ls2[j + 1]))
             {
@@ -195,9 +202,7 @@ bool crosses(const LineString& ls, const Polygon& polygon)
             {
                 // Found intersection with boundary
                 // Check if segment midpoint is inside polygon
-                typename LineString::value_type midpoint;
-                midpoint.x = (p1.x + p2.x) / 2;
-                midpoint.y = (p1.y + p2.y) / 2;
+                typename LineString::value_type midpoint{(p1.x + p2.x) / 2, (p1.y + p2.y) / 2};
 
                 if (contains(polygon, midpoint))
                 {
@@ -211,19 +216,17 @@ bool crosses(const LineString& ls, const Polygon& polygon)
 }
 
 //
-// OVERLAPS
+// BOUNDS OVERLAP
 //
 
-/*! @brief Test if two geometries overlap (share some but not all interior points) */
+/*! @brief Test if the bounding boxes of two geometries intersect
+ *  @note this is only a bounding-box test, not the OGC overlaps predicate */
 template <typename Geom1, typename Geom2>
-bool overlaps(const Geom1& g1, const Geom2& g2)
+bool bounds_overlap(const Geom1& g1, const Geom2& g2)
 {
-    // Quick rejection: check bounding boxes
     auto b1 = g1.bounds();
     auto b2 = g2.bounds();
     return bounds_intersect(b1, b2);
-    // Note: Full overlap test requires more complex logic
-    // This is a simplified implementation
 }
 
 }  // namespace algorithm

@@ -31,3 +31,24 @@ TEST_CASE("Polyline")
         CHECK(coords[5] == 43.252);
     }
 }
+TEST_CASE("Polyline - edge cases")
+{
+    SECTION("tiny negative value rounds to zero and encodes like zero")
+    {
+        CHECK(polyline::encode(-1e-9) == polyline::encode(0.0));
+    }
+
+    SECTION("negative deltas round-trip")
+    {
+        std::string encoded = polyline::encode(-179.9832104);
+        size_t index        = 0;
+        auto decoded        = polyline::advance(encoded, index);
+        CHECK(decoded == -17998321);
+    }
+
+    SECTION("from_polyline rejects truncated input")
+    {
+        CHECK_THROWS_AS(Point::from_polyline(""), exceptions::parse_error);
+        CHECK_THROWS_AS(Point::from_polyline("_p~iF~ps|U_ulLnnqC"), exceptions::parse_error);
+    }
+}

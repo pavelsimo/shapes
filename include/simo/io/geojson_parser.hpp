@@ -10,6 +10,7 @@
 #include <cctype>
 #include <cmath>
 #include <sstream>
+#include <simo/detail/number_util.hpp>
 
 namespace simo
 {
@@ -220,6 +221,33 @@ class geojson_parser
     const char* pos_;
     const char* end_;
 
+    // Maximum nesting depth for arrays/objects, guards against stack overflow on hostile input
+    static constexpr int MAX_DEPTH = 512;
+    int depth_ = 0;
+
+    struct depth_guard
+    {
+        explicit depth_guard(int& depth)
+            : depth_(depth)
+        {
+            if (++depth_ > MAX_DEPTH)
+            {
+                throw geojson_parse_error("nesting too deep");
+            }
+        }
+
+        ~depth_guard()
+        {
+            --depth_;
+        }
+
+        depth_guard(const depth_guard&) = delete;
+        depth_guard& operator=(const depth_guard&) = delete;
+
+      private:
+        int& depth_;
+    };
+
     // Skip whitespace
     void skip_whitespace()
     {
@@ -276,6 +304,31 @@ class geojson_parser
                     case 't':
                         result += '\t';
                         break;
+                    case 'u':
+                    {
+                        unsigned int cp = parse_hex4();
+                        if (cp >= 0xD800u && cp <= 0xDBFFu)
+                        {
+                            // high surrogate, must be followed by a low surrogate escape
+                            if (end_ - pos_ < 6 || pos_[0] != '\\' || pos_[1] != 'u')
+                            {
+                                throw geojson_parse_error("invalid unicode surrogate pair");
+                            }
+                            pos_ += 2;
+                            unsigned int low = parse_hex4();
+                            if (low < 0xDC00u || low > 0xDFFFu)
+                            {
+                                throw geojson_parse_error("invalid unicode surrogate pair");
+                            }
+                            cp = 0x10000u + ((cp - 0xD800u) << 10) + (low - 0xDC00u);
+                        }
+                        else if (cp >= 0xDC00u && cp <= 0xDFFFu)
+                        {
+                            throw geojson_parse_error("invalid unicode surrogate pair");
+                        }
+                        append_utf8(result, cp);
+                        break;
+                    }
                     default:
                         throw geojson_parse_error("invalid escape sequence");
                 }
@@ -287,6 +340,65 @@ class geojson_parser
         }
 
         throw geojson_parse_error("unterminated string");
+    }
+
+    // Parse 4 hexadecimal digits of a \uXXXX escape
+    unsigned int parse_hex4()
+    {
+        if (end_ - pos_ < 4)
+        {
+            throw geojson_parse_error("invalid unicode escape");
+        }
+        unsigned int cp = 0;
+        for (int i = 0; i < 4; ++i)
+        {
+            char c = *pos_++;
+            cp <<= 4;
+            if (c >= '0' && c <= '9')
+            {
+                cp += static_cast<unsigned int>(c - '0');
+            }
+            else if (c >= 'a' && c <= 'f')
+            {
+                cp += static_cast<unsigned int>(c - 'a' + 10);
+            }
+            else if (c >= 'A' && c <= 'F')
+            {
+                cp += static_cast<unsigned int>(c - 'A' + 10);
+            }
+            else
+            {
+                throw geojson_parse_error("invalid unicode escape");
+            }
+        }
+        return cp;
+    }
+
+    // Append a unicode code point to the string as UTF-8
+    static void append_utf8(std::string& out, unsigned int cp)
+    {
+        if (cp <= 0x7Fu)
+        {
+            out += static_cast<char>(cp);
+        }
+        else if (cp <= 0x7FFu)
+        {
+            out += static_cast<char>(0xC0u | (cp >> 6));
+            out += static_cast<char>(0x80u | (cp & 0x3Fu));
+        }
+        else if (cp <= 0xFFFFu)
+        {
+            out += static_cast<char>(0xE0u | (cp >> 12));
+            out += static_cast<char>(0x80u | ((cp >> 6) & 0x3Fu));
+            out += static_cast<char>(0x80u | (cp & 0x3Fu));
+        }
+        else
+        {
+            out += static_cast<char>(0xF0u | (cp >> 18));
+            out += static_cast<char>(0x80u | ((cp >> 12) & 0x3Fu));
+            out += static_cast<char>(0x80u | ((cp >> 6) & 0x3Fu));
+            out += static_cast<char>(0x80u | (cp & 0x3Fu));
+        }
     }
 
     // Parse a number
@@ -343,9 +455,12 @@ class geojson_parser
             }
         }
 
-        // Convert to double
-        std::string num_str(start, pos_);
-        return std::stod(num_str);
+        // Convert in place from the source buffer, the extent was validated above and the
+        // buffer is null-terminated (std::string::data)
+        char* parse_end = nullptr;
+        double value    = simo::shapes::detail::parse_double(start, &parse_end);
+        pos_            = parse_end;
+        return value;
     }
 
     // Parse an array
@@ -466,9 +581,11 @@ class geojson_parser
         return geojson_value(std::move(obj));
     }
 
-    // Parse a value (recursive)
+    // Parse a value (recursive, depth-limited)
     geojson_value parse_value()
     {
+        depth_guard guard(depth_);
+
         skip_whitespace();
 
         if (pos_ >= end_)

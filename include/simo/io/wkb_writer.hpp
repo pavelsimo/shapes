@@ -165,6 +165,7 @@ class wkb_writer
     {
         const auto kind = output_kind(multipoint.geom_type());
         write_header(multipoint.geom_type(), kind);
+        reserve_hint(4 + multipoint.size() * (5 + dimension_size(kind) * 8));
         write_count(multipoint.size());
         for (const auto& point : multipoint)
         {
@@ -185,6 +186,7 @@ class wkb_writer
     {
         const auto kind = output_kind(multilinestring.geom_type());
         write_header(multilinestring.geom_type(), kind);
+        reserve_hint(4 + multilinestring.size() * 9);
         write_count(multilinestring.size());
         for (const auto& linestring : multilinestring)
         {
@@ -205,6 +207,7 @@ class wkb_writer
     {
         const auto kind = output_kind(multipolygon.geom_type());
         write_header(multipolygon.geom_type(), kind);
+        reserve_hint(4 + multipolygon.size() * 9);
         write_count(multipolygon.size());
         for (const auto& polygon : multipolygon)
         {
@@ -217,6 +220,7 @@ class wkb_writer
     {
         const auto kind = output_kind(collection.geom_type());
         write_header(collection.geom_type(), kind);
+        reserve_hint(4 + collection.size() * 9);
         write_count(collection.size());
         for (const auto& geometry : collection)
         {
@@ -328,6 +332,18 @@ class wkb_writer
     std::vector<std::uint8_t> bytes() const
     {
         return bytes_;
+    }
+
+    /// moves the output buffer out of the writer, avoiding a copy
+    std::vector<std::uint8_t> take()
+    {
+        return std::move(bytes_);
+    }
+
+    /// grows the output buffer capacity by the given number of bytes
+    void reserve_hint(std::size_t additional)
+    {
+        bytes_.reserve(bytes_.size() + additional);
     }
 
   private:
@@ -488,6 +504,7 @@ class wkb_writer
     template <typename LineStringType>
     void write_linestring_coordinates(const LineStringType& linestring, wkb_dimension_kind kind)
     {
+        reserve_hint(4 + linestring.size() * dimension_size(kind) * 8);
         write_count(linestring.size());
         for (const auto& point : linestring)
         {
@@ -510,8 +527,9 @@ template <typename Geometry>
 std::vector<std::uint8_t> write_wkb(const Geometry& geometry, const wkb_options& options)
 {
     wkb_writer writer(options);
+    writer.reserve_hint(64);
     writer.write_geometry(geometry);
-    return writer.bytes();
+    return writer.take();
 }
 
 }  // namespace detail

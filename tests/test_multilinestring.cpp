@@ -647,3 +647,28 @@ TEST_CASE("MultiLineString")
         }
     }
 }
+
+TEST_CASE("MultiLineString is_closed and bounds")
+{
+    SECTION("first linestring equals last")
+    {
+        auto ml = multilinestring{{{0, 0}, {1, 1}}, {{2, 2}, {3, 3}}, {{0, 0}, {1, 1}}};
+        CHECK(ml.is_closed());
+    }
+
+    SECTION("first linestring differs from last")
+    {
+        auto ml = multilinestring{{{0, 0}, {1, 1}}, {{2, 2}, {3, 3}}};
+        CHECK_FALSE(ml.is_closed());
+    }
+
+    SECTION("bounds cover all child linestrings")
+    {
+        auto ml = multilinestring{{{-5, -6}, {1, 1}}, {{2, 2}, {7, 8}}};
+        auto b  = ml.bounds();
+        CHECK(b.minx == -5.0);
+        CHECK(b.miny == -6.0);
+        CHECK(b.maxx == 7.0);
+        CHECK(b.maxy == 8.0);
+    }
+}

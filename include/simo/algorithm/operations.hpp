@@ -53,16 +53,28 @@ Polygon convex_hull(const MultiPoint& points)
     Point pivot = *lowest;
 
     // Sort points by polar angle with respect to pivot
+    auto squared_distance = [](const Point& a, const Point& b) {
+        auto dx = b.x - a.x;
+        auto dy = b.y - a.y;
+        return dx * dx + dy * dy;
+    };
     std::sort(pts.begin(), pts.end(),
-              [&pivot](const Point& a, const Point& b) {
-                  if (a.x == pivot.x && a.y == pivot.y) return true;
-                  if (b.x == pivot.x && b.y == pivot.y) return false;
+              [&pivot, &squared_distance](const Point& a, const Point& b) {
+                  // pivot duplicates must be handled symmetrically to keep the
+                  // comparator a strict weak ordering (comp(x, x) must be false)
+                  bool a_is_pivot = a.x == pivot.x && a.y == pivot.y;
+                  bool b_is_pivot = b.x == pivot.x && b.y == pivot.y;
+                  if (a_is_pivot || b_is_pivot)
+                  {
+                      return a_is_pivot && !b_is_pivot;
+                  }
 
                   int o = detail::orient2d(pivot, a, b);
                   if (o == 0)
                   {
-                      // Collinear: closer point comes first
-                      return distance(pivot, a) < distance(pivot, b);
+                      // Collinear: closer point comes first, squared distance is
+                      // monotonic so the sqrt can be skipped
+                      return squared_distance(pivot, a) < squared_distance(pivot, b);
                   }
                   return o > 0;  // Counter-clockwise comes first
               });
@@ -137,16 +149,12 @@ auto perpendicular_distance(const Point& point, const Point& line_start, const P
     }
 }
 
-/*! @brief Recursive Douglas-Peucker simplification */
+/*! @brief Iterative Douglas-Peucker simplification, an explicit work stack keeps the
+ *         worst-case memory bounded instead of recursing once per point */
 template <typename Point>
 void douglas_peucker_recursive(const std::vector<Point>& points, size_t start, size_t end,
                                  double tolerance, std::vector<bool>& keep)
 {
-    if (end - start < 2)
-    {
-        return;
-    }
-
     // Special case: tolerance of 0 means keep all points
     if (tolerance == 0)
     {
@@ -157,26 +165,37 @@ void douglas_peucker_recursive(const std::vector<Point>& points, size_t start, s
         return;
     }
 
-    double max_dist = 0;
-    size_t max_index = start;
-
-    // Find point with maximum distance from line segment
-    for (size_t i = start + 1; i < end; ++i)
+    std::vector<std::pair<size_t, size_t>> stack;
+    stack.emplace_back(start, end);
+    while (!stack.empty())
     {
-        double dist = perpendicular_distance(points[i], points[start], points[end]);
-        if (dist > max_dist)
+        auto range = stack.back();
+        stack.pop_back();
+        if (range.second - range.first < 2)
         {
-            max_dist = dist;
-            max_index = i;
+            continue;
         }
-    }
 
-    // If max distance is greater than tolerance, recursively simplify
-    if (max_dist > tolerance)
-    {
-        keep[max_index] = true;
-        douglas_peucker_recursive(points, start, max_index, tolerance, keep);
-        douglas_peucker_recursive(points, max_index, end, tolerance, keep);
+        double max_dist = 0;
+        size_t max_index = range.first;
+
+        // Find point with maximum distance from line segment
+        for (size_t i = range.first + 1; i < range.second; ++i)
+        {
+            double dist = perpendicular_distance(points[i], points[range.first], points[range.second]);
+            if (dist > max_dist)
+            {
+                max_dist = dist;
+                max_index = i;
+            }
+        }
+
+        if (max_dist > tolerance)
+        {
+            keep[max_index] = true;
+            stack.emplace_back(range.first, max_index);
+            stack.emplace_back(max_index, range.second);
+        }
     }
 }
 
@@ -258,7 +277,7 @@ Point centroid(const Polygon& polygon)
     typename Point::coord_type cy = 0;
     typename Point::coord_type signed_area = 0;
 
-    for (size_t i = 0; i < ring.size() - 1; ++i)
+    for (size_t i = 0; i + 1 < ring.size(); ++i)
     {
         auto x0 = ring[i].x;
         auto y0 = ring[i].y;
@@ -271,6 +290,19 @@ Point centroid(const Polygon& polygon)
     }
 
     signed_area *= 0.5;
+    if (signed_area == 0)
+    {
+        // degenerate ring (collinear or repeated points): fall back to the vertex mean
+        typename Point::coord_type sx = 0;
+        typename Point::coord_type sy = 0;
+        for (const auto& p : ring)
+        {
+            sx += p.x;
+            sy += p.y;
+        }
+        auto n = static_cast<typename Point::coord_type>(ring.size());
+        return Point{sx / n, sy / n};
+    }
     cx /= (6.0 * signed_area);
     cy /= (6.0 * signed_area);
 

@@ -3,10 +3,9 @@
 #include <ciso646>
 #include <vector>
 #include <set>
-#include <sstream>
 #include <iterator>
-#include <iomanip>
 #include <simo/geom/detail/geometry.hpp>
+#include <simo/detail/number_util.hpp>
 #include <simo/geom/detail/bounds.hpp>
 
 namespace simo
@@ -124,7 +123,7 @@ class basic_multilinestring
         {
             return true;
         }
-        return *this[0] == *this[this->size() - 1];
+        return (*this)[0] == (*this)[this->size() - 1];
     }
 
     /// @private
@@ -140,9 +139,9 @@ class basic_multilinestring
     bounds_t bounds_() const
     {
         bounds_t res{};
-        for (const auto& p : *this)
+        for (const auto& ls : *this)
         {
-            res.extend(p.x, p.y);
+            res.extend(ls.bounds());
         }
         return res;
     }
@@ -193,44 +192,46 @@ class basic_multilinestring
     /// @private
     std::string json_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        if (precision >= 0)
-        {
-            ss << std::setprecision(precision);
-        }
-        ss << "{\"type\":\"MultiLineString\",\"coordinates\":[";
-        int i = 0;
+        std::string out;
+        out.reserve(64);
+        write_json_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_json_(std::string& out, std::int32_t precision) const
+    {
+        out += "{\"type\":\"MultiLineString\",\"coordinates\":[";
+        size_t i = 0;
         for (const auto& ls : *this)
         {
             if (i > 0)
             {
-                ss << ",";
+                out += ',';
             }
-            ss << "[";
+            out += '[';
             for (size_t j = 0; j < ls.size(); ++j)
             {
                 if (j > 0)
                 {
-                    ss << ",";
+                    out += ',';
                 }
-                ss << "[";
+                out += '[';
                 const auto& p = ls[j];
                 for (size_t k = 0; k < p.size(); ++k)
                 {
                     if (k > 0)
                     {
-                        ss << ",";
+                        out += ',';
                     }
-                    ss << p.coords[k];
+                    detail::append_double(out, static_cast<double>(p.coords[k]), precision);
                 }
-                ss << "]";
-                ++i;
+                out += ']';
             }
-            ss << "]";
+            out += ']';
             ++i;
         }
-        ss << "]}";
-        return ss.str();
+        out += "]}";
     }
 
     // wkt
@@ -252,50 +253,53 @@ class basic_multilinestring
     /// @private
     std::string wkt_(std::int32_t precision = -1) const
     {
-        std::stringstream ss;
-        if (precision >= 0)
-        {
-            ss << std::setprecision(precision);
-        }
-        ss << "MULTILINESTRING";
+        std::string out;
+        out.reserve(64);
+        write_wkt_(out, precision);
+        return out;
+    }
+
+    /// @private
+    void write_wkt_(std::string& out, std::int32_t precision) const
+    {
+        out += "MULTILINESTRING";
         if (this->has_z())
         {
-            ss << "Z";
+            out += 'Z';
         }
         if (this->has_m())
         {
-            ss << "M";
+            out += 'M';
         }
-        ss << "(";
-        int i = 0;
+        out += '(';
+        size_t i = 0;
         for (const auto& ls : *this)
         {
             if (i > 0)
             {
-                ss << ",";
+                out += ',';
             }
-            ss << "(";
+            out += '(';
             for (size_t j = 0; j < ls.size(); ++j)
             {
                 if (j > 0)
                 {
-                    ss << ",";
+                    out += ',';
                 }
                 const auto& p = ls[j];
                 for (size_t k = 0; k < p.size(); ++k)
                 {
                     if (k > 0)
                     {
-                        ss << " ";
+                        out += ' ';
                     }
-                    ss << p.coords[k];
+                    detail::append_double(out, static_cast<double>(p.coords[k]), precision);
                 }
             }
-            ss << ")";
+            out += ')';
             ++i;
         }
-        ss << ")";
-        return ss.str();
+        out += ')';
     }
 };
 
