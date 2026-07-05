@@ -31,18 +31,18 @@
             <td class="headerValue">coverage.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntryMed">76.1&nbsp;%</td>
-            <td class="headerCovTableEntry">117</td>
-            <td class="headerCovTableEntry">89</td>
+            <td class="headerCovTableEntryMed">78.1&nbsp;%</td>
+            <td class="headerCovTableEntry">128</td>
+            <td class="headerCovTableEntry">100</td>
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-06-07 17:53:22</td>
+            <td class="headerValue">2026-07-05 16:03:15</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntryHi">92.2&nbsp;%</td>
-            <td class="headerCovTableEntry">268</td>
-            <td class="headerCovTableEntry">247</td>
+            <td class="headerCovTableEntryMed">80.9&nbsp;%</td>
+            <td class="headerCovTableEntry">376</td>
+            <td class="headerCovTableEntry">304</td>
           </tr>
                   <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
                 </table>
@@ -101,9 +101,9 @@
 <span id="L39"><span class="lineNum">      39</span>              :      *</span>
 <span id="L40"><span class="lineNum">      40</span>              :      * @since 0.0.1</span>
 <span id="L41"><span class="lineNum">      41</span>              :      */</span>
-<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC tlaBgGNC">        2454 :     constexpr geometry_type geom_type() const noexcept</span></span>
+<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC tlaBgGNC">        2452 :     constexpr geometry_type geom_type() const noexcept</span></span>
 <span id="L43"><span class="lineNum">      43</span>              :     {</span>
-<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">        2454 :         return static_cast&lt;const T*&gt;(this)-&gt;geom_type_();</span></span>
+<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">        2452 :         return static_cast&lt;const T*&gt;(this)-&gt;geom_type_();</span></span>
 <span id="L45"><span class="lineNum">      45</span>              :     }</span>
 <span id="L46"><span class="lineNum">      46</span>              : </span>
 <span id="L47"><span class="lineNum">      47</span>              :     /*!</span>
@@ -183,22 +183,22 @@
 <span id="L121"><span class="lineNum">     121</span>              :      *</span>
 <span id="L122"><span class="lineNum">     122</span>              :      * @since 0.0.1</span>
 <span id="L123"><span class="lineNum">     123</span>              :      */</span>
-<span id="L124"><span class="lineNum">     124</span> <span class="tlaGNC tlaBgGNC">        2027 :     constexpr dimension_type dim() const noexcept</span></span>
+<span id="L124"><span class="lineNum">     124</span> <span class="tlaGNC tlaBgGNC">        2071 :     constexpr dimension_type dim() const noexcept</span></span>
 <span id="L125"><span class="lineNum">     125</span>              :     {</span>
-<span id="L126"><span class="lineNum">     126</span> <span class="tlaGNC">        2027 :         int value = static_cast&lt;int&gt;(geom_type());</span></span>
-<span id="L127"><span class="lineNum">     127</span> <span class="tlaGNC">        2027 :         if (value &gt;= 1000 and value &lt; 2000)</span></span>
+<span id="L126"><span class="lineNum">     126</span> <span class="tlaGNC">        2071 :         int value = static_cast&lt;int&gt;(geom_type());</span></span>
+<span id="L127"><span class="lineNum">     127</span> <span class="tlaGNC">        2071 :         if (value &gt;= 1000 and value &lt; 2000)</span></span>
 <span id="L128"><span class="lineNum">     128</span>              :         {</span>
-<span id="L129"><span class="lineNum">     129</span> <span class="tlaGNC">         401 :             return dimension_type::XYZ;</span></span>
+<span id="L129"><span class="lineNum">     129</span> <span class="tlaGNC">         407 :             return dimension_type::XYZ;</span></span>
 <span id="L130"><span class="lineNum">     130</span>              :         }</span>
-<span id="L131"><span class="lineNum">     131</span> <span class="tlaGNC">        1626 :         if (value &gt;= 2000 and value &lt; 3000)</span></span>
+<span id="L131"><span class="lineNum">     131</span> <span class="tlaGNC">        1664 :         if (value &gt;= 2000 and value &lt; 3000)</span></span>
 <span id="L132"><span class="lineNum">     132</span>              :         {</span>
-<span id="L133"><span class="lineNum">     133</span> <span class="tlaGNC">         391 :             return dimension_type::XYM;</span></span>
+<span id="L133"><span class="lineNum">     133</span> <span class="tlaGNC">         395 :             return dimension_type::XYM;</span></span>
 <span id="L134"><span class="lineNum">     134</span>              :         }</span>
-<span id="L135"><span class="lineNum">     135</span> <span class="tlaGNC">        1235 :         if (value &gt;= 3000)</span></span>
+<span id="L135"><span class="lineNum">     135</span> <span class="tlaGNC">        1269 :         if (value &gt;= 3000)</span></span>
 <span id="L136"><span class="lineNum">     136</span>              :         {</span>
-<span id="L137"><span class="lineNum">     137</span> <span class="tlaGNC">         550 :             return dimension_type::XYZM;</span></span>
+<span id="L137"><span class="lineNum">     137</span> <span class="tlaGNC">         554 :             return dimension_type::XYZM;</span></span>
 <span id="L138"><span class="lineNum">     138</span>              :         }</span>
-<span id="L139"><span class="lineNum">     139</span> <span class="tlaGNC">         685 :         return dimension_type::XY;</span></span>
+<span id="L139"><span class="lineNum">     139</span> <span class="tlaGNC">         715 :         return dimension_type::XY;</span></span>
 <span id="L140"><span class="lineNum">     140</span>              :     }</span>
 <span id="L141"><span class="lineNum">     141</span>              : </span>
 <span id="L142"><span class="lineNum">     142</span>              :     /*!</span>
@@ -208,17 +208,17 @@
 <span id="L146"><span class="lineNum">     146</span>              :      *</span>
 <span id="L147"><span class="lineNum">     147</span>              :      * @since 0.0.1</span>
 <span id="L148"><span class="lineNum">     148</span>              :      */</span>
-<span id="L149"><span class="lineNum">     149</span> <span class="tlaGNC">        1929 :     constexpr size_t ndim() const noexcept</span></span>
+<span id="L149"><span class="lineNum">     149</span> <span class="tlaGNC">        1972 :     constexpr size_t ndim() const noexcept</span></span>
 <span id="L150"><span class="lineNum">     150</span>              :     {</span>
-<span id="L151"><span class="lineNum">     151</span> <span class="tlaGNC">        1929 :         switch (dim())</span></span>
+<span id="L151"><span class="lineNum">     151</span> <span class="tlaGNC">        1972 :         switch (dim())</span></span>
 <span id="L152"><span class="lineNum">     152</span>              :         {</span>
-<span id="L153"><span class="lineNum">     153</span> <span class="tlaGNC">         525 :             case dimension_type::XYZM:</span></span>
-<span id="L154"><span class="lineNum">     154</span> <span class="tlaGNC">         525 :                 return 4;</span></span>
-<span id="L155"><span class="lineNum">     155</span> <span class="tlaGNC">         748 :             case dimension_type::XYZ:</span></span>
+<span id="L153"><span class="lineNum">     153</span> <span class="tlaGNC">         529 :             case dimension_type::XYZM:</span></span>
+<span id="L154"><span class="lineNum">     154</span> <span class="tlaGNC">         529 :                 return 4;</span></span>
+<span id="L155"><span class="lineNum">     155</span> <span class="tlaGNC">         757 :             case dimension_type::XYZ:</span></span>
 <span id="L156"><span class="lineNum">     156</span>              :             case dimension_type::XYM:</span>
-<span id="L157"><span class="lineNum">     157</span> <span class="tlaGNC">         748 :                 return 3;</span></span>
-<span id="L158"><span class="lineNum">     158</span> <span class="tlaGNC">         656 :             default:</span></span>
-<span id="L159"><span class="lineNum">     159</span> <span class="tlaGNC">         656 :                 return 2;</span></span>
+<span id="L157"><span class="lineNum">     157</span> <span class="tlaGNC">         757 :                 return 3;</span></span>
+<span id="L158"><span class="lineNum">     158</span> <span class="tlaGNC">         686 :             default:</span></span>
+<span id="L159"><span class="lineNum">     159</span> <span class="tlaGNC">         686 :                 return 2;</span></span>
 <span id="L160"><span class="lineNum">     160</span>              :         }</span>
 <span id="L161"><span class="lineNum">     161</span>              :     }</span>
 <span id="L162"><span class="lineNum">     162</span>              : </span>
@@ -228,9 +228,9 @@
 <span id="L166"><span class="lineNum">     166</span>              :      *</span>
 <span id="L167"><span class="lineNum">     167</span>              :      * @since 0.0.1</span>
 <span id="L168"><span class="lineNum">     168</span>              :      */</span>
-<span id="L169"><span class="lineNum">     169</span> <span class="tlaGNC">          29 :     void throw_for_invalid() const</span></span>
+<span id="L169"><span class="lineNum">     169</span> <span class="tlaGNC">          32 :     void throw_for_invalid() const</span></span>
 <span id="L170"><span class="lineNum">     170</span>              :     {</span>
-<span id="L171"><span class="lineNum">     171</span> <span class="tlaGNC">          29 :         return static_cast&lt;const T*&gt;(this)-&gt;throw_for_invalid_();</span></span>
+<span id="L171"><span class="lineNum">     171</span> <span class="tlaGNC">          32 :         return static_cast&lt;const T*&gt;(this)-&gt;throw_for_invalid_();</span></span>
 <span id="L172"><span class="lineNum">     172</span>              :     }</span>
 <span id="L173"><span class="lineNum">     173</span>              : </span>
 <span id="L174"><span class="lineNum">     174</span>              :     /*!</span>
@@ -239,9 +239,9 @@
 <span id="L177"><span class="lineNum">     177</span>              :      *</span>
 <span id="L178"><span class="lineNum">     178</span>              :      * @since 0.0.1</span>
 <span id="L179"><span class="lineNum">     179</span>              :      */</span>
-<span id="L180"><span class="lineNum">     180</span> <span class="tlaGNC">          13 :     bool is_closed() const noexcept</span></span>
+<span id="L180"><span class="lineNum">     180</span> <span class="tlaGNC">          24 :     bool is_closed() const noexcept</span></span>
 <span id="L181"><span class="lineNum">     181</span>              :     {</span>
-<span id="L182"><span class="lineNum">     182</span> <span class="tlaGNC">          13 :         return static_cast&lt;const T*&gt;(this)-&gt;is_closed_();</span></span>
+<span id="L182"><span class="lineNum">     182</span> <span class="tlaGNC">          24 :         return static_cast&lt;const T*&gt;(this)-&gt;is_closed_();</span></span>
 <span id="L183"><span class="lineNum">     183</span>              :     }</span>
 <span id="L184"><span class="lineNum">     184</span>              : </span>
 <span id="L185"><span class="lineNum">     185</span>              :     /*!</span>
@@ -250,17 +250,17 @@
 <span id="L188"><span class="lineNum">     188</span>              :      *</span>
 <span id="L189"><span class="lineNum">     189</span>              :      * @since 0.0.1</span>
 <span id="L190"><span class="lineNum">     190</span>              :      */</span>
-<span id="L191"><span class="lineNum">     191</span>              :     bool is_valid() const noexcept</span>
+<span id="L191"><span class="lineNum">     191</span> <span class="tlaGNC">           2 :     bool is_valid() const noexcept</span></span>
 <span id="L192"><span class="lineNum">     192</span>              :     {</span>
 <span id="L193"><span class="lineNum">     193</span>              :         try</span>
 <span id="L194"><span class="lineNum">     194</span>              :         {</span>
-<span id="L195"><span class="lineNum">     195</span>              :             throw_for_invalid();</span>
+<span id="L195"><span class="lineNum">     195</span> <span class="tlaGNC">           2 :             throw_for_invalid();</span></span>
 <span id="L196"><span class="lineNum">     196</span>              :         }</span>
-<span id="L197"><span class="lineNum">     197</span>              :         catch (const exceptions::geometry_error&amp; e)</span>
+<span id="L197"><span class="lineNum">     197</span> <span class="tlaGNC">           1 :         catch (const exceptions::geometry_error&amp; e)</span></span>
 <span id="L198"><span class="lineNum">     198</span>              :         {</span>
-<span id="L199"><span class="lineNum">     199</span>              :             return false;</span>
+<span id="L199"><span class="lineNum">     199</span> <span class="tlaGNC">           1 :             return false;</span></span>
 <span id="L200"><span class="lineNum">     200</span>              :         }</span>
-<span id="L201"><span class="lineNum">     201</span>              :         return true;</span>
+<span id="L201"><span class="lineNum">     201</span> <span class="tlaGNC">           1 :         return true;</span></span>
 <span id="L202"><span class="lineNum">     202</span>              :     }</span>
 <span id="L203"><span class="lineNum">     203</span>              : </span>
 <span id="L204"><span class="lineNum">     204</span>              :     /*!</span>
@@ -269,9 +269,9 @@
 <span id="L207"><span class="lineNum">     207</span>              :      *</span>
 <span id="L208"><span class="lineNum">     208</span>              :      * @since 0.0.1</span>
 <span id="L209"><span class="lineNum">     209</span>              :      */</span>
-<span id="L210"><span class="lineNum">     210</span> <span class="tlaGNC">          47 :     bounds_t bounds() const</span></span>
+<span id="L210"><span class="lineNum">     210</span> <span class="tlaGNC">          49 :     bounds_t bounds() const</span></span>
 <span id="L211"><span class="lineNum">     211</span>              :     {</span>
-<span id="L212"><span class="lineNum">     212</span> <span class="tlaGNC">          47 :         return static_cast&lt;const T*&gt;(this)-&gt;bounds_();</span></span>
+<span id="L212"><span class="lineNum">     212</span> <span class="tlaGNC">          49 :         return static_cast&lt;const T*&gt;(this)-&gt;bounds_();</span></span>
 <span id="L213"><span class="lineNum">     213</span>              :     }</span>
 <span id="L214"><span class="lineNum">     214</span>              : </span>
 <span id="L215"><span class="lineNum">     215</span>              :     /*!</span>
@@ -280,10 +280,10 @@
 <span id="L218"><span class="lineNum">     218</span>              :      *</span>
 <span id="L219"><span class="lineNum">     219</span>              :      * @since 0.0.1</span>
 <span id="L220"><span class="lineNum">     220</span>              :      */</span>
-<span id="L221"><span class="lineNum">     221</span> <span class="tlaGNC">          58 :     constexpr bool has_z() const noexcept</span></span>
+<span id="L221"><span class="lineNum">     221</span> <span class="tlaGNC">          63 :     constexpr bool has_z() const noexcept</span></span>
 <span id="L222"><span class="lineNum">     222</span>              :     {</span>
-<span id="L223"><span class="lineNum">     223</span> <span class="tlaGNC">          58 :         int value = static_cast&lt;int&gt;(geom_type());</span></span>
-<span id="L224"><span class="lineNum">     224</span> <span class="tlaGNC">          58 :         return (value &gt;= 1000 and value &lt; 2000) or value &gt;= 3000;</span></span>
+<span id="L223"><span class="lineNum">     223</span> <span class="tlaGNC">          63 :         int value = static_cast&lt;int&gt;(geom_type());</span></span>
+<span id="L224"><span class="lineNum">     224</span> <span class="tlaGNC">          63 :         return (value &gt;= 1000 and value &lt; 2000) or value &gt;= 3000;</span></span>
 <span id="L225"><span class="lineNum">     225</span>              :     }</span>
 <span id="L226"><span class="lineNum">     226</span>              : </span>
 <span id="L227"><span class="lineNum">     227</span>              :     /*!</span>
@@ -292,10 +292,10 @@
 <span id="L230"><span class="lineNum">     230</span>              :      *</span>
 <span id="L231"><span class="lineNum">     231</span>              :      * @since 0.0.1</span>
 <span id="L232"><span class="lineNum">     232</span>              :      */</span>
-<span id="L233"><span class="lineNum">     233</span> <span class="tlaGNC">          58 :     constexpr bool has_m() const noexcept</span></span>
+<span id="L233"><span class="lineNum">     233</span> <span class="tlaGNC">          63 :     constexpr bool has_m() const noexcept</span></span>
 <span id="L234"><span class="lineNum">     234</span>              :     {</span>
-<span id="L235"><span class="lineNum">     235</span> <span class="tlaGNC">          58 :         int value = static_cast&lt;int&gt;(geom_type());</span></span>
-<span id="L236"><span class="lineNum">     236</span> <span class="tlaGNC">          58 :         return value &gt;= 2000;</span></span>
+<span id="L235"><span class="lineNum">     235</span> <span class="tlaGNC">          63 :         int value = static_cast&lt;int&gt;(geom_type());</span></span>
+<span id="L236"><span class="lineNum">     236</span> <span class="tlaGNC">          63 :         return value &gt;= 2000;</span></span>
 <span id="L237"><span class="lineNum">     237</span>              :     }</span>
 <span id="L238"><span class="lineNum">     238</span>              : </span>
 <span id="L239"><span class="lineNum">     239</span>              :     // json</span>
@@ -321,152 +321,177 @@
 <span id="L259"><span class="lineNum">     259</span>              :      *</span>
 <span id="L260"><span class="lineNum">     260</span>              :      * @since 0.0.1</span>
 <span id="L261"><span class="lineNum">     261</span>              :      */</span>
-<span id="L262"><span class="lineNum">     262</span> <span class="tlaGNC">          83 :     std::string json(std::int32_t precision = -1) const</span></span>
+<span id="L262"><span class="lineNum">     262</span> <span class="tlaGNC">          53 :     std::string json(std::int32_t precision = -1) const</span></span>
 <span id="L263"><span class="lineNum">     263</span>              :     {</span>
-<span id="L264"><span class="lineNum">     264</span> <span class="tlaGNC">          83 :         return static_cast&lt;const T*&gt;(this)-&gt;json_(precision);</span></span>
+<span id="L264"><span class="lineNum">     264</span> <span class="tlaGNC">          53 :         return static_cast&lt;const T*&gt;(this)-&gt;json_(precision);</span></span>
 <span id="L265"><span class="lineNum">     265</span>              :     }</span>
 <span id="L266"><span class="lineNum">     266</span>              : </span>
-<span id="L267"><span class="lineNum">     267</span>              :     // wkt</span>
-<span id="L268"><span class="lineNum">     268</span>              : </span>
-<span id="L269"><span class="lineNum">     269</span>              :     /*!</span>
-<span id="L270"><span class="lineNum">     270</span>              :      * @brief Creates a Geometry from a wkt string</span>
-<span id="L271"><span class="lineNum">     271</span>              :      * @param wkt the wkt string</span>
-<span id="L272"><span class="lineNum">     272</span>              :      * @return a Geometry object</span>
-<span id="L273"><span class="lineNum">     273</span>              :      * @sa https://tools.ietf.org/html/rfc7946</span>
-<span id="L274"><span class="lineNum">     274</span>              :      *</span>
-<span id="L275"><span class="lineNum">     275</span>              :      * @since 0.0.1</span>
-<span id="L276"><span class="lineNum">     276</span>              :      */</span>
-<span id="L277"><span class="lineNum">     277</span> <span class="tlaGNC">         161 :     static T from_wkt(const std::string&amp; wkt)</span></span>
-<span id="L278"><span class="lineNum">     278</span>              :     {</span>
-<span id="L279"><span class="lineNum">     279</span> <span class="tlaGNC">         161 :         return T::from_wkt_(wkt);</span></span>
-<span id="L280"><span class="lineNum">     280</span>              :     }</span>
+<span id="L267"><span class="lineNum">     267</span>              :     /*!</span>
+<span id="L268"><span class="lineNum">     268</span>              :      * @brief Appends the geojson representation of the geometry to the given string</span>
+<span id="L269"><span class="lineNum">     269</span>              :      * @param out the output string</span>
+<span id="L270"><span class="lineNum">     270</span>              :      * @param precision the output precision</span>
+<span id="L271"><span class="lineNum">     271</span>              :      * @sa https://tools.ietf.org/html/rfc7946</span>
+<span id="L272"><span class="lineNum">     272</span>              :      *</span>
+<span id="L273"><span class="lineNum">     273</span>              :      * @since 0.1.1</span>
+<span id="L274"><span class="lineNum">     274</span>              :      */</span>
+<span id="L275"><span class="lineNum">     275</span> <span class="tlaGNC">          30 :     void write_json(std::string&amp; out, std::int32_t precision = -1) const</span></span>
+<span id="L276"><span class="lineNum">     276</span>              :     {</span>
+<span id="L277"><span class="lineNum">     277</span> <span class="tlaGNC">          30 :         static_cast&lt;const T*&gt;(this)-&gt;write_json_(out, precision);</span></span>
+<span id="L278"><span class="lineNum">     278</span> <span class="tlaGNC">          30 :     }</span></span>
+<span id="L279"><span class="lineNum">     279</span>              : </span>
+<span id="L280"><span class="lineNum">     280</span>              :     // wkt</span>
 <span id="L281"><span class="lineNum">     281</span>              : </span>
 <span id="L282"><span class="lineNum">     282</span>              :     /*!</span>
-<span id="L283"><span class="lineNum">     283</span>              :      * @brief Dumps the wkt representation of the geometry</span>
-<span id="L284"><span class="lineNum">     284</span>              :      * @param precision the output precision</span>
-<span id="L285"><span class="lineNum">     285</span>              :      * @return a wkt string</span>
+<span id="L283"><span class="lineNum">     283</span>              :      * @brief Creates a Geometry from a wkt string</span>
+<span id="L284"><span class="lineNum">     284</span>              :      * @param wkt the wkt string</span>
+<span id="L285"><span class="lineNum">     285</span>              :      * @return a Geometry object</span>
 <span id="L286"><span class="lineNum">     286</span>              :      * @sa https://tools.ietf.org/html/rfc7946</span>
 <span id="L287"><span class="lineNum">     287</span>              :      *</span>
 <span id="L288"><span class="lineNum">     288</span>              :      * @since 0.0.1</span>
 <span id="L289"><span class="lineNum">     289</span>              :      */</span>
-<span id="L290"><span class="lineNum">     290</span> <span class="tlaGNC">         152 :     std::string wkt(std::int32_t precision = -1) const</span></span>
+<span id="L290"><span class="lineNum">     290</span> <span class="tlaGNC">         158 :     static T from_wkt(const std::string&amp; wkt)</span></span>
 <span id="L291"><span class="lineNum">     291</span>              :     {</span>
-<span id="L292"><span class="lineNum">     292</span> <span class="tlaGNC">         152 :         return static_cast&lt;const T*&gt;(this)-&gt;wkt_(precision);</span></span>
+<span id="L292"><span class="lineNum">     292</span> <span class="tlaGNC">         158 :         return T::from_wkt_(wkt);</span></span>
 <span id="L293"><span class="lineNum">     293</span>              :     }</span>
 <span id="L294"><span class="lineNum">     294</span>              : </span>
-<span id="L295"><span class="lineNum">     295</span>              :     // Geometric algorithms (forward to algorithm namespace functions)</span>
-<span id="L296"><span class="lineNum">     296</span>              :     // Note: These are provided as convenience methods. Full implementations</span>
-<span id="L297"><span class="lineNum">     297</span>              :     // are in the simo::shapes::algorithm namespace.</span>
-<span id="L298"><span class="lineNum">     298</span>              : </span>
-<span id="L299"><span class="lineNum">     299</span>              :     /*!</span>
-<span id="L300"><span class="lineNum">     300</span>              :      * @brief Get length of the geometry (for LineString types)</span>
-<span id="L301"><span class="lineNum">     301</span>              :      * @return Length</span>
-<span id="L302"><span class="lineNum">     302</span>              :      * @since 0.1.0</span>
-<span id="L303"><span class="lineNum">     303</span>              :      */</span>
-<span id="L304"><span class="lineNum">     304</span>              :     template &lt;typename U = T&gt;</span>
-<span id="L305"><span class="lineNum">     305</span> <span class="tlaGNC">           3 :     auto length() const -&gt; typename U::coord_type</span></span>
-<span id="L306"><span class="lineNum">     306</span>              :     {</span>
-<span id="L307"><span class="lineNum">     307</span> <span class="tlaGNC">           3 :         return algorithm::length(*static_cast&lt;const T*&gt;(this));</span></span>
-<span id="L308"><span class="lineNum">     308</span>              :     }</span>
-<span id="L309"><span class="lineNum">     309</span>              : </span>
-<span id="L310"><span class="lineNum">     310</span>              :     /*!</span>
-<span id="L311"><span class="lineNum">     311</span>              :      * @brief Get area of the geometry (for Polygon types)</span>
-<span id="L312"><span class="lineNum">     312</span>              :      * @return Area</span>
-<span id="L313"><span class="lineNum">     313</span>              :      * @since 0.1.0</span>
+<span id="L295"><span class="lineNum">     295</span>              :     /*!</span>
+<span id="L296"><span class="lineNum">     296</span>              :      * @brief Dumps the wkt representation of the geometry</span>
+<span id="L297"><span class="lineNum">     297</span>              :      * @param precision the output precision</span>
+<span id="L298"><span class="lineNum">     298</span>              :      * @return a wkt string</span>
+<span id="L299"><span class="lineNum">     299</span>              :      * @sa https://tools.ietf.org/html/rfc7946</span>
+<span id="L300"><span class="lineNum">     300</span>              :      *</span>
+<span id="L301"><span class="lineNum">     301</span>              :      * @since 0.0.1</span>
+<span id="L302"><span class="lineNum">     302</span>              :      */</span>
+<span id="L303"><span class="lineNum">     303</span> <span class="tlaGNC">         100 :     std::string wkt(std::int32_t precision = -1) const</span></span>
+<span id="L304"><span class="lineNum">     304</span>              :     {</span>
+<span id="L305"><span class="lineNum">     305</span> <span class="tlaGNC">         100 :         return static_cast&lt;const T*&gt;(this)-&gt;wkt_(precision);</span></span>
+<span id="L306"><span class="lineNum">     306</span>              :     }</span>
+<span id="L307"><span class="lineNum">     307</span>              : </span>
+<span id="L308"><span class="lineNum">     308</span>              :     /*!</span>
+<span id="L309"><span class="lineNum">     309</span>              :      * @brief Appends the wkt representation of the geometry to the given string</span>
+<span id="L310"><span class="lineNum">     310</span>              :      * @param out the output string</span>
+<span id="L311"><span class="lineNum">     311</span>              :      * @param precision the output precision</span>
+<span id="L312"><span class="lineNum">     312</span>              :      *</span>
+<span id="L313"><span class="lineNum">     313</span>              :      * @since 0.1.1</span>
 <span id="L314"><span class="lineNum">     314</span>              :      */</span>
-<span id="L315"><span class="lineNum">     315</span>              :     template &lt;typename U = T&gt;</span>
-<span id="L316"><span class="lineNum">     316</span> <span class="tlaGNC">           1 :     auto area() const -&gt; typename U::coord_type</span></span>
-<span id="L317"><span class="lineNum">     317</span>              :     {</span>
-<span id="L318"><span class="lineNum">     318</span> <span class="tlaGNC">           1 :         return algorithm::area(*static_cast&lt;const T*&gt;(this));</span></span>
-<span id="L319"><span class="lineNum">     319</span>              :     }</span>
-<span id="L320"><span class="lineNum">     320</span>              : </span>
-<span id="L321"><span class="lineNum">     321</span>              :     /*!</span>
-<span id="L322"><span class="lineNum">     322</span>              :      * @brief Test if this geometry contains another</span>
-<span id="L323"><span class="lineNum">     323</span>              :      * @param other The other geometry</span>
-<span id="L324"><span class="lineNum">     324</span>              :      * @return true if this contains other</span>
-<span id="L325"><span class="lineNum">     325</span>              :      * @since 0.1.0</span>
-<span id="L326"><span class="lineNum">     326</span>              :      */</span>
-<span id="L327"><span class="lineNum">     327</span>              :     template &lt;typename Other&gt;</span>
-<span id="L328"><span class="lineNum">     328</span> <span class="tlaGNC">           2 :     bool contains(const Other&amp; other) const</span></span>
-<span id="L329"><span class="lineNum">     329</span>              :     {</span>
-<span id="L330"><span class="lineNum">     330</span> <span class="tlaGNC">           2 :         return algorithm::contains(*static_cast&lt;const T*&gt;(this), other);</span></span>
-<span id="L331"><span class="lineNum">     331</span>              :     }</span>
-<span id="L332"><span class="lineNum">     332</span>              : </span>
-<span id="L333"><span class="lineNum">     333</span>              :     /*!</span>
-<span id="L334"><span class="lineNum">     334</span>              :      * @brief Test if this geometry intersects another</span>
-<span id="L335"><span class="lineNum">     335</span>              :      * @param other The other geometry</span>
-<span id="L336"><span class="lineNum">     336</span>              :      * @return true if geometries intersect</span>
-<span id="L337"><span class="lineNum">     337</span>              :      * @since 0.1.0</span>
-<span id="L338"><span class="lineNum">     338</span>              :      */</span>
-<span id="L339"><span class="lineNum">     339</span>              :     template &lt;typename Other&gt;</span>
-<span id="L340"><span class="lineNum">     340</span> <span class="tlaGNC">           1 :     bool intersects(const Other&amp; other) const</span></span>
-<span id="L341"><span class="lineNum">     341</span>              :     {</span>
-<span id="L342"><span class="lineNum">     342</span> <span class="tlaGNC">           1 :         return algorithm::intersects(*static_cast&lt;const T*&gt;(this), other);</span></span>
-<span id="L343"><span class="lineNum">     343</span>              :     }</span>
-<span id="L344"><span class="lineNum">     344</span>              : </span>
-<span id="L345"><span class="lineNum">     345</span>              :     /*!</span>
-<span id="L346"><span class="lineNum">     346</span>              :      * @brief Test if this geometry is within another</span>
-<span id="L347"><span class="lineNum">     347</span>              :      * @param other The other geometry</span>
-<span id="L348"><span class="lineNum">     348</span>              :      * @return true if this is within other</span>
-<span id="L349"><span class="lineNum">     349</span>              :      * @since 0.1.0</span>
-<span id="L350"><span class="lineNum">     350</span>              :      */</span>
-<span id="L351"><span class="lineNum">     351</span>              :     template &lt;typename Other&gt;</span>
-<span id="L352"><span class="lineNum">     352</span> <span class="tlaGNC">           1 :     bool within(const Other&amp; other) const</span></span>
-<span id="L353"><span class="lineNum">     353</span>              :     {</span>
-<span id="L354"><span class="lineNum">     354</span> <span class="tlaGNC">           1 :         return algorithm::within(*static_cast&lt;const T*&gt;(this), other);</span></span>
-<span id="L355"><span class="lineNum">     355</span>              :     }</span>
-<span id="L356"><span class="lineNum">     356</span>              : </span>
-<span id="L357"><span class="lineNum">     357</span>              :     /*!</span>
-<span id="L358"><span class="lineNum">     358</span>              :      * @brief Translate geometry by offset</span>
-<span id="L359"><span class="lineNum">     359</span>              :      * @param xoff X offset</span>
-<span id="L360"><span class="lineNum">     360</span>              :      * @param yoff Y offset</span>
-<span id="L361"><span class="lineNum">     361</span>              :      * @return Translated geometry</span>
+<span id="L315"><span class="lineNum">     315</span> <span class="tlaGNC">          68 :     void write_wkt(std::string&amp; out, std::int32_t precision = -1) const</span></span>
+<span id="L316"><span class="lineNum">     316</span>              :     {</span>
+<span id="L317"><span class="lineNum">     317</span> <span class="tlaGNC">          68 :         static_cast&lt;const T*&gt;(this)-&gt;write_wkt_(out, precision);</span></span>
+<span id="L318"><span class="lineNum">     318</span> <span class="tlaGNC">          68 :     }</span></span>
+<span id="L319"><span class="lineNum">     319</span>              : </span>
+<span id="L320"><span class="lineNum">     320</span>              :     // Geometric algorithms (forward to algorithm namespace functions)</span>
+<span id="L321"><span class="lineNum">     321</span>              :     // Note: These are provided as convenience methods. Full implementations</span>
+<span id="L322"><span class="lineNum">     322</span>              :     // are in the simo::shapes::algorithm namespace.</span>
+<span id="L323"><span class="lineNum">     323</span>              : </span>
+<span id="L324"><span class="lineNum">     324</span>              :     /*!</span>
+<span id="L325"><span class="lineNum">     325</span>              :      * @brief Get length of the geometry (for LineString types)</span>
+<span id="L326"><span class="lineNum">     326</span>              :      * @return Length</span>
+<span id="L327"><span class="lineNum">     327</span>              :      * @since 0.1.0</span>
+<span id="L328"><span class="lineNum">     328</span>              :      */</span>
+<span id="L329"><span class="lineNum">     329</span>              :     template &lt;typename U = T&gt;</span>
+<span id="L330"><span class="lineNum">     330</span> <span class="tlaGNC">           3 :     auto length() const -&gt; typename U::coord_type</span></span>
+<span id="L331"><span class="lineNum">     331</span>              :     {</span>
+<span id="L332"><span class="lineNum">     332</span> <span class="tlaGNC">           3 :         return algorithm::length(*static_cast&lt;const T*&gt;(this));</span></span>
+<span id="L333"><span class="lineNum">     333</span>              :     }</span>
+<span id="L334"><span class="lineNum">     334</span>              : </span>
+<span id="L335"><span class="lineNum">     335</span>              :     /*!</span>
+<span id="L336"><span class="lineNum">     336</span>              :      * @brief Get area of the geometry (for Polygon types)</span>
+<span id="L337"><span class="lineNum">     337</span>              :      * @return Area</span>
+<span id="L338"><span class="lineNum">     338</span>              :      * @since 0.1.0</span>
+<span id="L339"><span class="lineNum">     339</span>              :      */</span>
+<span id="L340"><span class="lineNum">     340</span>              :     template &lt;typename U = T&gt;</span>
+<span id="L341"><span class="lineNum">     341</span> <span class="tlaGNC">           1 :     auto area() const -&gt; typename U::coord_type</span></span>
+<span id="L342"><span class="lineNum">     342</span>              :     {</span>
+<span id="L343"><span class="lineNum">     343</span> <span class="tlaGNC">           1 :         return algorithm::area(*static_cast&lt;const T*&gt;(this));</span></span>
+<span id="L344"><span class="lineNum">     344</span>              :     }</span>
+<span id="L345"><span class="lineNum">     345</span>              : </span>
+<span id="L346"><span class="lineNum">     346</span>              :     /*!</span>
+<span id="L347"><span class="lineNum">     347</span>              :      * @brief Test if this geometry contains another</span>
+<span id="L348"><span class="lineNum">     348</span>              :      * @param other The other geometry</span>
+<span id="L349"><span class="lineNum">     349</span>              :      * @return true if this contains other</span>
+<span id="L350"><span class="lineNum">     350</span>              :      * @since 0.1.0</span>
+<span id="L351"><span class="lineNum">     351</span>              :      */</span>
+<span id="L352"><span class="lineNum">     352</span>              :     template &lt;typename Other&gt;</span>
+<span id="L353"><span class="lineNum">     353</span> <span class="tlaGNC">           2 :     bool contains(const Other&amp; other) const</span></span>
+<span id="L354"><span class="lineNum">     354</span>              :     {</span>
+<span id="L355"><span class="lineNum">     355</span> <span class="tlaGNC">           2 :         return algorithm::contains(*static_cast&lt;const T*&gt;(this), other);</span></span>
+<span id="L356"><span class="lineNum">     356</span>              :     }</span>
+<span id="L357"><span class="lineNum">     357</span>              : </span>
+<span id="L358"><span class="lineNum">     358</span>              :     /*!</span>
+<span id="L359"><span class="lineNum">     359</span>              :      * @brief Test if this geometry intersects another</span>
+<span id="L360"><span class="lineNum">     360</span>              :      * @param other The other geometry</span>
+<span id="L361"><span class="lineNum">     361</span>              :      * @return true if geometries intersect</span>
 <span id="L362"><span class="lineNum">     362</span>              :      * @since 0.1.0</span>
 <span id="L363"><span class="lineNum">     363</span>              :      */</span>
-<span id="L364"><span class="lineNum">     364</span>              :     template &lt;typename U = T&gt;</span>
-<span id="L365"><span class="lineNum">     365</span> <span class="tlaGNC">           2 :     T translate(typename U::coord_type xoff, typename U::coord_type yoff) const</span></span>
+<span id="L364"><span class="lineNum">     364</span>              :     template &lt;typename Other&gt;</span>
+<span id="L365"><span class="lineNum">     365</span> <span class="tlaGNC">           1 :     bool intersects(const Other&amp; other) const</span></span>
 <span id="L366"><span class="lineNum">     366</span>              :     {</span>
-<span id="L367"><span class="lineNum">     367</span> <span class="tlaGNC">           2 :         return algorithm::translate(*static_cast&lt;const T*&gt;(this), xoff, yoff);</span></span>
+<span id="L367"><span class="lineNum">     367</span> <span class="tlaGNC">           1 :         return algorithm::intersects(*static_cast&lt;const T*&gt;(this), other);</span></span>
 <span id="L368"><span class="lineNum">     368</span>              :     }</span>
 <span id="L369"><span class="lineNum">     369</span>              : </span>
 <span id="L370"><span class="lineNum">     370</span>              :     /*!</span>
-<span id="L371"><span class="lineNum">     371</span>              :      * @brief Rotate geometry around origin</span>
-<span id="L372"><span class="lineNum">     372</span>              :      * @param angle Rotation angle in radians</span>
-<span id="L373"><span class="lineNum">     373</span>              :      * @return Rotated geometry</span>
+<span id="L371"><span class="lineNum">     371</span>              :      * @brief Test if this geometry is within another</span>
+<span id="L372"><span class="lineNum">     372</span>              :      * @param other The other geometry</span>
+<span id="L373"><span class="lineNum">     373</span>              :      * @return true if this is within other</span>
 <span id="L374"><span class="lineNum">     374</span>              :      * @since 0.1.0</span>
 <span id="L375"><span class="lineNum">     375</span>              :      */</span>
-<span id="L376"><span class="lineNum">     376</span> <span class="tlaGNC">           2 :     T rotate(double angle) const</span></span>
-<span id="L377"><span class="lineNum">     377</span>              :     {</span>
-<span id="L378"><span class="lineNum">     378</span> <span class="tlaGNC">           2 :         return algorithm::rotate(*static_cast&lt;const T*&gt;(this), angle);</span></span>
-<span id="L379"><span class="lineNum">     379</span>              :     }</span>
-<span id="L380"><span class="lineNum">     380</span>              : </span>
-<span id="L381"><span class="lineNum">     381</span>              :     /*!</span>
-<span id="L382"><span class="lineNum">     382</span>              :      * @brief Scale geometry by factors</span>
-<span id="L383"><span class="lineNum">     383</span>              :      * @param xfact X scale factor</span>
-<span id="L384"><span class="lineNum">     384</span>              :      * @param yfact Y scale factor</span>
-<span id="L385"><span class="lineNum">     385</span>              :      * @return Scaled geometry</span>
-<span id="L386"><span class="lineNum">     386</span>              :      * @since 0.1.0</span>
-<span id="L387"><span class="lineNum">     387</span>              :      */</span>
-<span id="L388"><span class="lineNum">     388</span>              :     template &lt;typename U = T&gt;</span>
-<span id="L389"><span class="lineNum">     389</span> <span class="tlaGNC">           1 :     T scale(typename U::coord_type xfact, typename U::coord_type yfact) const</span></span>
-<span id="L390"><span class="lineNum">     390</span>              :     {</span>
-<span id="L391"><span class="lineNum">     391</span> <span class="tlaGNC">           1 :         return algorithm::scale(*static_cast&lt;const T*&gt;(this), xfact, yfact);</span></span>
-<span id="L392"><span class="lineNum">     392</span>              :     }</span>
-<span id="L393"><span class="lineNum">     393</span>              : </span>
-<span id="L394"><span class="lineNum">     394</span>              :     /*!</span>
-<span id="L395"><span class="lineNum">     395</span>              :      * @brief Simplify geometry using Douglas-Peucker algorithm</span>
-<span id="L396"><span class="lineNum">     396</span>              :      * @param tolerance Tolerance for simplification</span>
-<span id="L397"><span class="lineNum">     397</span>              :      * @return Simplified geometry</span>
-<span id="L398"><span class="lineNum">     398</span>              :      * @since 0.1.0</span>
-<span id="L399"><span class="lineNum">     399</span>              :      */</span>
-<span id="L400"><span class="lineNum">     400</span> <span class="tlaGNC">           2 :     T simplify(double tolerance) const</span></span>
-<span id="L401"><span class="lineNum">     401</span>              :     {</span>
-<span id="L402"><span class="lineNum">     402</span> <span class="tlaGNC">           2 :         return algorithm::simplify(*static_cast&lt;const T*&gt;(this), tolerance);</span></span>
-<span id="L403"><span class="lineNum">     403</span>              :     }</span>
-<span id="L404"><span class="lineNum">     404</span>              : };</span>
+<span id="L376"><span class="lineNum">     376</span>              :     template &lt;typename Other&gt;</span>
+<span id="L377"><span class="lineNum">     377</span> <span class="tlaGNC">           1 :     bool within(const Other&amp; other) const</span></span>
+<span id="L378"><span class="lineNum">     378</span>              :     {</span>
+<span id="L379"><span class="lineNum">     379</span> <span class="tlaGNC">           1 :         return algorithm::within(*static_cast&lt;const T*&gt;(this), other);</span></span>
+<span id="L380"><span class="lineNum">     380</span>              :     }</span>
+<span id="L381"><span class="lineNum">     381</span>              : </span>
+<span id="L382"><span class="lineNum">     382</span>              :     /*!</span>
+<span id="L383"><span class="lineNum">     383</span>              :      * @brief Translate geometry by offset</span>
+<span id="L384"><span class="lineNum">     384</span>              :      * @param xoff X offset</span>
+<span id="L385"><span class="lineNum">     385</span>              :      * @param yoff Y offset</span>
+<span id="L386"><span class="lineNum">     386</span>              :      * @return Translated geometry</span>
+<span id="L387"><span class="lineNum">     387</span>              :      * @since 0.1.0</span>
+<span id="L388"><span class="lineNum">     388</span>              :      */</span>
+<span id="L389"><span class="lineNum">     389</span>              :     template &lt;typename U = T&gt;</span>
+<span id="L390"><span class="lineNum">     390</span> <span class="tlaGNC">           2 :     T translate(typename U::coord_type xoff, typename U::coord_type yoff) const</span></span>
+<span id="L391"><span class="lineNum">     391</span>              :     {</span>
+<span id="L392"><span class="lineNum">     392</span> <span class="tlaGNC">           2 :         return algorithm::translate(*static_cast&lt;const T*&gt;(this), xoff, yoff);</span></span>
+<span id="L393"><span class="lineNum">     393</span>              :     }</span>
+<span id="L394"><span class="lineNum">     394</span>              : </span>
+<span id="L395"><span class="lineNum">     395</span>              :     /*!</span>
+<span id="L396"><span class="lineNum">     396</span>              :      * @brief Rotate geometry around origin</span>
+<span id="L397"><span class="lineNum">     397</span>              :      * @param angle Rotation angle in radians</span>
+<span id="L398"><span class="lineNum">     398</span>              :      * @return Rotated geometry</span>
+<span id="L399"><span class="lineNum">     399</span>              :      * @since 0.1.0</span>
+<span id="L400"><span class="lineNum">     400</span>              :      */</span>
+<span id="L401"><span class="lineNum">     401</span> <span class="tlaGNC">           2 :     T rotate(double angle) const</span></span>
+<span id="L402"><span class="lineNum">     402</span>              :     {</span>
+<span id="L403"><span class="lineNum">     403</span> <span class="tlaGNC">           2 :         return algorithm::rotate(*static_cast&lt;const T*&gt;(this), angle);</span></span>
+<span id="L404"><span class="lineNum">     404</span>              :     }</span>
 <span id="L405"><span class="lineNum">     405</span>              : </span>
-<span id="L406"><span class="lineNum">     406</span>              : }  // namespace shapes</span>
-<span id="L407"><span class="lineNum">     407</span>              : }  // namespace simo</span>
+<span id="L406"><span class="lineNum">     406</span>              :     /*!</span>
+<span id="L407"><span class="lineNum">     407</span>              :      * @brief Scale geometry by factors</span>
+<span id="L408"><span class="lineNum">     408</span>              :      * @param xfact X scale factor</span>
+<span id="L409"><span class="lineNum">     409</span>              :      * @param yfact Y scale factor</span>
+<span id="L410"><span class="lineNum">     410</span>              :      * @return Scaled geometry</span>
+<span id="L411"><span class="lineNum">     411</span>              :      * @since 0.1.0</span>
+<span id="L412"><span class="lineNum">     412</span>              :      */</span>
+<span id="L413"><span class="lineNum">     413</span>              :     template &lt;typename U = T&gt;</span>
+<span id="L414"><span class="lineNum">     414</span> <span class="tlaGNC">           1 :     T scale(typename U::coord_type xfact, typename U::coord_type yfact) const</span></span>
+<span id="L415"><span class="lineNum">     415</span>              :     {</span>
+<span id="L416"><span class="lineNum">     416</span> <span class="tlaGNC">           1 :         return algorithm::scale(*static_cast&lt;const T*&gt;(this), xfact, yfact);</span></span>
+<span id="L417"><span class="lineNum">     417</span>              :     }</span>
+<span id="L418"><span class="lineNum">     418</span>              : </span>
+<span id="L419"><span class="lineNum">     419</span>              :     /*!</span>
+<span id="L420"><span class="lineNum">     420</span>              :      * @brief Simplify geometry using Douglas-Peucker algorithm</span>
+<span id="L421"><span class="lineNum">     421</span>              :      * @param tolerance Tolerance for simplification</span>
+<span id="L422"><span class="lineNum">     422</span>              :      * @return Simplified geometry</span>
+<span id="L423"><span class="lineNum">     423</span>              :      * @since 0.1.0</span>
+<span id="L424"><span class="lineNum">     424</span>              :      */</span>
+<span id="L425"><span class="lineNum">     425</span> <span class="tlaGNC">           2 :     T simplify(double tolerance) const</span></span>
+<span id="L426"><span class="lineNum">     426</span>              :     {</span>
+<span id="L427"><span class="lineNum">     427</span> <span class="tlaGNC">           2 :         return algorithm::simplify(*static_cast&lt;const T*&gt;(this), tolerance);</span></span>
+<span id="L428"><span class="lineNum">     428</span>              :     }</span>
+<span id="L429"><span class="lineNum">     429</span>              : };</span>
+<span id="L430"><span class="lineNum">     430</span>              : </span>
+<span id="L431"><span class="lineNum">     431</span>              : }  // namespace shapes</span>
+<span id="L432"><span class="lineNum">     432</span>              : }  // namespace simo</span>
         </pre>
               </td>
             </tr>

@@ -31,13 +31,13 @@
             <td class="headerValue">coverage.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntryHi">90.2&nbsp;%</td>
-            <td class="headerCovTableEntry">61</td>
-            <td class="headerCovTableEntry">55</td>
+            <td class="headerCovTableEntryMed">89.5&nbsp;%</td>
+            <td class="headerCovTableEntry">57</td>
+            <td class="headerCovTableEntry">51</td>
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-06-07 17:53:22</td>
+            <td class="headerValue">2026-07-05 16:03:15</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
@@ -184,111 +184,108 @@
 <span id="L122"><span class="lineNum">     122</span>              : /*! @brief Rotate a point around origin by angle (in radians) */</span>
 <span id="L123"><span class="lineNum">     123</span>              : template &lt;typename Point&gt;</span>
 <span id="L124"><span class="lineNum">     124</span>              : typename std::enable_if&lt;detail::is_point_like&lt;Point&gt;::value, Point&gt;::type</span>
-<span id="L125"><span class="lineNum">     125</span> <span class="tlaGNC tlaBgGNC">          37 : rotate(const Point&amp; point, double angle, const Point&amp; origin = Point{0, 0})</span></span>
+<span id="L125"><span class="lineNum">     125</span> <span class="tlaGNC tlaBgGNC">          38 : rotate(const Point&amp; point, double angle, const Point&amp; origin = Point{0, 0})</span></span>
 <span id="L126"><span class="lineNum">     126</span>              : {</span>
-<span id="L127"><span class="lineNum">     127</span> <span class="tlaGNC">          37 :     double cos_a = std::cos(angle);</span></span>
-<span id="L128"><span class="lineNum">     128</span> <span class="tlaGNC">          37 :     double sin_a = std::sin(angle);</span></span>
+<span id="L127"><span class="lineNum">     127</span> <span class="tlaGNC">          38 :     double cos_a = std::cos(angle);</span></span>
+<span id="L128"><span class="lineNum">     128</span> <span class="tlaGNC">          38 :     double sin_a = std::sin(angle);</span></span>
 <span id="L129"><span class="lineNum">     129</span>              : </span>
 <span id="L130"><span class="lineNum">     130</span>              :     // Translate to origin</span>
-<span id="L131"><span class="lineNum">     131</span> <span class="tlaGNC">          37 :     auto dx = point.x - origin.x;</span></span>
-<span id="L132"><span class="lineNum">     132</span> <span class="tlaGNC">          37 :     auto dy = point.y - origin.y;</span></span>
+<span id="L131"><span class="lineNum">     131</span> <span class="tlaGNC">          38 :     auto dx = point.x - origin.x;</span></span>
+<span id="L132"><span class="lineNum">     132</span> <span class="tlaGNC">          38 :     auto dy = point.y - origin.y;</span></span>
 <span id="L133"><span class="lineNum">     133</span>              : </span>
-<span id="L134"><span class="lineNum">     134</span>              :     // Rotate</span>
-<span id="L135"><span class="lineNum">     135</span> <span class="tlaGNC">          37 :     Point result;</span></span>
-<span id="L136"><span class="lineNum">     136</span> <span class="tlaGNC">          37 :     result.x = origin.x + dx * cos_a - dy * sin_a;</span></span>
-<span id="L137"><span class="lineNum">     137</span> <span class="tlaGNC">          37 :     result.y = origin.y + dx * sin_a + dy * cos_a;</span></span>
-<span id="L138"><span class="lineNum">     138</span>              : </span>
-<span id="L139"><span class="lineNum">     139</span> <span class="tlaGNC">          37 :     return result;</span></span>
-<span id="L140"><span class="lineNum">     140</span>              : }</span>
-<span id="L141"><span class="lineNum">     141</span>              : </span>
-<span id="L142"><span class="lineNum">     142</span>              : /*! @brief Rotate a linestring around origin by angle (in radians) */</span>
-<span id="L143"><span class="lineNum">     143</span>              : template &lt;typename LineString&gt;</span>
-<span id="L144"><span class="lineNum">     144</span>              : typename std::enable_if&lt;detail::is_linestring_like&lt;LineString&gt;::value, LineString&gt;::type</span>
-<span id="L145"><span class="lineNum">     145</span> <span class="tlaGNC">           8 : rotate(const LineString&amp; linestring, double angle,</span></span>
-<span id="L146"><span class="lineNum">     146</span>              :        const typename LineString::value_type&amp; origin = typename LineString::value_type{0, 0})</span>
-<span id="L147"><span class="lineNum">     147</span>              : {</span>
-<span id="L148"><span class="lineNum">     148</span> <span class="tlaGNC">           8 :     LineString result;</span></span>
-<span id="L149"><span class="lineNum">     149</span> <span class="tlaGNC">           8 :     result.reserve(linestring.size());</span></span>
-<span id="L150"><span class="lineNum">     150</span>              : </span>
-<span id="L151"><span class="lineNum">     151</span> <span class="tlaGNC">          37 :     for (const auto&amp; point : linestring)</span></span>
-<span id="L152"><span class="lineNum">     152</span>              :     {</span>
-<span id="L153"><span class="lineNum">     153</span> <span class="tlaGNC">          29 :         result.push_back(rotate(point, angle, origin));</span></span>
-<span id="L154"><span class="lineNum">     154</span>              :     }</span>
-<span id="L155"><span class="lineNum">     155</span>              : </span>
-<span id="L156"><span class="lineNum">     156</span> <span class="tlaGNC">           8 :     return result;</span></span>
-<span id="L157"><span class="lineNum">     157</span> <span class="tlaUNC tlaBgUNC">           0 : }</span></span>
-<span id="L158"><span class="lineNum">     158</span>              : </span>
-<span id="L159"><span class="lineNum">     159</span>              : /*! @brief Rotate a polygon around origin by angle (in radians) */</span>
-<span id="L160"><span class="lineNum">     160</span>              : template &lt;typename Polygon&gt;</span>
-<span id="L161"><span class="lineNum">     161</span>              : typename std::enable_if&lt;detail::is_polygon_like&lt;Polygon&gt;::value, Polygon&gt;::type</span>
-<span id="L162"><span class="lineNum">     162</span> <span class="tlaGNC tlaBgGNC">           4 : rotate(const Polygon&amp; polygon, double angle,</span></span>
-<span id="L163"><span class="lineNum">     163</span>              :        const typename Polygon::value_type::value_type&amp; origin = typename Polygon::value_type::value_type{0, 0})</span>
-<span id="L164"><span class="lineNum">     164</span>              : {</span>
-<span id="L165"><span class="lineNum">     165</span> <span class="tlaGNC">           4 :     Polygon result;</span></span>
-<span id="L166"><span class="lineNum">     166</span> <span class="tlaGNC">           4 :     result.reserve(polygon.size());</span></span>
-<span id="L167"><span class="lineNum">     167</span>              : </span>
-<span id="L168"><span class="lineNum">     168</span> <span class="tlaGNC">           7 :     for (const auto&amp; ring : polygon)</span></span>
-<span id="L169"><span class="lineNum">     169</span>              :     {</span>
-<span id="L170"><span class="lineNum">     170</span> <span class="tlaGNC">           3 :         result.push_back(rotate(ring, angle, origin));</span></span>
-<span id="L171"><span class="lineNum">     171</span>              :     }</span>
-<span id="L172"><span class="lineNum">     172</span>              : </span>
-<span id="L173"><span class="lineNum">     173</span> <span class="tlaGNC">           4 :     return result;</span></span>
-<span id="L174"><span class="lineNum">     174</span> <span class="tlaUNC tlaBgUNC">           0 : }</span></span>
-<span id="L175"><span class="lineNum">     175</span>              : </span>
+<span id="L134"><span class="lineNum">     134</span>              :     // Rotate; the value constructor keeps the result non-empty</span>
+<span id="L135"><span class="lineNum">     135</span>              :     using coord_type = typename Point::coord_type;</span>
+<span id="L136"><span class="lineNum">     136</span> <span class="tlaGNC">          38 :     return Point{static_cast&lt;coord_type&gt;(origin.x + dx * cos_a - dy * sin_a),</span></span>
+<span id="L137"><span class="lineNum">     137</span> <span class="tlaGNC">          38 :                  static_cast&lt;coord_type&gt;(origin.y + dx * sin_a + dy * cos_a)};</span></span>
+<span id="L138"><span class="lineNum">     138</span>              : }</span>
+<span id="L139"><span class="lineNum">     139</span>              : </span>
+<span id="L140"><span class="lineNum">     140</span>              : /*! @brief Rotate a linestring around origin by angle (in radians) */</span>
+<span id="L141"><span class="lineNum">     141</span>              : template &lt;typename LineString&gt;</span>
+<span id="L142"><span class="lineNum">     142</span>              : typename std::enable_if&lt;detail::is_linestring_like&lt;LineString&gt;::value, LineString&gt;::type</span>
+<span id="L143"><span class="lineNum">     143</span> <span class="tlaGNC">           8 : rotate(const LineString&amp; linestring, double angle,</span></span>
+<span id="L144"><span class="lineNum">     144</span>              :        const typename LineString::value_type&amp; origin = typename LineString::value_type{0, 0})</span>
+<span id="L145"><span class="lineNum">     145</span>              : {</span>
+<span id="L146"><span class="lineNum">     146</span> <span class="tlaGNC">           8 :     LineString result;</span></span>
+<span id="L147"><span class="lineNum">     147</span> <span class="tlaGNC">           8 :     result.reserve(linestring.size());</span></span>
+<span id="L148"><span class="lineNum">     148</span>              : </span>
+<span id="L149"><span class="lineNum">     149</span> <span class="tlaGNC">          37 :     for (const auto&amp; point : linestring)</span></span>
+<span id="L150"><span class="lineNum">     150</span>              :     {</span>
+<span id="L151"><span class="lineNum">     151</span> <span class="tlaGNC">          29 :         result.push_back(rotate(point, angle, origin));</span></span>
+<span id="L152"><span class="lineNum">     152</span>              :     }</span>
+<span id="L153"><span class="lineNum">     153</span>              : </span>
+<span id="L154"><span class="lineNum">     154</span> <span class="tlaGNC">           8 :     return result;</span></span>
+<span id="L155"><span class="lineNum">     155</span> <span class="tlaUNC tlaBgUNC">           0 : }</span></span>
+<span id="L156"><span class="lineNum">     156</span>              : </span>
+<span id="L157"><span class="lineNum">     157</span>              : /*! @brief Rotate a polygon around origin by angle (in radians) */</span>
+<span id="L158"><span class="lineNum">     158</span>              : template &lt;typename Polygon&gt;</span>
+<span id="L159"><span class="lineNum">     159</span>              : typename std::enable_if&lt;detail::is_polygon_like&lt;Polygon&gt;::value, Polygon&gt;::type</span>
+<span id="L160"><span class="lineNum">     160</span> <span class="tlaGNC tlaBgGNC">           4 : rotate(const Polygon&amp; polygon, double angle,</span></span>
+<span id="L161"><span class="lineNum">     161</span>              :        const typename Polygon::value_type::value_type&amp; origin = typename Polygon::value_type::value_type{0, 0})</span>
+<span id="L162"><span class="lineNum">     162</span>              : {</span>
+<span id="L163"><span class="lineNum">     163</span> <span class="tlaGNC">           4 :     Polygon result;</span></span>
+<span id="L164"><span class="lineNum">     164</span> <span class="tlaGNC">           4 :     result.reserve(polygon.size());</span></span>
+<span id="L165"><span class="lineNum">     165</span>              : </span>
+<span id="L166"><span class="lineNum">     166</span> <span class="tlaGNC">           7 :     for (const auto&amp; ring : polygon)</span></span>
+<span id="L167"><span class="lineNum">     167</span>              :     {</span>
+<span id="L168"><span class="lineNum">     168</span> <span class="tlaGNC">           3 :         result.push_back(rotate(ring, angle, origin));</span></span>
+<span id="L169"><span class="lineNum">     169</span>              :     }</span>
+<span id="L170"><span class="lineNum">     170</span>              : </span>
+<span id="L171"><span class="lineNum">     171</span> <span class="tlaGNC">           4 :     return result;</span></span>
+<span id="L172"><span class="lineNum">     172</span> <span class="tlaUNC tlaBgUNC">           0 : }</span></span>
+<span id="L173"><span class="lineNum">     173</span>              : </span>
+<span id="L174"><span class="lineNum">     174</span>              : //</span>
+<span id="L175"><span class="lineNum">     175</span>              : // SCALE</span>
 <span id="L176"><span class="lineNum">     176</span>              : //</span>
-<span id="L177"><span class="lineNum">     177</span>              : // SCALE</span>
-<span id="L178"><span class="lineNum">     178</span>              : //</span>
-<span id="L179"><span class="lineNum">     179</span>              : </span>
-<span id="L180"><span class="lineNum">     180</span>              : /*! @brief Scale a point by factors */</span>
-<span id="L181"><span class="lineNum">     181</span>              : template &lt;typename Point&gt;</span>
-<span id="L182"><span class="lineNum">     182</span>              : typename std::enable_if&lt;detail::is_point_like&lt;Point&gt;::value, Point&gt;::type</span>
-<span id="L183"><span class="lineNum">     183</span> <span class="tlaGNC tlaBgGNC">          38 : scale(const Point&amp; point, typename Point::coord_type xfact, typename Point::coord_type yfact,</span></span>
-<span id="L184"><span class="lineNum">     184</span>              :       const Point&amp; origin = Point{0, 0})</span>
-<span id="L185"><span class="lineNum">     185</span>              : {</span>
-<span id="L186"><span class="lineNum">     186</span> <span class="tlaGNC">          38 :     Point result;</span></span>
-<span id="L187"><span class="lineNum">     187</span> <span class="tlaGNC">          38 :     result.x = origin.x + (point.x - origin.x) * xfact;</span></span>
-<span id="L188"><span class="lineNum">     188</span> <span class="tlaGNC">          38 :     result.y = origin.y + (point.y - origin.y) * yfact;</span></span>
-<span id="L189"><span class="lineNum">     189</span> <span class="tlaGNC">          38 :     return result;</span></span>
-<span id="L190"><span class="lineNum">     190</span>              : }</span>
-<span id="L191"><span class="lineNum">     191</span>              : </span>
-<span id="L192"><span class="lineNum">     192</span>              : /*! @brief Scale a linestring by factors */</span>
-<span id="L193"><span class="lineNum">     193</span>              : template &lt;typename LineString&gt;</span>
-<span id="L194"><span class="lineNum">     194</span>              : typename std::enable_if&lt;detail::is_linestring_like&lt;LineString&gt;::value, LineString&gt;::type</span>
-<span id="L195"><span class="lineNum">     195</span> <span class="tlaGNC">           9 : scale(const LineString&amp; linestring, typename LineString::coord_type xfact,</span></span>
-<span id="L196"><span class="lineNum">     196</span>              :       typename LineString::coord_type yfact,</span>
-<span id="L197"><span class="lineNum">     197</span>              :       const typename LineString::value_type&amp; origin = typename LineString::value_type{0, 0})</span>
-<span id="L198"><span class="lineNum">     198</span>              : {</span>
-<span id="L199"><span class="lineNum">     199</span> <span class="tlaGNC">           9 :     LineString result;</span></span>
-<span id="L200"><span class="lineNum">     200</span> <span class="tlaGNC">           9 :     result.reserve(linestring.size());</span></span>
-<span id="L201"><span class="lineNum">     201</span>              : </span>
-<span id="L202"><span class="lineNum">     202</span> <span class="tlaGNC">          38 :     for (const auto&amp; point : linestring)</span></span>
-<span id="L203"><span class="lineNum">     203</span>              :     {</span>
-<span id="L204"><span class="lineNum">     204</span> <span class="tlaGNC">          29 :         result.push_back(scale(point, xfact, yfact, origin));</span></span>
-<span id="L205"><span class="lineNum">     205</span>              :     }</span>
+<span id="L177"><span class="lineNum">     177</span>              : </span>
+<span id="L178"><span class="lineNum">     178</span>              : /*! @brief Scale a point by factors */</span>
+<span id="L179"><span class="lineNum">     179</span>              : template &lt;typename Point&gt;</span>
+<span id="L180"><span class="lineNum">     180</span>              : typename std::enable_if&lt;detail::is_point_like&lt;Point&gt;::value, Point&gt;::type</span>
+<span id="L181"><span class="lineNum">     181</span> <span class="tlaGNC tlaBgGNC">          39 : scale(const Point&amp; point, typename Point::coord_type xfact, typename Point::coord_type yfact,</span></span>
+<span id="L182"><span class="lineNum">     182</span>              :       const Point&amp; origin = Point{0, 0})</span>
+<span id="L183"><span class="lineNum">     183</span>              : {</span>
+<span id="L184"><span class="lineNum">     184</span>              :     // the value constructor keeps the result non-empty</span>
+<span id="L185"><span class="lineNum">     185</span> <span class="tlaGNC">          39 :     return Point{origin.x + (point.x - origin.x) * xfact,</span></span>
+<span id="L186"><span class="lineNum">     186</span> <span class="tlaGNC">          39 :                  origin.y + (point.y - origin.y) * yfact};</span></span>
+<span id="L187"><span class="lineNum">     187</span>              : }</span>
+<span id="L188"><span class="lineNum">     188</span>              : </span>
+<span id="L189"><span class="lineNum">     189</span>              : /*! @brief Scale a linestring by factors */</span>
+<span id="L190"><span class="lineNum">     190</span>              : template &lt;typename LineString&gt;</span>
+<span id="L191"><span class="lineNum">     191</span>              : typename std::enable_if&lt;detail::is_linestring_like&lt;LineString&gt;::value, LineString&gt;::type</span>
+<span id="L192"><span class="lineNum">     192</span> <span class="tlaGNC">           9 : scale(const LineString&amp; linestring, typename LineString::coord_type xfact,</span></span>
+<span id="L193"><span class="lineNum">     193</span>              :       typename LineString::coord_type yfact,</span>
+<span id="L194"><span class="lineNum">     194</span>              :       const typename LineString::value_type&amp; origin = typename LineString::value_type{0, 0})</span>
+<span id="L195"><span class="lineNum">     195</span>              : {</span>
+<span id="L196"><span class="lineNum">     196</span> <span class="tlaGNC">           9 :     LineString result;</span></span>
+<span id="L197"><span class="lineNum">     197</span> <span class="tlaGNC">           9 :     result.reserve(linestring.size());</span></span>
+<span id="L198"><span class="lineNum">     198</span>              : </span>
+<span id="L199"><span class="lineNum">     199</span> <span class="tlaGNC">          38 :     for (const auto&amp; point : linestring)</span></span>
+<span id="L200"><span class="lineNum">     200</span>              :     {</span>
+<span id="L201"><span class="lineNum">     201</span> <span class="tlaGNC">          29 :         result.push_back(scale(point, xfact, yfact, origin));</span></span>
+<span id="L202"><span class="lineNum">     202</span>              :     }</span>
+<span id="L203"><span class="lineNum">     203</span>              : </span>
+<span id="L204"><span class="lineNum">     204</span> <span class="tlaGNC">           9 :     return result;</span></span>
+<span id="L205"><span class="lineNum">     205</span> <span class="tlaUNC tlaBgUNC">           0 : }</span></span>
 <span id="L206"><span class="lineNum">     206</span>              : </span>
-<span id="L207"><span class="lineNum">     207</span> <span class="tlaGNC">           9 :     return result;</span></span>
-<span id="L208"><span class="lineNum">     208</span> <span class="tlaUNC tlaBgUNC">           0 : }</span></span>
-<span id="L209"><span class="lineNum">     209</span>              : </span>
-<span id="L210"><span class="lineNum">     210</span>              : /*! @brief Scale a polygon by factors */</span>
-<span id="L211"><span class="lineNum">     211</span>              : template &lt;typename Polygon&gt;</span>
-<span id="L212"><span class="lineNum">     212</span>              : typename std::enable_if&lt;detail::is_polygon_like&lt;Polygon&gt;::value, Polygon&gt;::type</span>
-<span id="L213"><span class="lineNum">     213</span> <span class="tlaGNC tlaBgGNC">           4 : scale(const Polygon&amp; polygon, typename Polygon::coord_type xfact, typename Polygon::coord_type yfact,</span></span>
-<span id="L214"><span class="lineNum">     214</span>              :       const typename Polygon::value_type::value_type&amp; origin = typename Polygon::value_type::value_type{0, 0})</span>
-<span id="L215"><span class="lineNum">     215</span>              : {</span>
-<span id="L216"><span class="lineNum">     216</span> <span class="tlaGNC">           4 :     Polygon result;</span></span>
-<span id="L217"><span class="lineNum">     217</span> <span class="tlaGNC">           4 :     result.reserve(polygon.size());</span></span>
-<span id="L218"><span class="lineNum">     218</span>              : </span>
-<span id="L219"><span class="lineNum">     219</span> <span class="tlaGNC">           8 :     for (const auto&amp; ring : polygon)</span></span>
-<span id="L220"><span class="lineNum">     220</span>              :     {</span>
-<span id="L221"><span class="lineNum">     221</span> <span class="tlaGNC">           4 :         result.push_back(scale(ring, xfact, yfact, origin));</span></span>
-<span id="L222"><span class="lineNum">     222</span>              :     }</span>
+<span id="L207"><span class="lineNum">     207</span>              : /*! @brief Scale a polygon by factors */</span>
+<span id="L208"><span class="lineNum">     208</span>              : template &lt;typename Polygon&gt;</span>
+<span id="L209"><span class="lineNum">     209</span>              : typename std::enable_if&lt;detail::is_polygon_like&lt;Polygon&gt;::value, Polygon&gt;::type</span>
+<span id="L210"><span class="lineNum">     210</span> <span class="tlaGNC tlaBgGNC">           4 : scale(const Polygon&amp; polygon, typename Polygon::coord_type xfact, typename Polygon::coord_type yfact,</span></span>
+<span id="L211"><span class="lineNum">     211</span>              :       const typename Polygon::value_type::value_type&amp; origin = typename Polygon::value_type::value_type{0, 0})</span>
+<span id="L212"><span class="lineNum">     212</span>              : {</span>
+<span id="L213"><span class="lineNum">     213</span> <span class="tlaGNC">           4 :     Polygon result;</span></span>
+<span id="L214"><span class="lineNum">     214</span> <span class="tlaGNC">           4 :     result.reserve(polygon.size());</span></span>
+<span id="L215"><span class="lineNum">     215</span>              : </span>
+<span id="L216"><span class="lineNum">     216</span> <span class="tlaGNC">           8 :     for (const auto&amp; ring : polygon)</span></span>
+<span id="L217"><span class="lineNum">     217</span>              :     {</span>
+<span id="L218"><span class="lineNum">     218</span> <span class="tlaGNC">           4 :         result.push_back(scale(ring, xfact, yfact, origin));</span></span>
+<span id="L219"><span class="lineNum">     219</span>              :     }</span>
+<span id="L220"><span class="lineNum">     220</span>              : </span>
+<span id="L221"><span class="lineNum">     221</span> <span class="tlaGNC">           4 :     return result;</span></span>
+<span id="L222"><span class="lineNum">     222</span> <span class="tlaUNC tlaBgUNC">           0 : }</span></span>
 <span id="L223"><span class="lineNum">     223</span>              : </span>
-<span id="L224"><span class="lineNum">     224</span> <span class="tlaGNC">           4 :     return result;</span></span>
-<span id="L225"><span class="lineNum">     225</span> <span class="tlaUNC tlaBgUNC">           0 : }</span></span>
-<span id="L226"><span class="lineNum">     226</span>              : </span>
-<span id="L227"><span class="lineNum">     227</span>              : }  // namespace algorithm</span>
-<span id="L228"><span class="lineNum">     228</span>              : }  // namespace shapes</span>
-<span id="L229"><span class="lineNum">     229</span>              : }  // namespace simo</span>
+<span id="L224"><span class="lineNum">     224</span>              : }  // namespace algorithm</span>
+<span id="L225"><span class="lineNum">     225</span>              : }  // namespace shapes</span>
+<span id="L226"><span class="lineNum">     226</span>              : }  // namespace simo</span>
         </pre>
               </td>
             </tr>

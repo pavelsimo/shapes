@@ -31,18 +31,18 @@
             <td class="headerValue">coverage.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntryMed">75.4&nbsp;%</td>
-            <td class="headerCovTableEntry">171</td>
-            <td class="headerCovTableEntry">129</td>
+            <td class="headerCovTableEntryMed">77.7&nbsp;%</td>
+            <td class="headerCovTableEntry">215</td>
+            <td class="headerCovTableEntry">167</td>
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-06-07 17:53:22</td>
+            <td class="headerValue">2026-07-05 16:03:15</td>
             <td></td>
             <td class="headerItem">Functions:</td>
-            <td class="headerCovTableEntryLo">53.8&nbsp;%</td>
-            <td class="headerCovTableEntry">39</td>
-            <td class="headerCovTableEntry">21</td>
+            <td class="headerCovTableEntryLo">61.7&nbsp;%</td>
+            <td class="headerCovTableEntry">47</td>
+            <td class="headerCovTableEntry">29</td>
           </tr>
                   <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
                 </table>
@@ -66,312 +66,428 @@
 <span id="L4"><span class="lineNum">       4</span>              : #include &lt;cmath&gt;</span>
 <span id="L5"><span class="lineNum">       5</span>              : #include &lt;cstdint&gt;</span>
 <span id="L6"><span class="lineNum">       6</span>              : #include &lt;cstring&gt;</span>
-<span id="L7"><span class="lineNum">       7</span>              : #include &lt;limits&gt;</span>
-<span id="L8"><span class="lineNum">       8</span>              : #include &lt;vector&gt;</span>
-<span id="L9"><span class="lineNum">       9</span>              : #include &lt;simo/geom/geometry.hpp&gt;</span>
-<span id="L10"><span class="lineNum">      10</span>              : </span>
-<span id="L11"><span class="lineNum">      11</span>              : namespace simo</span>
-<span id="L12"><span class="lineNum">      12</span>              : {</span>
-<span id="L13"><span class="lineNum">      13</span>              : namespace shapes</span>
+<span id="L7"><span class="lineNum">       7</span>              : #include &lt;iterator&gt;</span>
+<span id="L8"><span class="lineNum">       8</span>              : #include &lt;limits&gt;</span>
+<span id="L9"><span class="lineNum">       9</span>              : #include &lt;type_traits&gt;</span>
+<span id="L10"><span class="lineNum">      10</span>              : #include &lt;vector&gt;</span>
+<span id="L11"><span class="lineNum">      11</span>              : #include &lt;simo/geom/geometry.hpp&gt;</span>
+<span id="L12"><span class="lineNum">      12</span>              : </span>
+<span id="L13"><span class="lineNum">      13</span>              : namespace simo</span>
 <span id="L14"><span class="lineNum">      14</span>              : {</span>
-<span id="L15"><span class="lineNum">      15</span>              : namespace io</span>
+<span id="L15"><span class="lineNum">      15</span>              : namespace shapes</span>
 <span id="L16"><span class="lineNum">      16</span>              : {</span>
-<span id="L17"><span class="lineNum">      17</span>              : namespace detail</span>
+<span id="L17"><span class="lineNum">      17</span>              : namespace io</span>
 <span id="L18"><span class="lineNum">      18</span>              : {</span>
-<span id="L19"><span class="lineNum">      19</span>              : </span>
-<span id="L20"><span class="lineNum">      20</span>              : template &lt;typename T&gt;</span>
-<span id="L21"><span class="lineNum">      21</span>              : class wkb_reader</span>
-<span id="L22"><span class="lineNum">      22</span>              : {</span>
-<span id="L23"><span class="lineNum">      23</span>              :   public:</span>
-<span id="L24"><span class="lineNum">      24</span> <span class="tlaGNC tlaBgGNC">          30 :     explicit wkb_reader(const std::vector&lt;std::uint8_t&gt;&amp; bytes)</span></span>
-<span id="L25"><span class="lineNum">      25</span> <span class="tlaGNC">          30 :         : bytes_(bytes), offset_(0) {}</span></span>
-<span id="L26"><span class="lineNum">      26</span>              : </span>
-<span id="L27"><span class="lineNum">      27</span> <span class="tlaGNC">          30 :     geometry_t&lt;T&gt; read()</span></span>
-<span id="L28"><span class="lineNum">      28</span>              :     {</span>
-<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC">          30 :         auto geometry = read_geometry();</span></span>
-<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">          27 :         if (offset_ != bytes_.size())</span></span>
-<span id="L31"><span class="lineNum">      31</span>              :         {</span>
-<span id="L32"><span class="lineNum">      32</span> <span class="tlaUNC tlaBgUNC">           0 :             throw exceptions::parse_error(&quot;unexpected trailing WKB bytes&quot;);</span></span>
-<span id="L33"><span class="lineNum">      33</span>              :         }</span>
-<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC tlaBgGNC">          27 :         return geometry;</span></span>
-<span id="L35"><span class="lineNum">      35</span> <span class="tlaUNC tlaBgUNC">           0 :     }</span></span>
-<span id="L36"><span class="lineNum">      36</span>              : </span>
-<span id="L37"><span class="lineNum">      37</span>              :   private:</span>
-<span id="L38"><span class="lineNum">      38</span>              :     std::vector&lt;std::uint8_t&gt; bytes_;</span>
-<span id="L39"><span class="lineNum">      39</span>              :     std::size_t offset_;</span>
-<span id="L40"><span class="lineNum">      40</span>              : </span>
-<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC tlaBgGNC">         219 :     void require(std::size_t count) const</span></span>
-<span id="L42"><span class="lineNum">      42</span>              :     {</span>
-<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">         219 :         if (bytes_.size() - offset_ &lt; count)</span></span>
-<span id="L44"><span class="lineNum">      44</span>              :         {</span>
-<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">           3 :             throw exceptions::parse_error(&quot;truncated WKB&quot;);</span></span>
-<span id="L46"><span class="lineNum">      46</span>              :         }</span>
-<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">         218 :     }</span></span>
-<span id="L48"><span class="lineNum">      48</span>              : </span>
-<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">          45 :     std::uint8_t read_u8()</span></span>
-<span id="L50"><span class="lineNum">      50</span>              :     {</span>
-<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">          45 :         require(1);</span></span>
-<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC">          45 :         return bytes_[offset_++];</span></span>
-<span id="L53"><span class="lineNum">      53</span>              :     }</span>
-<span id="L54"><span class="lineNum">      54</span>              : </span>
-<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">          68 :     std::uint32_t read_u32(bool little_endian)</span></span>
-<span id="L56"><span class="lineNum">      56</span>              :     {</span>
-<span id="L57"><span class="lineNum">      57</span> <span class="tlaGNC">          68 :         require(4);</span></span>
-<span id="L58"><span class="lineNum">      58</span> <span class="tlaGNC">          67 :         std::uint32_t value = 0;</span></span>
-<span id="L59"><span class="lineNum">      59</span> <span class="tlaGNC">          67 :         if (little_endian)</span></span>
+<span id="L19"><span class="lineNum">      19</span>              : namespace detail</span>
+<span id="L20"><span class="lineNum">      20</span>              : {</span>
+<span id="L21"><span class="lineNum">      21</span>              : </span>
+<span id="L22"><span class="lineNum">      22</span>              : template &lt;typename T&gt;</span>
+<span id="L23"><span class="lineNum">      23</span>              : class wkb_reader</span>
+<span id="L24"><span class="lineNum">      24</span>              : {</span>
+<span id="L25"><span class="lineNum">      25</span>              :   public:</span>
+<span id="L26"><span class="lineNum">      26</span> <span class="tlaGNC tlaBgGNC">          35 :     wkb_reader(const std::uint8_t* data, std::size_t size)</span></span>
+<span id="L27"><span class="lineNum">      27</span> <span class="tlaGNC">          35 :         : data_(data), size_(size), offset_(0) {}</span></span>
+<span id="L28"><span class="lineNum">      28</span>              : </span>
+<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC">          35 :     geometry_t&lt;T&gt; read()</span></span>
+<span id="L30"><span class="lineNum">      30</span>              :     {</span>
+<span id="L31"><span class="lineNum">      31</span> <span class="tlaGNC">          35 :         auto geometry = read_geometry();</span></span>
+<span id="L32"><span class="lineNum">      32</span> <span class="tlaGNC">          28 :         if (offset_ != size_)</span></span>
+<span id="L33"><span class="lineNum">      33</span>              :         {</span>
+<span id="L34"><span class="lineNum">      34</span> <span class="tlaUNC tlaBgUNC">           0 :             throw exceptions::parse_error(&quot;unexpected trailing WKB bytes&quot;);</span></span>
+<span id="L35"><span class="lineNum">      35</span>              :         }</span>
+<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC tlaBgGNC">          28 :         return geometry;</span></span>
+<span id="L37"><span class="lineNum">      37</span> <span class="tlaUNC tlaBgUNC">           0 :     }</span></span>
+<span id="L38"><span class="lineNum">      38</span>              : </span>
+<span id="L39"><span class="lineNum">      39</span>              :   private:</span>
+<span id="L40"><span class="lineNum">      40</span>              :     const std::uint8_t* data_;</span>
+<span id="L41"><span class="lineNum">      41</span>              :     std::size_t size_;</span>
+<span id="L42"><span class="lineNum">      42</span>              :     std::size_t offset_;</span>
+<span id="L43"><span class="lineNum">      43</span>              : </span>
+<span id="L44"><span class="lineNum">      44</span>              :     /// maximum nesting depth for geometry collections, guards against stack overflow</span>
+<span id="L45"><span class="lineNum">      45</span>              :     static constexpr int MAX_DEPTH = 128;</span>
+<span id="L46"><span class="lineNum">      46</span>              :     int depth_ = 0;</span>
+<span id="L47"><span class="lineNum">      47</span>              : </span>
+<span id="L48"><span class="lineNum">      48</span>              :     struct depth_guard</span>
+<span id="L49"><span class="lineNum">      49</span>              :     {</span>
+<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC tlaBgGNC">         170 :         explicit depth_guard(int&amp; depth)</span></span>
+<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">         170 :             : depth_(depth)</span></span>
+<span id="L52"><span class="lineNum">      52</span>              :         {</span>
+<span id="L53"><span class="lineNum">      53</span> <span class="tlaGNC">         170 :             if (++depth_ &gt; MAX_DEPTH)</span></span>
+<span id="L54"><span class="lineNum">      54</span>              :             {</span>
+<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">           3 :                 throw exceptions::parse_error(&quot;WKB nesting too deep&quot;);</span></span>
+<span id="L56"><span class="lineNum">      56</span>              :             }</span>
+<span id="L57"><span class="lineNum">      57</span> <span class="tlaGNC">         169 :         }</span></span>
+<span id="L58"><span class="lineNum">      58</span>              : </span>
+<span id="L59"><span class="lineNum">      59</span> <span class="tlaGNC">         169 :         ~depth_guard()</span></span>
 <span id="L60"><span class="lineNum">      60</span>              :         {</span>
-<span id="L61"><span class="lineNum">      61</span> <span class="tlaGNC">         325 :             for (int i = 0; i &lt; 4; ++i)</span></span>
-<span id="L62"><span class="lineNum">      62</span>              :             {</span>
-<span id="L63"><span class="lineNum">      63</span> <span class="tlaGNC">         260 :                 value |= static_cast&lt;std::uint32_t&gt;(bytes_[offset_ + static_cast&lt;std::size_t&gt;(i)]) &lt;&lt; (i * 8);</span></span>
-<span id="L64"><span class="lineNum">      64</span>              :             }</span>
-<span id="L65"><span class="lineNum">      65</span>              :         }</span>
-<span id="L66"><span class="lineNum">      66</span>              :         else</span>
-<span id="L67"><span class="lineNum">      67</span>              :         {</span>
-<span id="L68"><span class="lineNum">      68</span> <span class="tlaGNC">          10 :             for (int i = 0; i &lt; 4; ++i)</span></span>
-<span id="L69"><span class="lineNum">      69</span>              :             {</span>
-<span id="L70"><span class="lineNum">      70</span> <span class="tlaGNC">           8 :                 value = (value &lt;&lt; 8) | static_cast&lt;std::uint32_t&gt;(bytes_[offset_ + static_cast&lt;std::size_t&gt;(i)]);</span></span>
-<span id="L71"><span class="lineNum">      71</span>              :             }</span>
-<span id="L72"><span class="lineNum">      72</span>              :         }</span>
-<span id="L73"><span class="lineNum">      73</span> <span class="tlaGNC">          67 :         offset_ += 4;</span></span>
-<span id="L74"><span class="lineNum">      74</span> <span class="tlaGNC">          67 :         return value;</span></span>
-<span id="L75"><span class="lineNum">      75</span>              :     }</span>
-<span id="L76"><span class="lineNum">      76</span>              : </span>
-<span id="L77"><span class="lineNum">      77</span> <span class="tlaGNC">         106 :     std::uint64_t read_u64(bool little_endian)</span></span>
-<span id="L78"><span class="lineNum">      78</span>              :     {</span>
-<span id="L79"><span class="lineNum">      79</span> <span class="tlaGNC">         106 :         require(8);</span></span>
-<span id="L80"><span class="lineNum">      80</span> <span class="tlaGNC">         106 :         std::uint64_t value = 0;</span></span>
-<span id="L81"><span class="lineNum">      81</span> <span class="tlaGNC">         106 :         if (little_endian)</span></span>
-<span id="L82"><span class="lineNum">      82</span>              :         {</span>
-<span id="L83"><span class="lineNum">      83</span> <span class="tlaGNC">         918 :             for (int i = 0; i &lt; 8; ++i)</span></span>
-<span id="L84"><span class="lineNum">      84</span>              :             {</span>
-<span id="L85"><span class="lineNum">      85</span> <span class="tlaGNC">         816 :                 value |= static_cast&lt;std::uint64_t&gt;(bytes_[offset_ + static_cast&lt;std::size_t&gt;(i)]) &lt;&lt; (i * 8);</span></span>
-<span id="L86"><span class="lineNum">      86</span>              :             }</span>
-<span id="L87"><span class="lineNum">      87</span>              :         }</span>
-<span id="L88"><span class="lineNum">      88</span>              :         else</span>
-<span id="L89"><span class="lineNum">      89</span>              :         {</span>
-<span id="L90"><span class="lineNum">      90</span> <span class="tlaGNC">          36 :             for (int i = 0; i &lt; 8; ++i)</span></span>
-<span id="L91"><span class="lineNum">      91</span>              :             {</span>
-<span id="L92"><span class="lineNum">      92</span> <span class="tlaGNC">          32 :                 value = (value &lt;&lt; 8) | static_cast&lt;std::uint64_t&gt;(bytes_[offset_ + static_cast&lt;std::size_t&gt;(i)]);</span></span>
-<span id="L93"><span class="lineNum">      93</span>              :             }</span>
-<span id="L94"><span class="lineNum">      94</span>              :         }</span>
-<span id="L95"><span class="lineNum">      95</span> <span class="tlaGNC">         106 :         offset_ += 8;</span></span>
-<span id="L96"><span class="lineNum">      96</span> <span class="tlaGNC">         106 :         return value;</span></span>
-<span id="L97"><span class="lineNum">      97</span>              :     }</span>
-<span id="L98"><span class="lineNum">      98</span>              : </span>
-<span id="L99"><span class="lineNum">      99</span> <span class="tlaGNC">         106 :     double read_double(bool little_endian)</span></span>
-<span id="L100"><span class="lineNum">     100</span>              :     {</span>
-<span id="L101"><span class="lineNum">     101</span> <span class="tlaGNC">         106 :         const auto bits = read_u64(little_endian);</span></span>
-<span id="L102"><span class="lineNum">     102</span> <span class="tlaGNC">         106 :         double value = 0.0;</span></span>
-<span id="L103"><span class="lineNum">     103</span> <span class="tlaGNC">         106 :         std::memcpy(&amp;value, &amp;bits, sizeof(value));</span></span>
-<span id="L104"><span class="lineNum">     104</span> <span class="tlaGNC">         106 :         return value;</span></span>
+<span id="L61"><span class="lineNum">      61</span> <span class="tlaGNC">         169 :             --depth_;</span></span>
+<span id="L62"><span class="lineNum">      62</span> <span class="tlaGNC">         169 :         }</span></span>
+<span id="L63"><span class="lineNum">      63</span>              : </span>
+<span id="L64"><span class="lineNum">      64</span>              :         depth_guard(const depth_guard&amp;) = delete;</span>
+<span id="L65"><span class="lineNum">      65</span>              :         depth_guard&amp; operator=(const depth_guard&amp;) = delete;</span>
+<span id="L66"><span class="lineNum">      66</span>              : </span>
+<span id="L67"><span class="lineNum">      67</span>              :       private:</span>
+<span id="L68"><span class="lineNum">      68</span>              :         int&amp; depth_;</span>
+<span id="L69"><span class="lineNum">      69</span>              :     };</span>
+<span id="L70"><span class="lineNum">      70</span>              : </span>
+<span id="L71"><span class="lineNum">      71</span> <span class="tlaGNC">         623 :     void require(std::size_t count) const</span></span>
+<span id="L72"><span class="lineNum">      72</span>              :     {</span>
+<span id="L73"><span class="lineNum">      73</span> <span class="tlaGNC">         623 :         if (size_ - offset_ &lt; count)</span></span>
+<span id="L74"><span class="lineNum">      74</span>              :         {</span>
+<span id="L75"><span class="lineNum">      75</span> <span class="tlaGNC">           3 :             throw exceptions::parse_error(&quot;truncated WKB&quot;);</span></span>
+<span id="L76"><span class="lineNum">      76</span>              :         }</span>
+<span id="L77"><span class="lineNum">      77</span> <span class="tlaGNC">         622 :     }</span></span>
+<span id="L78"><span class="lineNum">      78</span>              : </span>
+<span id="L79"><span class="lineNum">      79</span> <span class="tlaGNC">         179 :     std::uint8_t read_u8()</span></span>
+<span id="L80"><span class="lineNum">      80</span>              :     {</span>
+<span id="L81"><span class="lineNum">      81</span> <span class="tlaGNC">         179 :         require(1);</span></span>
+<span id="L82"><span class="lineNum">      82</span> <span class="tlaGNC">         179 :         return data_[offset_++];</span></span>
+<span id="L83"><span class="lineNum">      83</span>              :     }</span>
+<span id="L84"><span class="lineNum">      84</span>              : </span>
+<span id="L85"><span class="lineNum">      85</span> <span class="tlaGNC">         334 :     std::uint32_t read_u32(bool little_endian)</span></span>
+<span id="L86"><span class="lineNum">      86</span>              :     {</span>
+<span id="L87"><span class="lineNum">      87</span> <span class="tlaGNC">         334 :         require(4);</span></span>
+<span id="L88"><span class="lineNum">      88</span> <span class="tlaGNC">         333 :         std::uint32_t value = 0;</span></span>
+<span id="L89"><span class="lineNum">      89</span> <span class="tlaGNC">         333 :         if (little_endian)</span></span>
+<span id="L90"><span class="lineNum">      90</span>              :         {</span>
+<span id="L91"><span class="lineNum">      91</span> <span class="tlaGNC">        1655 :             for (int i = 0; i &lt; 4; ++i)</span></span>
+<span id="L92"><span class="lineNum">      92</span>              :             {</span>
+<span id="L93"><span class="lineNum">      93</span> <span class="tlaGNC">        1324 :                 value |= static_cast&lt;std::uint32_t&gt;(data_[offset_ + static_cast&lt;std::size_t&gt;(i)]) &lt;&lt; (i * 8);</span></span>
+<span id="L94"><span class="lineNum">      94</span>              :             }</span>
+<span id="L95"><span class="lineNum">      95</span>              :         }</span>
+<span id="L96"><span class="lineNum">      96</span>              :         else</span>
+<span id="L97"><span class="lineNum">      97</span>              :         {</span>
+<span id="L98"><span class="lineNum">      98</span> <span class="tlaGNC">          10 :             for (int i = 0; i &lt; 4; ++i)</span></span>
+<span id="L99"><span class="lineNum">      99</span>              :             {</span>
+<span id="L100"><span class="lineNum">     100</span> <span class="tlaGNC">           8 :                 value = (value &lt;&lt; 8) | static_cast&lt;std::uint32_t&gt;(data_[offset_ + static_cast&lt;std::size_t&gt;(i)]);</span></span>
+<span id="L101"><span class="lineNum">     101</span>              :             }</span>
+<span id="L102"><span class="lineNum">     102</span>              :         }</span>
+<span id="L103"><span class="lineNum">     103</span> <span class="tlaGNC">         333 :         offset_ += 4;</span></span>
+<span id="L104"><span class="lineNum">     104</span> <span class="tlaGNC">         333 :         return value;</span></span>
 <span id="L105"><span class="lineNum">     105</span>              :     }</span>
 <span id="L106"><span class="lineNum">     106</span>              : </span>
-<span id="L107"><span class="lineNum">     107</span> <span class="tlaGNC">          43 :     geometry_type decode_type(std::uint32_t type_id) const</span></span>
+<span id="L107"><span class="lineNum">     107</span> <span class="tlaGNC">         110 :     std::uint64_t read_u64(bool little_endian)</span></span>
 <span id="L108"><span class="lineNum">     108</span>              :     {</span>
-<span id="L109"><span class="lineNum">     109</span> <span class="tlaGNC">          43 :         const auto base = type_id % 1000;</span></span>
-<span id="L110"><span class="lineNum">     110</span> <span class="tlaGNC">          43 :         if (base &lt; 1 or base &gt; 7)</span></span>
-<span id="L111"><span class="lineNum">     111</span>              :         {</span>
-<span id="L112"><span class="lineNum">     112</span> <span class="tlaGNC">           3 :             throw exceptions::parse_error(&quot;unsupported WKB geometry type&quot;);</span></span>
-<span id="L113"><span class="lineNum">     113</span>              :         }</span>
-<span id="L114"><span class="lineNum">     114</span>              : </span>
-<span id="L115"><span class="lineNum">     115</span> <span class="tlaGNC">          42 :         if (type_id &gt;= 1 and type_id &lt;= 7)</span></span>
-<span id="L116"><span class="lineNum">     116</span>              :         {</span>
-<span id="L117"><span class="lineNum">     117</span> <span class="tlaGNC">          37 :             return static_cast&lt;geometry_type&gt;(type_id);</span></span>
-<span id="L118"><span class="lineNum">     118</span>              :         }</span>
-<span id="L119"><span class="lineNum">     119</span> <span class="tlaGNC">           5 :         if (type_id &gt;= 1001 and type_id &lt;= 1007)</span></span>
-<span id="L120"><span class="lineNum">     120</span>              :         {</span>
-<span id="L121"><span class="lineNum">     121</span> <span class="tlaGNC">           2 :             return static_cast&lt;geometry_type&gt;(type_id);</span></span>
-<span id="L122"><span class="lineNum">     122</span>              :         }</span>
-<span id="L123"><span class="lineNum">     123</span> <span class="tlaGNC">           3 :         if (type_id &gt;= 2001 and type_id &lt;= 2007)</span></span>
-<span id="L124"><span class="lineNum">     124</span>              :         {</span>
-<span id="L125"><span class="lineNum">     125</span> <span class="tlaGNC">           2 :             return static_cast&lt;geometry_type&gt;(type_id);</span></span>
-<span id="L126"><span class="lineNum">     126</span>              :         }</span>
-<span id="L127"><span class="lineNum">     127</span> <span class="tlaGNC">           1 :         if (type_id &gt;= 3001 and type_id &lt;= 3007)</span></span>
-<span id="L128"><span class="lineNum">     128</span>              :         {</span>
-<span id="L129"><span class="lineNum">     129</span> <span class="tlaGNC">           1 :             return static_cast&lt;geometry_type&gt;(type_id);</span></span>
-<span id="L130"><span class="lineNum">     130</span>              :         }</span>
-<span id="L131"><span class="lineNum">     131</span>              : </span>
-<span id="L132"><span class="lineNum">     132</span> <span class="tlaUNC tlaBgUNC">           0 :         throw exceptions::parse_error(&quot;unsupported WKB geometry type&quot;);</span></span>
-<span id="L133"><span class="lineNum">     133</span>              :     }</span>
-<span id="L134"><span class="lineNum">     134</span>              : </span>
-<span id="L135"><span class="lineNum">     135</span>              :     template &lt;typename PointType&gt;</span>
-<span id="L136"><span class="lineNum">     136</span> <span class="tlaGNC tlaBgGNC">          50 :     PointType read_point_coordinates(bool little_endian)</span></span>
-<span id="L137"><span class="lineNum">     137</span>              :     {</span>
-<span id="L138"><span class="lineNum">     138</span> <span class="tlaGNC">          50 :         std::vector&lt;typename PointType::coord_type&gt; coords;</span></span>
-<span id="L139"><span class="lineNum">     139</span> <span class="tlaGNC">          50 :         coords.reserve(PointType::N);</span></span>
-<span id="L140"><span class="lineNum">     140</span>              : </span>
-<span id="L141"><span class="lineNum">     141</span> <span class="tlaGNC">          50 :         bool all_nan = true;</span></span>
-<span id="L142"><span class="lineNum">     142</span> <span class="tlaGNC">         156 :         for (std::size_t i = 0; i &lt; PointType::N; ++i)</span></span>
+<span id="L109"><span class="lineNum">     109</span> <span class="tlaGNC">         110 :         require(8);</span></span>
+<span id="L110"><span class="lineNum">     110</span> <span class="tlaGNC">         110 :         std::uint64_t value = 0;</span></span>
+<span id="L111"><span class="lineNum">     111</span> <span class="tlaGNC">         110 :         if (little_endian)</span></span>
+<span id="L112"><span class="lineNum">     112</span>              :         {</span>
+<span id="L113"><span class="lineNum">     113</span> <span class="tlaGNC">         954 :             for (int i = 0; i &lt; 8; ++i)</span></span>
+<span id="L114"><span class="lineNum">     114</span>              :             {</span>
+<span id="L115"><span class="lineNum">     115</span> <span class="tlaGNC">         848 :                 value |= static_cast&lt;std::uint64_t&gt;(data_[offset_ + static_cast&lt;std::size_t&gt;(i)]) &lt;&lt; (i * 8);</span></span>
+<span id="L116"><span class="lineNum">     116</span>              :             }</span>
+<span id="L117"><span class="lineNum">     117</span>              :         }</span>
+<span id="L118"><span class="lineNum">     118</span>              :         else</span>
+<span id="L119"><span class="lineNum">     119</span>              :         {</span>
+<span id="L120"><span class="lineNum">     120</span> <span class="tlaGNC">          36 :             for (int i = 0; i &lt; 8; ++i)</span></span>
+<span id="L121"><span class="lineNum">     121</span>              :             {</span>
+<span id="L122"><span class="lineNum">     122</span> <span class="tlaGNC">          32 :                 value = (value &lt;&lt; 8) | static_cast&lt;std::uint64_t&gt;(data_[offset_ + static_cast&lt;std::size_t&gt;(i)]);</span></span>
+<span id="L123"><span class="lineNum">     123</span>              :             }</span>
+<span id="L124"><span class="lineNum">     124</span>              :         }</span>
+<span id="L125"><span class="lineNum">     125</span> <span class="tlaGNC">         110 :         offset_ += 8;</span></span>
+<span id="L126"><span class="lineNum">     126</span> <span class="tlaGNC">         110 :         return value;</span></span>
+<span id="L127"><span class="lineNum">     127</span>              :     }</span>
+<span id="L128"><span class="lineNum">     128</span>              : </span>
+<span id="L129"><span class="lineNum">     129</span> <span class="tlaGNC">         110 :     double read_double(bool little_endian)</span></span>
+<span id="L130"><span class="lineNum">     130</span>              :     {</span>
+<span id="L131"><span class="lineNum">     131</span> <span class="tlaGNC">         110 :         const auto bits = read_u64(little_endian);</span></span>
+<span id="L132"><span class="lineNum">     132</span> <span class="tlaGNC">         110 :         double value = 0.0;</span></span>
+<span id="L133"><span class="lineNum">     133</span> <span class="tlaGNC">         110 :         std::memcpy(&amp;value, &amp;bits, sizeof(value));</span></span>
+<span id="L134"><span class="lineNum">     134</span> <span class="tlaGNC">         110 :         return value;</span></span>
+<span id="L135"><span class="lineNum">     135</span>              :     }</span>
+<span id="L136"><span class="lineNum">     136</span>              : </span>
+<span id="L137"><span class="lineNum">     137</span>              :     /// reads an element count and validates it against the remaining input before any</span>
+<span id="L138"><span class="lineNum">     138</span>              :     /// reserve call, so a crafted small buffer cannot trigger a huge allocation</span>
+<span id="L139"><span class="lineNum">     139</span> <span class="tlaGNC">         156 :     std::uint32_t read_count(bool little_endian, std::size_t min_element_bytes)</span></span>
+<span id="L140"><span class="lineNum">     140</span>              :     {</span>
+<span id="L141"><span class="lineNum">     141</span> <span class="tlaGNC">         156 :         const auto count = read_u32(little_endian);</span></span>
+<span id="L142"><span class="lineNum">     142</span> <span class="tlaGNC">         156 :         if (static_cast&lt;std::size_t&gt;(count) &gt; (size_ - offset_) / min_element_bytes)</span></span>
 <span id="L143"><span class="lineNum">     143</span>              :         {</span>
-<span id="L144"><span class="lineNum">     144</span> <span class="tlaGNC">         106 :             const auto value = read_double(little_endian);</span></span>
-<span id="L145"><span class="lineNum">     145</span> <span class="tlaGNC">         106 :             all_nan = all_nan and std::isnan(value);</span></span>
-<span id="L146"><span class="lineNum">     146</span> <span class="tlaGNC">         106 :             coords.push_back(static_cast&lt;typename PointType::coord_type&gt;(value));</span></span>
-<span id="L147"><span class="lineNum">     147</span>              :         }</span>
+<span id="L144"><span class="lineNum">     144</span> <span class="tlaGNC">           9 :             throw exceptions::parse_error(&quot;truncated WKB&quot;);</span></span>
+<span id="L145"><span class="lineNum">     145</span>              :         }</span>
+<span id="L146"><span class="lineNum">     146</span> <span class="tlaGNC">         153 :         return count;</span></span>
+<span id="L147"><span class="lineNum">     147</span>              :     }</span>
 <span id="L148"><span class="lineNum">     148</span>              : </span>
-<span id="L149"><span class="lineNum">     149</span> <span class="tlaGNC">          50 :         if (all_nan)</span></span>
-<span id="L150"><span class="lineNum">     150</span>              :         {</span>
-<span id="L151"><span class="lineNum">     151</span> <span class="tlaGNC">           1 :             return PointType();</span></span>
-<span id="L152"><span class="lineNum">     152</span>              :         }</span>
-<span id="L153"><span class="lineNum">     153</span> <span class="tlaGNC">          49 :         return PointType(coords.begin(), coords.end());</span></span>
-<span id="L154"><span class="lineNum">     154</span> <span class="tlaGNC">          50 :     }</span></span>
-<span id="L155"><span class="lineNum">     155</span>              : </span>
-<span id="L156"><span class="lineNum">     156</span>              :     template &lt;typename LineStringType&gt;</span>
-<span id="L157"><span class="lineNum">     157</span> <span class="tlaGNC">          10 :     LineStringType read_linestring_coordinates(bool little_endian)</span></span>
-<span id="L158"><span class="lineNum">     158</span>              :     {</span>
-<span id="L159"><span class="lineNum">     159</span>              :         using point_type = typename LineStringType::point_type;</span>
-<span id="L160"><span class="lineNum">     160</span>              : </span>
-<span id="L161"><span class="lineNum">     161</span> <span class="tlaGNC">          10 :         const auto count = read_u32(little_endian);</span></span>
-<span id="L162"><span class="lineNum">     162</span> <span class="tlaGNC">          10 :         std::vector&lt;point_type&gt; points;</span></span>
-<span id="L163"><span class="lineNum">     163</span> <span class="tlaGNC">          10 :         points.reserve(static_cast&lt;std::size_t&gt;(count));</span></span>
-<span id="L164"><span class="lineNum">     164</span> <span class="tlaGNC">          38 :         for (std::uint32_t i = 0; i &lt; count; ++i)</span></span>
-<span id="L165"><span class="lineNum">     165</span>              :         {</span>
-<span id="L166"><span class="lineNum">     166</span> <span class="tlaGNC">          28 :             points.emplace_back(read_point_coordinates&lt;point_type&gt;(little_endian));</span></span>
-<span id="L167"><span class="lineNum">     167</span>              :         }</span>
-<span id="L168"><span class="lineNum">     168</span> <span class="tlaGNC">          20 :         return LineStringType(points.begin(), points.end());</span></span>
-<span id="L169"><span class="lineNum">     169</span> <span class="tlaGNC">          10 :     }</span></span>
-<span id="L170"><span class="lineNum">     170</span>              : </span>
-<span id="L171"><span class="lineNum">     171</span>              :     template &lt;typename PolygonType&gt;</span>
-<span id="L172"><span class="lineNum">     172</span> <span class="tlaGNC">           4 :     PolygonType read_polygon_coordinates(bool little_endian)</span></span>
-<span id="L173"><span class="lineNum">     173</span>              :     {</span>
-<span id="L174"><span class="lineNum">     174</span>              :         using ring_type = typename PolygonType::value_type;</span>
-<span id="L175"><span class="lineNum">     175</span>              : </span>
-<span id="L176"><span class="lineNum">     176</span> <span class="tlaGNC">           4 :         const auto count = read_u32(little_endian);</span></span>
-<span id="L177"><span class="lineNum">     177</span> <span class="tlaGNC">           4 :         std::vector&lt;ring_type&gt; rings;</span></span>
-<span id="L178"><span class="lineNum">     178</span> <span class="tlaGNC">           4 :         rings.reserve(static_cast&lt;std::size_t&gt;(count));</span></span>
-<span id="L179"><span class="lineNum">     179</span> <span class="tlaGNC">           8 :         for (std::uint32_t i = 0; i &lt; count; ++i)</span></span>
-<span id="L180"><span class="lineNum">     180</span>              :         {</span>
-<span id="L181"><span class="lineNum">     181</span> <span class="tlaGNC">           4 :             rings.emplace_back(read_linestring_coordinates&lt;ring_type&gt;(little_endian));</span></span>
-<span id="L182"><span class="lineNum">     182</span>              :         }</span>
-<span id="L183"><span class="lineNum">     183</span> <span class="tlaGNC">           8 :         return PolygonType(rings.begin(), rings.end());</span></span>
-<span id="L184"><span class="lineNum">     184</span> <span class="tlaGNC">           4 :     }</span></span>
-<span id="L185"><span class="lineNum">     185</span>              : </span>
-<span id="L186"><span class="lineNum">     186</span>              :     template &lt;typename MultiType, typename ChildType&gt;</span>
-<span id="L187"><span class="lineNum">     187</span> <span class="tlaGNC">           6 :     MultiType read_geometry_children(bool little_endian, geometry_type expected_type)</span></span>
-<span id="L188"><span class="lineNum">     188</span>              :     {</span>
-<span id="L189"><span class="lineNum">     189</span> <span class="tlaGNC">           6 :         const auto count = read_u32(little_endian);</span></span>
-<span id="L190"><span class="lineNum">     190</span> <span class="tlaGNC">           6 :         std::vector&lt;ChildType&gt; children;</span></span>
-<span id="L191"><span class="lineNum">     191</span> <span class="tlaGNC">           6 :         children.reserve(static_cast&lt;std::size_t&gt;(count));</span></span>
-<span id="L192"><span class="lineNum">     192</span> <span class="tlaGNC">          14 :         for (std::uint32_t i = 0; i &lt; count; ++i)</span></span>
-<span id="L193"><span class="lineNum">     193</span>              :         {</span>
-<span id="L194"><span class="lineNum">     194</span> <span class="tlaGNC">           8 :             auto child = read_geometry();</span></span>
-<span id="L195"><span class="lineNum">     195</span> <span class="tlaGNC">           8 :             if (child.geom_type() != expected_type)</span></span>
-<span id="L196"><span class="lineNum">     196</span>              :             {</span>
-<span id="L197"><span class="lineNum">     197</span> <span class="tlaUNC tlaBgUNC">           0 :                 throw exceptions::parse_error(&quot;unexpected WKB child geometry type&quot;);</span></span>
-<span id="L198"><span class="lineNum">     198</span>              :             }</span>
-<span id="L199"><span class="lineNum">     199</span> <span class="tlaGNC tlaBgGNC">           8 :             children.emplace_back(*child.template get&lt;ChildType&gt;());</span></span>
-<span id="L200"><span class="lineNum">     200</span>              :         }</span>
-<span id="L201"><span class="lineNum">     201</span> <span class="tlaGNC">          12 :         return MultiType(children.begin(), children.end());</span></span>
-<span id="L202"><span class="lineNum">     202</span> <span class="tlaGNC">           6 :     }</span></span>
-<span id="L203"><span class="lineNum">     203</span>              : </span>
-<span id="L204"><span class="lineNum">     204</span>              :     template &lt;typename CollectionType&gt;</span>
-<span id="L205"><span class="lineNum">     205</span> <span class="tlaGNC">           4 :     CollectionType read_collection_children(bool little_endian)</span></span>
-<span id="L206"><span class="lineNum">     206</span>              :     {</span>
-<span id="L207"><span class="lineNum">     207</span> <span class="tlaGNC">           4 :         const auto count = read_u32(little_endian);</span></span>
-<span id="L208"><span class="lineNum">     208</span> <span class="tlaGNC">           4 :         std::vector&lt;geometry_t&lt;T&gt;&gt; children;</span></span>
-<span id="L209"><span class="lineNum">     209</span> <span class="tlaGNC">           4 :         children.reserve(static_cast&lt;std::size_t&gt;(count));</span></span>
-<span id="L210"><span class="lineNum">     210</span> <span class="tlaGNC">          11 :         for (std::uint32_t i = 0; i &lt; count; ++i)</span></span>
-<span id="L211"><span class="lineNum">     211</span>              :         {</span>
-<span id="L212"><span class="lineNum">     212</span> <span class="tlaGNC">           7 :             children.emplace_back(read_geometry());</span></span>
-<span id="L213"><span class="lineNum">     213</span>              :         }</span>
-<span id="L214"><span class="lineNum">     214</span> <span class="tlaGNC">           8 :         return CollectionType(children.begin(), children.end());</span></span>
-<span id="L215"><span class="lineNum">     215</span> <span class="tlaGNC">           4 :     }</span></span>
-<span id="L216"><span class="lineNum">     216</span>              : </span>
-<span id="L217"><span class="lineNum">     217</span> <span class="tlaGNC">          45 :     geometry_t&lt;T&gt; read_geometry()</span></span>
+<span id="L149"><span class="lineNum">     149</span> <span class="tlaGNC">         177 :     geometry_type decode_type(std::uint32_t type_id) const</span></span>
+<span id="L150"><span class="lineNum">     150</span>              :     {</span>
+<span id="L151"><span class="lineNum">     151</span> <span class="tlaGNC">         177 :         const auto base = type_id % 1000;</span></span>
+<span id="L152"><span class="lineNum">     152</span> <span class="tlaGNC">         177 :         if (base &lt; 1 or base &gt; 7)</span></span>
+<span id="L153"><span class="lineNum">     153</span>              :         {</span>
+<span id="L154"><span class="lineNum">     154</span> <span class="tlaGNC">           3 :             throw exceptions::parse_error(&quot;unsupported WKB geometry type&quot;);</span></span>
+<span id="L155"><span class="lineNum">     155</span>              :         }</span>
+<span id="L156"><span class="lineNum">     156</span>              : </span>
+<span id="L157"><span class="lineNum">     157</span> <span class="tlaGNC">         176 :         if (type_id &gt;= 1 and type_id &lt;= 7)</span></span>
+<span id="L158"><span class="lineNum">     158</span>              :         {</span>
+<span id="L159"><span class="lineNum">     159</span> <span class="tlaGNC">         171 :             return static_cast&lt;geometry_type&gt;(type_id);</span></span>
+<span id="L160"><span class="lineNum">     160</span>              :         }</span>
+<span id="L161"><span class="lineNum">     161</span> <span class="tlaGNC">           5 :         if (type_id &gt;= 1001 and type_id &lt;= 1007)</span></span>
+<span id="L162"><span class="lineNum">     162</span>              :         {</span>
+<span id="L163"><span class="lineNum">     163</span> <span class="tlaGNC">           2 :             return static_cast&lt;geometry_type&gt;(type_id);</span></span>
+<span id="L164"><span class="lineNum">     164</span>              :         }</span>
+<span id="L165"><span class="lineNum">     165</span> <span class="tlaGNC">           3 :         if (type_id &gt;= 2001 and type_id &lt;= 2007)</span></span>
+<span id="L166"><span class="lineNum">     166</span>              :         {</span>
+<span id="L167"><span class="lineNum">     167</span> <span class="tlaGNC">           2 :             return static_cast&lt;geometry_type&gt;(type_id);</span></span>
+<span id="L168"><span class="lineNum">     168</span>              :         }</span>
+<span id="L169"><span class="lineNum">     169</span> <span class="tlaGNC">           1 :         if (type_id &gt;= 3001 and type_id &lt;= 3007)</span></span>
+<span id="L170"><span class="lineNum">     170</span>              :         {</span>
+<span id="L171"><span class="lineNum">     171</span> <span class="tlaGNC">           1 :             return static_cast&lt;geometry_type&gt;(type_id);</span></span>
+<span id="L172"><span class="lineNum">     172</span>              :         }</span>
+<span id="L173"><span class="lineNum">     173</span>              : </span>
+<span id="L174"><span class="lineNum">     174</span> <span class="tlaUNC tlaBgUNC">           0 :         throw exceptions::parse_error(&quot;unsupported WKB geometry type&quot;);</span></span>
+<span id="L175"><span class="lineNum">     175</span>              :     }</span>
+<span id="L176"><span class="lineNum">     176</span>              : </span>
+<span id="L177"><span class="lineNum">     177</span>              :     template &lt;typename PointType&gt;</span>
+<span id="L178"><span class="lineNum">     178</span> <span class="tlaGNC tlaBgGNC">          46 :     static PointType make_point(const double* c, std::integral_constant&lt;std::size_t, 2&gt;)</span></span>
+<span id="L179"><span class="lineNum">     179</span>              :     {</span>
+<span id="L180"><span class="lineNum">     180</span>              :         using coord_type = typename PointType::coord_type;</span>
+<span id="L181"><span class="lineNum">     181</span> <span class="tlaGNC">          46 :         return PointType(static_cast&lt;coord_type&gt;(c[0]), static_cast&lt;coord_type&gt;(c[1]));</span></span>
+<span id="L182"><span class="lineNum">     182</span>              :     }</span>
+<span id="L183"><span class="lineNum">     183</span>              : </span>
+<span id="L184"><span class="lineNum">     184</span>              :     template &lt;typename PointType&gt;</span>
+<span id="L185"><span class="lineNum">     185</span> <span class="tlaGNC">           4 :     static PointType make_point(const double* c, std::integral_constant&lt;std::size_t, 3&gt;)</span></span>
+<span id="L186"><span class="lineNum">     186</span>              :     {</span>
+<span id="L187"><span class="lineNum">     187</span>              :         using coord_type = typename PointType::coord_type;</span>
+<span id="L188"><span class="lineNum">     188</span> <span class="tlaGNC">           4 :         return PointType(static_cast&lt;coord_type&gt;(c[0]), static_cast&lt;coord_type&gt;(c[1]), static_cast&lt;coord_type&gt;(c[2]));</span></span>
+<span id="L189"><span class="lineNum">     189</span>              :     }</span>
+<span id="L190"><span class="lineNum">     190</span>              : </span>
+<span id="L191"><span class="lineNum">     191</span>              :     template &lt;typename PointType&gt;</span>
+<span id="L192"><span class="lineNum">     192</span> <span class="tlaGNC">           1 :     static PointType make_point(const double* c, std::integral_constant&lt;std::size_t, 4&gt;)</span></span>
+<span id="L193"><span class="lineNum">     193</span>              :     {</span>
+<span id="L194"><span class="lineNum">     194</span>              :         using coord_type = typename PointType::coord_type;</span>
+<span id="L195"><span class="lineNum">     195</span> <span class="tlaGNC">           1 :         return PointType(static_cast&lt;coord_type&gt;(c[0]), static_cast&lt;coord_type&gt;(c[1]), static_cast&lt;coord_type&gt;(c[2]), static_cast&lt;coord_type&gt;(c[3]));</span></span>
+<span id="L196"><span class="lineNum">     196</span>              :     }</span>
+<span id="L197"><span class="lineNum">     197</span>              : </span>
+<span id="L198"><span class="lineNum">     198</span>              :     template &lt;typename PointType&gt;</span>
+<span id="L199"><span class="lineNum">     199</span> <span class="tlaGNC">          52 :     PointType read_point_coordinates(bool little_endian)</span></span>
+<span id="L200"><span class="lineNum">     200</span>              :     {</span>
+<span id="L201"><span class="lineNum">     201</span>              :         double coords[PointType::N];</span>
+<span id="L202"><span class="lineNum">     202</span> <span class="tlaGNC">          52 :         bool all_nan = true;</span></span>
+<span id="L203"><span class="lineNum">     203</span> <span class="tlaGNC">         162 :         for (std::size_t i = 0; i &lt; PointType::N; ++i)</span></span>
+<span id="L204"><span class="lineNum">     204</span>              :         {</span>
+<span id="L205"><span class="lineNum">     205</span> <span class="tlaGNC">         110 :             coords[i] = read_double(little_endian);</span></span>
+<span id="L206"><span class="lineNum">     206</span> <span class="tlaGNC">         110 :             all_nan   = all_nan and std::isnan(coords[i]);</span></span>
+<span id="L207"><span class="lineNum">     207</span>              :         }</span>
+<span id="L208"><span class="lineNum">     208</span>              : </span>
+<span id="L209"><span class="lineNum">     209</span> <span class="tlaGNC">          52 :         if (all_nan)</span></span>
+<span id="L210"><span class="lineNum">     210</span>              :         {</span>
+<span id="L211"><span class="lineNum">     211</span> <span class="tlaGNC">           1 :             return PointType();</span></span>
+<span id="L212"><span class="lineNum">     212</span>              :         }</span>
+<span id="L213"><span class="lineNum">     213</span> <span class="tlaGNC">          51 :         return make_point&lt;PointType&gt;(coords, std::integral_constant&lt;std::size_t, PointType::N&gt;{});</span></span>
+<span id="L214"><span class="lineNum">     214</span>              :     }</span>
+<span id="L215"><span class="lineNum">     215</span>              : </span>
+<span id="L216"><span class="lineNum">     216</span>              :     template &lt;typename LineStringType&gt;</span>
+<span id="L217"><span class="lineNum">     217</span> <span class="tlaGNC">          11 :     LineStringType read_linestring_coordinates(bool little_endian)</span></span>
 <span id="L218"><span class="lineNum">     218</span>              :     {</span>
-<span id="L219"><span class="lineNum">     219</span> <span class="tlaGNC">          45 :         const auto order = read_u8();</span></span>
-<span id="L220"><span class="lineNum">     220</span> <span class="tlaGNC">          45 :         if (order != 0 and order != 1)</span></span>
-<span id="L221"><span class="lineNum">     221</span>              :         {</span>
-<span id="L222"><span class="lineNum">     222</span> <span class="tlaGNC">           3 :             throw exceptions::parse_error(&quot;invalid WKB byte order&quot;);</span></span>
-<span id="L223"><span class="lineNum">     223</span>              :         }</span>
-<span id="L224"><span class="lineNum">     224</span> <span class="tlaGNC">          44 :         const bool little_endian = order == 1;</span></span>
-<span id="L225"><span class="lineNum">     225</span> <span class="tlaGNC">          44 :         const auto geom_type = decode_type(read_u32(little_endian));</span></span>
-<span id="L226"><span class="lineNum">     226</span>              : </span>
-<span id="L227"><span class="lineNum">     227</span> <span class="tlaGNC">          42 :         switch (geom_type)</span></span>
-<span id="L228"><span class="lineNum">     228</span>              :         {</span>
-<span id="L229"><span class="lineNum">     229</span> <span class="tlaGNC">          17 :             case geometry_type::POINT:</span></span>
-<span id="L230"><span class="lineNum">     230</span> <span class="tlaGNC">          17 :                 return geometry_t&lt;T&gt;(read_point_coordinates&lt;point_t&lt;T&gt;&gt;(little_endian));</span></span>
-<span id="L231"><span class="lineNum">     231</span> <span class="tlaGNC">           2 :             case geometry_type::POINTZ:</span></span>
-<span id="L232"><span class="lineNum">     232</span> <span class="tlaGNC">           2 :                 return geometry_t&lt;T&gt;(read_point_coordinates&lt;point_z_t&lt;T&gt;&gt;(little_endian));</span></span>
-<span id="L233"><span class="lineNum">     233</span> <span class="tlaGNC">           2 :             case geometry_type::POINTM:</span></span>
-<span id="L234"><span class="lineNum">     234</span> <span class="tlaGNC">           2 :                 return geometry_t&lt;T&gt;(read_point_coordinates&lt;point_m_t&lt;T&gt;&gt;(little_endian));</span></span>
-<span id="L235"><span class="lineNum">     235</span> <span class="tlaGNC">           1 :             case geometry_type::POINTZM:</span></span>
-<span id="L236"><span class="lineNum">     236</span> <span class="tlaGNC">           1 :                 return geometry_t&lt;T&gt;(read_point_coordinates&lt;point_zm_t&lt;T&gt;&gt;(little_endian));</span></span>
-<span id="L237"><span class="lineNum">     237</span>              : </span>
-<span id="L238"><span class="lineNum">     238</span> <span class="tlaGNC">           6 :             case geometry_type::LINESTRING:</span></span>
-<span id="L239"><span class="lineNum">     239</span> <span class="tlaGNC">           6 :                 return geometry_t&lt;T&gt;(read_linestring_coordinates&lt;linestring_t&lt;T&gt;&gt;(little_endian));</span></span>
-<span id="L240"><span class="lineNum">     240</span> <span class="tlaUNC tlaBgUNC">           0 :             case geometry_type::LINESTRINGZ:</span></span>
-<span id="L241"><span class="lineNum">     241</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_linestring_coordinates&lt;linestring_z_t&lt;T&gt;&gt;(little_endian));</span></span>
-<span id="L242"><span class="lineNum">     242</span> <span class="tlaUNC">           0 :             case geometry_type::LINESTRINGM:</span></span>
-<span id="L243"><span class="lineNum">     243</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_linestring_coordinates&lt;linestring_m_t&lt;T&gt;&gt;(little_endian));</span></span>
-<span id="L244"><span class="lineNum">     244</span> <span class="tlaUNC">           0 :             case geometry_type::LINESTRINGZM:</span></span>
-<span id="L245"><span class="lineNum">     245</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_linestring_coordinates&lt;linestring_zm_t&lt;T&gt;&gt;(little_endian));</span></span>
-<span id="L246"><span class="lineNum">     246</span>              : </span>
-<span id="L247"><span class="lineNum">     247</span> <span class="tlaGNC tlaBgGNC">           4 :             case geometry_type::POLYGON:</span></span>
-<span id="L248"><span class="lineNum">     248</span> <span class="tlaGNC">           4 :                 return geometry_t&lt;T&gt;(read_polygon_coordinates&lt;polygon_t&lt;T&gt;&gt;(little_endian));</span></span>
-<span id="L249"><span class="lineNum">     249</span> <span class="tlaUNC tlaBgUNC">           0 :             case geometry_type::POLYGONZ:</span></span>
-<span id="L250"><span class="lineNum">     250</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_polygon_coordinates&lt;polygon_z_t&lt;T&gt;&gt;(little_endian));</span></span>
-<span id="L251"><span class="lineNum">     251</span> <span class="tlaUNC">           0 :             case geometry_type::POLYGONM:</span></span>
-<span id="L252"><span class="lineNum">     252</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_polygon_coordinates&lt;polygon_m_t&lt;T&gt;&gt;(little_endian));</span></span>
-<span id="L253"><span class="lineNum">     253</span> <span class="tlaUNC">           0 :             case geometry_type::POLYGONZM:</span></span>
-<span id="L254"><span class="lineNum">     254</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_polygon_coordinates&lt;polygon_zm_t&lt;T&gt;&gt;(little_endian));</span></span>
-<span id="L255"><span class="lineNum">     255</span>              : </span>
-<span id="L256"><span class="lineNum">     256</span> <span class="tlaGNC tlaBgGNC">           2 :             case geometry_type::MULTIPOINT:</span></span>
-<span id="L257"><span class="lineNum">     257</span> <span class="tlaGNC">           2 :                 return geometry_t&lt;T&gt;(read_geometry_children&lt;multipoint_t&lt;T&gt;, point_t&lt;T&gt;&gt;(little_endian, geometry_type::POINT));</span></span>
-<span id="L258"><span class="lineNum">     258</span> <span class="tlaUNC tlaBgUNC">           0 :             case geometry_type::MULTIPOINTZ:</span></span>
-<span id="L259"><span class="lineNum">     259</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_geometry_children&lt;multipoint_z_t&lt;T&gt;, point_z_t&lt;T&gt;&gt;(little_endian, geometry_type::POINTZ));</span></span>
-<span id="L260"><span class="lineNum">     260</span> <span class="tlaUNC">           0 :             case geometry_type::MULTIPOINTM:</span></span>
-<span id="L261"><span class="lineNum">     261</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_geometry_children&lt;multipoint_m_t&lt;T&gt;, point_m_t&lt;T&gt;&gt;(little_endian, geometry_type::POINTM));</span></span>
-<span id="L262"><span class="lineNum">     262</span> <span class="tlaUNC">           0 :             case geometry_type::MULTIPOINTZM:</span></span>
-<span id="L263"><span class="lineNum">     263</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_geometry_children&lt;multipoint_zm_t&lt;T&gt;, point_zm_t&lt;T&gt;&gt;(little_endian, geometry_type::POINTZM));</span></span>
-<span id="L264"><span class="lineNum">     264</span>              : </span>
-<span id="L265"><span class="lineNum">     265</span> <span class="tlaGNC tlaBgGNC">           2 :             case geometry_type::MULTILINESTRING:</span></span>
-<span id="L266"><span class="lineNum">     266</span> <span class="tlaGNC">           2 :                 return geometry_t&lt;T&gt;(read_geometry_children&lt;multilinestring_t&lt;T&gt;, linestring_t&lt;T&gt;&gt;(little_endian, geometry_type::LINESTRING));</span></span>
-<span id="L267"><span class="lineNum">     267</span> <span class="tlaUNC tlaBgUNC">           0 :             case geometry_type::MULTILINESTRINGZ:</span></span>
-<span id="L268"><span class="lineNum">     268</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_geometry_children&lt;multilinestring_z_t&lt;T&gt;, linestring_z_t&lt;T&gt;&gt;(little_endian, geometry_type::LINESTRINGZ));</span></span>
-<span id="L269"><span class="lineNum">     269</span> <span class="tlaUNC">           0 :             case geometry_type::MULTILINESTRINGM:</span></span>
-<span id="L270"><span class="lineNum">     270</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_geometry_children&lt;multilinestring_m_t&lt;T&gt;, linestring_m_t&lt;T&gt;&gt;(little_endian, geometry_type::LINESTRINGM));</span></span>
-<span id="L271"><span class="lineNum">     271</span> <span class="tlaUNC">           0 :             case geometry_type::MULTILINESTRINGZM:</span></span>
-<span id="L272"><span class="lineNum">     272</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_geometry_children&lt;multilinestring_zm_t&lt;T&gt;, linestring_zm_t&lt;T&gt;&gt;(little_endian, geometry_type::LINESTRINGZM));</span></span>
-<span id="L273"><span class="lineNum">     273</span>              : </span>
-<span id="L274"><span class="lineNum">     274</span> <span class="tlaGNC tlaBgGNC">           2 :             case geometry_type::MULTIPOLYGON:</span></span>
-<span id="L275"><span class="lineNum">     275</span> <span class="tlaGNC">           2 :                 return geometry_t&lt;T&gt;(read_geometry_children&lt;multipolygon_t&lt;T&gt;, polygon_t&lt;T&gt;&gt;(little_endian, geometry_type::POLYGON));</span></span>
-<span id="L276"><span class="lineNum">     276</span> <span class="tlaUNC tlaBgUNC">           0 :             case geometry_type::MULTIPOLYGONZ:</span></span>
-<span id="L277"><span class="lineNum">     277</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_geometry_children&lt;multipolygon_z_t&lt;T&gt;, polygon_z_t&lt;T&gt;&gt;(little_endian, geometry_type::POLYGONZ));</span></span>
-<span id="L278"><span class="lineNum">     278</span> <span class="tlaUNC">           0 :             case geometry_type::MULTIPOLYGONM:</span></span>
-<span id="L279"><span class="lineNum">     279</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_geometry_children&lt;multipolygon_m_t&lt;T&gt;, polygon_m_t&lt;T&gt;&gt;(little_endian, geometry_type::POLYGONM));</span></span>
-<span id="L280"><span class="lineNum">     280</span> <span class="tlaUNC">           0 :             case geometry_type::MULTIPOLYGONZM:</span></span>
-<span id="L281"><span class="lineNum">     281</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_geometry_children&lt;multipolygon_zm_t&lt;T&gt;, polygon_zm_t&lt;T&gt;&gt;(little_endian, geometry_type::POLYGONZM));</span></span>
-<span id="L282"><span class="lineNum">     282</span>              : </span>
-<span id="L283"><span class="lineNum">     283</span> <span class="tlaGNC tlaBgGNC">           4 :             case geometry_type::GEOMETRYCOLLECTION:</span></span>
-<span id="L284"><span class="lineNum">     284</span> <span class="tlaGNC">           4 :                 return geometry_t&lt;T&gt;(read_collection_children&lt;geometrycollection_t&lt;T&gt;&gt;(little_endian));</span></span>
-<span id="L285"><span class="lineNum">     285</span> <span class="tlaUNC tlaBgUNC">           0 :             case geometry_type::GEOMETRYCOLLECTIONZ:</span></span>
-<span id="L286"><span class="lineNum">     286</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_collection_children&lt;geometrycollection_z_t&lt;T&gt;&gt;(little_endian));</span></span>
-<span id="L287"><span class="lineNum">     287</span> <span class="tlaUNC">           0 :             case geometry_type::GEOMETRYCOLLECTIONM:</span></span>
-<span id="L288"><span class="lineNum">     288</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_collection_children&lt;geometrycollection_m_t&lt;T&gt;&gt;(little_endian));</span></span>
-<span id="L289"><span class="lineNum">     289</span> <span class="tlaUNC">           0 :             case geometry_type::GEOMETRYCOLLECTIONZM:</span></span>
-<span id="L290"><span class="lineNum">     290</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_collection_children&lt;geometrycollection_zm_t&lt;T&gt;&gt;(little_endian));</span></span>
-<span id="L291"><span class="lineNum">     291</span>              : </span>
-<span id="L292"><span class="lineNum">     292</span> <span class="tlaUNC">           0 :             default:</span></span>
-<span id="L293"><span class="lineNum">     293</span> <span class="tlaUNC">           0 :                 throw exceptions::parse_error(&quot;unsupported WKB geometry type&quot;);</span></span>
-<span id="L294"><span class="lineNum">     294</span>              :         }</span>
-<span id="L295"><span class="lineNum">     295</span>              :     }</span>
-<span id="L296"><span class="lineNum">     296</span>              : };</span>
-<span id="L297"><span class="lineNum">     297</span>              : </span>
-<span id="L298"><span class="lineNum">     298</span>              : template &lt;typename T, typename Iterator&gt;</span>
-<span id="L299"><span class="lineNum">     299</span> <span class="tlaGNC tlaBgGNC">          30 : geometry_t&lt;T&gt; read_wkb(Iterator first, Iterator last)</span></span>
-<span id="L300"><span class="lineNum">     300</span>              : {</span>
-<span id="L301"><span class="lineNum">     301</span> <span class="tlaGNC">          30 :     std::vector&lt;std::uint8_t&gt; bytes;</span></span>
-<span id="L302"><span class="lineNum">     302</span> <span class="tlaGNC">        1201 :     for (auto it = first; it != last; ++it)</span></span>
-<span id="L303"><span class="lineNum">     303</span>              :     {</span>
-<span id="L304"><span class="lineNum">     304</span> <span class="tlaGNC">        1171 :         bytes.push_back(static_cast&lt;std::uint8_t&gt;(*it));</span></span>
-<span id="L305"><span class="lineNum">     305</span>              :     }</span>
-<span id="L306"><span class="lineNum">     306</span> <span class="tlaGNC">          60 :     return wkb_reader&lt;T&gt;(bytes).read();</span></span>
-<span id="L307"><span class="lineNum">     307</span> <span class="tlaGNC">          30 : }</span></span>
-<span id="L308"><span class="lineNum">     308</span>              : </span>
-<span id="L309"><span class="lineNum">     309</span>              : }  // namespace detail</span>
-<span id="L310"><span class="lineNum">     310</span>              : }  // namespace io</span>
-<span id="L311"><span class="lineNum">     311</span>              : }  // namespace shapes</span>
-<span id="L312"><span class="lineNum">     312</span>              : }  // namespace simo</span>
+<span id="L219"><span class="lineNum">     219</span>              :         using point_type = typename LineStringType::point_type;</span>
+<span id="L220"><span class="lineNum">     220</span>              : </span>
+<span id="L221"><span class="lineNum">     221</span> <span class="tlaGNC">          11 :         const auto count = read_count(little_endian, point_type::N * 8);</span></span>
+<span id="L222"><span class="lineNum">     222</span> <span class="tlaGNC">          10 :         LineStringType res;</span></span>
+<span id="L223"><span class="lineNum">     223</span> <span class="tlaGNC">          10 :         res.reserve(static_cast&lt;std::size_t&gt;(count));</span></span>
+<span id="L224"><span class="lineNum">     224</span> <span class="tlaGNC">          38 :         for (std::uint32_t i = 0; i &lt; count; ++i)</span></span>
+<span id="L225"><span class="lineNum">     225</span>              :         {</span>
+<span id="L226"><span class="lineNum">     226</span> <span class="tlaGNC">          28 :             res.emplace_back(read_point_coordinates&lt;point_type&gt;(little_endian));</span></span>
+<span id="L227"><span class="lineNum">     227</span>              :         }</span>
+<span id="L228"><span class="lineNum">     228</span> <span class="tlaGNC">          10 :         return res;</span></span>
+<span id="L229"><span class="lineNum">     229</span> <span class="tlaUNC tlaBgUNC">           0 :     }</span></span>
+<span id="L230"><span class="lineNum">     230</span>              : </span>
+<span id="L231"><span class="lineNum">     231</span>              :     template &lt;typename PolygonType&gt;</span>
+<span id="L232"><span class="lineNum">     232</span> <span class="tlaGNC tlaBgGNC">           5 :     PolygonType read_polygon_coordinates(bool little_endian)</span></span>
+<span id="L233"><span class="lineNum">     233</span>              :     {</span>
+<span id="L234"><span class="lineNum">     234</span>              :         using ring_type = typename PolygonType::value_type;</span>
+<span id="L235"><span class="lineNum">     235</span>              : </span>
+<span id="L236"><span class="lineNum">     236</span> <span class="tlaGNC">           5 :         const auto count = read_count(little_endian, 4);</span></span>
+<span id="L237"><span class="lineNum">     237</span> <span class="tlaGNC">           4 :         PolygonType res;</span></span>
+<span id="L238"><span class="lineNum">     238</span> <span class="tlaGNC">           4 :         res.reserve(static_cast&lt;std::size_t&gt;(count));</span></span>
+<span id="L239"><span class="lineNum">     239</span> <span class="tlaGNC">           8 :         for (std::uint32_t i = 0; i &lt; count; ++i)</span></span>
+<span id="L240"><span class="lineNum">     240</span>              :         {</span>
+<span id="L241"><span class="lineNum">     241</span> <span class="tlaGNC">           4 :             res.emplace_back(read_linestring_coordinates&lt;ring_type&gt;(little_endian));</span></span>
+<span id="L242"><span class="lineNum">     242</span>              :         }</span>
+<span id="L243"><span class="lineNum">     243</span> <span class="tlaGNC">           4 :         return res;</span></span>
+<span id="L244"><span class="lineNum">     244</span> <span class="tlaUNC tlaBgUNC">           0 :     }</span></span>
+<span id="L245"><span class="lineNum">     245</span>              : </span>
+<span id="L246"><span class="lineNum">     246</span>              :     /// reads a child geometry header and returns the child byte order, the child is</span>
+<span id="L247"><span class="lineNum">     247</span>              :     /// parsed as its concrete type with no geometry_t wrapper in between</span>
+<span id="L248"><span class="lineNum">     248</span> <span class="tlaGNC tlaBgGNC">          10 :     bool read_child_header(geometry_type expected_type)</span></span>
+<span id="L249"><span class="lineNum">     249</span>              :     {</span>
+<span id="L250"><span class="lineNum">     250</span> <span class="tlaGNC">          10 :         const auto order = read_u8();</span></span>
+<span id="L251"><span class="lineNum">     251</span> <span class="tlaGNC">          10 :         if (order != 0 and order != 1)</span></span>
+<span id="L252"><span class="lineNum">     252</span>              :         {</span>
+<span id="L253"><span class="lineNum">     253</span> <span class="tlaUNC tlaBgUNC">           0 :             throw exceptions::parse_error(&quot;invalid WKB byte order&quot;);</span></span>
+<span id="L254"><span class="lineNum">     254</span>              :         }</span>
+<span id="L255"><span class="lineNum">     255</span> <span class="tlaGNC tlaBgGNC">          10 :         const bool little_endian = order == 1;</span></span>
+<span id="L256"><span class="lineNum">     256</span> <span class="tlaGNC">          10 :         if (decode_type(read_u32(little_endian)) != expected_type)</span></span>
+<span id="L257"><span class="lineNum">     257</span>              :         {</span>
+<span id="L258"><span class="lineNum">     258</span> <span class="tlaUNC tlaBgUNC">           0 :             throw exceptions::parse_error(&quot;unexpected WKB child geometry type&quot;);</span></span>
+<span id="L259"><span class="lineNum">     259</span>              :         }</span>
+<span id="L260"><span class="lineNum">     260</span> <span class="tlaGNC tlaBgGNC">          10 :         return little_endian;</span></span>
+<span id="L261"><span class="lineNum">     261</span>              :     }</span>
+<span id="L262"><span class="lineNum">     262</span>              : </span>
+<span id="L263"><span class="lineNum">     263</span>              :     template &lt;typename MultiType&gt;</span>
+<span id="L264"><span class="lineNum">     264</span> <span class="tlaGNC">           4 :     MultiType read_multi_points(bool little_endian, geometry_type expected_type)</span></span>
+<span id="L265"><span class="lineNum">     265</span>              :     {</span>
+<span id="L266"><span class="lineNum">     266</span>              :         using point_type = typename MultiType::value_type;</span>
+<span id="L267"><span class="lineNum">     267</span>              : </span>
+<span id="L268"><span class="lineNum">     268</span> <span class="tlaGNC">           4 :         const auto count = read_count(little_endian, 5 + point_type::N * 8);</span></span>
+<span id="L269"><span class="lineNum">     269</span> <span class="tlaGNC">           3 :         MultiType res;</span></span>
+<span id="L270"><span class="lineNum">     270</span> <span class="tlaGNC">           3 :         res.reserve(static_cast&lt;std::size_t&gt;(count));</span></span>
+<span id="L271"><span class="lineNum">     271</span> <span class="tlaGNC">           9 :         for (std::uint32_t i = 0; i &lt; count; ++i)</span></span>
+<span id="L272"><span class="lineNum">     272</span>              :         {</span>
+<span id="L273"><span class="lineNum">     273</span> <span class="tlaGNC">           6 :             const bool child_little_endian = read_child_header(expected_type);</span></span>
+<span id="L274"><span class="lineNum">     274</span> <span class="tlaGNC">           6 :             res.emplace_back(read_point_coordinates&lt;point_type&gt;(child_little_endian));</span></span>
+<span id="L275"><span class="lineNum">     275</span>              :         }</span>
+<span id="L276"><span class="lineNum">     276</span> <span class="tlaGNC">           3 :         return res;</span></span>
+<span id="L277"><span class="lineNum">     277</span> <span class="tlaUNC tlaBgUNC">           0 :     }</span></span>
+<span id="L278"><span class="lineNum">     278</span>              : </span>
+<span id="L279"><span class="lineNum">     279</span>              :     template &lt;typename MultiType&gt;</span>
+<span id="L280"><span class="lineNum">     280</span> <span class="tlaGNC tlaBgGNC">           2 :     MultiType read_multi_linestrings(bool little_endian, geometry_type expected_type)</span></span>
+<span id="L281"><span class="lineNum">     281</span>              :     {</span>
+<span id="L282"><span class="lineNum">     282</span>              :         using linestring_type = typename MultiType::value_type;</span>
+<span id="L283"><span class="lineNum">     283</span>              : </span>
+<span id="L284"><span class="lineNum">     284</span> <span class="tlaGNC">           2 :         const auto count = read_count(little_endian, 9);</span></span>
+<span id="L285"><span class="lineNum">     285</span> <span class="tlaGNC">           2 :         MultiType res;</span></span>
+<span id="L286"><span class="lineNum">     286</span> <span class="tlaGNC">           2 :         res.reserve(static_cast&lt;std::size_t&gt;(count));</span></span>
+<span id="L287"><span class="lineNum">     287</span> <span class="tlaGNC">           4 :         for (std::uint32_t i = 0; i &lt; count; ++i)</span></span>
+<span id="L288"><span class="lineNum">     288</span>              :         {</span>
+<span id="L289"><span class="lineNum">     289</span> <span class="tlaGNC">           2 :             const bool child_little_endian = read_child_header(expected_type);</span></span>
+<span id="L290"><span class="lineNum">     290</span> <span class="tlaGNC">           2 :             res.emplace_back(read_linestring_coordinates&lt;linestring_type&gt;(child_little_endian));</span></span>
+<span id="L291"><span class="lineNum">     291</span>              :         }</span>
+<span id="L292"><span class="lineNum">     292</span> <span class="tlaGNC">           2 :         return res;</span></span>
+<span id="L293"><span class="lineNum">     293</span> <span class="tlaUNC tlaBgUNC">           0 :     }</span></span>
+<span id="L294"><span class="lineNum">     294</span>              : </span>
+<span id="L295"><span class="lineNum">     295</span>              :     template &lt;typename MultiType&gt;</span>
+<span id="L296"><span class="lineNum">     296</span> <span class="tlaGNC tlaBgGNC">           2 :     MultiType read_multi_polygons(bool little_endian, geometry_type expected_type)</span></span>
+<span id="L297"><span class="lineNum">     297</span>              :     {</span>
+<span id="L298"><span class="lineNum">     298</span>              :         using polygon_type = typename MultiType::value_type;</span>
+<span id="L299"><span class="lineNum">     299</span>              : </span>
+<span id="L300"><span class="lineNum">     300</span> <span class="tlaGNC">           2 :         const auto count = read_count(little_endian, 9);</span></span>
+<span id="L301"><span class="lineNum">     301</span> <span class="tlaGNC">           2 :         MultiType res;</span></span>
+<span id="L302"><span class="lineNum">     302</span> <span class="tlaGNC">           2 :         res.reserve(static_cast&lt;std::size_t&gt;(count));</span></span>
+<span id="L303"><span class="lineNum">     303</span> <span class="tlaGNC">           4 :         for (std::uint32_t i = 0; i &lt; count; ++i)</span></span>
+<span id="L304"><span class="lineNum">     304</span>              :         {</span>
+<span id="L305"><span class="lineNum">     305</span> <span class="tlaGNC">           2 :             const bool child_little_endian = read_child_header(expected_type);</span></span>
+<span id="L306"><span class="lineNum">     306</span> <span class="tlaGNC">           2 :             res.emplace_back(read_polygon_coordinates&lt;polygon_type&gt;(child_little_endian));</span></span>
+<span id="L307"><span class="lineNum">     307</span>              :         }</span>
+<span id="L308"><span class="lineNum">     308</span> <span class="tlaGNC">           2 :         return res;</span></span>
+<span id="L309"><span class="lineNum">     309</span> <span class="tlaUNC tlaBgUNC">           0 :     }</span></span>
+<span id="L310"><span class="lineNum">     310</span>              : </span>
+<span id="L311"><span class="lineNum">     311</span>              :     template &lt;typename CollectionType&gt;</span>
+<span id="L312"><span class="lineNum">     312</span> <span class="tlaGNC tlaBgGNC">         132 :     CollectionType read_collection_children(bool little_endian)</span></span>
+<span id="L313"><span class="lineNum">     313</span>              :     {</span>
+<span id="L314"><span class="lineNum">     314</span> <span class="tlaGNC">         132 :         const auto count = read_count(little_endian, 5);</span></span>
+<span id="L315"><span class="lineNum">     315</span> <span class="tlaGNC">         132 :         CollectionType res;</span></span>
+<span id="L316"><span class="lineNum">     316</span> <span class="tlaGNC">         132 :         res.reserve(static_cast&lt;std::size_t&gt;(count));</span></span>
+<span id="L317"><span class="lineNum">     317</span> <span class="tlaGNC">         139 :         for (std::uint32_t i = 0; i &lt; count; ++i)</span></span>
+<span id="L318"><span class="lineNum">     318</span>              :         {</span>
+<span id="L319"><span class="lineNum">     319</span> <span class="tlaGNC">         135 :             res.emplace_back(read_geometry());</span></span>
+<span id="L320"><span class="lineNum">     320</span>              :         }</span>
+<span id="L321"><span class="lineNum">     321</span> <span class="tlaGNC">           4 :         return res;</span></span>
+<span id="L322"><span class="lineNum">     322</span> <span class="tlaGNC">         128 :     }</span></span>
+<span id="L323"><span class="lineNum">     323</span>              : </span>
+<span id="L324"><span class="lineNum">     324</span> <span class="tlaGNC">         170 :     geometry_t&lt;T&gt; read_geometry()</span></span>
+<span id="L325"><span class="lineNum">     325</span>              :     {</span>
+<span id="L326"><span class="lineNum">     326</span> <span class="tlaGNC">         170 :         depth_guard guard(depth_);</span></span>
+<span id="L327"><span class="lineNum">     327</span>              : </span>
+<span id="L328"><span class="lineNum">     328</span> <span class="tlaGNC">         169 :         const auto order = read_u8();</span></span>
+<span id="L329"><span class="lineNum">     329</span> <span class="tlaGNC">         169 :         if (order != 0 and order != 1)</span></span>
+<span id="L330"><span class="lineNum">     330</span>              :         {</span>
+<span id="L331"><span class="lineNum">     331</span> <span class="tlaGNC">           3 :             throw exceptions::parse_error(&quot;invalid WKB byte order&quot;);</span></span>
+<span id="L332"><span class="lineNum">     332</span>              :         }</span>
+<span id="L333"><span class="lineNum">     333</span> <span class="tlaGNC">         168 :         const bool little_endian = order == 1;</span></span>
+<span id="L334"><span class="lineNum">     334</span> <span class="tlaGNC">         168 :         const auto geom_type = decode_type(read_u32(little_endian));</span></span>
+<span id="L335"><span class="lineNum">     335</span>              : </span>
+<span id="L336"><span class="lineNum">     336</span> <span class="tlaGNC">         166 :         switch (geom_type)</span></span>
+<span id="L337"><span class="lineNum">     337</span>              :         {</span>
+<span id="L338"><span class="lineNum">     338</span> <span class="tlaGNC">          13 :             case geometry_type::POINT:</span></span>
+<span id="L339"><span class="lineNum">     339</span> <span class="tlaGNC">          13 :                 return geometry_t&lt;T&gt;(read_point_coordinates&lt;point_t&lt;T&gt;&gt;(little_endian));</span></span>
+<span id="L340"><span class="lineNum">     340</span> <span class="tlaGNC">           2 :             case geometry_type::POINTZ:</span></span>
+<span id="L341"><span class="lineNum">     341</span> <span class="tlaGNC">           2 :                 return geometry_t&lt;T&gt;(read_point_coordinates&lt;point_z_t&lt;T&gt;&gt;(little_endian));</span></span>
+<span id="L342"><span class="lineNum">     342</span> <span class="tlaGNC">           2 :             case geometry_type::POINTM:</span></span>
+<span id="L343"><span class="lineNum">     343</span> <span class="tlaGNC">           2 :                 return geometry_t&lt;T&gt;(read_point_coordinates&lt;point_m_t&lt;T&gt;&gt;(little_endian));</span></span>
+<span id="L344"><span class="lineNum">     344</span> <span class="tlaGNC">           1 :             case geometry_type::POINTZM:</span></span>
+<span id="L345"><span class="lineNum">     345</span> <span class="tlaGNC">           1 :                 return geometry_t&lt;T&gt;(read_point_coordinates&lt;point_zm_t&lt;T&gt;&gt;(little_endian));</span></span>
+<span id="L346"><span class="lineNum">     346</span>              : </span>
+<span id="L347"><span class="lineNum">     347</span> <span class="tlaGNC">           5 :             case geometry_type::LINESTRING:</span></span>
+<span id="L348"><span class="lineNum">     348</span> <span class="tlaGNC">           5 :                 return geometry_t&lt;T&gt;(read_linestring_coordinates&lt;linestring_t&lt;T&gt;&gt;(little_endian));</span></span>
+<span id="L349"><span class="lineNum">     349</span> <span class="tlaUNC tlaBgUNC">           0 :             case geometry_type::LINESTRINGZ:</span></span>
+<span id="L350"><span class="lineNum">     350</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_linestring_coordinates&lt;linestring_z_t&lt;T&gt;&gt;(little_endian));</span></span>
+<span id="L351"><span class="lineNum">     351</span> <span class="tlaUNC">           0 :             case geometry_type::LINESTRINGM:</span></span>
+<span id="L352"><span class="lineNum">     352</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_linestring_coordinates&lt;linestring_m_t&lt;T&gt;&gt;(little_endian));</span></span>
+<span id="L353"><span class="lineNum">     353</span> <span class="tlaUNC">           0 :             case geometry_type::LINESTRINGZM:</span></span>
+<span id="L354"><span class="lineNum">     354</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_linestring_coordinates&lt;linestring_zm_t&lt;T&gt;&gt;(little_endian));</span></span>
+<span id="L355"><span class="lineNum">     355</span>              : </span>
+<span id="L356"><span class="lineNum">     356</span> <span class="tlaGNC tlaBgGNC">           3 :             case geometry_type::POLYGON:</span></span>
+<span id="L357"><span class="lineNum">     357</span> <span class="tlaGNC">           3 :                 return geometry_t&lt;T&gt;(read_polygon_coordinates&lt;polygon_t&lt;T&gt;&gt;(little_endian));</span></span>
+<span id="L358"><span class="lineNum">     358</span> <span class="tlaUNC tlaBgUNC">           0 :             case geometry_type::POLYGONZ:</span></span>
+<span id="L359"><span class="lineNum">     359</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_polygon_coordinates&lt;polygon_z_t&lt;T&gt;&gt;(little_endian));</span></span>
+<span id="L360"><span class="lineNum">     360</span> <span class="tlaUNC">           0 :             case geometry_type::POLYGONM:</span></span>
+<span id="L361"><span class="lineNum">     361</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_polygon_coordinates&lt;polygon_m_t&lt;T&gt;&gt;(little_endian));</span></span>
+<span id="L362"><span class="lineNum">     362</span> <span class="tlaUNC">           0 :             case geometry_type::POLYGONZM:</span></span>
+<span id="L363"><span class="lineNum">     363</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_polygon_coordinates&lt;polygon_zm_t&lt;T&gt;&gt;(little_endian));</span></span>
+<span id="L364"><span class="lineNum">     364</span>              : </span>
+<span id="L365"><span class="lineNum">     365</span> <span class="tlaGNC tlaBgGNC">           4 :             case geometry_type::MULTIPOINT:</span></span>
+<span id="L366"><span class="lineNum">     366</span> <span class="tlaGNC">           4 :                 return geometry_t&lt;T&gt;(read_multi_points&lt;multipoint_t&lt;T&gt;&gt;(little_endian, geometry_type::POINT));</span></span>
+<span id="L367"><span class="lineNum">     367</span> <span class="tlaUNC tlaBgUNC">           0 :             case geometry_type::MULTIPOINTZ:</span></span>
+<span id="L368"><span class="lineNum">     368</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_multi_points&lt;multipoint_z_t&lt;T&gt;&gt;(little_endian, geometry_type::POINTZ));</span></span>
+<span id="L369"><span class="lineNum">     369</span> <span class="tlaUNC">           0 :             case geometry_type::MULTIPOINTM:</span></span>
+<span id="L370"><span class="lineNum">     370</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_multi_points&lt;multipoint_m_t&lt;T&gt;&gt;(little_endian, geometry_type::POINTM));</span></span>
+<span id="L371"><span class="lineNum">     371</span> <span class="tlaUNC">           0 :             case geometry_type::MULTIPOINTZM:</span></span>
+<span id="L372"><span class="lineNum">     372</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_multi_points&lt;multipoint_zm_t&lt;T&gt;&gt;(little_endian, geometry_type::POINTZM));</span></span>
+<span id="L373"><span class="lineNum">     373</span>              : </span>
+<span id="L374"><span class="lineNum">     374</span> <span class="tlaGNC tlaBgGNC">           2 :             case geometry_type::MULTILINESTRING:</span></span>
+<span id="L375"><span class="lineNum">     375</span> <span class="tlaGNC">           2 :                 return geometry_t&lt;T&gt;(read_multi_linestrings&lt;multilinestring_t&lt;T&gt;&gt;(little_endian, geometry_type::LINESTRING));</span></span>
+<span id="L376"><span class="lineNum">     376</span> <span class="tlaUNC tlaBgUNC">           0 :             case geometry_type::MULTILINESTRINGZ:</span></span>
+<span id="L377"><span class="lineNum">     377</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_multi_linestrings&lt;multilinestring_z_t&lt;T&gt;&gt;(little_endian, geometry_type::LINESTRINGZ));</span></span>
+<span id="L378"><span class="lineNum">     378</span> <span class="tlaUNC">           0 :             case geometry_type::MULTILINESTRINGM:</span></span>
+<span id="L379"><span class="lineNum">     379</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_multi_linestrings&lt;multilinestring_m_t&lt;T&gt;&gt;(little_endian, geometry_type::LINESTRINGM));</span></span>
+<span id="L380"><span class="lineNum">     380</span> <span class="tlaUNC">           0 :             case geometry_type::MULTILINESTRINGZM:</span></span>
+<span id="L381"><span class="lineNum">     381</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_multi_linestrings&lt;multilinestring_zm_t&lt;T&gt;&gt;(little_endian, geometry_type::LINESTRINGZM));</span></span>
+<span id="L382"><span class="lineNum">     382</span>              : </span>
+<span id="L383"><span class="lineNum">     383</span> <span class="tlaGNC tlaBgGNC">           2 :             case geometry_type::MULTIPOLYGON:</span></span>
+<span id="L384"><span class="lineNum">     384</span> <span class="tlaGNC">           2 :                 return geometry_t&lt;T&gt;(read_multi_polygons&lt;multipolygon_t&lt;T&gt;&gt;(little_endian, geometry_type::POLYGON));</span></span>
+<span id="L385"><span class="lineNum">     385</span> <span class="tlaUNC tlaBgUNC">           0 :             case geometry_type::MULTIPOLYGONZ:</span></span>
+<span id="L386"><span class="lineNum">     386</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_multi_polygons&lt;multipolygon_z_t&lt;T&gt;&gt;(little_endian, geometry_type::POLYGONZ));</span></span>
+<span id="L387"><span class="lineNum">     387</span> <span class="tlaUNC">           0 :             case geometry_type::MULTIPOLYGONM:</span></span>
+<span id="L388"><span class="lineNum">     388</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_multi_polygons&lt;multipolygon_m_t&lt;T&gt;&gt;(little_endian, geometry_type::POLYGONM));</span></span>
+<span id="L389"><span class="lineNum">     389</span> <span class="tlaUNC">           0 :             case geometry_type::MULTIPOLYGONZM:</span></span>
+<span id="L390"><span class="lineNum">     390</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_multi_polygons&lt;multipolygon_zm_t&lt;T&gt;&gt;(little_endian, geometry_type::POLYGONZM));</span></span>
+<span id="L391"><span class="lineNum">     391</span>              : </span>
+<span id="L392"><span class="lineNum">     392</span> <span class="tlaGNC tlaBgGNC">         132 :             case geometry_type::GEOMETRYCOLLECTION:</span></span>
+<span id="L393"><span class="lineNum">     393</span> <span class="tlaGNC">         132 :                 return geometry_t&lt;T&gt;(read_collection_children&lt;geometrycollection_t&lt;T&gt;&gt;(little_endian));</span></span>
+<span id="L394"><span class="lineNum">     394</span> <span class="tlaUNC tlaBgUNC">           0 :             case geometry_type::GEOMETRYCOLLECTIONZ:</span></span>
+<span id="L395"><span class="lineNum">     395</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_collection_children&lt;geometrycollection_z_t&lt;T&gt;&gt;(little_endian));</span></span>
+<span id="L396"><span class="lineNum">     396</span> <span class="tlaUNC">           0 :             case geometry_type::GEOMETRYCOLLECTIONM:</span></span>
+<span id="L397"><span class="lineNum">     397</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_collection_children&lt;geometrycollection_m_t&lt;T&gt;&gt;(little_endian));</span></span>
+<span id="L398"><span class="lineNum">     398</span> <span class="tlaUNC">           0 :             case geometry_type::GEOMETRYCOLLECTIONZM:</span></span>
+<span id="L399"><span class="lineNum">     399</span> <span class="tlaUNC">           0 :                 return geometry_t&lt;T&gt;(read_collection_children&lt;geometrycollection_zm_t&lt;T&gt;&gt;(little_endian));</span></span>
+<span id="L400"><span class="lineNum">     400</span>              : </span>
+<span id="L401"><span class="lineNum">     401</span> <span class="tlaUNC">           0 :             default:</span></span>
+<span id="L402"><span class="lineNum">     402</span> <span class="tlaUNC">           0 :                 throw exceptions::parse_error(&quot;unsupported WKB geometry type&quot;);</span></span>
+<span id="L403"><span class="lineNum">     403</span>              :         }</span>
+<span id="L404"><span class="lineNum">     404</span> <span class="tlaGNC tlaBgGNC">         169 :     }</span></span>
+<span id="L405"><span class="lineNum">     405</span>              : };</span>
+<span id="L406"><span class="lineNum">     406</span>              : </span>
+<span id="L407"><span class="lineNum">     407</span>              : template &lt;typename T&gt;</span>
+<span id="L408"><span class="lineNum">     408</span> <span class="tlaGNC">          35 : geometry_t&lt;T&gt; read_wkb(const std::uint8_t* data, std::size_t size)</span></span>
+<span id="L409"><span class="lineNum">     409</span>              : {</span>
+<span id="L410"><span class="lineNum">     410</span> <span class="tlaGNC">          35 :     return wkb_reader&lt;T&gt;(data, size).read();</span></span>
+<span id="L411"><span class="lineNum">     411</span>              : }</span>
+<span id="L412"><span class="lineNum">     412</span>              : </span>
+<span id="L413"><span class="lineNum">     413</span>              : template &lt;typename T, typename Iterator&gt;</span>
+<span id="L414"><span class="lineNum">     414</span> <span class="tlaGNC">           1 : geometry_t&lt;T&gt; read_wkb(Iterator first, Iterator last)</span></span>
+<span id="L415"><span class="lineNum">     415</span>              : {</span>
+<span id="L416"><span class="lineNum">     416</span> <span class="tlaGNC">           1 :     std::vector&lt;std::uint8_t&gt; bytes;</span></span>
+<span id="L417"><span class="lineNum">     417</span> <span class="tlaGNC">           1 :     bytes.reserve(static_cast&lt;std::size_t&gt;(std::distance(first, last)));</span></span>
+<span id="L418"><span class="lineNum">     418</span> <span class="tlaGNC">          22 :     for (auto it = first; it != last; ++it)</span></span>
+<span id="L419"><span class="lineNum">     419</span>              :     {</span>
+<span id="L420"><span class="lineNum">     420</span> <span class="tlaGNC">          21 :         bytes.push_back(static_cast&lt;std::uint8_t&gt;(*it));</span></span>
+<span id="L421"><span class="lineNum">     421</span>              :     }</span>
+<span id="L422"><span class="lineNum">     422</span> <span class="tlaGNC">           2 :     return read_wkb&lt;T&gt;(bytes.data(), bytes.size());</span></span>
+<span id="L423"><span class="lineNum">     423</span> <span class="tlaGNC">           1 : }</span></span>
+<span id="L424"><span class="lineNum">     424</span>              : </span>
+<span id="L425"><span class="lineNum">     425</span>              : }  // namespace detail</span>
+<span id="L426"><span class="lineNum">     426</span>              : }  // namespace io</span>
+<span id="L427"><span class="lineNum">     427</span>              : }  // namespace shapes</span>
+<span id="L428"><span class="lineNum">     428</span>              : }  // namespace simo</span>
         </pre>
               </td>
             </tr>

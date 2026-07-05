@@ -31,13 +31,13 @@
             <td class="headerValue">coverage.info</td>
             <td></td>
             <td class="headerItem">Lines:</td>
-            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
-            <td class="headerCovTableEntry">21</td>
-            <td class="headerCovTableEntry">21</td>
+            <td class="headerCovTableEntryHi">97.2&nbsp;%</td>
+            <td class="headerCovTableEntry">36</td>
+            <td class="headerCovTableEntry">35</td>
           </tr>
           <tr>
             <td class="headerItem">Test Date:</td>
-            <td class="headerValue">2026-06-07 17:53:22</td>
+            <td class="headerValue">2026-07-05 16:03:15</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
@@ -85,80 +85,100 @@
 <span id="L23"><span class="lineNum">      23</span>              :  * @return Winding number (0 = outside, non-zero = inside)</span>
 <span id="L24"><span class="lineNum">      24</span>              :  */</span>
 <span id="L25"><span class="lineNum">      25</span>              : template &lt;typename Point, typename Ring&gt;</span>
-<span id="L26"><span class="lineNum">      26</span> <span class="tlaGNC tlaBgGNC">          40 : int winding_number(const Point&amp; point, const Ring&amp; ring)</span></span>
+<span id="L26"><span class="lineNum">      26</span> <span class="tlaGNC tlaBgGNC">          41 : int winding_number(const Point&amp; point, const Ring&amp; ring)</span></span>
 <span id="L27"><span class="lineNum">      27</span>              : {</span>
-<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">          40 :     int wn = 0;  // Winding number counter</span></span>
+<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">          41 :     int wn = 0;  // Winding number counter</span></span>
 <span id="L29"><span class="lineNum">      29</span>              : </span>
-<span id="L30"><span class="lineNum">      30</span>              :     // Loop through all edges of the polygon</span>
-<span id="L31"><span class="lineNum">      31</span> <span class="tlaGNC">         208 :     for (size_t i = 0; i &lt; ring.size() - 1; ++i)</span></span>
-<span id="L32"><span class="lineNum">      32</span>              :     {</span>
-<span id="L33"><span class="lineNum">      33</span> <span class="tlaGNC">         168 :         const auto&amp; v1 = ring[i];</span></span>
-<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">         168 :         const auto&amp; v2 = ring[i + 1];</span></span>
-<span id="L35"><span class="lineNum">      35</span>              : </span>
-<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">         168 :         if (v1.y &lt;= point.y)</span></span>
-<span id="L37"><span class="lineNum">      37</span>              :         {</span>
-<span id="L38"><span class="lineNum">      38</span>              :             // Upward crossing</span>
-<span id="L39"><span class="lineNum">      39</span> <span class="tlaGNC">         108 :             if (v2.y &gt; point.y)</span></span>
-<span id="L40"><span class="lineNum">      40</span>              :             {</span>
-<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC">          27 :                 if (orient2d(v1, v2, point) &gt; 0)</span></span>
-<span id="L42"><span class="lineNum">      42</span>              :                 {</span>
-<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">          24 :                     ++wn;  // Point is left of edge</span></span>
-<span id="L44"><span class="lineNum">      44</span>              :                 }</span>
-<span id="L45"><span class="lineNum">      45</span>              :             }</span>
-<span id="L46"><span class="lineNum">      46</span>              :         }</span>
-<span id="L47"><span class="lineNum">      47</span>              :         else</span>
-<span id="L48"><span class="lineNum">      48</span>              :         {</span>
-<span id="L49"><span class="lineNum">      49</span>              :             // Downward crossing</span>
-<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">          60 :             if (v2.y &lt;= point.y)</span></span>
-<span id="L51"><span class="lineNum">      51</span>              :             {</span>
-<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC">          27 :                 if (orient2d(v1, v2, point) &lt; 0)</span></span>
-<span id="L53"><span class="lineNum">      53</span>              :                 {</span>
-<span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">           3 :                     --wn;  // Point is right of edge</span></span>
-<span id="L55"><span class="lineNum">      55</span>              :                 }</span>
-<span id="L56"><span class="lineNum">      56</span>              :             }</span>
-<span id="L57"><span class="lineNum">      57</span>              :         }</span>
-<span id="L58"><span class="lineNum">      58</span>              :     }</span>
-<span id="L59"><span class="lineNum">      59</span>              : </span>
-<span id="L60"><span class="lineNum">      60</span> <span class="tlaGNC">          40 :     return wn;</span></span>
-<span id="L61"><span class="lineNum">      61</span>              : }</span>
-<span id="L62"><span class="lineNum">      62</span>              : </span>
-<span id="L63"><span class="lineNum">      63</span>              : /*!</span>
-<span id="L64"><span class="lineNum">      64</span>              :  * @brief Test if a point is on the boundary of a polygon</span>
-<span id="L65"><span class="lineNum">      65</span>              :  *</span>
-<span id="L66"><span class="lineNum">      66</span>              :  * @param point The point to test</span>
-<span id="L67"><span class="lineNum">      67</span>              :  * @param ring The polygon ring</span>
-<span id="L68"><span class="lineNum">      68</span>              :  * @param tolerance Distance tolerance for boundary test</span>
-<span id="L69"><span class="lineNum">      69</span>              :  * @return true if point is on the boundary</span>
-<span id="L70"><span class="lineNum">      70</span>              :  */</span>
-<span id="L71"><span class="lineNum">      71</span>              : template &lt;typename Point, typename Ring&gt;</span>
-<span id="L72"><span class="lineNum">      72</span> <span class="tlaGNC">           4 : bool point_on_boundary(const Point&amp; point, const Ring&amp; ring, double tolerance = 1e-10)</span></span>
-<span id="L73"><span class="lineNum">      73</span>              : {</span>
-<span id="L74"><span class="lineNum">      74</span> <span class="tlaGNC">          12 :     for (size_t i = 0; i &lt; ring.size() - 1; ++i)</span></span>
-<span id="L75"><span class="lineNum">      75</span>              :     {</span>
-<span id="L76"><span class="lineNum">      76</span> <span class="tlaGNC">          10 :         const auto&amp; v1 = ring[i];</span></span>
-<span id="L77"><span class="lineNum">      77</span> <span class="tlaGNC">          10 :         const auto&amp; v2 = ring[i + 1];</span></span>
-<span id="L78"><span class="lineNum">      78</span>              : </span>
-<span id="L79"><span class="lineNum">      79</span>              :         // Check if collinear</span>
-<span id="L80"><span class="lineNum">      80</span> <span class="tlaGNC">          10 :         if (orient2d(v1, v2, point) == 0)</span></span>
-<span id="L81"><span class="lineNum">      81</span>              :         {</span>
-<span id="L82"><span class="lineNum">      82</span>              :             // Check if on segment</span>
-<span id="L83"><span class="lineNum">      83</span> <span class="tlaGNC">           2 :             if (on_segment(v1, v2, point))</span></span>
-<span id="L84"><span class="lineNum">      84</span>              :             {</span>
-<span id="L85"><span class="lineNum">      85</span> <span class="tlaGNC">           2 :                 return true;</span></span>
-<span id="L86"><span class="lineNum">      86</span>              :             }</span>
-<span id="L87"><span class="lineNum">      87</span>              :         }</span>
-<span id="L88"><span class="lineNum">      88</span>              : </span>
-<span id="L89"><span class="lineNum">      89</span>              :         // Alternative: distance to line segment check</span>
-<span id="L90"><span class="lineNum">      90</span>              :         // (Can add more sophisticated distance calculation if needed)</span>
-<span id="L91"><span class="lineNum">      91</span>              :     }</span>
-<span id="L92"><span class="lineNum">      92</span>              : </span>
-<span id="L93"><span class="lineNum">      93</span> <span class="tlaGNC">           2 :     return false;</span></span>
-<span id="L94"><span class="lineNum">      94</span>              : }</span>
-<span id="L95"><span class="lineNum">      95</span>              : </span>
-<span id="L96"><span class="lineNum">      96</span>              : }  // namespace detail</span>
-<span id="L97"><span class="lineNum">      97</span>              : }  // namespace algorithm</span>
-<span id="L98"><span class="lineNum">      98</span>              : }  // namespace shapes</span>
-<span id="L99"><span class="lineNum">      99</span>              : }  // namespace simo</span>
+<span id="L30"><span class="lineNum">      30</span>              :     // Loop through all edges of the polygon; the i + 1 bound is underflow-safe on</span>
+<span id="L31"><span class="lineNum">      31</span>              :     // empty rings</span>
+<span id="L32"><span class="lineNum">      32</span> <span class="tlaGNC">         209 :     for (size_t i = 0; i + 1 &lt; ring.size(); ++i)</span></span>
+<span id="L33"><span class="lineNum">      33</span>              :     {</span>
+<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">         168 :         const auto&amp; v1 = ring[i];</span></span>
+<span id="L35"><span class="lineNum">      35</span> <span class="tlaGNC">         168 :         const auto&amp; v2 = ring[i + 1];</span></span>
+<span id="L36"><span class="lineNum">      36</span>              : </span>
+<span id="L37"><span class="lineNum">      37</span> <span class="tlaGNC">         168 :         if (v1.y &lt;= point.y)</span></span>
+<span id="L38"><span class="lineNum">      38</span>              :         {</span>
+<span id="L39"><span class="lineNum">      39</span>              :             // Upward crossing</span>
+<span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">         108 :             if (v2.y &gt; point.y)</span></span>
+<span id="L41"><span class="lineNum">      41</span>              :             {</span>
+<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC">          27 :                 if (orient2d(v1, v2, point) &gt; 0)</span></span>
+<span id="L43"><span class="lineNum">      43</span>              :                 {</span>
+<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">          24 :                     ++wn;  // Point is left of edge</span></span>
+<span id="L45"><span class="lineNum">      45</span>              :                 }</span>
+<span id="L46"><span class="lineNum">      46</span>              :             }</span>
+<span id="L47"><span class="lineNum">      47</span>              :         }</span>
+<span id="L48"><span class="lineNum">      48</span>              :         else</span>
+<span id="L49"><span class="lineNum">      49</span>              :         {</span>
+<span id="L50"><span class="lineNum">      50</span>              :             // Downward crossing</span>
+<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">          60 :             if (v2.y &lt;= point.y)</span></span>
+<span id="L52"><span class="lineNum">      52</span>              :             {</span>
+<span id="L53"><span class="lineNum">      53</span> <span class="tlaGNC">          27 :                 if (orient2d(v1, v2, point) &lt; 0)</span></span>
+<span id="L54"><span class="lineNum">      54</span>              :                 {</span>
+<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">           3 :                     --wn;  // Point is right of edge</span></span>
+<span id="L56"><span class="lineNum">      56</span>              :                 }</span>
+<span id="L57"><span class="lineNum">      57</span>              :             }</span>
+<span id="L58"><span class="lineNum">      58</span>              :         }</span>
+<span id="L59"><span class="lineNum">      59</span>              :     }</span>
+<span id="L60"><span class="lineNum">      60</span>              : </span>
+<span id="L61"><span class="lineNum">      61</span> <span class="tlaGNC">          41 :     return wn;</span></span>
+<span id="L62"><span class="lineNum">      62</span>              : }</span>
+<span id="L63"><span class="lineNum">      63</span>              : </span>
+<span id="L64"><span class="lineNum">      64</span>              : /*!</span>
+<span id="L65"><span class="lineNum">      65</span>              :  * @brief Test if a point is on the boundary of a polygon</span>
+<span id="L66"><span class="lineNum">      66</span>              :  *</span>
+<span id="L67"><span class="lineNum">      67</span>              :  * @param point The point to test</span>
+<span id="L68"><span class="lineNum">      68</span>              :  * @param ring The polygon ring</span>
+<span id="L69"><span class="lineNum">      69</span>              :  * @param tolerance Distance tolerance for boundary test</span>
+<span id="L70"><span class="lineNum">      70</span>              :  * @return true if point is on the boundary</span>
+<span id="L71"><span class="lineNum">      71</span>              :  */</span>
+<span id="L72"><span class="lineNum">      72</span>              : template &lt;typename Point, typename Ring&gt;</span>
+<span id="L73"><span class="lineNum">      73</span> <span class="tlaGNC">           5 : bool point_on_boundary(const Point&amp; point, const Ring&amp; ring, double tolerance = 1e-10)</span></span>
+<span id="L74"><span class="lineNum">      74</span>              : {</span>
+<span id="L75"><span class="lineNum">      75</span> <span class="tlaGNC">           5 :     const double squared_tolerance = tolerance * tolerance;</span></span>
+<span id="L76"><span class="lineNum">      76</span> <span class="tlaGNC">          13 :     for (size_t i = 0; i + 1 &lt; ring.size(); ++i)</span></span>
+<span id="L77"><span class="lineNum">      77</span>              :     {</span>
+<span id="L78"><span class="lineNum">      78</span> <span class="tlaGNC">          10 :         const auto&amp; v1 = ring[i];</span></span>
+<span id="L79"><span class="lineNum">      79</span> <span class="tlaGNC">          10 :         const auto&amp; v2 = ring[i + 1];</span></span>
+<span id="L80"><span class="lineNum">      80</span>              : </span>
+<span id="L81"><span class="lineNum">      81</span>              :         // Exact hit: collinear and within the segment box</span>
+<span id="L82"><span class="lineNum">      82</span> <span class="tlaGNC">          10 :         if (orient2d(v1, v2, point) == 0)</span></span>
+<span id="L83"><span class="lineNum">      83</span>              :         {</span>
+<span id="L84"><span class="lineNum">      84</span> <span class="tlaGNC">           2 :             if (on_segment(v1, v2, point))</span></span>
+<span id="L85"><span class="lineNum">      85</span>              :             {</span>
+<span id="L86"><span class="lineNum">      86</span> <span class="tlaGNC">           2 :                 return true;</span></span>
+<span id="L87"><span class="lineNum">      87</span>              :             }</span>
+<span id="L88"><span class="lineNum">      88</span>              :         }</span>
+<span id="L89"><span class="lineNum">      89</span>              : </span>
+<span id="L90"><span class="lineNum">      90</span>              :         // Near hit: squared distance from the point to the segment within tolerance</span>
+<span id="L91"><span class="lineNum">      91</span> <span class="tlaGNC">           8 :         double dx  = static_cast&lt;double&gt;(v2.x) - static_cast&lt;double&gt;(v1.x);</span></span>
+<span id="L92"><span class="lineNum">      92</span> <span class="tlaGNC">           8 :         double dy  = static_cast&lt;double&gt;(v2.y) - static_cast&lt;double&gt;(v1.y);</span></span>
+<span id="L93"><span class="lineNum">      93</span> <span class="tlaGNC">           8 :         double px  = static_cast&lt;double&gt;(point.x) - static_cast&lt;double&gt;(v1.x);</span></span>
+<span id="L94"><span class="lineNum">      94</span> <span class="tlaGNC">           8 :         double py  = static_cast&lt;double&gt;(point.y) - static_cast&lt;double&gt;(v1.y);</span></span>
+<span id="L95"><span class="lineNum">      95</span> <span class="tlaGNC">           8 :         double mag = dx * dx + dy * dy;</span></span>
+<span id="L96"><span class="lineNum">      96</span> <span class="tlaGNC">           8 :         double u   = mag == 0 ? 0 : (px * dx + py * dy) / mag;</span></span>
+<span id="L97"><span class="lineNum">      97</span> <span class="tlaGNC">           8 :         if (u &lt; 0)</span></span>
+<span id="L98"><span class="lineNum">      98</span>              :         {</span>
+<span id="L99"><span class="lineNum">      99</span> <span class="tlaGNC">           2 :             u = 0;</span></span>
+<span id="L100"><span class="lineNum">     100</span>              :         }</span>
+<span id="L101"><span class="lineNum">     101</span> <span class="tlaGNC">           6 :         else if (u &gt; 1)</span></span>
+<span id="L102"><span class="lineNum">     102</span>              :         {</span>
+<span id="L103"><span class="lineNum">     103</span> <span class="tlaGNC">           2 :             u = 1;</span></span>
+<span id="L104"><span class="lineNum">     104</span>              :         }</span>
+<span id="L105"><span class="lineNum">     105</span> <span class="tlaGNC">           8 :         double ex = px - u * dx;</span></span>
+<span id="L106"><span class="lineNum">     106</span> <span class="tlaGNC">           8 :         double ey = py - u * dy;</span></span>
+<span id="L107"><span class="lineNum">     107</span> <span class="tlaGNC">           8 :         if (ex * ex + ey * ey &lt;= squared_tolerance)</span></span>
+<span id="L108"><span class="lineNum">     108</span>              :         {</span>
+<span id="L109"><span class="lineNum">     109</span> <span class="tlaUNC tlaBgUNC">           0 :             return true;</span></span>
+<span id="L110"><span class="lineNum">     110</span>              :         }</span>
+<span id="L111"><span class="lineNum">     111</span>              :     }</span>
+<span id="L112"><span class="lineNum">     112</span>              : </span>
+<span id="L113"><span class="lineNum">     113</span> <span class="tlaGNC tlaBgGNC">           3 :     return false;</span></span>
+<span id="L114"><span class="lineNum">     114</span>              : }</span>
+<span id="L115"><span class="lineNum">     115</span>              : </span>
+<span id="L116"><span class="lineNum">     116</span>              : }  // namespace detail</span>
+<span id="L117"><span class="lineNum">     117</span>              : }  // namespace algorithm</span>
+<span id="L118"><span class="lineNum">     118</span>              : }  // namespace shapes</span>
+<span id="L119"><span class="lineNum">     119</span>              : }  // namespace simo</span>
         </pre>
               </td>
             </tr>
